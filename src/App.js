@@ -39,7 +39,7 @@ const MMOptionLayout = styled.div`
   width: 710px;
 `;
 
-const MMList = styled.ul`
+const MMOList = styled.ul`
   display: flex;
   margin: 0;
   margin-bottom: 10px;
@@ -64,19 +64,19 @@ const MMList = styled.ul`
     }
   }
 `;
-const MMOptionContainer = styled.div`
+const MMOContainer = styled.div`
   height: 50px;
   background: linear-gradient(to right, #009ffa, #00c36a);
   border-radius: 6px;
   display: flex;
 `;
-const MMSelectWrapper = styled.div`
+const MMOSelectWrapper = styled.div`
   flex: 1;
   padding: 10px;
   font-size: 14px;
   color: #0a0a0a;
 `;
-const MMSelect = styled(Select)`
+const MMOSelect = styled(Select)`
   border-radius: 30px;
   background: #fff no-repeat right 10px center;
   background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
@@ -108,9 +108,34 @@ const MMWrapper = styled.div`
   height: 705px;
   box-sizing: border-box;
   background: url('/map_svg_warp_bg.png') no-repeat;
+  position: relative;
 
+  /* 맵 */
   > svg {
     margin-top: -25px;
+  }
+
+  /* 기준 날짜 */
+  > span {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    min-width: 143px;
+    height: 30px;
+    padding: 0 20px;
+    background: #fff;
+    font-size: 14px;
+    color: #6e6e6e;
+    line-height: 30px;
+    font-weight: 400;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #d2d2d2;
+
+    strong {
+      color: #000;
+    }
   }
 `;
 
@@ -123,7 +148,7 @@ function App() {
         <FirstSection>
           {/* Main Map 설정 */}
           <MMOptionLayout>
-            <MMList>
+            <MMOList>
               <li>
                 <a className="on" href>
                   실시간 대기정보
@@ -138,10 +163,10 @@ function App() {
               <li>
                 <a href>오늘/내일/모레 기상정보</a>
               </li>
-            </MMList>
-            <MMOptionContainer>
-              <MMSelectWrapper>
-                <MMSelect bg width="188px">
+            </MMOList>
+            <MMOContainer>
+              <MMOSelectWrapper>
+                <MMOSelect bg width="188px">
                   <option value="KHAI">통합대기환경지수(CAI)</option>
                   <option value="10008">초미세먼지 (PM-2.5)</option>
                   <option value="10007">미세먼지 (PM-10)</option>
@@ -149,13 +174,13 @@ function App() {
                   <option value="10006">이산화질소(NO₂)</option>
                   <option value="10002">일산화탄소 (CO)</option>
                   <option value="10001">아황산가스 (SO₂)</option>
-                </MMSelect>
-              </MMSelectWrapper>
-              <MMSelectWrapper>
+                </MMOSelect>
+              </MMOSelectWrapper>
+              <MMOSelectWrapper>
                 <label for="area1" style={{ marginRight: '5px' }}>
                   시/도
                 </label>
-                <MMSelect bg id="area1" width="130px">
+                <MMOSelect bg id="area1" width="130px">
                   <option value="">-전체-</option>
                   <option value="02">서울특별시</option>
                   <option value="051">부산광역시</option>
@@ -174,9 +199,9 @@ function App() {
                   <option value="054">경상북도</option>
                   <option value="055">경상남도</option>
                   <option value="064">제주특별자치도</option>
-                </MMSelect>
-              </MMSelectWrapper>
-            </MMOptionContainer>
+                </MMOSelect>
+              </MMOSelectWrapper>
+            </MMOContainer>
           </MMOptionLayout>
           {/* Main Map 전국 지도 */}
           <MMWrapper>
@@ -214,6 +239,9 @@ function App() {
                 <JejuPath />
               </g>
             </svg>
+            <span>
+              0000년 00월 00일 <strong>00시</strong>
+            </span>
           </MMWrapper>
         </FirstSection>
       </Main>
