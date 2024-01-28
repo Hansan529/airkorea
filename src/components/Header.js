@@ -77,14 +77,6 @@ const Util = styled.div`
   align-items: center;
 `;
 
-const LanguageBtn = styled.a`
-  padding: 0 30px 0 0;
-  display: inline-block;
-  background: url('/img_bg_lang.png') no-repeat right center;
-  letter-spacing: -0.4px;
-  color: #0a0a0a;
-`;
-
 const UtilBtn = styled.button`
   display: inline-block;
   width: 25px;
@@ -136,14 +128,6 @@ export default function Headers() {
           </NavUl>
         </GlobalNav>
         <Util>
-          <LanguageBtn
-            href="/eng"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="영문 버전으로 새창 이동"
-          >
-            En
-          </LanguageBtn>
           <UtilBtn bgImg={'img_bg_search.png'}>
             <span>통합검색 열기</span>
           </UtilBtn>

@@ -1,6 +1,25 @@
 import styled from '@emotion/styled';
 import './App.css';
 import Headers from './components/Header';
+import {
+  BusanPath,
+  ChungbukPath,
+  ChungnamPath,
+  DaeguPath,
+  DaejeonPath,
+  GangwonPath,
+  GwangjuPath,
+  GyeongbukPath,
+  GyeonggiPath,
+  GyeongnamPath,
+  IncheonPath,
+  JejuPath,
+  JeonbukPath,
+  JeonnamPath,
+  SejongPath,
+  SeoulPath,
+  UlsanPath,
+} from './components/MapPath';
 
 const Select = styled.select`
   -o-appearance: none;
@@ -16,10 +35,11 @@ const FirstSection = styled(Section)`
   background: url('/img_main_bg.png') repeat-x 0 0;
 `;
 
-const Map = styled.div`
+const MMOptionLayout = styled.div`
   width: 710px;
 `;
-const MapUl = styled.ul`
+
+const MMList = styled.ul`
   display: flex;
   margin: 0;
   margin-bottom: 10px;
@@ -44,19 +64,19 @@ const MapUl = styled.ul`
     }
   }
 `;
-const MapGradation = styled.div`
+const MMOptionContainer = styled.div`
   height: 50px;
   background: linear-gradient(to right, #009ffa, #00c36a);
   border-radius: 6px;
   display: flex;
 `;
-const MapRoundWrap = styled.div`
+const MMSelectWrapper = styled.div`
   flex: 1;
   padding: 10px;
   font-size: 14px;
   color: #0a0a0a;
 `;
-const Round = styled(Select)`
+const MMSelect = styled(Select)`
   border-radius: 30px;
   background: #fff no-repeat right 10px center;
   background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
@@ -83,14 +103,27 @@ const Round = styled(Select)`
   }
 `;
 
+const MMWrapper = styled.div`
+  width: 700px;
+  height: 705px;
+  box-sizing: border-box;
+  background: url('/map_svg_warp_bg.png') no-repeat;
+
+  > svg {
+    margin-top: -25px;
+  }
+`;
+
 function App() {
   return (
     <>
       <Headers />
       <Main>
+        {/* 첫번째 색션 */}
         <FirstSection>
-          <Map>
-            <MapUl>
+          {/* Main Map 설정 */}
+          <MMOptionLayout>
+            <MMList>
               <li>
                 <a className="on" href>
                   실시간 대기정보
@@ -100,12 +133,15 @@ function App() {
                 <a href>오늘/내일/모레 대기정보</a>
               </li>
               <li>
-                <a href>실시간 공간분포</a>
+                <a href>실시간 기상정보</a>
               </li>
-            </MapUl>
-            <MapGradation>
-              <MapRoundWrap>
-                <Round bg width="188px">
+              <li>
+                <a href>오늘/내일/모레 기상정보</a>
+              </li>
+            </MMList>
+            <MMOptionContainer>
+              <MMSelectWrapper>
+                <MMSelect bg width="188px">
                   <option value="KHAI">통합대기환경지수(CAI)</option>
                   <option value="10008">초미세먼지 (PM-2.5)</option>
                   <option value="10007">미세먼지 (PM-10)</option>
@@ -113,13 +149,13 @@ function App() {
                   <option value="10006">이산화질소(NO₂)</option>
                   <option value="10002">일산화탄소 (CO)</option>
                   <option value="10001">아황산가스 (SO₂)</option>
-                </Round>
-              </MapRoundWrap>
-              <MapRoundWrap>
+                </MMSelect>
+              </MMSelectWrapper>
+              <MMSelectWrapper>
                 <label for="area1" style={{ marginRight: '5px' }}>
                   시/도
                 </label>
-                <Round bg id="area1" width="130px">
+                <MMSelect bg id="area1" width="130px">
                   <option value="">-전체-</option>
                   <option value="02">서울특별시</option>
                   <option value="051">부산광역시</option>
@@ -138,15 +174,47 @@ function App() {
                   <option value="054">경상북도</option>
                   <option value="055">경상남도</option>
                   <option value="064">제주특별자치도</option>
-                </Round>
-              </MapRoundWrap>
-              <MapRoundWrap>
-                <Round flex as="div" width="auto">
-                  <button className="on">대기/경보 정보</button>
-                </Round>
-              </MapRoundWrap>
-            </MapGradation>
-          </Map>
+                </MMSelect>
+              </MMSelectWrapper>
+            </MMOptionContainer>
+          </MMOptionLayout>
+          {/* Main Map 전국 지도 */}
+          <MMWrapper>
+            <svg
+              version="1.1"
+              id="map_svg_city"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              width="700px"
+              height="730px"
+              viewBox="0 0 700 730"
+              enable-background="new 0 0 700 730"
+              xmlS
+              pace="preserve"
+            >
+              <g>
+                <IncheonPath />
+                <SeoulPath />
+                <GyeonggiPath />
+                <GangwonPath />
+                <ChungbukPath />
+                <ChungnamPath />
+                <SejongPath />
+                <DaejeonPath />
+                <GyeongbukPath />
+                <GyeongnamPath />
+                <DaeguPath />
+                <UlsanPath />
+                <BusanPath />
+                <JeonbukPath />
+                <JeonnamPath />
+                <GwangjuPath />
+                <JejuPath />
+              </g>
+            </svg>
+          </MMWrapper>
         </FirstSection>
       </Main>
     </>
