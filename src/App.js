@@ -7,6 +7,7 @@ import {
   ChungnamPath,
   DaeguPath,
   DaejeonPath,
+  GangwonInner,
   GangwonPath,
   GwangjuPath,
   GyeongbukPath,
@@ -213,6 +214,7 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
+              <GangwonInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
