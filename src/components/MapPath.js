@@ -8,6 +8,14 @@ const GanwonContaier = styled.div`
 
 const InnerMapButton = styled.button`
   position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50px;
+  border: none;
+  text-align: center;
+  line-height: 17px;
+  font-size: 13px;
+  background-color: ${(props) => props.bgColor};
 `;
 
 /** 인천 */
@@ -178,6 +186,8 @@ export const IncheonPath = (props) => {
   );
 };
 
+// ---------------------------------------------------------------------------------
+
 /** 서울 외각선의 경우, 경기도 외각선으로 대체 */
 export const SeoulPath = (props) => {
   return (
@@ -217,6 +227,8 @@ export const SeoulPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 경기 */
 export const GyeonggiPath = (props) => {
@@ -658,6 +670,8 @@ export const GyeonggiPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 강원 */
 export const GangwonPath = (props) => {
@@ -3038,6 +3052,7 @@ export const GangwonInner = (props) => {
     </>
   );
 };
+// ---------------------------------------------------------------------------------
 
 /** 충북 */
 export const ChungbukPath = (props) => {
@@ -3468,6 +3483,8 @@ export const ChungbukPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 충남 */
 export const ChungnamPath = (props) => {
@@ -3928,6 +3945,8 @@ export const ChungnamPath = (props) => {
   );
 };
 
+// ---------------------------------------------------------------------------------
+
 /** 세종 */
 export const SejongPath = (props) => {
   return (
@@ -4004,6 +4023,8 @@ export const SejongPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 대전 */
 export const DaejeonPath = (props) => {
@@ -4094,6 +4115,8 @@ export const DaejeonPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 경북 */
 export const GyeongbukPath = (props) => {
@@ -5096,6 +5119,8 @@ export const GyeongbukPath = (props) => {
   );
 };
 
+// ---------------------------------------------------------------------------------
+
 /** 경남 */
 export const GyeongnamPath = (props) => {
   return (
@@ -5712,6 +5737,8 @@ export const GyeongnamPath = (props) => {
   );
 };
 
+// ---------------------------------------------------------------------------------
+
 /** 대구 */
 export const DaeguPath = (props) => {
   return (
@@ -6118,6 +6145,8 @@ export const DaeguPath = (props) => {
   );
 };
 
+// ---------------------------------------------------------------------------------
+
 /** 울산 */
 export const UlsanPath = (props) => {
   return (
@@ -6238,6 +6267,8 @@ export const UlsanPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 부산 */
 export const BusanPath = (props) => {
@@ -6384,6 +6415,8 @@ export const BusanPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 전북 */
 export const JeonbukPath = (props) => {
@@ -6758,6 +6791,8 @@ export const JeonbukPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 전남 */
 export const JeonnamPath = (props) => {
@@ -7707,6 +7742,8 @@ export const JeonnamPath = (props) => {
   );
 };
 
+// ---------------------------------------------------------------------------------
+
 /** 광주 */
 export const GwangjuPath = (props) => {
   return (
@@ -7783,6 +7820,8 @@ export const GwangjuPath = (props) => {
     </>
   );
 };
+
+// ---------------------------------------------------------------------------------
 
 /** 제주 */
 export const JejuPath = (props) => {
