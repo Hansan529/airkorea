@@ -1,5 +1,30 @@
 import styled from '@emotion/styled';
 
+const value = 'test';
+
+/**
+ * 대기 정보 목록
+ * 좋음 (0~50): #d0ecff / #7ed6ff
+ * 보통 (51~100): #caf2de / #94edbc
+ * 나쁨 (101~250): #f8f7c6 / #ffeb8b
+ * 매우나쁨 (251~): #ffd6da / #ffc1c5
+ * 데이터없음: #cbd0d3 / #c1c5c7
+ */
+
+const getColorValue = (value) => {
+  if (value >= 0 && value <= 50) {
+    return ['#d0ecff', '#7ed6ff'];
+  } else if (value >= 51 && value <= 100) {
+    return ['#caf2de', '#94edbc'];
+  } else if (value >= 101 && value <= 250) {
+    return ['#f8f7c6', '#ffeb8b'];
+  } else if (value >= 251) {
+    return ['#ffd6da', '#ffc1c5'];
+  } else {
+    return ['#cbd0d3', '#c1c5c7'];
+  }
+};
+
 const GanwonContaier = styled.div`
   background-image: url('/map_bg_033.jpg');
   background-repeat: no-repeat;
@@ -24,15 +49,6 @@ const InnerMapPath = styled.path`
     fill: ${(props) => props.fillHoverColor || 'blue'};
   }
 `;
-
-/**
- * 대기 정보 목록
- * 좋음 (0~50): #d0ecff / #7ed6ff
- * 보통 (51~100): #caf2de / #94edbc
- * 나쁨 (101~250): #f8f7c6 / #ffeb8b
- * 매우나쁨 (251~): #ffd6da / #ffc1c5
- * 데이터없음: #cbd0d3 / #c1c5c7
- */
 
 /** 인천 */
 export const IncheonPath = (props) => {
@@ -1089,26 +1105,26 @@ export const GangwonPath = (props) => {
 };
 
 export const GangwonInner = (props) => {
-    const list = [
-      '강릉',
-      '고성',
-      '동해',
-      '삼척',
-      '속초',
-      '양구',
-      '양양',
-      '영월',
-      '원주',
-      '인제',
-      '정선',
-      '철원',
-      '춘천',
-      '태백',
-      '평창',
-      '홍천',
-      '화천',
-      '횡성',
-    ];
+  const list = [
+    '강릉',
+    '고성',
+    '동해',
+    '삼척',
+    '속초',
+    '양구',
+    '양양',
+    '영월',
+    '원주',
+    '인제',
+    '정선',
+    '철원',
+    '춘천',
+    '태백',
+    '평창',
+    '홍천',
+    '화천',
+    '횡성',
+  ];
   return (
     <>
       <GanwonContaier class="airWarningMap p_code_033">
@@ -1504,8 +1520,9 @@ export const GangwonInner = (props) => {
             id="m_033_001"
             class="mType_2"
             // onclick="fnTab1SubChange(1,'033')"
+            fillColor={getColorValue(value)[0]}
+            fillHoverColor={getColorValue(value)[1]}
             title="강원_강릉시"
-            fill="#FFFFFF"
             d="M314.3,250.429c-0.01,0.142-0.084,0.373-0.372,1.222
 			c-0.146,0.432-0.368,1.083-0.391,1.22c-0.01,0.137-0.027,0.367-2.023,2.954l0.449,1.946l3.092,3.237l0.03,0.138
 			c0.801,3.732,0.676,4.121,0.634,4.249c-0.003,0.019-0.005,0.05-0.006,0.091c-0.006,0.288,0.033,1.072,0.064,1.726
