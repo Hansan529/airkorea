@@ -25,6 +25,15 @@ const InnerMapPath = styled.path`
   }
 `;
 
+/**
+ * 대기 정보 목록
+ * 좋음 (0~50): #d0ecff / #7ed6ff
+ * 보통 (51~100): #caf2de / #94edbc
+ * 나쁨 (101~250): #f8f7c6 / #ffeb8b
+ * 매우나쁨 (251~): #ffd6da / #ffc1c5
+ * 데이터없음: #cbd0d3 / #c1c5c7
+ */
+
 /** 인천 */
 export const IncheonPath = (props) => {
   return (
