@@ -28,7 +28,9 @@ const getColorValue = (value) => {
 const GanwonContaier = styled.div`
   background-image: url('/map_bg_033.jpg');
   background-repeat: no-repeat;
-  position: relative;
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
 `;
 
 const InnerMapButton = styled.button`
