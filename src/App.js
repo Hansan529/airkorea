@@ -18,6 +18,7 @@ import {
   JeonbukPath,
   JeonnamPath,
   SejongPath,
+  SeoulInner,
   SeoulPath,
   UlsanPath,
 } from './components/MapPath';
@@ -214,7 +215,8 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <GangwonInner />
+              {/* <GangwonInner /> */}
+              <SeoulInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
@@ -225,9 +227,8 @@ function App() {
                 width="700px"
                 height="730px"
                 viewBox="0 0 700 730"
-                enable-background="new 0 0 700 730"
-                xmlS
-                pace="preserve"
+                enableBackground="new 0 0 700 730"
+                xmlSpace="preserve"
               >
                 <g>
                   <IncheonPath />
