@@ -26,27 +26,27 @@ const getColorValue = (value) => {
 };
 
 const DetailContainer = styled.div`
-    background-image: ${(props) => `url('/map_bg_${props.regionNum}.jpg')`};
-    background-repeat: no-repeat;
-    position: absolute;
-    /* opacity: 0;
+  background-image: ${(props) => `url('/map_bg_${props.regionNum}.jpg')`};
+  background-repeat: no-repeat;
+  position: absolute;
+  /* opacity: 0;
     visibility: hidden; */
 `;
 
 const InnerMapButton = styled.button`
-    position: absolute;
-    width: 42px;
-    height: 42px;
-    border-radius: 50px;
-    border: none;
-    text-align: center;
-    line-height: 17px;
-    font-size: 13px;
-    background-color: ${(props) => props.bgColor};
-    padding: 0;
-    strong { 
-        display: block; 
-    }
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50px;
+  border: none;
+  text-align: center;
+  line-height: 17px;
+  font-size: 13px;
+  background-color: ${(props) => props.bgColor};
+  padding: 0;
+  strong {
+    display: block;
+  }
 `;
 
 const InnerMapPath = styled.path`
@@ -351,6 +351,7 @@ export const SeoulInner = () => {
         enableBackground="new 0 0 492 548"
         xmlSpace="preserve"
       >
+        {/* 강 */}
         <path
           title="서울_한강"
           fill="rgb(40, 124, 224)"
@@ -373,6 +374,7 @@ export const SeoulInner = () => {
 			c-2.322-6.43-2.322-9.465-2.322-10.895C190.577,295.944,189.862,294.514,192.005,294.514z"
         ></path>
 
+        {/* 배경 */}
         <path
           title="서울_BG"
           fill="#BFD3E1"
