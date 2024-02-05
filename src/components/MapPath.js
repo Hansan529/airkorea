@@ -351,7 +351,7 @@ export const SeoulInner = () => {
     { left: '357px', top: '189px' },
   ];
   return (
-    <DetailContainer class="airWarningMap p_code_02" regionNum="02">
+    <DetailContainer className="airWarningMap p_code_02" regionNum="02">
       {list.map((el, key) => {
         return (
           <InnerMapButton
@@ -951,11 +951,11 @@ export const GyeonggiInner = () => {
     '화성',
   ];
   return (
-    <DetailContainer class="airWarningMap p_code_031">
+    <DetailContainer className="airWarningMap p_code_031">
       {/* 가평 001 */}
       <InnerMapButton
         id="p_031_001"
-        class="aw_city mcType_2"
+        className="aw_city mcType_2"
         style={{ left: '297px', top: '161px' }}
       >
         가평<strong>27</strong>
@@ -963,7 +963,7 @@ export const GyeonggiInner = () => {
       {/* 고양 002 */}
       <InnerMapButton
         id="p_031_002"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '126px', top: '200px' }}
       >
         고양<strong>47</strong>
@@ -971,7 +971,7 @@ export const GyeonggiInner = () => {
       {/* 과천 003 */}
       <InnerMapButton
         id="p_031_003"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '179px', top: '260px' }}
       >
         과천<strong>60</strong>
@@ -979,7 +979,7 @@ export const GyeonggiInner = () => {
       {/* 광명 004 */}
       <InnerMapButton
         id="p_031_004"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '137px', top: '251px' }}
       >
         광명<strong>42</strong>
@@ -987,7 +987,7 @@ export const GyeonggiInner = () => {
       {/* 광주 005 */}
       <InnerMapButton
         id="p_031_005"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '251px', top: '304px' }}
       >
         광주<strong>71</strong>
@@ -995,227 +995,167 @@ export const GyeonggiInner = () => {
       {/* 구리 006 */}
       <InnerMapButton
         id="p_031_006"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '207px', top: '210px' }}
       >
         구리<strong>55</strong>
       </InnerMapButton>
       {/* 군포 007 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','007')"
-        // onmouseout="handleMouseOut2('031','007')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_007"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '140px', top: '333px' }}
       >
         군포<strong>50</strong>
       </InnerMapButton>
       {/* 김포 008 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','008')"
-        // onmouseout="handleMouseOut2('031','008')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_008"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '62px', top: '189px' }}
       >
         김포<strong>42</strong>
       </InnerMapButton>
       {/* 남양주 009 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','009')"
-        // onmouseout="handleMouseOut2('031','009')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_009"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '253px', top: '203px' }}
       >
         남양주<strong>47</strong>
       </InnerMapButton>
       {/* 동두천 010 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','010')"
-        // onmouseout="handleMouseOut2('031','010')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_010"
-        class="aw_city mcType_2"
+        className="aw_city mcType_2"
         style={{ left: '206px', top: '124px' }}
       >
         동두천<strong>25</strong>
       </InnerMapButton>
       {/* 부천 011 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','011')"
-        // onmouseout="handleMouseOut2('031','011')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_011"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '90px', top: '254px' }}
       >
         부천<strong>44</strong>
       </InnerMapButton>
       {/* 성남 012 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','012')"
-        // onmouseout="handleMouseOut2('031','012')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_012"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '209px', top: '291px' }}
       >
         성남<strong>68</strong>
       </InnerMapButton>
       {/* 수원 013 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','013')"
-        // onmouseout="handleMouseOut2('031','013')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_013"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '182px', top: '342px' }}
       >
         수원<strong>38</strong>
       </InnerMapButton>
       {/* 시흥 014 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','014')"
-        // onmouseout="handleMouseOut2('031','014')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_014"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '83px', top: '297px' }}
       >
         시흥<strong>39</strong>
       </InnerMapButton>
       {/* 안산 015 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','015')"
-        // onmouseout="handleMouseOut2('031','015')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_015"
-        class="aw_city mcType_2"
+        className="aw_city mcType_2"
         style={{ left: '97px', top: '338px' }}
       >
         안산<strong>31</strong>
       </InnerMapButton>
       {/* 안성 016 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','016')"
-        // onmouseout="handleMouseOut2('031','016')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_016"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '240px', top: '425px' }}
       >
         안성<strong>56</strong>
       </InnerMapButton>
       {/* 안양 017 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','017')"
-        // onmouseout="handleMouseOut2('031','017')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_017"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '126px', top: '292px' }}
       >
         안양<strong>45</strong>
       </InnerMapButton>
       {/* 양주 018 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','018')"
-        // onmouseout="handleMouseOut2('031','018')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_018"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '164px', top: '137px' }}
       >
         양주<strong>58</strong>
       </InnerMapButton>
       {/* 양평 019 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','019')"
-        // onmouseout="handleMouseOut2('031','019')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_019"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '327px', top: '273px' }}
       >
         양평<strong>43</strong>
       </InnerMapButton>
       {/* 여주 020 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','020')"
-        // onmouseout="handleMouseOut2('031','020')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_020"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '336px', top: '343px' }}
       >
         여주<strong>74</strong>
       </InnerMapButton>
       {/* 연천 021 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','021')"
-        // onmouseout="handleMouseOut2('031','021')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_021"
-        class="aw_city mcType_2"
+        className="aw_city mcType_2"
         style={{ left: '182px', top: '59px' }}
       >
         연천<strong>24</strong>
       </InnerMapButton>
       {/* 오산 022 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','022')"
-        // onmouseout="handleMouseOut2('031','022')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_022"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '165px', top: '382px' }}
       >
         오산<strong>39</strong>
       </InnerMapButton>
       {/* 용인 023 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','023')"
-        // onmouseout="handleMouseOut2('031','023')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_023"
-        class="aw_city mcType_4"
+        className="aw_city mcType_4"
         style={{ left: '222px', top: '364px' }}
       >
         용인<strong>76</strong>
       </InnerMapButton>
       {/* 의왕 024 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','024')"
-        // onmouseout="handleMouseOut2('031','024')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_024"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '168px', top: '301px' }}
       >
         의왕<strong>44</strong>
       </InnerMapButton>
       {/* 의정부 025 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','025')"
-        // onmouseout="handleMouseOut2('031','025')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_025"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '177px', top: '179px' }}
       >
         의정부<strong>55</strong>
       </InnerMapButton>
       {/* 이천 026 */}
       <InnerMapButton
-        // onmouseover="handleMouseOver2('031','026')"
-        // onmouseout="handleMouseOut2('031','026')"
-        // onclick="fnTab1SubChange(1,'031')"
         id="p_031_026"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '282px', top: '358px' }}
       >
         이천<strong>70</strong>
@@ -1223,7 +1163,7 @@ export const GyeonggiInner = () => {
       {/* 파주 027 */}
       <InnerMapButton
         id="p_031_027"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '116px', top: '149px' }}
       >
         파주<strong>44</strong>
@@ -1231,7 +1171,7 @@ export const GyeonggiInner = () => {
       {/* 평택 028 */}
       <InnerMapButton
         id="p_031_028"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '163px', top: '433px' }}
       >
         평택<strong>40</strong>
@@ -1239,7 +1179,7 @@ export const GyeonggiInner = () => {
       {/* 포천 029 */}
       <InnerMapButton
         id="p_031_029"
-        class="aw_city mcType_2"
+        className="aw_city mcType_2"
         style={{ left: '255px', top: '95px' }}
       >
         포천<strong>33</strong>
@@ -1247,7 +1187,7 @@ export const GyeonggiInner = () => {
       {/* 하남 030 */}
       <InnerMapButton
         id="p_031_030"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '241px', top: '253px' }}
       >
         하남<strong>68</strong>
@@ -1255,7 +1195,7 @@ export const GyeonggiInner = () => {
       {/* 화성 040 */}
       <InnerMapButton
         id="p_031_040"
-        class="aw_city mcType_3"
+        className="aw_city mcType_3"
         style={{ left: '111px', top: '387px' }}
       >
         화성<strong>37</strong>
@@ -1478,8 +1418,7 @@ export const GyeonggiInner = () => {
         {/* 가평 001 */}
         <InnerMapPath
           id="m_031_001"
-          class="mType_2"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_2"
           title="경기_가평군"
           d="M267.153,195.091c0.009,0.003,0.016,0.005,0.024,0.008
 			c0.115,0.034,0.253,0.073,0.404,0.115c0.024,0.006,0.048,0.013,0.073,0.02c0.153,0.042,0.327,0.086,0.52,0.135
@@ -1556,8 +1495,7 @@ export const GyeonggiInner = () => {
         {/* 고양 002 */}
         <InnerMapPath
           id="m_031_002"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_고양시"
           d="M175.99,200.251l-0.104-0.415c-0.002,0.001-0.006,0.001-0.009,0.002
 			c-0.013,0.003-0.029,0.007-0.044,0.011c-0.013,0.003-0.027,0.006-0.042,0.008c-0.016,0.003-0.035,0.006-0.054,0.009
@@ -1590,8 +1528,7 @@ export const GyeonggiInner = () => {
         {/* 과천 003 */}
         <InnerMapPath
           id="m_031_003"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_과천시"
           d="M185.288,311.987l4.025-2.303l2.882,0.878l3.663-1.109l1.878-6.701
 			c-0.405-0.707-0.945-1.504-1.385-2.154c-0.303-0.447-0.568-0.84-0.735-1.119c-0.216-0.359-0.983-1.234-3.687-3.042
@@ -1601,8 +1538,7 @@ export const GyeonggiInner = () => {
         {/* 광명 004 */}
         <InnerMapPath
           id="m_031_004"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_광명시"
           d="M142.599,292.309l1.096,0.919l-0.235,2.972l-0.45,3.357l0.631,1.649l0.104,2.479
 			l0.932,2.256v2.639l1.717,1.581l0.582,1.747l4.84,0.542v-0.226l-1.907-1.146l1.085-2.722l2.08,1.213l2-0.165l0.261-2.549
@@ -1614,8 +1550,7 @@ export const GyeonggiInner = () => {
         {/* 광주 005 */}
         <InnerMapPath
           id="m_031_005"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_광주시"
           d="M273.356,281.166l-0.265,0.12l-0.029,0.014l-0.522,0.237l-0.902,2.605l-3.544-0.183
 			l-2.808,2.408l-2.884,3.719l-3.43,2.143l-4.783,3.479l-0.121,0.018c-0.215,0.032-5.906,0.868-7.223,0.644
@@ -1654,8 +1589,7 @@ export const GyeonggiInner = () => {
         {/* 구리 006 */}
         <InnerMapPath
           id="m_031_006"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_구리시"
           d="M235.651,257.081c-0.029-0.162-0.06-0.342-0.092-0.54
 			c-0.006-0.038-0.012-0.076-0.018-0.115c-0.032-0.202-0.065-0.414-0.099-0.646c0-0.006-0.001-0.012-0.002-0.018
@@ -1680,8 +1614,7 @@ export const GyeonggiInner = () => {
         {/* 군포 007 */}
         <InnerMapPath
           id="m_031_007"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_군포"
           d="M166.437,339.432h2.694l1.385-5.83l1.326-0.735l2.133-5.119l-1.153-1.467
 			l-2.793-1.046l0.222-2.652c-0.682-0.444-1.44-0.896-1.632-0.946c-0.481,0.006-2.874,0.529-4.263,0.858l-0.161,0.038l-1.319-0.565
@@ -1691,8 +1624,7 @@ export const GyeonggiInner = () => {
         {/* 김포 008 */}
         <InnerMapPath
           id="m_031_008"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_김포시"
           d="M110.449,217.261c-1.347-1.242-2.605-5.11-1.999-7.217
 			c0.318-1.109,0.189-2.265,0.075-3.285c-0.065-0.583-0.127-1.134-0.093-1.61c0.021-0.295,0.014-0.542,0.009-0.771
@@ -1727,8 +1659,7 @@ export const GyeonggiInner = () => {
         {/* 남양주 009 */}
         <InnerMapPath
           id="m_031_009"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_남양주시"
           d="M236.867,257.419c0.063-0.013,0.127-0.026,0.2-0.045
 			c0.082-0.021,0.173-0.047,0.267-0.076c0.081-0.025,0.161-0.049,0.25-0.078c0.107-0.036,0.222-0.076,0.338-0.117
@@ -1797,8 +1728,7 @@ export const GyeonggiInner = () => {
         {/* 동두천 010 */}
         <InnerMapPath
           id="m_031_010"
-          class="mType_2"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_2"
           title="경기_동두천시"
           d="M202.932,142.857l-1.189,0.54l-0.914,0.992l0.358,1.183l0.326,1.814l2.507,2.283
 			l3.588,0.53l2.551,0.977l1.075,1.932l-0.257,1.745l2.889,5.059l2.993-0.548l0.107,0.028c0.654,0.17,1.819,0.44,2.164,0.44
@@ -1833,8 +1763,7 @@ export const GyeonggiInner = () => {
         {/* 부천 011 */}
         <InnerMapPath
           id="m_031_011"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_부천시"
           d="M139.592,292.11l1.551-1.551l0.453-2.303c-0.5-0.732-1.291-2.15-1.327-2.216
 			l-0.054-0.148l-0.82-4.249l0.088-0.159c1.125-2.021,1.52-2.597,1.69-2.786c0.143-0.346,0.497-2.01,0.755-3.416l0.021-0.115
@@ -1851,8 +1780,7 @@ export const GyeonggiInner = () => {
         {/* 성남 012 */}
         <InnerMapPath
           id="m_031_012"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_성남시"
           d="M192.902,327.273c0.096-0.007,0.191-0.013,0.309-0.021
 			c0.635-0.043,1.506-0.102,2.315-0.102c0.168,0,0.324,0.003,0.472,0.008c0.049,0.002,0.091,0.005,0.138,0.008
@@ -1885,8 +1813,7 @@ export const GyeonggiInner = () => {
         {/* 수원 013 */}
         <InnerMapPath
           id="m_031_013"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_수원시"
           d="M198.759,369.234l3.215-2.358c0.32-0.667,2.008-4.321,1.825-6.7
 			c-0.123-1.61-0.694-3.064-1.198-4.347c-0.339-0.864-0.633-1.61-0.726-2.259c-0.217-1.533-2.534-4.998-3.443-5.15
@@ -1926,8 +1853,7 @@ export const GyeonggiInner = () => {
         {/* 시흥 014 */}
         <InnerMapPath
           id="m_031_014"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_시흥시"
           d="M150.933,315.038l1.059-0.531l-0.125-1.043l-5.637-0.633l-0.703-2.108l-1.85-1.704
 			v-2.973l-0.927-2.226l-0.104-2.486l-0.662-1.647l0.482-3.592l0.192-2.431l-0.264-0.222l-1.064,0.376l0.121,0.312l-0.722-0.1
@@ -1956,8 +1882,7 @@ export const GyeonggiInner = () => {
         {/* 안산 015 */}
         <InnerMapPath
           id="m_031_015"
-          class="mType_2"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_2"
           title="경기_안산시"
           d="M162.594,353.137c0.108-0.11,0.219-0.224,0.332-0.338
 			c0.103-0.104,0.202-0.205,0.307-0.312c0.117-0.119,0.234-0.236,0.353-0.355c0.097-0.097,0.192-0.193,0.289-0.29
@@ -1993,8 +1918,7 @@ export const GyeonggiInner = () => {
         {/* 안성 016 */}
         <InnerMapPath
           id="m_031_016"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_안성시"
           d="M294.94,413.672c-0.217,0.508-0.533,0.846-0.839,1.173
 			c-0.691,0.74-1.476,1.578-1.476,5.056c0,3.605-0.426,4.983-0.68,5.807c-0.107,0.347-0.178,0.575-0.178,0.836
@@ -2037,8 +1961,7 @@ export const GyeonggiInner = () => {
         {/* 안양 017 */}
         <InnerMapPath
           id="m_031_017"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_안양시"
           d="M152.127,315.557l1.514,5.169l1.425,0.312l1.064,2.487l1.055,2.683l2.019-0.083
 			l1.554-3.27l1.847-2.091l1.681,0.72c0.777-0.183,3.637-0.842,4.355-0.842l0.218,0.023c0.476,0.117,1.798,0.984,2.192,1.247
@@ -2050,8 +1973,7 @@ export const GyeonggiInner = () => {
         {/* 양주 018 */}
         <InnerMapPath
           id="m_031_018"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_양주시"
           d="M226.669,184.693l1.151-3.096l0.533-2.66l0.63-3.443l-1.916-3.774l-0.239-4.204
 			l-0.893-1.984l0,0l-0.401-0.894c-0.755-0.986-1.727-2.114-1.995-2.25c-0.089-0.018-0.199-0.072-0.327-0.161
@@ -2084,8 +2006,7 @@ export const GyeonggiInner = () => {
         {/* 양평 019 */}
         <InnerMapPath
           id="m_031_019"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_양평군"
           d="M295.714,239.599l-0.357,0.11l-0.051,0.016l-2.937,0.902l-3.992,3.364l-4.462,3.648
 			c0.382,1.248,0.884,2.413,1.121,2.581c0.694,0.225,0.713,1.405,0.397,4.826c-0.05,0.545-0.092,0.988-0.092,1.2
@@ -2173,8 +2094,7 @@ export const GyeonggiInner = () => {
         {/* 여주 020 */}
         <InnerMapPath
           id="m_031_020"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_여주시"
           d="M296.24,321.117c0.072,0.089,0.142,0.177,0.211,0.265
 			c0.06,0.075,0.117,0.148,0.174,0.222c0.103,0.131,0.198,0.257,0.289,0.378c0.028,0.038,0.058,0.077,0.085,0.114
@@ -2222,8 +2142,7 @@ export const GyeonggiInner = () => {
         {/* 연천 021 */}
         <InnerMapPath
           id="m_031_021"
-          class="mType_2"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_2"
           title="경기_연천구"
           d="M193.379,135.361l3.251,0.679l1.722,0.608l1.834,0.774l1.442,1.429l1.107-1.416
 			l2.063-1.751c0.731-2.03,1.495-4.267,1.537-4.578c0.063-0.922,2.813-1.17,3.659-1.224c0.243-0.447,0.784-1.723,0.919-2.1
@@ -2294,8 +2213,7 @@ export const GyeonggiInner = () => {
         {/* 오산 022 */}
         <InnerMapPath
           id="m_031_022"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_오산시"
           d="M207.226,403.438c-0.082-1.3-0.263-3.521-0.403-3.942
 			c-0.023-0.036-0.07-0.082-0.135-0.137c-0.457-0.384-1.838-1.188-2.793-1.745c-0.96-0.56-1.866-1.088-2.458-1.512
@@ -2331,8 +2249,7 @@ export const GyeonggiInner = () => {
         {/* 용인 023 */}
         <InnerMapPath
           id="m_031_023"
-          class="mType_4"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_4"
           title="경기_용인시"
           d="M269.333,367.493l-7.108-2.445l-3.379-5.854l0.242-7.767l1.256-4.194l-0.408-4.91
 			l-2.555-3.535h-4.604l-0.124-0.08c-0.874-0.565-3.759-2.462-4.214-3.139v0.001c-0.012,0-0.243-0.136-1.114-0.136
@@ -2395,8 +2312,7 @@ export const GyeonggiInner = () => {
         {/* 의왕 024 */}
         <InnerMapPath
           id="m_031_024"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_의왕시"
           d="M175.125,327.591l-0.112,0.27l-0.328,0.788h0l-2.052,4.923l-1.244,0.69l-1.466,6.17
 			H166.9l-1.285,1.515l0.384,3.844l0.001,0.001l1.877,1.296l0-0.001l0.479,0.331l0.348,0.24v0.001l0.104,0.071
@@ -2412,8 +2328,7 @@ export const GyeonggiInner = () => {
         {/* 의정부 025 */}
         <InnerMapPath
           id="m_031_025"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_의정부시"
           d="M234.362,200.146c-0.002-0.001-0.006-0.003-0.007-0.004
 			c-0.038-0.022-0.06-0.034-0.063-0.036l-0.118-0.065l-0.069-0.116c-0.56-0.938-1.256-2.034-1.513-2.348
@@ -2458,8 +2373,7 @@ export const GyeonggiInner = () => {
         {/* 이천 026 */}
         <InnerMapPath
           id="m_031_026"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_이천시"
           d="M306.728,340.777c-0.004,0.001-0.023,0.005-0.033,0.008
 			c-0.085,0.021-0.378,0.087-0.766,0.087c-0.671,0-1.229-0.207-1.615-0.599c-0.249-0.253-0.422-0.573-0.517-0.958l-4.07,2.363
@@ -2505,8 +2419,7 @@ export const GyeonggiInner = () => {
         {/* 파주 027 */}
         <InnerMapPath
           id="m_031_027"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_파주시"
           d="M175.954,197.748c-0.111-0.149-0.404-0.439-0.681-0.668l-0.305-0.252l1.836-3.701
 			l1.415-5.388l-2.925-1.694l-5.529-0.523l-0.084-0.346c-0.693-2.843-0.672-3.106-0.665-3.193c-0.002-0.184-0.211-1.597-0.413-2.843
@@ -2566,8 +2479,7 @@ export const GyeonggiInner = () => {
         {/* 평택 028 */}
         <InnerMapPath
           id="m_031_028"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_평택시"
           d="M211.873,421.164c0.039-0.161,0.065-0.304,0.065-0.405c0-1.787-0.493-5.853-1.139-6.5
 			c-0.055-0.055-0.111-0.13-0.168-0.218c-0.019-0.028-0.038-0.065-0.057-0.098c-0.039-0.066-0.079-0.134-0.118-0.213
@@ -2622,8 +2534,7 @@ export const GyeonggiInner = () => {
         {/* 포천 029 */}
         <InnerMapPath
           id="m_031_029"
-          class="mType_2"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_2"
           title="경기_포천시"
           d="M224.858,126.715c0.025,0.081,0.049,0.162,0.071,0.234
 			c0.023,0.077,0.042,0.146,0.062,0.213c0.017,0.058,0.034,0.118,0.048,0.169c0.017,0.062,0.031,0.115,0.045,0.167
@@ -2710,8 +2621,7 @@ export const GyeonggiInner = () => {
         {/* 하남 030 */}
         <InnerMapPath
           id="m_031_030"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_하남시"
           d="M241.748,293.835l0.196,0.065c0.038,0.013,3.833,1.275,5.065,1.481
 			c0.121,0.021,0.29,0.027,0.494,0.027c1.475,0,4.628-0.421,5.886-0.597c0.18-0.025,0.32-0.045,0.412-0.059l4.613-3.354l3.382-2.114
@@ -2736,8 +2646,7 @@ export const GyeonggiInner = () => {
         {/* 화성 040 */}
         <InnerMapPath
           id="m_031_040"
-          class="mType_3"
-          onclick="fnTab1SubChange(1,'031')"
+          className="mType_3"
           title="경기_화성시"
           d="M84.571,383.78c-0.048-0.053-0.083-0.108-0.11-0.165c-0.048,0.013-0.1,0.02-0.155,0.02H84.15l-0.212-0.117
 			c-0.33-0.229-0.597-0.704-0.744-1.044c-0.141,0.122-0.293,0.227-0.446,0.331c-0.243,0.164-0.453,0.307-0.588,0.535
@@ -3280,201 +3189,147 @@ export const GangwonInner = (props) => {
   ];
   return (
     <>
-      <DetailContainer class="airWarningMap p_code_033">
+      <DetailContainer className="airWarningMap p_code_033">
         {/* 강릉 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','001')"
-          //   onmouseout="handleMouseOut2('033','001')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_001"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '351px', top: '254px' }}
         >
           강릉<strong>23</strong>
         </InnerMapButton>
         {/* 고성 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','002')"
-          //   onmouseout="handleMouseOut2('033','002')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_002"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '269px', top: '88px' }}
         >
           고성<strong>21</strong>
         </InnerMapButton>
         {/* 동해 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','003')"
-          //   onmouseout="handleMouseOut2('033','003')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_003"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '390px', top: '312px' }}
         >
           동해<strong>15</strong>
         </InnerMapButton>
         {/* 삼척 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','004')"
-          //   onmouseout="handleMouseOut2('033','004')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_004"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '403px', top: '377px' }}
         >
           삼척<strong>16</strong>
         </InnerMapButton>
         {/* 속초 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','005')"
-          //   onmouseout="handleMouseOut2('033','005')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_005"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '303px', top: '145px' }}
         >
           속초<strong>26</strong>
         </InnerMapButton>
         {/* 양구 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','006')"
-          //   onmouseout="handleMouseOut2('033','006')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_006"
-          class="aw_city mcType_5"
+          className="aw_city mcType_5"
           style={{ left: '182px', top: '137px' }}
         >
           양구<strong>-</strong>
         </InnerMapButton>
         {/* 양양 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','007')"
-          //   onmouseout="handleMouseOut2('033','007')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_007"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '313px', top: '191px' }}
         >
           양양<strong>15</strong>
         </InnerMapButton>
         {/* 영월 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','008')"
-          //   onmouseout="handleMouseOut2('033','008')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_008"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '255px', top: '391px' }}
         >
           영월<strong>23</strong>
         </InnerMapButton>
         {/* 원주 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','009')"
-          //   onmouseout="handleMouseOut2('033','009')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_009"
-          class="aw_city mcType_3"
+          className="aw_city mcType_3"
           style={{ left: '150px', top: '359px' }}
         >
           원주<strong>40</strong>
         </InnerMapButton>
         {/* 인제 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','010')"
-          //   onmouseout="handleMouseOut2('033','010')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_010"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '229px', top: '179px' }}
         >
           인제<strong>14</strong>
         </InnerMapButton>
         {/* 정선 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','011')"
-          //   onmouseout="handleMouseOut2('033','011')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_011"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '309px', top: '347px' }}
         >
           정선<strong>11</strong>
         </InnerMapButton>
         {/* 철원 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','012')"
-          //   onmouseout="handleMouseOut2('033','012')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_012"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '62px', top: '116px' }}
         >
           철원<strong>33</strong>
         </InnerMapButton>
         {/* 춘천 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','013')"
-          //   onmouseout="handleMouseOut2('033','013')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_013"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '123px', top: '209px' }}
         >
           춘천<strong>11</strong>
         </InnerMapButton>
         {/* 태백 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','014')"
-          //   onmouseout="handleMouseOut2('033','014')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_014"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '357px', top: '412px' }}
         >
           태백<strong>15</strong>
         </InnerMapButton>
         {/* 평창 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','015')"
-          //   onmouseout="handleMouseOut2('033','015')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_015"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '261px', top: '293px' }}
         >
           평창<strong>23</strong>
         </InnerMapButton>
         {/* 홍천 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','016')"
-          //   onmouseout="handleMouseOut2('033','016')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_016"
-          class="aw_city mcType_2"
+          className="aw_city mcType_2"
           style={{ left: '184px', top: '245px' }}
         >
           홍천<strong>35</strong>
         </InnerMapButton>
         {/* 화천 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','017')"
-          //   onmouseout="handleMouseOut2('033','017')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_017"
-          class="aw_city mcType_1"
+          className="aw_city mcType_1"
           style={{ left: '125px', top: '141px' }}
         >
           화천<strong>10</strong>
         </InnerMapButton>
         {/* 횡성 */}
         <InnerMapButton
-          //   onmouseover="handleMouseOver2('033','018')"
-          //   onmouseout="handleMouseOut2('033','018')"
-          //   onclick="fnTab1SubChange(1,'033')"
           id="p_033_018"
-          //   class="aw_city mcType_3"
+          //   className="aw_city mcType_3"
           style={{ left: '194px', top: '303px' }}
         >
           횡성<strong>43</strong>
@@ -3671,8 +3526,7 @@ export const GangwonInner = (props) => {
           {/* 강릉 */}
           <InnerMapPath
             id="m_033_001"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             fillColor={getColorValue(value)[0]}
             fillHoverColor={getColorValue(value)[1]}
             title="강원_강릉시"
@@ -3750,8 +3604,7 @@ export const GangwonInner = (props) => {
           {/* 고성 */}
           <InnerMapPath
             id="m_033_002"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_고성군"
             d="M290.516,163.67c0.119-0.003,0.246-0.005,0.379-0.005
 			c0.695,0,1.188,0.055,1.506,0.168c0.002,0,0.053,0.017,0.199,0.017c0.091,0,0.195-0.006,0.307-0.017
@@ -3808,8 +3661,7 @@ export const GangwonInner = (props) => {
           {/* 동해 */}
           <InnerMapPath
             id="m_033_003"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_동해시"
             d="M383.796,331.432c0.007,0.042,0.013,0.082,0.021,0.125
 			c0.016,0.102,0.031,0.202,0.048,0.306c0.011,0.068,0.021,0.135,0.031,0.203c0.014,0.094,0.027,0.185,0.041,0.277
@@ -3859,8 +3711,7 @@ export const GangwonInner = (props) => {
           {/* 삼척 */}
           <InnerMapPath
             id="m_033_004"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_삼척시"
             d="M377.506,353.777l-0.445,0.271l-0.252-0.457c-0.001-0.001-0.187-0.296-0.46-0.164
 			c-0.401,0.194-0.838,0.224-1.25,0.192c-0.176-0.016-0.342-0.024-0.474,0.024c-0.319,0.12-0.87,0.59-1.199,0.871
@@ -3970,8 +3821,7 @@ export const GangwonInner = (props) => {
           {/* 속초 */}
           <InnerMapPath
             id="m_033_005"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_속초시"
             d="M290.251,165.09c-0.009,0.045-0.018,0.091-0.026,0.135
 			c-0.022,0.112-0.045,0.219-0.066,0.321c-0.009,0.042-0.018,0.084-0.026,0.125c-0.021,0.097-0.042,0.189-0.063,0.278
@@ -4026,8 +3876,7 @@ export const GangwonInner = (props) => {
           {/* 양구 */}
           <InnerMapPath
             id="m_033_006"
-            class="mType_5"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_5"
             title="강원_양구군"
             d="M183.025,196.334c0.009,0.426,0.784,3.219,1.117,3.581
 			c0.21,0.224,0.741,0.488,1.255,0.744c0.469,0.233,0.955,0.475,1.345,0.751c0.159,0.112,0.445,0.167,0.876,0.167
@@ -4086,8 +3935,7 @@ export const GangwonInner = (props) => {
           {/* 양양 */}
           <InnerMapPath
             id="m_033_007"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_양양군"
             d="M292.23,183.835l-0.55,0.18l0.001-0.251l-0.618-0.08l-1.246,0.9l-2.352,1.477
 			l-2.617,0.828l-0.114-0.017c-1.931-0.29-2.032-0.331-2.094-0.356c0.035,0.017-0.018,0.017-0.138,0.017
@@ -4151,8 +3999,7 @@ export const GangwonInner = (props) => {
           {/* 영월 */}
           <InnerMapPath
             id="m_033_008"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_영월군"
             d="M363.914,421.77l-0.098,0.013l-1.821-0.481c-0.276,0.01-1.255,0.043-1.931,0.043
 			c-0.537,0-0.669-0.021-0.75-0.04c-0.02,0.001-0.049,0.004-0.089,0.008c-0.28,0.028-1.038,0.12-1.774,0.21
@@ -4254,8 +4101,7 @@ export const GangwonInner = (props) => {
           {/* 원주 */}
           <InnerMapPath
             id="m_033_009"
-            class="mType_3"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_3"
             title="강원_원주시"
             d="M211.197,381.438c-0.264-0.026-0.554-0.055-0.838-0.081
 			c-0.285-0.027-0.563-0.051-0.802-0.069c-0.025-0.002-0.051-0.004-0.075-0.006c-0.088-0.007-0.167-0.012-0.239-0.017
@@ -4331,8 +4177,7 @@ export const GangwonInner = (props) => {
           {/* 인제 */}
           <InnerMapPath
             id="m_033_010"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_인제군"
             d="M207.227,205.42c-0.318,0.251-0.634,0.528-0.74,0.645
 			c-0.065,0.204-0.264,0.695-0.893,2.069l-0.142,0.31l-2.382-0.127c-0.423,0.396-1.171,1.047-1.629,1.165
@@ -4450,8 +4295,7 @@ export const GangwonInner = (props) => {
           {/* 정선 */}
           <InnerMapPath
             id="m_033_011"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_정선군"
             d="M382.726,331.49c-0.108,0.029-0.221,0.058-0.337,0.086
 			c-0.035,0.009-0.07,0.017-0.106,0.025c-0.094,0.021-0.188,0.043-0.282,0.063c-0.038,0.009-0.075,0.017-0.112,0.024
@@ -4564,8 +4408,7 @@ export const GangwonInner = (props) => {
           {/* 철원 */}
           <InnerMapPath
             id="m_033_012"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_철원군"
             d="M124.246,121.399c-0.646,0-1.364,0.086-2.194,0.265
 			c-1.285,0.276-2.237,0.422-2.83,0.435c-0.078,0.163-0.184,0.317-0.281,0.447c-0.157,0.211-0.324,0.449-0.501,0.702
@@ -4635,8 +4478,7 @@ export const GangwonInner = (props) => {
           {/* 춘천 */}
           <InnerMapPath
             id="m_033_013"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_춘천시"
             d="M199.568,220.95c-0.093-0.129-0.188-0.265-0.281-0.406
 			c-0.007-0.011-0.013-0.021-0.021-0.032c-0.078-0.12-0.149-0.238-0.214-0.352c-0.018-0.032-0.035-0.063-0.052-0.094
@@ -4755,8 +4597,7 @@ export const GangwonInner = (props) => {
           {/* 태백 */}
           <InnerMapPath
             id="m_033_014"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_태백시"
             d="M368.562,409.941c0.035,0.082,0.064,0.182,0.096,0.277
 			c0.022,0.071,0.047,0.133,0.066,0.209c0.029,0.11,0.052,0.23,0.075,0.35c0.017,0.079,0.034,0.152,0.049,0.234
@@ -4825,8 +4666,7 @@ export const GangwonInner = (props) => {
           {/* 평창 */}
           <InnerMapPath
             id="m_033_015"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_평창군"
             d="M249.164,357.464l0.08,0.164c0.848,1.748,1.114,2.388,1.201,2.642
 			c0.113,0.084,0.37,0.233,0.55,0.337c0.669,0.388,1.169,0.678,1.231,1.103c0.118,0.151,0.503,0.48,0.74,0.683
@@ -4929,8 +4769,7 @@ export const GangwonInner = (props) => {
           {/* 홍천 */}
           <InnerMapPath
             id="m_033_016"
-            class="mType_2"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_2"
             title="강원_홍천군"
             d="M247.514,301.659c0.154-0.074,0.313-0.162,0.471-0.251
 			c0.044-0.024,0.089-0.045,0.133-0.07c0.112-0.065,0.214-0.132,0.321-0.197c0.274-0.171,0.534-0.341,0.727-0.479
@@ -5078,8 +4917,7 @@ export const GangwonInner = (props) => {
           {/* 화천 */}
           <InnerMapPath
             id="m_033_017"
-            class="mType_1"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_1"
             title="강원_화천군"
             d="M182.64,193.34c0.028-0.035,0.063-0.065,0.095-0.099
 			c0.078-0.081,0.161-0.158,0.255-0.231c0.045-0.034,0.09-0.068,0.138-0.101c0.1-0.068,0.203-0.133,0.313-0.195
@@ -5181,8 +5019,7 @@ export const GangwonInner = (props) => {
           {/* 횡성 */}
           <InnerMapPath
             id="m_033_018"
-            class="mType_3"
-            // onclick="fnTab1SubChange(1,'033')"
+            className="mType_3"
             title="강원_횡성군"
             d="M190.491,339.081c0.284-0.067,0.605-0.143,0.931-0.143
 			c0.637,0,1.136,0.294,1.484,0.875c0.511,0.856,0.9,1.569,1.085,1.915l2.763,0.454c0.335-0.098,1.221-0.147,2.066,0.118
@@ -6251,7 +6088,7 @@ export const DaejeonPath = (props) => {
     <>
       <path
         title="대전 지도 배경"
-        class="svgmap map_08 mType_2"
+        className="svgmap map_08 mType_2"
         id="totalMap_042"
         fill={props.bgColor || '#FFFFFF'}
         d="M322.506,400.387c-0.196,0-0.693-0.373-1.144-0.723c-1.391-1.079-2.682-2.854-3.542-4.869
@@ -6342,7 +6179,6 @@ export const GyeongbukPath = (props) => {
       <path
         title="경북 지도 배경"
         id="totalMap_054"
-        // onclick="fnShowTab3Detail('054')"
         fill={props.bgColor || '#FFFFFF'}
         d="M587.717,426.026c0.006-1.615-0.262-3.443-1.399-4.679
 												c-0.509-0.551-1.49-1.309-2.25-1.055c-0.761,0.254-1.396,1.494-1.851,2.096c-1.355,1.791-2.326,4.031-3.867,5.658
@@ -7960,9 +7796,8 @@ export const DaeguPath = (props) => {
     <>
       <path
         title="대구 지도 배경"
-        class="svgmap map_11 mType_2"
+        className="svgmap map_11 mType_2"
         id="totalMap_053"
-        onclick="fnShowTab3Detail('053')"
         fill={props.bgColor || '#FFFFFF'}
         d="M451.813,485.452l-0.032-0.233l0.075-0.228c0.004-0.024,0.001-0.139-0.003-0.22
 												c-0.004-0.154-0.006-0.311,0.009-0.463c0.056-0.565,0.303-1.024,0.501-1.394l0.13-0.247c0.267-0.531,0.407-1.127,0.407-1.723
@@ -8368,7 +8203,7 @@ export const UlsanPath = (props) => {
     <>
       <path
         title="울산 지도 배경"
-        class="svgmap map_12 mType_1"
+        className="svgmap map_12 mType_1"
         id="totalMap_052"
         fill={props.bgColor || '#FFFFFF'}
         d="M554.795,532.923c-0.392-0.373-0.784-0.697-1.208-0.998l-0.391-0.271c-0.61-0.415-0.755-0.514-0.905-1.009
