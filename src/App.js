@@ -11,6 +11,7 @@ import {
   GangwonPath,
   GwangjuPath,
   GyeongbukPath,
+  GyeonggiInner,
   GyeonggiPath,
   GyeongnamPath,
   IncheonPath,
@@ -216,7 +217,8 @@ function App() {
             {/* Main Map 전국 지도 */}
             <MMWrapper>
               {/* <GangwonInner /> */}
-              <SeoulInner />
+              {/* <SeoulInner /> */}
+              <GyeonggiInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
