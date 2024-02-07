@@ -219,8 +219,8 @@ function App() {
             <MMWrapper>
               {/* <SeoulInner /> */}
               {/* <GyeonggiInner /> */}
-              <IncheonInner />
-              {/* <GangwonInner /> */}
+              {/* <IncheonInner /> */}
+              <GangwonInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
