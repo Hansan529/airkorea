@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import './App.css';
 import Headers from './components/Header';
 import {
+  BusanInner,
   BusanPath,
   ChungbukInner,
   ChungbukPath,
@@ -22,6 +23,7 @@ import {
   JejuPath,
   JeonbukPath,
   JeonnamPath,
+  SejongInner,
   SejongPath,
   SeoulInner,
   SeoulPath,
@@ -227,6 +229,8 @@ function App() {
               {/* <ChungnamInner /> */}
               {/* <DaejeonInner /> */}
               {/* <ChungbukInner /> */}
+              {/* <SejongInner /> */}
+              <BusanInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
