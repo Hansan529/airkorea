@@ -3,6 +3,7 @@ import './App.css';
 import Headers from './components/Header';
 import {
   BusanPath,
+  ChungbukInner,
   ChungbukPath,
   ChungnamInner,
   ChungnamPath,
@@ -224,7 +225,8 @@ function App() {
               {/* <IncheonInner /> */}
               {/* <GangwonInner /> */}
               {/* <ChungnamInner /> */}
-              <DaejeonInner />
+              {/* <DaejeonInner /> */}
+              {/* <ChungbukInner /> */}
               <svg
                 version="1.1"
                 id="map_svg_city"
