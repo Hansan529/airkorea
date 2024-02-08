@@ -27,6 +27,7 @@ import {
   SejongPath,
   SeoulInner,
   SeoulPath,
+  UlsanInner,
   UlsanPath,
 } from './components/MapPath';
 
@@ -230,7 +231,8 @@ function App() {
               {/* <DaejeonInner /> */}
               {/* <ChungbukInner /> */}
               {/* <SejongInner /> */}
-              <BusanInner />
+              {/* <BusanInner /> */}
+              <UlsanInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
