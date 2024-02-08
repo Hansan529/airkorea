@@ -1,8 +1,6 @@
 import styled from '@emotion/styled';
 import { pathData } from '../paths/paths';
 
-const value = 'test';
-
 /**
  * 대기 정보 목록
  * 좋음 (0~50): #d0ecff / #7ed6ff
@@ -271,17 +269,18 @@ export const IncheonPath = (props) => {
 
 //  <!-- mType_1 : 좋음, mType_2 :  보통,  mType_3 : 나쁨,  mType_4 : 매우나쁨 -->
 export const IncheonInner = () => {
+  const regionData = { num: '032', name: '인천' };
   const list = [
-    '강화',
-    '계양',
-    '미추홀',
-    '남동구',
-    '동구',
-    '부평',
-    '서구',
-    '연수',
-    '옹진',
-    '중구',
+    { name: '강화', district: '군' },
+    { name: '계양', district: '구' },
+    { name: '미추홀', district: '구' },
+    { name: '남동구', district: '' },
+    { name: '동구', district: '' },
+    { name: '부평', district: '구' },
+    { name: '서구', district: '' },
+    { name: '연수', district: '구' },
+    { name: '옹진', district: '군' },
+    { name: '중구', district: '' },
   ];
   const testValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
@@ -299,33 +298,40 @@ export const IncheonInner = () => {
     { left: '261px', top: '300px' },
   ];
 
-  const cityCounty = (district) => {
-    if (district === '강화' || district === '옹진') {
-      return '군';
-    } else {
-      return '구';
-    }
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
+    return (
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: positionValue[key].left,
+          top: positionValue[key].top,
+        }}
+        value={getColorValue(testValue[key])[2]}
+      >
+        {el.name}
+        <strong>{testValue[key]}</strong>
+      </InnerMapButton>
+    );
+  };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(testValue[key])[0]}
+        fillHoverColor={getColorValue(testValue[key])[1]}
+      ></InnerMapPath>
+    );
   };
   return (
-    <DetailContainer regionNum="032">
-      {list.map((el, key) => {
-        return (
-          <InnerMapButton
-            key={key}
-            id={`p_032_${String(key + 1).padStart(3, '0')}`}
-            style={{
-              left: positionValue[key].left,
-              top: positionValue[key].top,
-            }}
-            value={getColorValue(testValue[key])[2]}
-          >
-            {el}
-            <strong>{testValue[key]}</strong>
-          </InnerMapButton>
-        );
-      })}
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
 
-      <InnerMapSvg id="p_code_032">
+      <InnerMapSvg>
         <rect
           title="인천_백령도_BOX"
           x="15.356"
@@ -874,18 +880,7 @@ export const IncheonInner = () => {
 			c1.031-0.895,2.702-0.682,2.57-2.316c-0.676-0.024-1.25-0.264-1.987-0.263C130.942,493.89,130.34,493.864,129.684,493.81z"
         ></path>
 
-        {list.map((el, key) => {
-          return (
-            <InnerMapPath
-              key={key}
-              id={`m_032_${String(key + 1).padStart(3, '0')}`}
-              title={`인천_${el}${cityCounty(el)}`}
-              d={pathData[`m_032_${String(key + 1).padStart(3, '0')}`]}
-              fillColor={getColorValue(testValue[key])[0]}
-              fillHoverColor={getColorValue(testValue[key])[1]}
-            ></InnerMapPath>
-          );
-        })}
+        {list.map(renderPath)}
 
         <g class="eng_map_hide" title="인천_섬_TXT">
           <g title="인천_울도_TXTBG">
@@ -1083,32 +1078,33 @@ export const SeoulPath = (props) => {
 };
 
 export const SeoulInner = () => {
+  const regionData = { num: '02', name: '서울' };
   const list = [
-    '강남',
-    '강동',
-    '강북',
-    '강서',
-    '관악',
-    '광진',
-    '구로',
-    '금천',
-    '노원',
-    '도봉',
-    '동대문',
-    '동작',
-    '마포',
-    '서대문',
-    '서초',
-    '성동',
-    '성북',
-    '송파',
-    '양천',
-    '영등포',
-    '용산',
-    '은평',
-    '종로',
-    '중구',
-    '중랑',
+    { name: '강남', district: '구' },
+    { name: '강동', district: '구' },
+    { name: '강북', district: '구' },
+    { name: '강서', district: '구' },
+    { name: '관악', district: '구' },
+    { name: '광진', district: '구' },
+    { name: '구로', district: '구' },
+    { name: '금천', district: '구' },
+    { name: '노원', district: '구' },
+    { name: '도봉', district: '구' },
+    { name: '동대문', district: '구' },
+    { name: '동작', district: '구' },
+    { name: '마포', district: '구' },
+    { name: '서대문', district: '구' },
+    { name: '서초', district: '구' },
+    { name: '성동', district: '구' },
+    { name: '성북', district: '구' },
+    { name: '송파', district: '구' },
+    { name: '양천', district: '구' },
+    { name: '영등포', district: '구' },
+    { name: '용산', district: '구' },
+    { name: '은평', district: '구' },
+    { name: '종로', district: '구' },
+    { name: '중구', district: '' },
+    { name: '중랑', district: '구' },
   ];
   const testValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
@@ -1140,26 +1136,41 @@ export const SeoulInner = () => {
     { left: '250px', top: '231px' },
     { left: '357px', top: '189px' },
   ];
+
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
+    return (
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: positionValue[key].left,
+          top: positionValue[key].top,
+        }}
+        value={getColorValue(testValue[key])[2]}
+      >
+        {el.name}
+        <strong>{testValue[key]}</strong>
+      </InnerMapButton>
+    );
+  };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(testValue[key])[0]}
+        fillHoverColor={getColorValue(testValue[key])[1]}
+      ></InnerMapPath>
+    );
+  };
+
   return (
-    <DetailContainer regionNum="02">
-      {list.map((el, key) => {
-        return (
-          <InnerMapButton
-            key={key}
-            id={`p_02_${String(key + 1).padStart(3, '0')}`}
-            style={{
-              left: positionValue[key].left,
-              top: positionValue[key].top,
-            }}
-            value={getColorValue(testValue[key])[2]}
-          >
-            {el}
-            <strong>{testValue[key]}</strong>
-          </InnerMapButton>
-        );
-      })}
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
       <InnerMapSvg id="p_code_02">
-        {/* 강 */}
         <path
           title="서울_한강"
           fill="rgb(40, 124, 224)"
@@ -1181,8 +1192,6 @@ export const SeoulInner = () => {
 			c2.145,3.215,6.608,5.895,6.252,7.68c-0.357,1.787-10.003,1.43-13.039,1.25c-3.036-0.178-8.037-2.678-10.359-9.109
 			c-2.322-6.43-2.322-9.465-2.322-10.895C190.577,295.944,189.862,294.514,192.005,294.514z"
         ></path>
-
-        {/* 배경 */}
         <path
           title="서울_BG"
           fill="#BFD3E1"
@@ -1250,18 +1259,7 @@ export const SeoulInner = () => {
 			S133.778,242.922,134.79,248.852z"
         ></path>
 
-        {list.map((el, key) => {
-          return (
-            <InnerMapPath
-              key={key}
-              id={`m_02_${String(key + 1).padStart(3, '0')}`}
-              title={`서울_${el}구`}
-              d={pathData[`m_02_${String(key + 1).padStart(3, '0')}`]}
-              fillColor={getColorValue(testValue[key])[0]}
-              fillHoverColor={getColorValue(testValue[key])[1]}
-            ></InnerMapPath>
-          );
-        })}
+        {list.map(renderPath)}
       </InnerMapSvg>
       ;
     </DetailContainer>
@@ -1710,38 +1708,39 @@ export const GyeonggiPath = (props) => {
 };
 
 export const GyeonggiInner = () => {
+  const regionData = { num: '031', name: '경기' };
   const list = [
-    '가평',
-    '고양',
-    '과천',
-    '광명',
-    '광주',
-    '구리',
-    '군포',
-    '김포',
-    '남양주',
-    '동두천',
-    '부천',
-    '성남',
-    '수원',
-    '시흥',
-    '안산',
-    '안성',
-    '안양',
-    '양주',
-    '양평',
-    '여주',
-    '연천',
-    '오산',
-    '용인',
-    '의왕',
-    '의정부',
-    '이천',
-    '파주',
-    '평택',
-    '포천',
-    '하남',
-    '화성',
+    { name: '가평', district: '군' },
+    { name: '고양', district: '시' },
+    { name: '과천', district: '시' },
+    { name: '광명', district: '시' },
+    { name: '광주', district: '시' },
+    { name: '구리', district: '시' },
+    { name: '군포', district: '시' },
+    { name: '김포', district: '시' },
+    { name: '남양주', district: '시' },
+    { name: '동두천', district: '시' },
+    { name: '부천', district: '시' },
+    { name: '성남', district: '시' },
+    { name: '수원', district: '시' },
+    { name: '시흥', district: '시' },
+    { name: '안산', district: '시' },
+    { name: '안성', district: '시' },
+    { name: '안양', district: '시' },
+    { name: '양주', district: '시' },
+    { name: '양평', district: '군' },
+    { name: '여주', district: '시' },
+    { name: '연천', district: '군' },
+    { name: '오산', district: '시' },
+    { name: '용인', district: '시' },
+    { name: '의왕', district: '시' },
+    { name: '의정부', district: '시' },
+    { name: '이천', district: '시' },
+    { name: '파주', district: '시' },
+    { name: '평택', district: '시' },
+    { name: '포천', district: '시' },
+    { name: '하남', district: '시' },
+    { name: '화성', district: '시' },
   ];
   const testValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
@@ -1780,32 +1779,40 @@ export const GyeonggiInner = () => {
     { left: '111px', top: '387px' },
   ];
 
-  const cityCounty = (district) => {
-    if (district === '가평' || district === '양평' || district === '연천') {
-      return '군';
-    } else {
-      return '시';
-    }
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
+    return (
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: positionValue[key].left,
+          top: positionValue[key].top,
+        }}
+        value={getColorValue(testValue[key])[2]}
+      >
+        {el.name}
+        <strong>{testValue[key]}</strong>
+      </InnerMapButton>
+    );
   };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(testValue[key])[0]}
+        fillHoverColor={getColorValue(testValue[key])[1]}
+      ></InnerMapPath>
+    );
+  };
+
   return (
-    <DetailContainer regionNum="031">
-      {list.map((el, key) => {
-        return (
-          <InnerMapButton
-            key={key}
-            id={`p_031_${String(key + 1).padStart(3, '0')}`}
-            style={{
-              left: positionValue[key].left,
-              top: positionValue[key].top,
-            }}
-            value={getColorValue(testValue[key])[2]}
-          >
-            {el}
-            <strong>{testValue[key]}</strong>
-          </InnerMapButton>
-        );
-      })}
-      <InnerMapSvg id="p_code_031">
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
+      <InnerMapSvg>
         <path
           title="경기_BG"
           fill="#BFD3E1"
@@ -2007,18 +2014,7 @@ export const GyeonggiInner = () => {
 			C420.61,284.893,420.395,281.442,420.395,281.442z"
         ></path>
 
-        {list.map((el, key) => {
-          return (
-            <InnerMapPath
-              key={key}
-              id={`m_031_${String(key + 1).padStart(3, '0')}`}
-              title={`경기_${el}${cityCounty(el)}`}
-              d={pathData[`m_031_${String(key + 1).padStart(3, '0')}`]}
-              fillColor={getColorValue(testValue[key])[0]}
-              fillHoverColor={getColorValue(testValue[key])[1]}
-            ></InnerMapPath>
-          );
-        })}
+        {list.map(renderPath)}
       </InnerMapSvg>
     </DetailContainer>
   );
@@ -2424,25 +2420,26 @@ export const GangwonPath = (props) => {
 };
 
 export const GangwonInner = (props) => {
+  const regionData = { num: '033', name: '강원' };
   const list = [
-    '강릉',
-    '고성',
-    '동해',
-    '삼척',
-    '속초',
-    '양구',
-    '양양',
-    '영월',
-    '원주',
-    '인제',
-    '정선',
-    '철원',
-    '춘천',
-    '태백',
-    '평창',
-    '홍천',
-    '화천',
-    '횡성',
+    { name: '강릉', district: '시' },
+    { name: '고성', district: '군' },
+    { name: '동해', district: '시' },
+    { name: '삼척', district: '시' },
+    { name: '속초', district: '시' },
+    { name: '양구', district: '군' },
+    { name: '양양', district: '군' },
+    { name: '영월', district: '군' },
+    { name: '원주', district: '시' },
+    { name: '인제', district: '군' },
+    { name: '정선', district: '군' },
+    { name: '철원', district: '군' },
+    { name: '춘천', district: '시' },
+    { name: '태백', district: '시' },
+    { name: '평창', district: '군' },
+    { name: '홍천', district: '군' },
+    { name: '화천', district: '군' },
+    { name: '횡성', district: '군' },
   ];
   const testValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
@@ -2467,41 +2464,42 @@ export const GangwonInner = (props) => {
     { left: '125px', top: '141px' },
     { left: '194px', top: '303px' },
   ];
-  const cityCounty = (district) => {
-    if (
-      district === '춘천' ||
-      district === '원주' ||
-      district === '강릉' ||
-      district === '속초' ||
-      district === '동해' ||
-      district === '태백' ||
-      district === '삼척'
-    ) {
-      return '시';
-    } else {
-      return '군';
-    }
+
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
+    return (
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: positionValue[key].left,
+          top: positionValue[key].top,
+        }}
+        value={getColorValue(testValue[key])[2]}
+      >
+        {el.name}
+        <strong>{testValue[key]}</strong>
+      </InnerMapButton>
+    );
   };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(testValue[key])[0]}
+        fillHoverColor={getColorValue(testValue[key])[1]}
+      ></InnerMapPath>
+    );
+  };
+
   return (
     <>
-      <DetailContainer className="airWarningMap p_code_033" regionNum="033">
-        {list.map((el, key) => {
-          return (
-            <InnerMapButton
-              key={key}
-              id={`p_033_${String(key + 1).padStart(3, '0')}`}
-              style={{
-                left: positionValue[key].left,
-                top: positionValue[key].top,
-              }}
-              value={getColorValue(testValue[key])[2]}
-            >
-              {el}
-              <strong>{testValue[key]}</strong>
-            </InnerMapButton>
-          );
-        })}
-        <InnerMapSvg id="p_code_033">
+      <DetailContainer regionNum={regionData.num}>
+        {list.map(renderButton)}
+        <InnerMapSvg>
           <path
             title="강원_BG"
             fill="#BFD3E1"
@@ -2677,18 +2675,7 @@ export const GangwonInner = (props) => {
 			c-0.457,0.59,2.318,0.885-1.716,3.816C39.137,119.356,37.026,121,35.245,124.719z"
           ></path>
 
-          {list.map((el, key) => {
-            return (
-              <InnerMapPath
-                key={key}
-                id={`m_031_${String(key + 1).padStart(3, '0')}`}
-                title={`강원_${el}${cityCounty(el)}`}
-                d={pathData[`m_033_${String(key + 1).padStart(3, '0')}`]}
-                fillColor={getColorValue(testValue[key])[0]}
-                fillHoverColor={getColorValue(testValue[key])[1]}
-              ></InnerMapPath>
-            );
-          })}
+          {list.map(renderPath)}
         </InnerMapSvg>
       </DetailContainer>
     </>
@@ -3583,25 +3570,24 @@ export const ChungnamPath = (props) => {
   );
 };
 
-
 export const ChungnamInner = () => {
   const regionData = { num: '041', name: '충남' };
   const list = [
-    '공주',
-    '금산',
-    '논산',
-    '당진',
-    '보령',
-    '부여',
-    '서산',
-    '서천',
-    '아산',
-    '예산',
-    '천안',
-    '청양',
-    '태안',
-    '홍성',
-    '계룡',
+    { name: '공주', district: '시' },
+    { name: '금산', district: '군' },
+    { name: '논산', district: '시' },
+    { name: '당진', district: '시' },
+    { name: '보령', district: '시' },
+    { name: '부여', district: '군' },
+    { name: '서산', district: '시' },
+    { name: '서천', district: '군' },
+    { name: '아산', district: '시' },
+    { name: '예산', district: '군' },
+    { name: '천안', district: '시' },
+    { name: '청양', district: '군' },
+    { name: '태안', district: '군' },
+    { name: '홍성', district: '군' },
+    { name: '계룡', district: '시' },
   ];
   const testValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
@@ -3624,22 +3610,6 @@ export const ChungnamInner = () => {
     { left: '352px', top: '301px' },
   ];
 
-  const cityCounty = (district) => {
-    if (
-      district === '홍성' ||
-      district === '예산' ||
-      district === '부여' ||
-      district === '서천' ||
-      district === '청양' ||
-      district === '태안' ||
-      district === '금산'
-    ) {
-      return '군';
-    } else {
-      return '시';
-    }
-  };
-
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -3652,7 +3622,7 @@ export const ChungnamInner = () => {
         }}
         value={getColorValue(testValue[key])[2]}
       >
-        {el}
+        {el.name}
         <strong>{testValue[key]}</strong>
       </InnerMapButton>
     );
@@ -3662,7 +3632,7 @@ export const ChungnamInner = () => {
       <InnerMapPath
         key={key}
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
-        title={`${regionData.name}_${el}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
         fillColor={getColorValue(testValue[key])[0]}
         fillHoverColor={getColorValue(testValue[key])[1]}
@@ -3671,25 +3641,10 @@ export const ChungnamInner = () => {
   };
 
   return (
-    <DetailContainer regionNum="041">
-      {list.map((el, key) => {
-        return (
-          <InnerMapButton
-            key={key}
-            id={`p_041_${String(key + 1).padStart(3, '0')}`}
-            style={{
-              left: positionValue[key].left,
-              top: positionValue[key].top,
-            }}
-            value={getColorValue(testValue[key])[2]}
-          >
-            {el}
-            <strong>{testValue[key]}</strong>
-          </InnerMapButton>
-        );
-      })}
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
 
-      <InnerMapSvg id="p_code_041">
+      <InnerMapSvg>
         <rect
           title="충남_결렬비열도_BOX"
           x="24.5"
@@ -4189,18 +4144,7 @@ export const ChungnamInner = () => {
 			c0.423,0.846,1.003,1.602,1.33,2.493C56.942,254.628,59.756,256.567,60.17,259.409z"
         ></path>
 
-        {list.map((el, key) => {
-          return (
-            <InnerMapPath
-              key={key}
-              id={`m_041_${String(key + 1).padStart(3, '0')}`}
-              title={`충남_${el}${cityCounty(el)}`}
-              d={pathData[`m_041_${String(key + 1).padStart(3, '0')}`]}
-              fillColor={getColorValue(testValue[key])[0]}
-              fillHoverColor={getColorValue(testValue[key])[1]}
-            ></InnerMapPath>
-          );
-        })}
+        {list.map(renderPath)}
       </InnerMapSvg>
     </DetailContainer>
   );
@@ -4427,7 +4371,7 @@ export const DaejeonInner = () => {
     <DetailContainer regionNum={regionData.num}>
       {list.map(renderButton)}
 
-      <InnerMapSvg id="p_code_042">
+      <InnerMapSvg>
         <path
           title="대전_배경"
           fill="#BFD3E1"
