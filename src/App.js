@@ -15,6 +15,7 @@ import {
   GangwonInner,
   GangwonPath,
   GwangjuPath,
+  GyeongbukInner,
   GyeongbukPath,
   GyeonggiInner,
   GyeonggiPath,
@@ -234,7 +235,8 @@ function App() {
               {/* <SejongInner /> */}
               {/* <BusanInner /> */}
               {/* <UlsanInner /> */}
-              <DaeguInner />
+              {/* <DaeguInner /> */}
+              <GyeongbukInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
