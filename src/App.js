@@ -4,8 +4,10 @@ import Headers from './components/Header';
 import {
   BusanPath,
   ChungbukPath,
+  ChungnamInner,
   ChungnamPath,
   DaeguPath,
+  DaejeonInner,
   DaejeonPath,
   GangwonInner,
   GangwonPath,
@@ -220,7 +222,9 @@ function App() {
               {/* <SeoulInner /> */}
               {/* <GyeonggiInner /> */}
               {/* <IncheonInner /> */}
-              <GangwonInner />
+              {/* <GangwonInner /> */}
+              {/* <ChungnamInner /> */}
+              <DaejeonInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
