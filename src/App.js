@@ -8,6 +8,7 @@ import {
   ChungbukPath,
   ChungnamInner,
   ChungnamPath,
+  DaeguInner,
   DaeguPath,
   DaejeonInner,
   DaejeonPath,
@@ -232,7 +233,8 @@ function App() {
               {/* <ChungbukInner /> */}
               {/* <SejongInner /> */}
               {/* <BusanInner /> */}
-              <UlsanInner />
+              {/* <UlsanInner /> */}
+              <DaeguInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
