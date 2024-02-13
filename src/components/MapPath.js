@@ -31,8 +31,8 @@ const DetailContainer = styled.div`
       props.noImage ? '' : `url('/map_bg_${props.regionNum}.jpg')`
     } no-repeat`};
   position: absolute;
-  /* opacity: 0;
-    visibility: hidden; */
+  opacity: 0;
+  visibility: hidden;
 `;
 
 const InnerMapButton = styled.button`
@@ -102,6 +102,75 @@ const InnerMapPath = ({
     fillHoverColor={fillHoverColor || '#c1c5c7'}
   ></InnerMapPathStyle>
 );
+
+const MapNameButtonsWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+const MapNameButton = styled.button`
+  position: absolute;
+  left: ${(props) => props.left};
+  top: ${(props) => props.top};
+  border: none;
+  background-color: ${(props) => props.bgColor};
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  text-align: center;
+  line-height: 17px;
+  opacity: 1;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  > span {
+    display: block;
+  }
+`;
+export const MapNameButtons = () => {
+  const namePositionVal = [
+    { name: '서울', left: '241px', top: '120px' },
+    { name: '경기', left: '290px', top: '175px' },
+    { name: '인천', left: '180px', top: '160px' },
+    { name: '강원', left: '401px', top: '105px' },
+    { name: '충남', left: '206px', top: '325px' },
+    { name: '대전', left: '310px', top: '330px' },
+    { name: '충북', left: '333px', top: '251px' },
+    { name: '세종', left: '262px', top: '280px' },
+    { name: '부산', left: '496px', top: '518px' },
+    { name: '울산', left: '516px', top: '441px' },
+    { name: '대구', left: '435px', top: '385px' },
+    { name: '경북', left: '470px', top: '280px' },
+    { name: '경남', left: '380px', top: '483px' },
+    { name: '전남', left: '269px', top: '543px' },
+    { name: '광주', left: '213px', top: '503px' },
+    { name: '전북', left: '257px', top: '422px' },
+    { name: '제주', left: '45px', top: '640px' },
+  ];
+  const testValue = Array.from({ length: namePositionVal.length }, () =>
+    Math.floor(Math.random() * 300)
+  );
+  return (
+    <MapNameButtonsWrapper>
+      {namePositionVal.map((el, key) => {
+        return (
+          <MapNameButton
+            key={key}
+            left={el.left}
+            top={el.top}
+            bgColor={getColorValue(testValue[key])}
+          >
+            {el.name}
+            <span>{testValue[key]}</span>
+          </MapNameButton>
+        );
+      })}
+    </MapNameButtonsWrapper>
+  );
+};
 
 /** 인천 */
 export const IncheonPath = (props) => {
