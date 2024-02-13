@@ -203,7 +203,7 @@ function App() {
                   </MMOSelect>
                 </MMOSelectWrapper>
                 <MMOSelectWrapper>
-                  <label for="area1" style={{ marginRight: '5px' }}>
+                  <label htmlFor="area1" style={{ marginRight: '5px' }}>
                     시/도
                   </label>
                   <MMOSelect bg id="area1" width="130px">
