@@ -163,6 +163,21 @@ const MMWrapper = styled.div`
 
 const InfoContainer = styled.div``;
 
+// default, hover, button
+const getColorValue = (value) => {
+  if (value >= 0 && value <= 50) {
+    return ['#d0ecff', '#7ed6ff', '#6ac8fe'];
+  } else if (value >= 51 && value <= 100) {
+    return ['#caf2de', '#94edbc', '#59e494'];
+  } else if (value >= 101 && value <= 250) {
+    return ['#f8f7c6', '#ffeb8b', '#ffda58'];
+  } else if (value >= 251) {
+    return ['#ffd6da', '#ffc1c5', '#ffa8a8'];
+  } else {
+    return ['#cbd0d3', '#c1c5c7', '#abb0b3'];
+  }
+};
+
 function App() {
   return (
     <>
@@ -209,21 +224,21 @@ function App() {
                   <MMOSelect bg id="area1" width="130px">
                     <option value="">-전체-</option>
                     <option value="02">서울특별시</option>
-                    <option value="051">부산광역시</option>
-                    <option value="053">대구광역시</option>
-                    <option value="032">인천광역시</option>
-                    <option value="062">광주광역시</option>
-                    <option value="042">대전광역시</option>
-                    <option value="052">울산광역시</option>
                     <option value="031">경기도</option>
+                    <option value="032">인천광역시</option>
                     <option value="033">강원특별자치도</option>
-                    <option value="043">충청북도</option>
                     <option value="041">충청남도</option>
-                    <option value="063">전라북도</option>
-                    <option value="061">전라남도</option>
+                    <option value="042">대전광역시</option>
+                    <option value="043">충청북도</option>
                     <option value="044">세종특별자치시</option>
+                    <option value="051">부산광역시</option>
+                    <option value="052">울산광역시</option>
+                    <option value="053">대구광역시</option>
                     <option value="054">경상북도</option>
                     <option value="055">경상남도</option>
+                    <option value="061">전라남도</option>
+                    <option value="062">광주광역시</option>
+                    <option value="063">전라북도</option>
                     <option value="064">제주특별자치도</option>
                   </MMOSelect>
                 </MMOSelectWrapper>

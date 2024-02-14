@@ -25,6 +25,148 @@ const getColorValue = (value) => {
   }
 };
 
+const resultVal = {
+  '02': Math.floor(Math.random() * 300),
+  '031': Math.floor(Math.random() * 300),
+  '032': Math.floor(Math.random() * 300),
+  '033': Math.floor(Math.random() * 300),
+  '041': Math.floor(Math.random() * 300),
+  '042': Math.floor(Math.random() * 300),
+  '043': Math.floor(Math.random() * 300),
+  '044': Math.floor(Math.random() * 300),
+  '051': Math.floor(Math.random() * 300),
+  '052': Math.floor(Math.random() * 300),
+  '053': Math.floor(Math.random() * 300),
+  '054': Math.floor(Math.random() * 300),
+  '055': Math.floor(Math.random() * 300),
+  '061': Math.floor(Math.random() * 300),
+  '062': Math.floor(Math.random() * 300),
+  '063': Math.floor(Math.random() * 300),
+  '064': Math.floor(Math.random() * 300),
+};
+
+const namePositionVal = {
+  '02': {
+    num: '02',
+    name: '서울',
+    left: '241px',
+    top: '120px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '031': {
+    num: '031',
+    name: '경기',
+    left: '290px',
+    top: '175px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '032': {
+    num: '032',
+    name: '인천',
+    left: '180px',
+    top: '160px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '033': {
+    num: '033',
+    name: '강원',
+    left: '401px',
+    top: '105px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '041': {
+    num: '041',
+    name: '충남',
+    left: '206px',
+    top: '325px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '042': {
+    num: '042',
+    name: '대전',
+    left: '310px',
+    top: '330px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '043': {
+    num: '043',
+    name: '충북',
+    left: '333px',
+    top: '251px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '044': {
+    num: '044',
+    name: '세종',
+    left: '262px',
+    top: '280px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '051': {
+    num: '051',
+    name: '부산',
+    left: '496px',
+    top: '518px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '052': {
+    num: '052',
+    name: '울산',
+    left: '516px',
+    top: '441px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '053': {
+    num: '053',
+    name: '대구',
+    left: '435px',
+    top: '385px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '054': {
+    num: '054',
+    name: '경북',
+    left: '470px',
+    top: '280px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '055': {
+    num: '055',
+    name: '경남',
+    left: '380px',
+    top: '483px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '061': {
+    num: '061',
+    name: '전남',
+    left: '269px',
+    top: '543px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '062': {
+    num: '062',
+    name: '광주',
+    left: '213px',
+    top: '503px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '063': {
+    num: '063',
+    name: '전북',
+    left: '257px',
+    top: '422px',
+    value: Math.floor(Math.random() * 300),
+  },
+  '064': {
+    num: '064',
+    name: '제주',
+    left: '45px',
+    top: '640px',
+    value: Math.floor(Math.random() * 300),
+  },
+};
+
 const DetailContainer = styled.div`
   background: ${(props) =>
     `#dff6ff ${
@@ -33,6 +175,13 @@ const DetailContainer = styled.div`
   position: absolute;
   opacity: 0;
   visibility: hidden;
+`;
+
+const MapPath = styled.path`
+  fill: ${(props) => props.fillColor || ''};
+  &:hover {
+    fill: ${(props) => props.fillHoverColor || ''};
+  }
 `;
 
 const InnerMapButton = styled.button`
@@ -80,9 +229,9 @@ const InnerMapSvg = ({
 };
 
 const InnerMapPathStyle = styled.path`
-  fill: ${(props) => props.fillColor};
+  fill: ${(props) => props.fillColor || ''};
   &:hover {
-    fill: ${(props) => props.fillHoverColor};
+    fill: ${(props) => props.fillHoverColor || ''};
   }
 `;
 const InnerMapPath = ({
@@ -131,41 +280,20 @@ const MapNameButton = styled.button`
     display: block;
   }
 `;
+
 export const MapNameButtons = () => {
-  const namePositionVal = [
-    { name: '서울', left: '241px', top: '120px' },
-    { name: '경기', left: '290px', top: '175px' },
-    { name: '인천', left: '180px', top: '160px' },
-    { name: '강원', left: '401px', top: '105px' },
-    { name: '충남', left: '206px', top: '325px' },
-    { name: '대전', left: '310px', top: '330px' },
-    { name: '충북', left: '333px', top: '251px' },
-    { name: '세종', left: '262px', top: '280px' },
-    { name: '부산', left: '496px', top: '518px' },
-    { name: '울산', left: '516px', top: '441px' },
-    { name: '대구', left: '435px', top: '385px' },
-    { name: '경북', left: '470px', top: '280px' },
-    { name: '경남', left: '380px', top: '483px' },
-    { name: '전남', left: '269px', top: '543px' },
-    { name: '광주', left: '213px', top: '503px' },
-    { name: '전북', left: '257px', top: '422px' },
-    { name: '제주', left: '45px', top: '640px' },
-  ];
-  const testValue = Array.from({ length: namePositionVal.length }, () =>
-    Math.floor(Math.random() * 300)
-  );
   return (
     <MapNameButtonsWrapper>
-      {namePositionVal.map((el, key) => {
+      {Object.values(namePositionVal).map((el, key) => {
         return (
           <MapNameButton
             key={key}
             left={el.left}
             top={el.top}
-            bgColor={getColorValue(testValue[key])}
+            bgColor={getColorValue(el.value)[2]}
           >
             {el.name}
-            <span>{testValue[key]}</span>
+            <span>{el.value}</span>
           </MapNameButton>
         );
       })}
@@ -175,6 +303,7 @@ export const MapNameButtons = () => {
 
 /** 인천 */
 export const IncheonPath = (props) => {
+  const regionData = { num: '032', name: '인천' };
   return (
     <>
       <path
@@ -246,11 +375,11 @@ export const IncheonPath = (props) => {
 												c-0.135-0.752-1.064-1.747-1.604-2.211c-0.342-0.295-0.663-0.626-1.012-0.899c-0.333-0.265-0.875-0.467-1.076-0.842
 												C213.02,197.596,214.233,197.828,214.737,197.803z"
       ></path>
-
-      <path
+      <MapPath
         title="인천 지도 배경"
         id="totalMap_032"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M235.163,196.127c0.545-0.705,0.996-1.286,1.171-1.921c0.554-2.009,1.378-3.576,2.585-4.914
 												c-0.003,0-0.007,0.001-0.01,0.001c-0.553,0.078-1.075,0.151-1.568,0.151c-0.213,0-0.406-0.014-0.589-0.042
 												c-2.092-0.324-3.94-1.792-5.163-2.764c-0.553-0.44-1.164-1.043-1.811-1.681c-1.06-1.042-3.52-3.461-4.598-3.461
@@ -334,7 +463,7 @@ export const IncheonPath = (props) => {
 												c0.195-0.073,0.415-0.201,0.647-0.336c0.289-0.168,0.617-0.358,0.988-0.497c0.286-0.108,0.576-0.158,0.831-0.202
 												c0.181-0.031,0.484-0.083,0.55-0.14c0.044-0.049,0.079-0.112,0.118-0.174c0.1-0.159,0.225-0.356,0.416-0.548
 												c0.011-0.011,0.022-0.022,0.033-0.033C215.134,201.552,214.632,200.945,214.129,200.513z"
-      ></path>
+      ></MapPath>
     </>
   );
 };
@@ -354,7 +483,7 @@ export const IncheonInner = () => {
     { name: '옹진', district: '군' },
     { name: '중구', district: '' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -380,10 +509,10 @@ export const IncheonInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -394,8 +523,8 @@ export const IncheonInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -1113,12 +1242,14 @@ export const IncheonInner = () => {
 
 /** 서울 외각선의 경우, 경기도 외각선으로 대체 */
 export const SeoulPath = (props) => {
+  const regionData = { num: '02', name: '서울' };
   return (
     <>
-      <path
+      <MapPath
         title="서울 지도 배경"
         id="totalMap_02"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M275.175,209.648c-0.438-0.002-1.368-0.664-1.533-1.091c-0.065-0.164-0.041-0.526-0.022-0.817
 												c0.045-0.686,0.103-1.584-0.558-2.291c-0.28-0.3-0.792-0.659-1.639-0.659c-0.329,0-0.69,0.053-1.105,0.162
 												c-0.229,0.057-0.437,0.154-0.619,0.289c-0.25-0.341-0.594-0.681-1.119-0.832c-0.195-0.055-0.397-0.083-0.603-0.083
@@ -1144,7 +1275,7 @@ export const SeoulPath = (props) => {
 												c0.102,1.341,0.926,2.119,1.472,2.634c0.166,0.158,0.405,0.386,0.442,0.476c-0.005,0.002-0.01,0.801-3.155,3.978l-0.226,0.23
 												c-0.822,0.835-1.633,1.451-2.631,1.998c-0.382,0.21-0.855,0.336-1.357,0.47c-0.75,0.201-1.48,0.396-2.192,0.839
 												c-0.854,0.528-1.265,1.279-1.536,1.776C275.373,209.319,275.24,209.568,275.175,209.648z"
-      ></path>
+      ></MapPath>
     </>
   );
 };
@@ -1178,7 +1309,7 @@ export const SeoulInner = () => {
     { name: '중구', district: '' },
     { name: '중랑', district: '구' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -1219,10 +1350,10 @@ export const SeoulInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -1233,8 +1364,8 @@ export const SeoulInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -1342,12 +1473,14 @@ export const SeoulInner = () => {
 
 /** 경기 */
 export const GyeonggiPath = (props) => {
+  const regionData = { num: '031', name: '경기' };
   return (
     <>
-      <path
+      <MapPath
         title="경기 지도 배경"
         id="totalMap_031"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M242.549,186.202c-0.549-0.404-1.263-0.598-2.177-0.598c-0.654,0-1.345,0.097-1.954,0.183
 												c-0.335,0.047-0.842,0.119-1.078,0.119c-1.207-0.181-2.611-1.296-3.54-2.033c-0.385-0.305-0.91-0.821-1.465-1.367l-0.074-0.073
 												c-2.027-1.995-4.549-4.477-7.08-4.477c-0.405,0-0.802,0.063-1.181,0.189c-1.551,0.517-2.237,1.78-2.739,2.703
@@ -1490,7 +1623,7 @@ export const GyeonggiPath = (props) => {
 												c-0.381-0.062-0.81-0.131-1.28-0.131c-0.675,0-1.271,0.146-1.825,0.447c-0.67,0.363-1.088,0.858-1.393,1.22
 												c-0.112,0.134-0.22,0.265-0.351,0.389c-0.105,0.099-0.29,0.142-0.753,0.232l-0.22,0.043c-1.815,0.363-2.189,1.231-2.244,2.708
 												c-0.013,0.354-0.005,0.709,0.003,1.066C304.007,291.581,304.015,291.863,304.005,292.135z"
-      ></path>
+      ></MapPath>
 
       <path
         title="경기 외각선"
@@ -1814,7 +1947,7 @@ export const GyeonggiInner = () => {
     { name: '하남', district: '시' },
     { name: '화성', district: '시' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -1861,10 +1994,10 @@ export const GyeonggiInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -1875,8 +2008,8 @@ export const GyeonggiInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -2096,12 +2229,14 @@ export const GyeonggiInner = () => {
 
 /** 강원 */
 export const GangwonPath = (props) => {
+  const regionData = { num: '033', name: '강원' };
   return (
     <>
-      <path
+      <MapPath
         title="강원 지도 배경"
         id="totalMap_033"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M484.273,270.986c-0.238-0.055-0.485-0.088-0.748-0.101c-0.252-0.013-0.492-0.019-0.719-0.023
 												c-0.795-0.018-1.185-0.026-1.688-0.29c-0.818-0.428-1.592-0.933-2.41-1.467c-0.657-0.429-1.337-0.874-2.043-1.277
 												c-0.725-0.414-1.461-0.705-2.172-0.987c-0.795-0.313-1.519-0.597-2.148-1.007c-0.179-0.117-0.349-0.267-0.528-0.423
@@ -2231,7 +2366,7 @@ export const GangwonPath = (props) => {
 												c-0.781-0.81-1.518-1.25-2.451-1.7c-0.127-0.062-0.379-0.261-0.582-0.422c-0.48-0.382-0.974-0.775-1.571-1
 												c-0.492-0.186-0.977-0.28-1.438-0.28c-2.423,0-3.585,2.532-4.021,3.485l-0.228,0.476c-0.258,0.542-0.546,1.144-0.752,1.741
 												C484.238,269.602,484.191,270.337,484.273,270.986z"
-      ></path>
+      ></MapPath>
 
       <path
         title="강원 외각선"
@@ -2513,7 +2648,7 @@ export const GangwonInner = (props) => {
     { name: '화천', district: '군' },
     { name: '횡성', district: '군' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -2547,10 +2682,10 @@ export const GangwonInner = (props) => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -2561,8 +2696,8 @@ export const GangwonInner = (props) => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -2757,12 +2892,14 @@ export const GangwonInner = (props) => {
 
 /** 충북 */
 export const ChungbukPath = (props) => {
+  const regionData = { num: '043', name: '충북' };
   return (
     <>
-      <path
+      <MapPath
         title="충북 지도 배경"
         id="totalMap_043"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M363.938,428.169c-0.269,0-0.538-0.022-0.825-0.07c-0.574-0.096-1.191-0.457-1.846-0.84
 												c-0.791-0.464-1.683-0.987-2.755-1.198c-0.345-0.068-0.652-0.103-0.942-0.132c-0.532-0.054-0.681-0.076-0.929-0.264
 												c-0.365-0.276-0.646-0.689-1.032-1.288c-0.069-0.107-0.133-0.22-0.195-0.33c-0.327-0.58-0.995-1.765-2.428-1.765
@@ -2899,7 +3036,7 @@ export const ChungbukPath = (props) => {
 												c-0.197-0.19-0.342-0.33-0.487-0.464c-0.084-0.078-0.167-0.152-0.248-0.222c0.191,0.063,0.378,0.113,0.547,0.159l0.107,0.029
 												c0.072,0.019,0.138,0.034,0.185,0.054c0.526,0.23,0.973,0.507,1.289,0.798c0.366,0.337,0.636,0.719,0.795,0.996
 												C398.985,322.146,398.955,322.147,398.926,322.147z"
-      ></path>
+      ></MapPath>
 
       <path
         title="충북 외각선"
@@ -3198,7 +3335,7 @@ export const ChungbukInner = () => {
     { name: '청주', district: '시' },
     { name: '충주', district: '시' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -3225,10 +3362,10 @@ export const ChungbukInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -3239,8 +3376,8 @@ export const ChungbukInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -3396,12 +3533,14 @@ export const ChungbukInner = () => {
 
 /** 충남 */
 export const ChungnamPath = (props) => {
+  const regionData = { num: '041', name: '충남' };
   return (
     <>
-      <path
+      <MapPath
         title="충남 지도 배경"
         id="totalMap_041"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M328.191,434.8c-0.076,0-0.151-0.005-0.224-0.017c-0.895-0.14-2.601-1.438-3.162-1.864
 												c-0.43-0.326-0.741-0.738-1.008-1.338c-0.05-0.111-0.104-0.364-0.156-0.588c-0.197-0.844-0.438-1.875-1.256-2.478
 												c-0.559-0.412-1.162-0.621-1.791-0.621c-1.211,0-2.232,0.755-2.978,1.306c-0.22,0.163-0.734,0.542-0.904,0.591
@@ -3561,7 +3700,7 @@ export const ChungnamPath = (props) => {
 												c-0.671,1.512-0.919,1.703-2.208,1.703c-0.798-0.002-1.478-0.219-2.198-0.448c-0.87-0.274-1.768-0.559-2.915-0.572h0
 												c-1.766,0-2.896,0.498-3.989,0.979c-0.476,0.209-0.924,0.405-1.412,0.567c-0.585,0.195-1.16,0.479-1.667,0.729
 												C329.722,434.384,328.871,434.8,328.191,434.8z"
-      ></path>
+      ></MapPath>
 
       <path
         title="충남 외각선"
@@ -3870,7 +4009,7 @@ export const ChungnamInner = () => {
     { name: '홍성', district: '군' },
     { name: '계룡', district: '시' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -3901,10 +4040,10 @@ export const ChungnamInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -3915,8 +4054,8 @@ export const ChungnamInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -4435,12 +4574,14 @@ export const ChungnamInner = () => {
 
 /** 세종 */
 export const SejongPath = (props) => {
+  const regionData = { num: '044', name: '세종' };
   return (
     <>
-      <path
+      <MapPath
         title="세종 지도 배경"
         id="totalMap_044"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M299.862,368.807c-0.108,0-0.521-0.388-0.658-0.516c-0.214-0.2-0.426-0.395-0.638-0.554
 												c-0.642-0.483-1.305-0.794-1.89-1.067c-1.18-0.55-1.593-0.78-1.776-1.625c-0.088-0.409-0.321-0.743-0.662-0.955
 												c-0.044-0.151-0.107-0.687-0.062-2.148c0.024-0.877,0.045-1.616-0.106-2.236c-0.17-0.687-1.097-4.093-2.949-5.034
@@ -4460,7 +4601,7 @@ export const SejongPath = (props) => {
 												c-0.233,0.329-0.47,0.671-0.667,1.026c-0.175,0.317-0.337,0.643-0.499,0.967c-0.512,1.029-0.916,1.841-1.674,2.259
 												c-0.765,0.423-1.592,0.75-2.467,1.097c-0.747,0.297-1.478,0.587-2.185,0.936l-0.435,0.21c-0.317,0.151-0.645,0.314-0.973,0.491
 												c-0.052-0.003-0.103-0.004-0.153-0.004c-1.25,0-1.902,0.684-2.252,1.051c-0.203,0.212-0.219,0.216-0.263,0.227L299.862,368.807z"
-      ></path>
+      ></MapPath>
 
       <path
         title="세종 외각선"
@@ -4511,7 +4652,7 @@ export const SejongPath = (props) => {
 export const SejongInner = () => {
   const regionData = { num: '044', name: '세종' };
   const list = [{ name: '세종', district: '시' }];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [{ left: '218px', top: '260px' }];
@@ -4526,10 +4667,10 @@ export const SejongInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -4540,8 +4681,8 @@ export const SejongInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -4634,13 +4775,15 @@ export const SejongInner = () => {
 
 /** 대전 */
 export const DaejeonPath = (props) => {
+  const regionData = { num: '042', name: '대전' };
   return (
     <>
-      <path
+      <MapPath
         title="대전 지도 배경"
         className="svgmap map_08 mType_2"
         id="totalMap_042"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M322.506,400.387c-0.196,0-0.693-0.373-1.144-0.723c-1.391-1.079-2.682-2.854-3.542-4.869
 												c-0.076-0.182-0.106-0.786-0.122-1.111c-0.052-0.966-0.116-2.143-0.833-2.983c-0.623-0.73-1.5-1.133-2.471-1.133l-0.121,0.002
 												c-1.121,0.041-2.232,0.635-2.899,1.551c-1.343,1.842-0.841,4.072-0.438,5.863c0.116,0.518,0.236,1.049,0.297,1.52
@@ -4664,7 +4807,7 @@ export const DaejeonPath = (props) => {
 												c-0.055,1.038-0.317,2.221-0.594,3.473c-0.482,2.168-1.021,4.591-0.524,6.849c-0.19,0.127-0.396,0.288-0.594,0.501
 												c-0.536,0.579-0.86,1.143-1.024,1.793c-0.989,0.295-1.498,0.954-1.846,1.405c-0.199,0.255-0.339,0.434-0.531,0.564
 												C322.654,400.343,322.563,400.387,322.506,400.387L322.506,400.387z"
-      ></path>
+      ></MapPath>
 
       <path
         title="대전 외각선"
@@ -4729,7 +4872,7 @@ export const DaejeonInner = () => {
     { name: '유성', district: '구' },
     { name: '중구', district: '' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -4750,10 +4893,10 @@ export const DaejeonInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -4764,8 +4907,8 @@ export const DaejeonInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -4825,12 +4968,14 @@ export const DaejeonInner = () => {
 
 /** 경북 */
 export const GyeongbukPath = (props) => {
+  const regionData = { num: '054', name: '경북' };
   return (
     <>
-      <path
+      <MapPath
         title="경북 지도 배경"
         id="totalMap_054"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M587.717,426.026c0.006-1.615-0.262-3.443-1.399-4.679
 												c-0.509-0.551-1.49-1.309-2.25-1.055c-0.761,0.254-1.396,1.494-1.851,2.096c-1.355,1.791-2.326,4.031-3.867,5.658
 												c-0.811,0.855-1.774,1.539-2.768,2.232c-0.996,0.694-1.777,1.526-2.654,2.377c-1.178,1.141-2.684,0.457-4.19,0.084
@@ -5065,7 +5210,7 @@ export const GyeongbukPath = (props) => {
 												c1.025-2.322,2.775-3.938,3.4-6.545c0.646-2.693,0.758-5.387,0.766-8.244c0.004-1.449-0.537-2.832-0.148-4.248
 												c0.313-1.146,1.105-2.223,1.74-3.172c0.822-1.232,0.965-3.584,1.525-4.916c0.477-1.133,1.742-1.922,2.266-3.061
 												C587.938,430.456,587.711,428.782,587.717,426.026"
-      ></path>
+      ></MapPath>
 
       <path
         title="경북_외각선"
@@ -5849,7 +5994,7 @@ export const GyeongbukInner = () => {
     { name: '칠곡', district: '군' },
     { name: '포항', district: '군' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -5887,10 +6032,10 @@ export const GyeongbukInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -5901,8 +6046,8 @@ export const GyeongbukInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -6409,12 +6554,14 @@ h-3.003v2.53H474.769z"
 
 /** 경남 */
 export const GyeongnamPath = (props) => {
+  const regionData = { num: '055', name: '경남' };
   return (
     <>
-      <path
+      <MapPath
         title="경남 지도 배경"
         id="totalMap_055"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M466.9,628.955c-0.451,0-1.023-0.184-1.215-0.585c-0.194-0.408,0.032-0.834,0.401-1.436
 												c0.1-0.162,0.195-0.319,0.273-0.47c0.505-0.979,0.532-1.417-0.316-1.921c-0.137-0.082-0.308-0.183-0.505-0.331
 												c-0.698-0.525-0.921-0.964-0.85-1.674c0.067-0.686,0.448-1.585,0.849-2.006c0.131-0.139,0.328-0.242,0.518-0.343
@@ -6627,7 +6774,7 @@ export const GyeongnamPath = (props) => {
 												c-0.062,0.717,0.355,1.449,0.758,2.158c0.713,1.254,0.951,1.856,0.245,2.363c-0.289,0.207-0.733,0.242-1.204,0.28
 												c-0.632,0.05-1.349,0.106-1.82,0.65l-0.326,0.376l0.375,0.328c0.167,0.146,0.18,0.266,0.146,0.401
 												c-0.195,0.808-1.966,1.931-2.444,2.05C467.141,628.941,467.023,628.955,466.9,628.955z"
-      ></path>
+      ></MapPath>
 
       <path
         title="경남 외각선"
@@ -7043,7 +7190,7 @@ export const GyeongnamInner = () => {
     { name: '함양', district: '군' },
     { name: '합천', district: '군' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -7077,10 +7224,10 @@ export const GyeongnamInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -7091,8 +7238,8 @@ export const GyeongnamInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -7534,13 +7681,15 @@ export const GyeongnamInner = () => {
 
 /** 대구 */
 export const DaeguPath = (props) => {
+  const regionData = { num: '053', name: '대구' };
   return (
     <>
-      <path
+      <MapPath
         title="대구 지도 배경"
         className="svgmap map_11 mType_2"
         id="totalMap_053"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M451.813,485.452l-0.032-0.233l0.075-0.228c0.004-0.024,0.001-0.139-0.003-0.22
 												c-0.004-0.154-0.006-0.311,0.009-0.463c0.056-0.565,0.303-1.024,0.501-1.394l0.13-0.247c0.267-0.531,0.407-1.127,0.407-1.723
 												c0-0.17,0-0.502,0.203-0.83c0.276-0.448,0.717-0.572,0.983-0.62c0.021-0.035,0.043-0.066,0.065-0.097
@@ -7656,7 +7805,7 @@ export const DaeguPath = (props) => {
 												c0.625-0.086,1.215-0.166,1.637-0.444c0.236-0.156,0.424-0.302,0.6-0.438c0.472-0.359,0.957-0.732,1.863-1.018
 												c0.187-0.058,0.371-0.119,0.56-0.183c0.713-0.237,1.448-0.483,2.202-0.572c0.406-0.047,0.809-0.065,1.197-0.086
 												c0.465-0.021,0.838-0.048,1.155-0.1C451.885,486.06,451.813,485.463,451.813,485.452"
-      ></path>
+      ></MapPath>
 
       <path
         title="대구_외각선"
@@ -7950,7 +8099,7 @@ export const DaeguInner = () => {
     { name: '중구', district: '' },
     { name: '군위군', district: '' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -7975,10 +8124,10 @@ export const DaeguInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -7989,8 +8138,8 @@ export const DaeguInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -8119,13 +8268,15 @@ export const DaeguInner = () => {
 
 /** 울산 */
 export const UlsanPath = (props) => {
+  const regionData = { num: '052', name: '울산' };
   return (
     <>
-      <path
+      <MapPath
         title="울산 지도 배경"
         className="svgmap map_12 mType_1"
         id="totalMap_052"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M554.795,532.923c-0.392-0.373-0.784-0.697-1.208-0.998l-0.391-0.271c-0.61-0.415-0.755-0.514-0.905-1.009
 												c-0.08-0.262-0.094-0.643-0.107-1.012c-0.028-0.68-0.063-1.512-0.453-2.311c-0.843-1.731-2.293-2.609-4.309-2.609
 												c-0.865,0-1.717,0.154-2.4,0.278c-0.387,0.071-0.765,0.141-1.116,0.18c-0.297,0.034-0.567,0.05-0.817,0.05
@@ -8161,7 +8312,7 @@ export const UlsanPath = (props) => {
 												c-0.563,1.531-0.38,3.049,0.517,4.274l0.087,0.118c0.529,0.704,0.604,0.981,0.574,1.09c-0.095,0.141-0.736,0.358-0.947,0.43
 												l-0.183,0.063c-0.21,0.074-0.425,0.145-0.639,0.215c-1.087,0.357-2.21,0.726-3.078,1.684
 												C554.89,532.807,554.842,532.864,554.795,532.923z"
-      ></path>
+      ></MapPath>
 
       <path
         title="울산 외각선"
@@ -8245,7 +8396,7 @@ export const UlsanInner = () => {
     { name: '울주군', district: '' },
     { name: '중구', district: '' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -8266,10 +8417,10 @@ export const UlsanInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -8280,8 +8431,8 @@ export const UlsanInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -8344,12 +8495,14 @@ export const UlsanInner = () => {
 
 /** 부산 */
 export const BusanPath = (props) => {
+  const regionData = { num: '051', name: '부산' };
   return (
     <>
-      <path
+      <MapPath
         title="부산 지도 배경"
         id="totalMap_051"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M495.242,584.849c-0.618,0-1.442-2.05-1.713-2.723c-0.084-0.208-0.156-0.39-0.218-0.527
 												c-0.588-1.336-1.196-2.72-1.68-4.237c-0.046-0.142-0.101-0.291-0.157-0.444c-0.194-0.527-0.415-1.125-0.191-1.394
 												c0.199-0.238,0.801-0.44,1.284-0.604c0.553-0.186,1.074-0.361,1.411-0.66l0.33-0.292l-0.248-0.364
@@ -8395,7 +8548,7 @@ export const BusanPath = (props) => {
 												c0.165,0.194,0.32,0.379,0.412,0.6c0.153,0.368,0.188,1.027,0.22,1.608c0.02,0.364,0.039,0.713,0.082,0.999
 												c0.112,0.753-0.058,1.773-0.194,2.594l-0.035,0.217c-0.028,0.175-0.057,0.412-0.088,0.686c-0.08,0.698-0.294,2.553-0.708,2.816
 												C495.354,584.829,495.296,584.849,495.242,584.849z"
-      ></path>
+      ></MapPath>
 
       <path
         title="부산 외각선"
@@ -8506,7 +8659,7 @@ export const BusanInner = () => {
     { name: '중구', district: '' },
     { name: '해운대', district: '구' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -8538,10 +8691,10 @@ export const BusanInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -8552,8 +8705,8 @@ export const BusanInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -8635,12 +8788,14 @@ export const BusanInner = () => {
 
 /** 전북 */
 export const JeonbukPath = (props) => {
+  const regionData = { num: '063', name: '전북' };
   return (
     <>
-      <path
+      <MapPath
         title="전북 지도 배경"
         id="totalMap_063"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M279.579,536.881c-1.227-0.014-2.195-0.289-2.586-0.737c-0.504-0.575-0.368-1.434,0.128-3.141l0.053-0.179
 												c0.77-2.659,0.389-4.065-1.568-5.789c-0.471-0.416-1.898-1.677-1.792-2.497c0.023-0.059,0.189-0.233,0.261-0.309
 												c0.243-0.254,0.579-0.603,0.84-1.119c0.645-1.283,0.436-2.872,0.062-3.844c-0.141-0.368-0.292-0.657-0.425-0.912
@@ -8762,7 +8917,7 @@ export const JeonbukPath = (props) => {
 												c-0.096-0.072-0.188-0.148-0.283-0.227c-0.698-0.575-1.592-1.311-2.833-1.311l-0.16,0.005c-1.383,0.063-2.043,0.908-2.438,1.414
 												c-0.134,0.171-0.248,0.318-0.388,0.442c-0.229,0.203-0.375,0.306-0.462,0.325c-0.305,0.066-0.58,0.224-0.793,0.455
 												c-0.818,0.893-3.266,1.646-5.348,1.646H279.579z"
-      ></path>
+      ></MapPath>
 
       <path
         title="전북 외각선"
@@ -9023,7 +9178,7 @@ export const JeonbukInner = () => {
     { name: '정읍', district: '시' },
     { name: '진안', district: '군' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -9053,10 +9208,10 @@ export const JeonbukInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -9067,8 +9222,8 @@ export const JeonbukInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -9341,12 +9496,14 @@ export const JeonbukInner = () => {
 
 /** 전남 */
 export const JeonnamPath = (props) => {
+  const regionData = { num: '061', name: '전남' };
   return (
     <>
-      <path
+      <MapPath
         title="전남 지도 배경"
         id="totalMap_061"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M238.552,691.614c-0.688,0-1.501-0.433-2.132-0.81c-0.243-0.145-0.405-0.265-0.54-0.363
 												c-0.424-0.312-0.688-0.477-1.604-0.521l-0.131-0.004c-0.389,0-0.753,0.084-1.104,0.165c-0.326,0.075-0.634,0.146-0.94,0.146
 												c-0.05,0-0.101-0.002-0.152-0.006c-1.151-0.095-2.226-1.001-3.174-1.8c-0.238-0.2-0.469-0.395-0.693-0.571
@@ -9685,7 +9842,7 @@ export const JeonnamPath = (props) => {
 												c0.166,0,0.442,0.067,0.71,0.136c1.432,0.366,3.105,0.976,4.476,1.629l0.622,0.29c1.235,0.57,2.513,1.16,3.366,2.118
 												c0.733,0.823,0.543,1.649,0.142,2.913c-0.808,2.535-1.571,4.93-3.856,6.454C152.066,656.279,151.678,656.429,151.372,656.429
 												C151.372,656.429,151.373,656.429,151.372,656.429z"
-      ></path>
+      ></MapPath>
 
       <path
         title="전남 외각선"
@@ -10311,7 +10468,7 @@ export const JeonnamInner = () => {
     { name: '해남', district: '군' },
     { name: '화순', district: '군' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -10349,10 +10506,10 @@ export const JeonnamInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -10363,8 +10520,8 @@ export const JeonnamInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -11748,12 +11905,14 @@ export const JeonnamInner = () => {
 
 /** 광주 */
 export const GwangjuPath = (props) => {
+  const regionData = { num: '062', name: '광주' };
   return (
     <>
-      <path
+      <MapPath
         title="광주 지도 배경"
         id="totalMap_062 "
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M244.701,575.094c-1.677,0-3.59-0.902-3.907-1.354c-0.379-0.532-0.619-1.222-0.873-1.951
 												c-0.537-1.549-1.187-3.423-3.329-4.354c-0.721-0.313-1.493-0.464-2.36-0.464c-0.915,0-1.788,0.168-2.633,0.33
 												c-0.742,0.144-1.499,0.272-2.176,0.272c-0.468,0-0.85-0.062-1.166-0.188c-1.406-0.561-1.681-2.294-1.917-4.681l-0.068-0.662
@@ -11773,7 +11932,7 @@ export const GwangjuPath = (props) => {
 												c-0.544,0-1.101,0.144-1.656,0.428c-0.715,0.365-1.146,0.738-1.433,0.984c-0.35,0.302-0.413,0.355-1.156,0.379l-0.41,0.012
 												c-1.388,0.037-2.958,0.078-4.381,0.908c-0.713,0.415-1.243,0.95-1.756,1.467c-0.421,0.428-0.794,0.808-1.269,1.136
 												C245.528,574.985,245.239,575.094,244.701,575.094z"
-      ></path>
+      ></MapPath>
 
       <path
         title="광주 외각선"
@@ -11830,7 +11989,7 @@ export const GwangjuInner = () => {
     { name: '북구', district: '' },
     { name: '서구', district: '' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -11851,10 +12010,10 @@ export const GwangjuInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -11865,8 +12024,8 @@ export const GwangjuInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -11934,12 +12093,14 @@ export const GwangjuInner = () => {
 
 /** 제주 */
 export const JejuPath = (props) => {
+  const regionData = { num: '064', name: '제주' };
   return (
     <>
-      <path
+      <MapPath
         title="제주 지도 배경"
         id="totalMap_064"
-        fill={props.bgColor || '#FFFFFF'}
+        fillColor={getColorValue(namePositionVal[regionData.num].value)[0]}
+        fillHoverColor={getColorValue(namePositionVal[regionData.num].value)[1]}
         d="M42.289,719.529c-0.307-0.249-0.542-0.585-0.801-0.956c-0.239-0.341-0.485-0.693-0.815-1.013
 												c-0.45-0.436-0.971-0.778-1.475-1.109c-0.307-0.202-0.611-0.4-0.887-0.616c-0.481-0.376-0.855-0.936-1.251-1.528
 												c-0.257-0.384-0.523-0.781-0.827-1.137c-0.251-0.295-0.485-0.606-0.72-0.918c-0.405-0.539-0.824-1.097-1.34-1.583
@@ -11979,7 +12140,7 @@ export const JejuPath = (props) => {
 												c-0.182-0.011-0.366-0.021-0.546-0.021c-0.294,0-0.728,0.024-1.099,0.239c-0.291,0.17-0.458,0.364-0.591,0.521
 												c-0.159,0.186-0.225,0.263-0.48,0.306c-0.131,0.022-0.243,0.038-0.34,0.052c-0.679,0.093-0.951,0.2-1.345,1.033
 												C42.546,718.855,42.422,719.169,42.289,719.529z"
-      ></path>
+      ></MapPath>
 
       <path
         title="제주 외각선"
@@ -12062,7 +12223,7 @@ export const JejuInner = () => {
     { name: '서귀포', district: '시' },
     { name: '제주', district: '시' },
   ];
-  const testValue = Array.from({ length: list.length }, () =>
+  const innerTestValue = Array.from({ length: list.length }, () =>
     Math.floor(Math.random() * 300)
   );
   const positionValue = [
@@ -12080,10 +12241,10 @@ export const JejuInner = () => {
           left: positionValue[key].left,
           top: positionValue[key].top,
         }}
-        value={getColorValue(testValue[key])[2]}
+        value={getColorValue(resultVal[regionData.num])[2]}
       >
         {el.name}
-        <strong>{testValue[key]}</strong>
+        <strong>{innerTestValue[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -12094,8 +12255,8 @@ export const JejuInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(testValue[key])[0]}
-        fillHoverColor={getColorValue(testValue[key])[1]}
+        fillColor={getColorValue(innerTestValue[key])[0]}
+        fillHoverColor={getColorValue(innerTestValue[key])[1]}
       ></InnerMapPath>
     );
   };
