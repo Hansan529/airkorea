@@ -4,12 +4,19 @@ import {
   innerBackgroundPathData,
   pathData,
 } from '../paths/paths';
-import data from '../data/getCtprvnRltmMesureDnsty.json';
+import detailDataJson from '../data/getCtprvnRltmMesureDnsty.json';
+import stationDataJson from '../data/MsrstnInfoInqireSvc.json';
+
 const {
   response: {
-    body: { items },
+    body: { items: detailData },
   },
-} = data;
+} = detailDataJson;
+const {
+  response: {
+    body: { items: stationData },
+  },
+} = stationDataJson;
 
 /**
  * 대기 정보 목록
@@ -339,7 +346,15 @@ export const SeoulInner = () => {
     { name: '중랑', district: '구', left: '357px', top: '189px' },
   ];
 
-  const filterItems = items.filter((item) => {
+  const filterRegion = stationData.filter((station) => {
+    const addr = station.addr;
+    const matchResult = addr.match(regionData.name);
+    return matchResult ? matchResult[0] : null;
+  });
+
+  const test = filterRegion.map((reg) => console.log(reg));
+
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -430,7 +445,7 @@ export const SeoulInner = () => {
 // ---------------------------------------------------------------------------------
 
 /** 경기 031 */
-export const GyeonggiPath = (props) => {
+export const GyeonggiPath = () => {
   const regionData = { num: '031', name: '경기' };
   return (
     <>
@@ -765,7 +780,7 @@ export const GyeonggiInner = () => {
     { name: '화성', district: '시', left: '111px', top: '387px' },
   ];
 
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -932,7 +947,7 @@ export const IncheonInner = () => {
     { name: '중구', district: '', left: '261px', top: '300px' },
   ];
 
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -1479,7 +1494,7 @@ export const GangwonInner = () => {
     { name: '화천', district: '군', left: '125px', top: '141px' },
     { name: '횡성', district: '군', left: '194px', top: '303px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -1869,7 +1884,7 @@ export const ChungnamInner = () => {
     { name: '홍성', district: '군', left: '192px', top: '215px' },
     { name: '계룡', district: '시', left: '352px', top: '301px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -2161,7 +2176,7 @@ export const DaejeonInner = () => {
     { name: '유성', district: '구', left: '148px', top: '190px' },
     { name: '중구', district: '', left: '227px', top: '298px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -2540,7 +2555,7 @@ export const ChungbukInner = () => {
     { name: '청주', district: '시', left: '95px', top: '230px' },
     { name: '충주', district: '시', left: '213px', top: '109px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -2671,7 +2686,7 @@ export const SejongPath = () => {
 export const SejongInner = () => {
   const regionData = { num: '044', name: '세종' };
   const list = [{ name: '세종', district: '시', left: '218px', top: '260px' }];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -2862,7 +2877,7 @@ export const BusanInner = () => {
     { name: '중구', district: '', left: '209px', top: '347px' },
     { name: '해운대', district: '구', left: '315px', top: '232px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -3027,7 +3042,7 @@ export const UlsanInner = () => {
     { name: '울주군', district: '', left: '196px', top: '229px' },
     { name: '중구', district: '', left: '287px', top: '189px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -3402,7 +3417,7 @@ export const DaeguInner = () => {
     { name: '중구', district: '', left: '210px', top: '320px' },
     { name: '군위군', district: '', left: '280px', top: '160px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -4266,7 +4281,7 @@ export const GyeongbukInner = () => {
     { name: '칠곡', district: '군', left: '119px', top: '315px' },
     { name: '포항', district: '시', left: '290px', top: '288px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -5158,7 +5173,7 @@ export const GyeongnamInner = () => {
     { name: '함양', district: '군', left: '66px', top: '141px' },
     { name: '합천', district: '군', left: '167px', top: '148px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -6278,7 +6293,7 @@ export const JeonnamInner = () => {
     { name: '해남', district: '군', left: '163px', top: '302px' },
     { name: '화순', district: '군', left: '279px', top: '180px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -7771,7 +7786,7 @@ export const GwangjuInner = () => {
     { name: '북구', district: '', left: '306px', top: '178px' },
     { name: '서구', district: '', left: '244px', top: '254px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -8152,7 +8167,7 @@ export const JeonbukInner = () => {
     { name: '정읍', district: '시', left: '169px', top: '267px' },
     { name: '진안', district: '군', left: '317px', top: '206px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
@@ -8560,7 +8575,7 @@ export const JejuInner = () => {
     { name: '서귀포', district: '시', left: '277px', top: '244px' },
     { name: '제주', district: '시', left: '185px', top: '191px' },
   ];
-  const filterItems = items.filter((item) => {
+  const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
       return item.stationName === stationName;
