@@ -247,23 +247,40 @@ function App() {
             {/* Main Map 전국 지도 */}
             <MMWrapper>
               <MapNameButtons />
-              {/* 서울 */} <SeoulInner />
-              {/* 경기 */} <GyeonggiInner />
-              {/* 인천 */} <IncheonInner />
-              {/* 강원 */} <GangwonInner />
-              {/* 충남 */} <ChungnamInner />
-              {/* 대전 */} <DaejeonInner />
-              {/* 충북 */} <ChungbukInner />
-              {/* 세종 */} <SejongInner />
-              {/* 부산 */} <BusanInner />
-              {/* 울산 */} <UlsanInner />
-              {/* 대구 */} <DaeguInner />
-              {/* 경북 */} <GyeongbukInner />
-              {/* 경남 */} <GyeongnamInner />
-              {/* 전남 */} <JeonnamInner />
-              {/* 광주 */} <GwangjuInner />
-              {/* 전북 */} <JeonbukInner />
-              {/* 제주 */} <JejuInner />
+              {/* 서울 */}
+              <SeoulInner />
+              {/* 경기 */}
+              {/* <GyeonggiInner /> */}
+              {/* 인천 */}
+              {/* <IncheonInner /> */}
+              {/* 강원 */}
+              {/* <GangwonInner /> */}
+              {/* 충남 */}
+              {/* <ChungnamInner /> */}
+              {/* 대전 */}
+              {/* <DaejeonInner /> */}
+              {/* 충북 */}
+              {/* <ChungbukInner /> */}
+              {/* 세종 */}
+              {/* <SejongInner /> */}
+              {/* 부산 */}
+              {/* <BusanInner /> */}
+              {/* 울산 */}
+              {/* <UlsanInner /> */}
+              {/* 대구 */}
+              {/* <DaeguInner /> */}
+              {/* 경북 */}
+              {/* <GyeongbukInner /> */}
+              {/* 경남 */}
+              {/* <GyeongnamInner /> */}
+              {/* 전남 */}
+              {/* <JeonnamInner /> */}
+              {/* 광주 */}
+              {/* <GwangjuInner /> */}
+              {/* 전북 */}
+              {/* <JeonbukInner /> */}
+              {/* 제주 */}
+              {/* <JejuInner /> */}
               <svg
                 version="1.1"
                 id="map_svg_city"
