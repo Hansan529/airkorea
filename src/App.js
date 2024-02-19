@@ -163,21 +163,6 @@ const MMWrapper = styled.div`
 
 const InfoContainer = styled.div``;
 
-// default, hover, button
-const getColorValue = (value) => {
-  if (value >= 0 && value <= 50) {
-    return ['#d0ecff', '#7ed6ff', '#6ac8fe'];
-  } else if (value >= 51 && value <= 100) {
-    return ['#caf2de', '#94edbc', '#59e494'];
-  } else if (value >= 101 && value <= 250) {
-    return ['#f8f7c6', '#ffeb8b', '#ffda58'];
-  } else if (value >= 251) {
-    return ['#ffd6da', '#ffc1c5', '#ffa8a8'];
-  } else {
-    return ['#cbd0d3', '#c1c5c7', '#abb0b3'];
-  }
-};
-
 function App() {
   return (
     <>
