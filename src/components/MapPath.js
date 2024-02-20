@@ -3465,11 +3465,49 @@ export const DaejeonPath = () => {
 export const DaejeonInner = () => {
   const regionData = { num: '042', name: '대전' };
   const list = [
-    { name: '대덕', district: '구', left: '262px', top: '158px' },
-    { name: '동구', district: '', left: '302px', top: '256px' },
-    { name: '서구', district: '', left: '150px', top: '337px' },
-    { name: '유성', district: '구', left: '148px', top: '190px' },
-    { name: '중구', district: '', left: '227px', top: '298px' },
+    {
+      name: '대덕',
+      district: '구',
+      left: '262px',
+      top: '158px',
+      station1: '읍내동',
+      station2: '문평동',
+    },
+    {
+      name: '동구',
+      district: '',
+      left: '302px',
+      top: '256px',
+      station1: '대성동',
+      station2: '성남동1',
+    },
+    {
+      name: '서구',
+      district: '',
+      left: '150px',
+      top: '337px',
+      station1: '정림동',
+      station2: '둔산동',
+      station3: '월평동',
+    },
+    {
+      name: '유성',
+      district: '구',
+      left: '148px',
+      top: '190px',
+      station1: '구성동',
+      station2: '노은동',
+      station3: '삼대동(대전)',
+      station4: '관평동',
+    },
+    {
+      name: '중구',
+      district: '',
+      left: '227px',
+      top: '298px',
+      station1: '문창동',
+      station2: '대흥동1',
+    },
   ];
   const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
@@ -3980,7 +4018,20 @@ export const SejongPath = () => {
 
 export const SejongInner = () => {
   const regionData = { num: '044', name: '세종' };
-  const list = [{ name: '세종', district: '시', left: '218px', top: '260px' }];
+  const list = [
+    {
+      name: '세종',
+      district: '시',
+      left: '218px',
+      top: '260px',
+      station1: '신흥동',
+      station2: '아름동',
+      station3: '한솔동',
+      station4: '부강면',
+      station5: '보람동',
+      station6: '전의면',
+    },
+  ];
   const filterItems = detailData.filter((item) => {
     return list.some((listItem) => {
       const stationName = `${listItem.name}${listItem.district}`;
