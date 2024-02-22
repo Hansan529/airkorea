@@ -1011,26 +1011,22 @@ export const SeoulInner = () => {
     return 0;
   });
 
+  //   const filterStation = detailData.filter((data) => {
+  //     return list.some((item) => {
+  //     });
+  //   });
+
+  list.forEach((item) => {
+    const stationCount = Array.from({ length: Object.keys(item).length - 4 });
+    console.log('stationCount: ', stationCount);
+    // for (let i = 1; stationCount <= i; i++) {
+    //   console.log('test', item[`station${i}`]);
+    // }
+  });
+
   /**
    * 해당 지역에 대한 측정소 출력
    */
-  const filterRegion = stationData.filter((station) => {
-    const addr = station.addr;
-    const matchResult = addr.match(regionData.name);
-    return matchResult ? matchResult[0] : null;
-  });
-
-  const groupData = filterRegion.reduce((acc, curr) => {
-    return curr;
-    const key = curr.addr.split(' ')[1];
-    // if (!acc[key]) {
-    //   acc[key] = { sum: 0, count: 0 };
-    // }
-    // acc[key].sum += Object.values(curr)[0].val;
-    // acc[key].count++;
-    // return acc;
-  }, {});
-  console.log(groupData);
 
   //   const averages = Object.entries(groupData).reduce((acc, [key, value]) => {
   //     acc[key] = value.sum / value.count;
