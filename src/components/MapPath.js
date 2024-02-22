@@ -982,48 +982,21 @@ export const SeoulInner = () => {
   /**
    * 해당 지역에 대한 대기 정보 출력
    */
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      console.log('station', station);
+      return Number(
+        detailData.find((data) => data.stationName === station).khaiValue
+      );
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  //   const filterStation = detailData.filter((data) => {
-  //     return list.some((item) => {
-  //     });
-  //   });
-
-  list.forEach((item) => {
-    const stationCount = Array.from({ length: Object.keys(item).length - 4 });
-    console.log('stationCount: ', stationCount);
-    // for (let i = 1; stationCount <= i; i++) {
-    //   console.log('test', item[`station${i}`]);
-    // }
-  });
-
-  /**
-   * 해당 지역에 대한 측정소 출력
-   */
-
-  //   const averages = Object.entries(groupData).reduce((acc, [key, value]) => {
-  //     acc[key] = value.sum / value.count;
-  //     return acc;
-  //   }, {});
-
-  //   const test = filterRegion.map((reg) => console.log(reg));
-
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -1034,10 +1007,10 @@ export const SeoulInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -1048,8 +1021,8 @@ export const SeoulInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
