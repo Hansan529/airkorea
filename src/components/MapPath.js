@@ -807,189 +807,175 @@ export const SeoulInner = () => {
       district: '구',
       left: '310px',
       top: '342px',
-      station1: '강남구',
-      station2: '도산대로',
+      station: ['강남구', '도산대로'],
     },
     {
       name: '강동',
       district: '구',
       left: '402px',
       top: '256px',
-      station1: '강동구',
-      station2: '천호대로',
+      station: ['강동구', '천호대로'],
     },
     {
       name: '강북',
       district: '구',
       left: '261px',
       top: '125px',
-      station1: '강북구',
+      station: ['강북구'],
     },
     {
       name: '강서',
       district: '구',
       left: '61px',
       top: '225px',
-      station1: '강서구',
-      station2: '공항대로',
+      station: ['강서구', '공항대로'],
     },
     {
       name: '관악',
       district: '구',
       left: '194px',
       top: '378px',
-      station1: '관악구',
+      station: ['관악구'],
     },
     {
       name: '광진',
       district: '구',
       left: '342px',
       top: '262px',
-      station1: '광진구',
+      station: ['광진구'],
     },
     {
       name: '구로',
       district: '구',
       left: '87px',
       top: '336px',
-      station1: '구로구',
+      station: ['구로구'],
     },
     {
       name: '금천',
       district: '구',
       left: '140px',
       top: '377px',
-      station1: '금천구',
-      station2: '시흥대로',
+      station: ['금천구', '시흥대로'],
     },
     {
       name: '노원',
       district: '구',
       left: '338px',
       top: '116px',
-      station1: '노원구',
-      station2: '화랑로',
+      station: ['노원구', '화랑로'],
     },
     {
       name: '도봉',
       district: '구',
       left: '285px',
       top: '83px',
-      station1: '도봉구',
+      station: ['도봉구'],
     },
     {
       name: '동대문',
       district: '구',
       left: '307px',
       top: '209px',
-      station1: '동대문구',
-      station2: '홍릉로',
+      station: ['동대문구', '홍릉로'],
     },
     {
       name: '동작',
       district: '구',
       left: '199px',
       top: '322px',
-      station1: '동작구',
-      station2: '동작대로 중앙차로',
+      station: ['동작구', '동작대로 중앙차로'],
     },
     {
       name: '마포',
       district: '구',
       left: '150px',
       top: '232px',
-      station1: '마포구',
-      station2: '신촌로',
+      station: ['마포구', '신촌로'],
     },
     {
       name: '서대문',
       district: '구',
       left: '194px',
       top: '212px',
-      station1: '서대문구',
+      station: ['서대문구'],
     },
     {
       name: '서초',
       district: '구',
       left: '255px',
       top: '352px',
-      station1: '서초구',
-      station2: '강남대로',
+      station: ['서초구', '강남대로'],
     },
     {
       name: '성동',
       district: '구',
       left: '292px',
       top: '257px',
-      station1: '성동구',
-      station2: '강변북로',
+      station: ['성동구', '강변북로'],
     },
     {
       name: '성북',
       district: '구',
       left: '268px',
       top: '183px',
-      station1: '성북구',
-      station2: '정릉로',
+      station: ['성북구', '정릉로'],
     },
     {
       name: '송파',
       district: '구',
       left: '363px',
       top: '312px',
-      station1: '송파구',
+      station: ['송파구'],
     },
     {
       name: '양천',
       district: '구',
       left: '97px',
       top: '287px',
-      station1: '양천구',
+      station: ['양천구'],
     },
     {
       name: '영등포',
       district: '구',
       left: '150px',
       top: '297px',
-      station1: '영등포구',
-      station2: '영등포로',
+      station: ['영등포구', '영등포로'],
     },
     {
       name: '용산',
       district: '구',
       left: '230px',
       top: '275px',
-      station1: '한강대로',
-      station2: '용산구',
+      station: ['한강대로', '용산구'],
     },
     {
       name: '은평',
       district: '구',
       left: '168px',
       top: '154px',
-      station1: '은평구',
+      station: ['은평구'],
     },
     {
       name: '종로',
       district: '구',
       left: '220px',
       top: '162px',
-      station1: '종로구',
-      station2: '종로',
+      station: ['종로구', '종로'],
     },
     {
       name: '중구',
       district: '',
       left: '250px',
       top: '231px',
-      station1: '중구',
+      station: ['중구'],
     },
     {
       name: '중랑',
       district: '구',
       left: '357px',
       top: '189px',
-      station1: '중랑구',
+      station: ['중랑구'],
     },
   ];
 
@@ -1418,311 +1404,277 @@ export const GyeonggiInner = () => {
       district: '군',
       left: '297px',
       top: '161px',
-      station1: '가평',
-      station2: '설악면',
+      station: ['가평', '설악면'],
     },
     {
       name: '고양',
       district: '시',
       left: '126px',
       top: '200px',
-      station1: '행신동',
-      station2: '식사동',
-      station3: '백마로(마두역)',
-      station4: '신원동',
-      station5: '주엽동',
+      station: ['행신동', '식사동', '백마로(마두역)', '신원동', '주엽동'],
     },
     {
       name: '과천',
       district: '시',
       left: '179px',
       top: '260px',
-      station1: '별양동',
-      station2: '과천동',
+      station: ['별양동', '과천동'],
     },
     {
       name: '광명',
       district: '시',
       left: '137px',
       top: '251px',
-      station1: '철산동',
-      station2: '소하동',
+      station: ['철산동', '소하동'],
     },
     {
       name: '광주',
       district: '시',
       left: '251px',
       top: '304px',
-      station1: '경안동',
-      station2: '오포1동',
-      station3: '곤지암',
+      station: ['경안동', '오포1동', '곤지암'],
     },
     {
       name: '구리',
       district: '시',
       left: '207px',
       top: '210px',
-      station1: '교문동',
-      station2: '동구동',
+      station: ['교문동', '동구동'],
     },
     {
       name: '군포',
       district: '시',
       left: '140px',
       top: '333px',
-      station1: '당동',
-      station2: '산본동',
+      station: ['당동', '산본동'],
     },
     {
       name: '김포',
       district: '시',
       left: '62px',
       top: '189px',
-      station1: '사우동',
-      station2: '고촌읍',
-      station3: '월곶면',
-      station4: '한강신도시',
-      station5: '한강로',
+      station: ['사우동', '고촌읍', '월곶면', '한강신도시', '한강로'],
     },
     {
       name: '남양주',
       district: '시',
       left: '253px',
       top: '203px',
-      station1: '금곡동',
-      station2: '오남읍',
-      station3: '별내동',
-      station4: '화도읍',
-      station5: '경춘로',
-      station6: '와부읍',
-      station7: '진접읍',
+      station: [
+        '금곡동',
+        '오남읍',
+        '별내동',
+        '화도읍',
+        '경춘로',
+        '와부읍',
+        '진접읍',
+      ],
     },
     {
       name: '동두천',
       district: '시',
       left: '206px',
       top: '124px',
-      station1: '보산동',
+      station: ['보산동'],
     },
     {
       name: '부천',
       district: '시',
       left: '90px',
       top: '254px',
-      station1: '소사본동',
-      station2: '내동',
-      station3: '중동',
-      station4: '오정동',
-      station5: '송내대로(중동)',
+      station: ['소사본동', '내동', '중동', '오정동', '송내대로(중동)'],
     },
     {
       name: '성남',
       district: '시',
       left: '209px',
       top: '291px',
-      station1: '대왕판교로(백현동)',
-      station2: '단대동',
-      station3: '정자동',
-      station4: '수내동',
-      station5: '성남대로(모란역)',
-      station6: '북정동',
-      station7: '운종동',
-      station8: '상대원동',
+      station: [
+        '대왕판교로(백현동)',
+        '단대동',
+        '정자동',
+        '수내동',
+        '성남대로(모란역)',
+        '북정동',
+        '운종동',
+        '상대원동',
+      ],
     },
     {
       name: '수원',
       district: '시',
       left: '182px',
       top: '342px',
-      station1: '신풍동',
-      station2: '인계동',
-      station3: '광교동',
-      station4: '영통동',
-      station5: '천천동',
-      station6: '경수대로(동수원)',
-      station7: '고색동',
-      station8: '호매실',
+      station: [
+        '신풍동',
+        '인계동',
+        '광교동',
+        '영통동',
+        '천천동',
+        '경수대로(동수원)',
+        '고색동',
+        '호매실',
+      ],
     },
     {
       name: '시흥',
       district: '시',
       left: '83px',
       top: '297px',
-      station1: '정왕동',
-      station2: '시화산단',
-      station3: '대야동',
-      station4: '목감동',
-      station5: '장현동',
-      station6: '서해안로',
-      station7: '배곧동',
+      station: [
+        '정왕동',
+        '시화산단',
+        '대야동',
+        '목감동',
+        '장현동',
+        '서해안로',
+        '배곧동',
+      ],
     },
     {
       name: '안산',
       district: '시',
       left: '97px',
       top: '338px',
-      station1: '대부동',
-      station2: '호수동',
-      station3: '중앙대로(고잔동)',
-      station4: '고잔동',
-      station5: '원시동',
-      station6: '본오동',
-      station7: '원곡동',
-      station8: '부곡동1',
+      station: [
+        '대부동',
+        '호수동',
+        '중앙대로(고잔동)',
+        '고잔동',
+        '원시동',
+        '본오동',
+        '원곡동',
+        '부곡동1',
+      ],
     },
     {
       name: '안성',
       district: '시',
       left: '240px',
       top: '425px',
-      station1: '봉산동',
-      station2: '공도읍',
-      station3: '죽산면',
+      station: ['봉산동', '공도읍', '죽산면'],
     },
     {
       name: '안양',
       district: '시',
       left: '126px',
       top: '292px',
-      station1: '안양8동',
-      station2: '부림동',
-      station3: '호계3동',
-      station4: '안양2동',
+      station: ['안양8동', '부림동', '호계3동', '안양2동'],
     },
     {
       name: '양주',
       district: '시',
       left: '164px',
       top: '137px',
-      station1: '백석읍',
-      station2: '고읍',
+      station: ['백석읍', '고읍'],
     },
     {
       name: '양평',
       district: '군',
       left: '327px',
       top: '273px',
-      station1: '용문면',
-      station2: '양평읍',
+      station: ['용문면', '양평읍'],
     },
     {
       name: '여주',
       district: '시',
       left: '336px',
       top: '343px',
-      station1: '중앙동(경기)',
-      station2: '대신면',
-      station3: '가남읍',
+      station: ['중앙동(경기)', '대신면', '가남읍'],
     },
     {
       name: '연천',
       district: '군',
       left: '182px',
       top: '59px',
-      station1: '연천(DMZ)',
-      station2: '연천',
-      station3: '전곡',
+      station: ['연천(DMZ)', '연천', '전곡'],
     },
     {
       name: '오산',
       district: '시',
       left: '165px',
       top: '382px',
-      station1: '오산동',
-      station2: '금암로(신장동)',
+      station: ['오산동', '금암로(신장동)'],
     },
     {
       name: '용인',
       district: '시',
       left: '222px',
       top: '364px',
-      station1: '김량장동',
-      station2: '수지',
-      station3: '기흥',
-      station4: '중부대로(구갈동)',
-      station5: '모현읍',
-      station6: '이동읍',
-      station7: '백암면',
+      station: [
+        '김량장동',
+        '수지',
+        '기흥',
+        '중부대로(구갈동)',
+        '모현읍',
+        '이동읍',
+        '백암면',
+      ],
     },
     {
       name: '의왕',
       district: '시',
       left: '168px',
       top: '301px',
-      station1: '부곡3동',
-      station2: '고천동',
+      station: ['부곡3동', '고천동'],
     },
     {
       name: '의정부',
       district: '시',
       left: '177px',
       top: '179px',
-      station1: '의정부동',
-      station2: '의정부1동',
-      station3: '송산3동',
+      station: ['의정부동', '의정부1동', '송산3동'],
     },
     {
       name: '이천',
       district: '시',
       left: '282px',
       top: '358px',
-      station1: '설성면',
-      station2: '창전동',
-      station3: '장호원읍',
-      station4: '부발읍',
+      station: ['설성면', '창전동', '장호원읍', '부발읍'],
     },
     {
       name: '파주',
       district: '시',
       left: '116px',
       top: '149px',
-      station1: '금촌동',
-      station2: '운정',
-      station3: '파주',
-      station4: '파주읍',
+      station: ['금촌동', '운정', '파주', '파주읍'],
     },
     {
       name: '평택',
       district: '시',
       left: '163px',
       top: '433px',
-      station1: '비전동',
-      station2: '안중',
-      station3: '평택항',
-      station4: '송북동',
-      station5: '청북읍',
-      station6: '고덕동',
+      station: ['비전동', '안중', '평택항', '송북동', '청북읍', '고덕동'],
     },
     {
       name: '포천',
       district: '시',
       left: '255px',
       top: '95px',
-      station1: '관인면',
-      station2: '선단동',
-      station3: '일동면',
+      station: ['관인면', '선단동', '일동면'],
     },
     {
       name: '하남',
       district: '시',
       left: '241px',
       top: '253px',
-      station1: '신장동',
-      station2: '미사',
+      station: ['신장동', '미사'],
     },
     {
       name: '화성',
       district: '시',
       left: '111px',
       top: '387px',
-      station1: '남양읍',
-      station2: '향남읍',
-      station3: '동탄',
-      station4: '우정읍',
-      station5: '청계동',
-      station6: '새솔동',
-      station7: '봉담읍',
-      station8: '서신면',
+      station: [
+        '남양읍',
+        '향남읍',
+        '동탄',
+        '우정읍',
+        '청계동',
+        '새솔동',
+        '봉담읍',
+        '서신면',
+      ],
     },
   ];
 
@@ -1886,100 +1838,79 @@ export const IncheonInner = () => {
       district: '군',
       left: '253px',
       top: '140px',
-      station1: '송해',
-      station2: '길상',
-      station3: '석모리',
+      station: ['송해', '길상', '석모리'],
     },
     {
       name: '계양',
       district: '구',
       left: '408px',
       top: '242px',
-      station1: '계산',
+      station: ['계산'],
     },
     {
       name: '미추홀',
       district: '구',
       left: '339px',
       top: '333px',
-      station1: '숭의',
-      station2: '석바위',
-      station3: '주안',
+      station: ['숭의', '석바위', '주안'],
     },
     {
       name: '남동구',
       district: '',
       left: '408px',
       top: '342px',
-      station1: '구월동',
-      station2: '남동',
-      station3: '고잔',
-      station4: '서창',
-      station5: '논현',
+      station: ['구월동', '남동', '고잔', '서창', '논현'],
     },
     {
       name: '동구',
       district: '',
       left: '338px',
       top: '283px',
-      station1: '송림',
-      station2: '송현',
+      station: ['송림', '송현'],
     },
     {
       name: '부평',
       district: '구',
       left: '403px',
       top: '292px',
-      station1: '부평역',
-      station2: '부평',
-      station3: '삼산',
+      station: ['부평역', '부평', '삼산'],
     },
     {
       name: '서구',
       district: '',
       left: '350px',
       top: '225px',
-      station1: '연희',
-      station2: '겸단',
-      station3: '석남',
-      station4: '청라',
-      station5: '원당',
-      station6: '경인항',
-      station7: '중봉',
-      station8: '인천 북항',
+      station: [
+        '연희',
+        '겸단',
+        '석남',
+        '청라',
+        '원당',
+        '경인항',
+        '중봉',
+        '인천 북항',
+      ],
     },
     {
       name: '연수',
       district: '구',
       left: '367px',
       top: '378px',
-      station1: '동춘',
-      station2: '송도',
-      station3: '아암',
-      station4: '인천 신항',
+      station: ['동춘', '송도', '아암', '인천 신항'],
     },
     {
       name: '옹진',
       district: '군',
       left: '71px',
       top: '269px',
-      station1: '덕적도',
-      station2: '백령도',
-      station3: '영흥',
-      station4: '연평도',
-      station5: '울도',
+      station: ['덕적도', '백령도', '영흥', '연평도', '울도'],
     },
     {
       name: '중구',
       district: '',
       left: '261px',
       top: '300px',
-      station1: '신흥',
-      station2: '운서',
-      station3: '인천항',
-      station4: '서해',
-      station5: '영종',
-      station6: '인천 남항',
+      station: ['신흥', '운서', '인천항', '서해', '영종', '인천 남항'],
     },
   ];
 
@@ -2516,145 +2447,126 @@ export const GangwonInner = () => {
       district: '시',
       left: '351px',
       top: '254px',
-      station1: '주문진읍',
-      station2: '옥천동',
+      station: ['주문진읍', '옥천동'],
     },
     {
       name: '고성',
       district: '군',
       left: '269px',
       top: '88px',
-      station1: '인제(DMZ)',
-      station2: '고성(DMZ)',
-      station3: '간성읍',
-      station4: '상리',
+      station: ['인제(DMZ)', '고성(DMZ)', '간성읍', '상리'],
     },
     {
       name: '동해',
       district: '시',
       left: '390px',
       top: '312px',
-      station1: '동해항',
-      station2: '묵호항',
+      station: ['동해항', '묵호항'],
     },
     {
       name: '삼척',
       district: '시',
       left: '403px',
       top: '377px',
-      station1: '호산항',
-      station2: '삼척항',
-      station3: '남양동1',
+      station: ['호산항', '삼척항', '남양동1'],
     },
     {
       name: '속초',
       district: '시',
       left: '303px',
       top: '145px',
-      station1: '금호동',
+      station: ['금호동'],
     },
     {
       name: '양구',
       district: '군',
       left: '182px',
       top: '137px',
-      station1: '방산면',
-      station2: '양구읍',
+      station: ['방산면', '양구읍'],
     },
     {
       name: '양양',
       district: '군',
       left: '313px',
       top: '191px',
-      station1: '양양읍',
+      station: ['양양읍'],
     },
     {
       name: '영월',
       district: '군',
       left: '255px',
       top: '391px',
-      station1: '영월읍',
+      station: ['영월읍'],
     },
     {
       name: '원주',
       district: '시',
       left: '150px',
       top: '359px',
-      station1: '중앙동(강원)',
-      station2: '반곡동(명륜동)',
-      station3: '문막읍',
-      station4: '지정면',
+      station: ['중앙동(강원)', '반곡동(명륜동)', '문막읍', '지정면'],
     },
     {
       name: '인제',
       district: '군',
       left: '229px',
       top: '179px',
-      station1: '인제읍',
+      station: ['인제읍'],
     },
     {
       name: '정선',
       district: '군',
       left: '309px',
       top: '347px',
-      station1: '북평면',
-      station2: '정선읍',
+      station: ['북평면', '정선읍'],
     },
     {
       name: '철원',
       district: '군',
       left: '62px',
       top: '116px',
-      station1: '철원(DMZ)',
-      station2: '갈말읍',
+      station: ['철원(DMZ)', '갈말읍'],
     },
     {
       name: '춘천',
       district: '시',
       left: '123px',
       top: '209px',
-      station1: '중앙로',
-      station2: '석사동',
-      station3: '신사우동',
-      station4: '온의동',
+      station: ['중앙로', '석사동', '신사우동', '온의동'],
     },
     {
       name: '태백',
       district: '시',
       left: '357px',
       top: '412px',
-      station1: '황지동',
+      station: ['황지동'],
     },
     {
       name: '평창',
       district: '군',
       left: '261px',
       top: '293px',
-      station1: '평창읍',
+      station: ['평창읍'],
     },
     {
       name: '홍천',
       district: '군',
       left: '184px',
       top: '245px',
-      station1: '홍천읍',
+      station: ['홍천읍'],
     },
     {
       name: '화천',
       district: '군',
       left: '125px',
       top: '141px',
-      station1: '화천(DMZ)',
-      station2: '화천읍',
+      station: ['화천(DMZ)', '화천읍'],
     },
     {
       name: '횡성',
       district: '군',
       left: '194px',
       top: '303px',
-      station1: '치악산',
-      station2: '횡성읍',
-      station3: '우천면',
+      station: ['치악산', '횡성읍', '우천면'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -3036,143 +2948,120 @@ export const ChungnamInner = () => {
       district: '시',
       left: '311px',
       top: '245px',
-      station1: '사곡면',
-      station2: '공주',
-      station3: '탄천면',
+      station: ['사곡면', '공주', '탄천면'],
     },
     {
       name: '금산',
       district: '군',
       left: '402px',
       top: '375px',
-      station1: '금산읍',
+      station: ['금산읍'],
     },
     {
       name: '논산',
       district: '시',
       left: '315px',
       top: '347px',
-      station1: '논산',
-      station2: '연무읍',
-      station3: '성동면',
+      station: ['논산', '연무읍', '성동면'],
     },
     {
       name: '당진',
       district: '시',
       left: '209px',
       top: '111px',
-      station1: '송산면',
-      station2: '당진시청사',
-      station3: '합덕읍',
-      station4: '복운리',
-      station5: '평택당진항',
-      station6: '평택당진항(당진항)',
+      station: [
+        '송산면',
+        '당진시청사',
+        '합덕읍',
+        '복운리',
+        '평택당진항',
+        '평택당진항(당진항)',
+      ],
     },
     {
       name: '보령',
       district: '시',
       left: '178px',
       top: '287px',
-      station1: '대천2동',
-      station2: '주교면',
-      station3: '외연도',
-      station4: '보령항',
+      station: ['대천2동', '주교면', '외연도', '보령항'],
     },
     {
       name: '부여',
       district: '군',
       left: '245px',
       top: '325px',
-      station1: '부여읍',
+      station: ['부여읍'],
     },
     {
       name: '서산',
       district: '시',
       left: '157px',
       top: '154px',
-      station1: '독곶리',
-      station2: '동문동',
-      station3: '대산리',
-      station4: '성영면',
-      station5: '대산항',
+      station: ['독곶리', '동문동', '대산리', '성영면', '대산항'],
     },
     {
       name: '서천',
       district: '군',
       left: '200px',
       top: '368px',
-      station1: '서천읍',
-      station2: '서면',
-      station3: '장항읍',
-      station4: '장항항',
+      station: ['서천읍', '서면', '장항읍', '장항항'],
     },
     {
       name: '아산',
       district: '시',
       left: '288px',
       top: '149px',
-      station1: '모종동',
-      station2: '배방읍',
-      station3: '도고면',
-      station4: '둔포면',
-      station5: '인주면',
-      station6: '잠재리',
-      station7: '송악면',
+      station: [
+        '모종동',
+        '배방읍',
+        '도고면',
+        '둔포면',
+        '인주면',
+        '잠재리',
+        '송악면',
+      ],
     },
     {
       name: '예산',
       district: '군',
       left: '241px',
       top: '182px',
-      station1: '예산군',
-      station2: '삽교읍',
-      station3: '고덕면(충남)',
+      station: ['예산군', '삽교읍', '고덕면(충남)'],
     },
     {
       name: '천안',
       district: '시',
       left: '350px',
       top: '147px',
-      station1: '성황동',
-      station2: '백석동',
-      station3: '성성동',
-      station4: '성거읍',
-      station5: '신방동',
+      station: ['성황동', '백석동', '성성동', '성거읍', '신방동'],
     },
     {
       name: '청양',
       district: '군',
       left: '240px',
       top: '260px',
-      station1: '청양읍',
-      station2: '정산면',
+      station: ['청양읍', '정산면'],
     },
     {
       name: '태안',
       district: '군',
       left: '91px',
       top: '139px',
-      station1: '파도리',
-      station2: '이원면',
-      station3: '태안읍',
-      station4: '격렬비열도',
-      station5: '원북면',
-      station6: '태안항',
+      station: ['파도리', '이원면', '태안읍', '격렬비열도', '원북면', '태안항'],
     },
     {
       name: '홍성',
       district: '군',
       left: '192px',
       top: '215px',
-      station1: '홍성읍',
-      station2: '내포',
+      station: ['홍성읍', '내포'],
     },
     {
       name: '계룡',
       district: '시',
       left: '352px',
       top: '301px',
-      station1: '엄사면',
+      station: ['엄사면'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -3466,43 +3355,35 @@ export const DaejeonInner = () => {
       district: '구',
       left: '262px',
       top: '158px',
-      station1: '읍내동',
-      station2: '문평동',
+      station: ['읍내동', '문평동'],
     },
     {
       name: '동구',
       district: '',
       left: '302px',
       top: '256px',
-      station1: '대성동',
-      station2: '성남동1',
+      station: ['대성동', '성남동1'],
     },
     {
       name: '서구',
       district: '',
       left: '150px',
       top: '337px',
-      station1: '정림동',
-      station2: '둔산동',
-      station3: '월평동',
+      station: ['정림동', '둔산동', '월평동'],
     },
     {
       name: '유성',
       district: '구',
       left: '148px',
       top: '190px',
-      station1: '구성동',
-      station2: '노은동',
-      station3: '삼대동(대전)',
-      station4: '관평동',
+      station: ['구성동', '노은동', '삼대동(대전)', '관평동'],
     },
     {
       name: '중구',
       district: '',
       left: '227px',
       top: '298px',
-      station1: '문창동',
-      station2: '대흥동1',
+      station: ['문창동', '대흥동1'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -3877,99 +3758,87 @@ export const ChungbukInner = () => {
       district: '군',
       left: '182px',
       top: '190px',
-      station1: '청천면',
-      station2: '괴산읍',
-      station3: '감물면',
+      station: ['청천면', '괴산읍', '감물면'],
     },
     {
       name: '단양',
       district: '군',
       left: '336px',
       top: '128px',
-      station1: '매포읍',
-      station2: '단성면',
-      station3: '단양읍',
+      station: ['매포읍', '단성면', '단양읍'],
     },
     {
       name: '보은',
       district: '군',
       left: '161px',
       top: '279px',
-      station1: '보은읍',
+      station: ['보은읍'],
     },
     {
       name: '영동',
       district: '군',
       left: '177px',
       top: '391px',
-      station1: '영동읍',
-      station2: '황간면',
+      station: ['영동읍', '황간면'],
     },
     {
       name: '옥천',
       district: '군',
       left: '125px',
       top: '336px',
-      station1: '옥천읍',
+      station: ['옥천읍'],
     },
     {
       name: '음성',
       district: '군',
       left: '132px',
       top: '119px',
-      station1: '음성읍',
-      station2: '소이면',
-      station3: '금왕',
+      station: ['음성읍', '소이면', '금왕'],
     },
     {
       name: '제천',
       district: '시',
       left: '276px',
       top: '107px',
-      station1: '장락동',
-      station2: '영천동',
-      station3: '청풍면',
+      station: ['장락동', '영천동', '청풍면'],
     },
     {
       name: '증평',
       district: '군',
       left: '129px',
       top: '176px',
-      station1: '도안면',
-      station2: '증평읍',
+      station: ['도안면', '증평읍'],
     },
     {
       name: '진천',
       district: '군',
       left: '79px',
       top: '155px',
-      station1: '진천읍',
-      station2: '덕산읍',
+      station: ['진천읍', '덕산읍'],
     },
     {
       name: '청주',
       district: '시',
       left: '95px',
       top: '230px',
-      station1: '용암동',
-      station2: '복대동',
-      station3: '오창읍',
-      station4: '산남동',
-      station5: '오송읍',
-      station6: '가덕면',
-      station7: '봉명동',
-      station8: '사천동',
-      station9: '용담동',
+      station: [
+        '용암동',
+        '복대동',
+        '오창읍',
+        '산남동',
+        '오송읍',
+        '가덕면',
+        '봉명동',
+        '사천동',
+        '용담동',
+      ],
     },
     {
       name: '충주',
       district: '시',
       left: '213px',
       top: '109px',
-      station1: '호암동',
-      station2: '칠금동',
-      station3: '중앙탑면',
-      station4: '살미연',
+      station: ['호암동', '칠금동', '중앙탑면', '살미연'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -4108,12 +3977,7 @@ export const SejongInner = () => {
       district: '시',
       left: '218px',
       top: '260px',
-      station1: '신흥동',
-      station2: '아름동',
-      station3: '한솔동',
-      station4: '부강면',
-      station5: '보람동',
-      station6: '전의면',
+      station: ['신흥동', '아름동', '한솔동', '부강면', '보람동', '전의면'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -4295,129 +4159,112 @@ export const BusanInner = () => {
       district: '구',
       left: '108px',
       top: '296px',
-      station1: '녹산동',
-      station2: '부산항',
-      station3: '부산신항',
-      station4: '대저동',
-      station5: '명지동',
+      station: ['녹산동', '부산항', '부산신항', '대저동', '명지동'],
     },
     {
       name: '금정',
       district: '구',
       left: '255px',
       top: '155px',
-      station1: '청룡동',
-      station2: '부곡동',
-      station3: '회동동',
+      station: ['청룡동', '부곡동', '회동동'],
     },
     {
       name: '기장',
       district: '군',
       left: '346px',
       top: '130px',
-      station1: '기장읍',
-      station2: '용수리',
+      station: ['기장읍', '용수리'],
     },
     {
       name: '남구',
       district: '',
       left: '276px',
       top: '307px',
-      station1: '대연동',
+      station: ['대연동'],
     },
     {
       name: '동구',
       district: '',
       left: '235px',
       top: '281px',
-      station1: '수정동',
-      station2: '초량동',
-      station3: '부산북항',
+      station: ['수정동', '초량동', '부산북항'],
     },
     {
       name: '동래',
       district: '구',
       left: '255px',
       top: '199px',
-      station1: '온천동',
-      station2: '명장동',
+      station: ['온천동', '명장동'],
     },
     {
       name: '부산진',
       district: '구',
       left: '194px',
       top: '239px',
-      station1: '개금동',
-      station2: '전포동',
+      station: ['개금동', '전포동'],
     },
     {
       name: '북구',
       district: '',
       left: '198px',
       top: '193px',
-      station1: '덕천동',
+      station: ['덕천동'],
     },
     {
       name: '사상',
       district: '구',
       left: '164px',
       top: '272px',
-      station1: '학장동',
-      station2: '삼락동',
-      station3: '덕포동',
+      station: ['학장동', '삼락동', '덕포동'],
     },
     {
       name: '사하',
       district: '구',
       left: '154px',
       top: '333px',
-      station1: '장림동',
-      station2: '당리동',
+      station: ['장림동', '당리동'],
     },
     {
       name: '서구',
       district: '',
       left: '197px',
       top: '300px',
-      station1: '대신동',
+      station: ['대신동'],
     },
     {
       name: '수영',
       district: '구',
       left: '286px',
       top: '264px',
-      station1: '광안동',
+      station: ['광안동'],
     },
     {
       name: '연제',
       district: '구',
       left: '239px',
       top: '239px',
-      station1: '연산동',
+      station: ['연산동'],
     },
     {
       name: '영도',
       district: '구',
       left: '255px',
       top: '346px',
-      station1: '태종대',
-      station2: '청학동',
+      station: ['태종대', '청학동'],
     },
     {
       name: '중구',
       district: '',
       left: '209px',
       top: '347px',
-      station1: '광복동',
+      station: ['광복동'],
     },
     {
       name: '해운대',
       district: '구',
       left: '315px',
       top: '232px',
-      station1: '우동',
-      station2: '좌동',
-      station3: '재송동',
+      station: ['우동', '좌동', '재송동'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -4584,52 +4431,44 @@ export const UlsanInner = () => {
       district: '',
       left: '317px',
       top: '243px',
-      station1: '부곡동(울산)',
-      station2: '여천동(울산)',
-      station3: '야음동',
-      station4: '삼산동',
-      station5: '신정로',
-      station6: '신정동',
-      station7: '무거동',
-      station8: '울산항',
+      station: [
+        '부곡동(울산)',
+        '여천동(울산)',
+        '야음동',
+        '삼산동',
+        '신정로',
+        '신정동',
+        '무거동',
+        '울산항',
+      ],
     },
     {
       name: '동구',
       district: '',
       left: '387px',
       top: '241px',
-      station1: '전하동',
-      station2: '대송동',
+      station: ['전하동', '대송동'],
     },
     {
       name: '북구',
       district: '',
       left: '346px',
       top: '154px',
-      station1: '송정동 대기환경측정소',
-      station2: '농소동',
-      station3: '효문동',
+      station: ['송정동 대기환경측정소', '농소동', '효문동'],
     },
     {
       name: '울주군',
       district: '',
       left: '196px',
       top: '229px',
-      station1: '덕산리',
-      station2: '화산리',
-      station3: '상남리',
-      station4: '상남읍',
-      station5: '웅촌면',
-      station6: '범서읍',
+      station: ['덕산리', '화산리', '상남리', '상남읍', '웅촌면', '범서읍'],
     },
     {
       name: '중구',
       district: '',
       left: '287px',
       top: '189px',
-      station1: '약사동',
-      station2: '성남동',
-      station3: '북부순환도로',
+      station: ['약사동', '성남동', '북부순환도로'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -5002,78 +4841,63 @@ export const DaeguInner = () => {
       district: '',
       left: '190px',
       top: '360px',
-      station1: '대명동',
-      station2: '충혼탑',
+      station: ['대명동', '충혼탑'],
     },
     {
       name: '달서',
       district: '구',
       left: '150px',
       top: '352px',
-      station1: '호림동',
-      station2: '이곡동',
-      station3: '진천동',
-      station4: '본동',
+      station: ['호림동', '이곡동', '진천동', '본동'],
     },
     {
       name: '달성',
       district: '구',
       left: '140px',
       top: '410px',
-      station1: '유가읍',
-      station2: '다사읍',
-      station3: '화원읍',
+      station: ['유가읍', '다사읍', '화원읍'],
     },
     {
       name: '동구',
       district: '',
       left: '240px',
       top: '270px',
-      station1: '서호동',
-      station2: '신암동',
+      station: ['서호동', '신암동'],
     },
     {
       name: '북구',
       district: '',
       left: '190px',
       top: '260px',
-      station1: '산격동',
-      station2: '서변동',
-      station3: '침산동',
-      station4: '태전동',
+      station: ['산격동', '서변동', '침산동', '태전동'],
     },
     {
       name: '서구',
       district: '',
       left: '165px',
       top: '310px',
-      station1: '이현동',
-      station2: '평기동',
+      station: ['이현동', '평기동'],
     },
     {
       name: '수성',
       district: '구',
       left: '250px',
       top: '350px',
-      station1: '지산동',
-      station2: '연호동',
-      station3: '만촌동',
-      station4: '시지동',
+      station: ['지산동', '연호동', '만촌동', '시지동'],
     },
     {
       name: '중구',
       district: '',
       left: '210px',
       top: '320px',
-      station1: '남사1동',
-      station2: '수창동',
+      station: ['남사1동', '수창동'],
     },
     {
       name: '군위군',
       district: '',
       left: '280px',
       top: '160px',
-      station1: '군위읍',
+      station: ['군위읍'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -5922,185 +5746,168 @@ export const GyeongbukInner = () => {
       district: '시',
       left: '176px',
       top: '358px',
-      station1: '중방동',
-      station2: '하양읍',
-      station3: '진량읍',
+      station: ['중방동', '하양읍', '진량읍'],
     },
     {
       name: '경주',
       district: '시',
       left: '268px',
       top: '364px',
-      station1: '성건동',
-      station2: '보덕동',
-      station3: '안강읍',
-      station4: '외동읍',
+      station: ['성건동', '보덕동', '안강읍', '외동읍'],
     },
     {
       name: '고령',
       district: '군',
       left: '81px',
       top: '380px',
-      station1: '대가야읍',
+      station: ['대가야읍'],
     },
     {
       name: '구미',
       district: '시',
       left: '98px',
       top: '265px',
-      station1: '공단동',
-      station2: '원평동',
-      station3: '형곡동',
-      station4: '4공단',
-      station5: '진미동',
+      station: ['공단동', '원평동', '형곡동', '4공단', '진미동'],
     },
     {
       name: '김천',
       district: '시',
       left: '39px',
       top: '293px',
-      station1: '평화남산동',
-      station2: '대광동',
-      station3: '율곡동',
+      station: ['평화남산동', '대광동', '율곡동'],
     },
     {
       name: '문경',
       district: '시',
       left: '74px',
       top: '141px',
-      station1: '문경시',
+      station: ['문경시'],
     },
     {
       name: '봉화',
       district: '군',
       left: '218px',
       top: '98px',
-      station1: '석포면',
-      station2: '봉화군청',
+      station: ['석포면', '봉화군청'],
     },
     {
       name: '상주',
       district: '시',
       left: '49px',
       top: '211px',
-      station1: '상주시',
+      station: ['상주시'],
     },
     {
       name: '성주',
       district: '군',
       left: '71px',
       top: '334px',
-      station1: '성주군',
+      station: ['성주군'],
     },
     {
       name: '안동',
       district: '시',
       left: '193px',
       top: '176px',
-      station1: '명륜동',
+      station: ['명륜동'],
     },
     {
       name: '영덕',
       district: '군',
       left: '296px',
       top: '214px',
-      station1: '영덕읍',
-      station2: '강구면',
-      station3: '영해면',
+      station: ['영덕읍', '강구면', '영해면'],
     },
     {
       name: '영양',
       district: '군',
       left: '256px',
       top: '155px',
-      station1: '영양군',
+      station: ['영양군'],
     },
     {
       name: '영주',
       district: '시',
       left: '153px',
       top: '109px',
-      station1: '가흥동',
-      station2: '영주동',
+      station: ['가흥동', '영주동'],
     },
     {
       name: '영천',
       district: '시',
       left: '213px',
       top: '313px',
-      station1: '화북면',
-      station2: '영천시',
+      station: ['화북면', '영천시'],
     },
     {
       name: '예천',
       district: '군',
       left: '121px',
       top: '157px',
-      station1: '예천군',
+      station: ['예천군'],
     },
     {
       name: '울릉',
       district: '군',
       left: '384px',
       top: '157px',
-      station1: '태하리',
-      station2: '울릉읍',
+      station: ['태하리', '울릉읍'],
     },
     {
       name: '울진',
       district: '군',
       left: '303px',
       top: '105px',
-      station1: '울진군',
+      station: ['울진군'],
     },
     {
       name: '의성',
       district: '군',
       left: '150px',
       top: '234px',
-      station1: '안계면(교외)',
-      station2: '의성읍',
-      station3: '안계면',
+      station: ['안계면(교외)', '의성읍', '안계면'],
     },
     {
       name: '청도',
       district: '군',
       left: '186px',
       top: '404px',
-      station1: '화양읍',
+      station: ['화양읍'],
     },
     {
       name: '청송',
       district: '군',
       left: '241px',
       top: '235px',
-      station1: '청송읍',
+      station: ['청송읍'],
     },
     {
       name: '칠곡',
       district: '군',
       left: '119px',
       top: '315px',
-      station1: '칠곡군',
+      station: ['칠곡군'],
     },
     {
       name: '포항',
       district: '시',
       left: '290px',
       top: '288px',
-      station1: '우현동',
-      station2: '장흥동',
-      station3: '장량동',
-      station4: '대도동',
-      station5: '대송면',
-      station6: '3공단',
-      station7: '송도동',
-      station8: '오천읍',
-      station9: '청림동',
-      station10: '연일읍',
-      station11: '제철동',
-      station12: '양덕동',
-      station13: '포항항',
+      station: [
+        '우현동',
+        '장흥동',
+        '장량동',
+        '대도동',
+        '대송면',
+        '3공단',
+        '송도동',
+        '오천읍',
+        '청림동',
+        '연일읍',
+        '제철동',
+        '양덕동',
+        '포항항',
+      ],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -6981,156 +6788,141 @@ export const GyeongnamInner = () => {
       district: '시',
       left: '282px',
       top: '357px',
-      station1: '저구리',
-      station2: '아주동',
-      station3: '고현동',
+      station: ['저구리', '아주동', '고현동'],
     },
     {
       name: '거창',
       district: '군',
       left: '122px',
       top: '88px',
-      station1: '거창읍',
-      station2: '남상면',
+      station: ['거창읍', '남상면'],
     },
     {
       name: '고성',
       district: '군',
       left: '196px',
       top: '309px',
-      station1: '고성읍',
+      station: ['고성읍'],
     },
     {
       name: '김해',
       district: '시',
       left: '333px',
       top: '250px',
-      station1: '동상동',
-      station2: '삼방동',
-      station3: '장유동',
-      station4: '진영읍',
-      station5: '김해대로',
-      station6: '진례면',
+      station: ['동상동', '삼방동', '장유동', '진영읍', '김해대로', '진례면'],
     },
     {
       name: '남해',
       district: '군',
       left: '116px',
       top: '368px',
-      station1: '남해읍',
+      station: ['남해읍'],
     },
     {
       name: '밀양',
       district: '시',
       left: '321px',
       top: '175px',
-      station1: '내일동',
+      station: ['내일동'],
     },
     {
       name: '사천',
       district: '시',
       left: '137px',
       top: '294px',
-      station1: '사천읍',
-      station2: '향촌동',
-      station3: '삼천포항',
+      station: ['사천읍', '향촌동', '삼천포항'],
     },
     {
       name: '산청',
       district: '군',
       left: '108px',
       top: '196px',
-      station1: '산청읍',
+      station: ['산청읍'],
     },
     {
       name: '양산',
       district: '시',
       left: '384px',
       top: '206px',
-      station1: '북부동',
-      station2: '삼호동',
-      station3: '물금옵',
+      station: ['북부동', '삼호동', '물금옵'],
     },
     {
       name: '의령',
       district: '군',
       left: '200px',
       top: '199px',
-      station1: '의령읍',
+      station: ['의령읍'],
     },
     {
       name: '진주',
       district: '시',
       left: '155px',
       top: '245px',
-      station1: '상봉동',
-      station2: '대안동',
-      station3: '상대동(진주)',
-      station4: '정촌면',
+      station: ['상봉동', '대안동', '상대동(진주)', '정촌면'],
     },
     {
       name: '창녕',
       district: '군',
       left: '250px',
       top: '164px',
-      station1: '창녕읍',
+      station: ['창녕읍'],
     },
     {
       name: '창원',
       district: '시',
       left: '272px',
       top: '272px',
-      station1: '회원동',
-      station2: '봉암동',
-      station3: '내서읍',
-      station4: '명서동',
-      station5: '웅남동',
-      station6: '성주동',
-      station7: '용지동',
-      station8: '반송로',
-      station9: '사파동',
-      station10: '삼진로',
-      station11: '경화동',
-      station12: '월영동',
-      station13: '대산면',
-      station14: '마산항',
+      station: [
+        '회원동',
+        '봉암동',
+        '내서읍',
+        '명서동',
+        '웅남동',
+        '성주동',
+        '용지동',
+        '반송로',
+        '사파동',
+        '삼진로',
+        '경화동',
+        '월영동',
+        '대산면',
+        '마산항',
+      ],
     },
     {
       name: '통영',
       district: '시',
       left: '205px',
       top: '368px',
-      station1: '무전동',
+      station: ['무전동'],
     },
     {
       name: '하동',
       district: '군',
       left: '74px',
       top: '269px',
-      station1: '하동읍',
-      station2: '금성면',
-      station3: '하동항',
+      station: ['하동읍', '금성면', '하동항'],
     },
     {
       name: '함안',
       district: '군',
       left: '235px',
       top: '234px',
-      station1: '가야읍',
+      station: ['가야읍'],
     },
     {
       name: '함양',
       district: '군',
       left: '66px',
       top: '141px',
-      station1: '함양읍',
+      station: ['함양읍'],
     },
     {
       name: '합천',
       district: '군',
       left: '167px',
       top: '148px',
-      station1: '합천읍',
+      station: ['합천읍'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -8235,181 +8027,173 @@ export const JeonnamInner = () => {
       district: '군',
       left: '211px',
       top: '292px',
-      station1: '강진읍',
+      station: ['강진읍'],
     },
     {
       name: '고흥',
       district: '군',
       left: '346px',
       top: '306px',
-      station1: '고흥읍',
+      station: ['고흥읍'],
     },
     {
       name: '곡성',
       district: '군',
       left: '338px',
       top: '122px',
-      station1: '곡성읍',
+      station: ['곡성읍'],
     },
     {
       name: '광양',
       district: '시',
       left: '426px',
       top: '185px',
-      station1: '중동',
-      station2: '태인동',
-      station3: '광양읍',
-      station4: '봉강면',
-      station5: '진월면',
-      station6: '광양항',
-      station7: '광양 중마',
-      station8: '광양 유촌',
+      station: [
+        '중동',
+        '태인동',
+        '광양읍',
+        '봉강면',
+        '진월면',
+        '광양항',
+        '광양 중마',
+        '광양 유촌',
+      ],
     },
     {
       name: '구례',
       district: '군',
       left: '393px',
       top: '122px',
-      station1: '구례읍',
+      station: ['구례읍'],
     },
     {
       name: '나주',
       district: '시',
       left: '212px',
       top: '174px',
-      station1: '빛가람동',
+      station: ['빛가람동'],
     },
     {
       name: '담양',
       district: '군',
       left: '276px',
       top: '97px',
-      station1: '담양읍',
+      station: ['담양읍'],
     },
     {
       name: '목포',
       district: '시',
       left: '123px',
       top: '238px',
-      station1: '용당동',
-      station2: '부흥동',
+      station: ['용당동', '부흥동'],
     },
     {
       name: '무안',
       district: '군',
       left: '137px',
       top: '191px',
-      station1: '무안읍',
+      station: ['무안읍'],
     },
     {
       name: '보성',
       district: '군',
       left: '306px',
       top: '239px',
-      station1: '벌교읍',
-      station2: '보성읍',
+      station: ['벌교읍', '보성읍'],
     },
     {
       name: '순천',
       district: '시',
       left: '365px',
       top: '191px',
-      station1: '장천동',
-      station2: '연향동',
-      station3: '순천만',
-      station4: '호두리',
-      station5: '신대',
+      station: ['장천동', '연향동', '순천만', '호두리', '신대'],
     },
     {
       name: '신안',
       district: '군',
       left: '77px',
       top: '226px',
-      station1: '신안군',
-      station2: '홍도',
-      station3: '가거도',
+      station: ['신안군', '홍도', '가거도'],
     },
     {
       name: '여수',
       district: '시',
       left: '425px',
       top: '262px',
-      station1: '월내동',
-      station2: '문수동',
-      station3: '여천동(여수)',
-      station4: '덕충동',
-      station5: '화양면',
-      station6: '율촌면',
-      station7: '삼일동',
-      station8: '여수항',
-      station9: '서강동',
+      station: [
+        '월내동',
+        '문수동',
+        '여천동(여수)',
+        '덕충동',
+        '화양면',
+        '율촌면',
+        '삼일동',
+        '여수항',
+        '서강동',
+      ],
     },
     {
       name: '영광',
       district: '군',
       left: '151px',
       top: '95px',
-      station1: '영광읍',
-      station2: '안마도',
+      station: ['영광읍', '안마도'],
     },
     {
       name: '영암',
       district: '군',
       left: '189px',
       top: '225px',
-      station1: '대불',
-      station2: '영암읍',
-      station3: '목포항',
+      station: ['대불', '영암읍', '목포항'],
     },
     {
       name: '완도',
       district: '군',
       left: '205px',
       top: '372px',
-      station1: '신지면',
+      station: ['신지면'],
     },
     {
       name: '장성',
       district: '군',
       left: '229px',
       top: '89px',
-      station1: '장성읍',
+      station: ['장성읍'],
     },
     {
       name: '장흥',
       district: '군',
       left: '245px',
       top: '259px',
-      station1: '장흥읍',
+      station: ['장흥읍'],
     },
     {
       name: '진도',
       district: '군',
       left: '95px',
       top: '318px',
-      station1: '진도읍',
+      station: ['진도읍'],
     },
     {
       name: '함평',
       district: '군',
       left: '168px',
       top: '143px',
-      station1: '함평읍',
+      station: ['함평읍'],
     },
     {
       name: '해남',
       district: '군',
       left: '163px',
       top: '302px',
-      station1: '해남읍',
+      station: ['해남읍'],
     },
     {
       name: '화순',
       district: '군',
       left: '279px',
       top: '180px',
-      station1: '송단리',
-      station2: '화순읍',
+      station: ['송단리', '화순읍'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -9904,43 +9688,35 @@ export const GwangjuInner = () => {
       district: '구',
       left: '137px',
       top: '224px',
-      station1: '오선동',
-      station2: '우산동(광주)',
-      station3: '평동',
+      station: ['오선동', '우산동(광주)', '평동'],
     },
     {
       name: '남구',
       district: '',
       left: '262px',
       top: '318px',
-      station1: '노대동',
-      station2: '주월동',
+      station: ['노대동', '주월동'],
     },
     {
       name: '동구',
       district: '',
       left: '353px',
       top: '290px',
-      station1: '서석동',
+      station: ['서석동'],
     },
     {
       name: '북구',
       district: '',
       left: '306px',
       top: '178px',
-      station1: '두암동',
-      station2: '운암동',
-      station3: '건국동',
-      station4: '일곡동',
+      station: ['두암동', '운암동', '건국동', '일곡동'],
     },
     {
       name: '서구',
       district: '',
       left: '244px',
       top: '254px',
-      station1: '유촌동',
-      station2: '농성동',
-      station3: '치평동',
+      station: ['유촌동', '농성동', '치평동'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -10001,47 +9777,7 @@ export const GwangjuInner = () => {
           fill="#BFD3E1"
           stroke="#9EAEC2"
           strokeMiterlimit="10"
-          d="M445.153,236.1
-			c-0.533-0.354-2.667-2.125-3.2-3.188c-0.532-1.063-3.021-6.904-3.021-6.904s-3.199-1.063-5.154-1.24
-			c-1.955-0.177-3.555-0.885-4.443-2.125c-0.89-1.239-3.556-6.905-3.556-6.905l-20.796,0.354c0,0-2.488,3.188-3.021,4.072
-			c-0.534,0.885-3.377-1.771-3.377-1.771l-9.243,0.531v6.021c0,0-6.22-4.781-7.286-7.083s-2.844-7.968-2.844-7.968
-			s4.798-7.614,5.51-9.208c0.711-1.593,2.844-3.541,2.844-3.541s-7.821-4.25-8.709-5.136c-0.888-0.885-4.621-5.666-6.043-8.853
-			c-1.422-3.188-4.088-4.604-4.265-6.375c-0.178-1.771,1.243-5.489,1.777-7.968c0.532-2.479-1.067-4.958-1.955-6.021
-			c-0.89-1.063-1.601-3.541-2.489-3.896c-0.889-0.354-5.332-1.593-5.332-1.593v-5.667l-8.711-0.177c0,0,0.178-1.594,0-2.656
-			c-0.177-1.062,0.71-7.26,0-8.322c-0.71-1.063-1.422-4.25-2.132-5.843c-0.713-1.594-1.067-1.594-3.733-2.125
-			c-2.665-0.531-10.842-3.01-12.264-3.364c-1.423-0.354-4.977-2.833-5.687-3.718c-0.711-0.885-2.488-1.416-3.732-2.302
-			c-1.245-0.885-2.311,0.708-2.311,0.708l-4.799,0.354l-1.244,0.708c0,0-0.534,2.302-1.245,3.364c-0.71,1.063-5.332,3.542-6.753,4.073
-			c-1.422,0.531-3.377,5.666-3.377,6.551s-7.643,0.885-9.064,0.354s-1.422-1.948-1.777-3.896s-1.244-2.125-1.955-1.771
-			c-0.712,0.354-4.089,5.135-5.688,5.843c-1.6,0.708-7.109,0.177-8.176,0.885s-4.443,5.843-5.154,6.729s-1.954,3.187-3.909,3.01
-			c-1.956-0.177-6.934,1.239-9.064,1.239c-2.135,0-4.09,0.885-5.155,2.302c-1.066,1.417-7.286,8.322-7.286,8.322s-1.778,0-3.2-0.531
-			s-5.332-3.01-7.465-4.072c-2.133-1.063-2.666,0.708-3.555,3.364c-0.889,2.656-3.021,6.02-4.622,6.905
-			c-1.599,0.885-9.242,5.135-10.486,5.843c-1.245,0.708-8.177,0-11.376-0.531c-3.199-0.531-8.354-0.177-10.486-2.479
-			c-2.133-2.302-12.975-5.312-14.041-5.843c-1.067-0.531-1.067-3.188-0.889-4.25c0.177-1.062-0.533-2.125-2.133-2.833
-			c-1.6-0.707-14.929-0.885-15.996-1.948c-1.066-1.062-0.178-9.208-0.178-10.624s1.777-3.01,3.021-3.187s2.488-0.708,2.488-2.124
-			c0-1.417-0.889-2.657-1.066-3.719c-0.178-1.063,2.843-2.479,2.843-3.364s0-5.666,0-5.666s-7.82-0.177-9.419-0.177
-			c-1.6,0-1.422,1.948-1.422,1.948s-5.687,0.708-7.465,0.354c-1.777-0.354-3.377,4.958-3.377,4.958l-9.064,0.177
-			c0,0-1.244,2.656-2.488,4.25c-1.244,1.594-2.311,4.427-2.843,6.197c-0.533,1.771-1.245,9.208-1.245,9.208
-			s-10.308,9.739-11.552,10.447l0.533,2.658l3.732,11.332l-2.845,6.908l-11.553-0.355c0,0-3.91,4.428-5.332,4.073
-			s-5.688-4.78-5.688-4.78l-3.021-1.594l-3.91-0.177l-2.666-1.24H88.08l-7.109,6.021v10.447l-5.333,3.01v2.656l1.422,1.239
-			l0.178,3.541c0,0-9.242,0.53-11.02,0.53s-1.955,2.656-3.554,2.303c-1.6-0.355-5.865-5.666-6.754-6.198
-			c-0.889-0.531-2.488,2.656-2.488,2.656l0.177,5.489l18.662,21.426l-0.177,6.374c0,0-2.666,0.708-4.622,2.479
-			c-1.955,1.77-4.265-1.417-4.265-1.417l-8.531,0.531l-1.6,6.021l-0.533,4.78l-1.599,2.302v6.197l-4.444,8.677l7.109,7.436
-			c0,0-0.533,9.206-1.066,12.394s-1.955,14.697-1.955,14.697l6.753,6.728l12.089-0.352l0.355,9.206l12.797-0.177
-			c0,0,6.042-6.552,6.576-6.552c0.533,0,6.931,4.072,8.709,3.719c1.777-0.354,5.865-3.719,5.865-3.719s1.777,0.354,2.666,1.239
-			c0.163,0.162,0.404,0.372,0.695,0.604c1.305,1.041,3.653,2.552,4.815,2.407c1.421-0.179,6.22-2.833,6.22-2.833l2.133-0.354
-			l3.199,4.427l14.041-0.177l0.534-4.073l19.551,15.759l2.844,9.208h7.287l2.783,7.651l6.104,16.783l-0.552,0.904l-1.937,3.169
-			l-14.218,0.177c0,0-2.488,6.021-1.956,6.374c0.533,0.354,4.266,5.313,4.266,5.313h4.266l4.265-4.604c0,0,3.555-0.178,5.51-0.178
-			s1.6,1.417,1.6,1.417l-5.154,7.436c0,0,0.711,4.251,2.844,5.666c2.132,1.418,14.929,1.239,14.929,1.239l11.02-12.039l8.354,5.665
-			l0.355,4.604l4.444,2.655l14.397-0.707l5.332-14.697l15.286-0.177l8.354-7.614c0,0,0.711-3.541,1.422-6.021s7.288-3.54,9.065-4.958
-			c1.778-1.416,7.109-1.063,7.109-1.063l4.442,4.249l12.086,0.532l4.266-7.26c0,0,4.621,0.531,5.865,1.416
-			c1.244,0.886,4.621,1.417,6.576,0.709c1.955-0.709,13.864-3.542,14.398-4.427c0.533-0.887,0.888-5.489,0.888-5.489
-			s4.088-3.896,5.688-4.603c1.498-0.664,6.579-0.552,7.219-0.534c0.044,0.001,0.067,0.001,0.067,0.001l16.885,25.145l13.152-0.178
-			c0,0,9.775-8.145,11.375-9.562s2.488-4.249,3.377-6.905c0.888-2.656,9.242-7.614,11.908-8.677
-			c2.666-1.061,12.798-3.543,12.798-3.543s11.907-23.549,13.329-26.027c1.423-2.479,6.754-9.209,7.999-10.447
-			c1.245-1.239,5.865-2.834,5.865-2.834s-0.355-7.26-0.355-8.322c0-1.063,2.665-4.072,2.843-5.843s-0.178-3.542-1.243-5.135
-			c-1.066-1.594-3.378-5.313-3.555-5.844c-0.178-0.532-1.245-12.749-1.245-12.749s1.067-0.885,2.133-2.478
-			c1.066-1.594,3.91-3.011,3.555-4.604c-0.355-1.592-0.178-7.436-0.178-7.436s4.621-1.063,6.043-1.416
-			c1.423-0.354,3.378-1.596,3.378-1.596S445.686,236.454,445.153,236.1z"
+          d={innerBackgroundPathData[regionData.num]}
         ></path>
 
         {list.map(renderPath)}
@@ -10314,131 +10050,125 @@ export const JeonbukInner = () => {
       district: '군',
       left: '91px',
       top: '315px',
-      station1: '고창읍',
-      station2: '심원면',
+      station: ['고창읍', '심원면'],
     },
     {
       name: '군산',
       district: '시',
       left: '129px',
       top: '151px',
-      station1: '신풍동(군산)',
-      station2: '소룡동',
-      station3: '사정동',
-      station4: '옥산면',
-      station5: '비응도동',
-      station6: '말도',
-      station7: '소룡동2',
-      station8: '군산항',
+      station: [
+        '신풍동(군산)',
+        '소룡동',
+        '사정동',
+        '옥산면',
+        '비응도동',
+        '말도',
+        '소룡동2',
+        '군산항',
+      ],
     },
     {
       name: '김제',
       district: '시',
       left: '174px',
       top: '200px',
-      station1: '요촌동',
-      station2: '광할면',
+      station: ['요촌동', '광할면'],
     },
     {
       name: '남원',
       district: '시',
       left: '317px',
       top: '337px',
-      station1: '죽항동',
-      station2: '운봉읍',
+      station: ['죽항동', '운봉읍'],
     },
     {
       name: '무주',
       district: '군',
       left: '403px',
       top: '175px',
-      station1: '무주읍',
-      station2: '안성면',
+      station: ['무주읍', '안성면'],
     },
     {
       name: '부안',
       district: '군',
       left: '101px',
       top: '242px',
-      station1: '부안읍',
-      station2: '새만금',
-      station3: '계화면',
+      station: ['부안읍', '새만금', '계화면'],
     },
     {
       name: '순창',
       district: '군',
       left: '226px',
       top: '341px',
-      station1: '순창읍',
+      station: ['순창읍'],
     },
     {
       name: '완주',
       district: '군',
       left: '269px',
       top: '155px',
-      station1: '고산면',
-      station2: '봉동읍',
-      station3: '구이면',
+      station: ['고산면', '봉동읍', '구이면'],
     },
     {
       name: '익산',
       district: '시',
       left: '210px',
       top: '128px',
-      station1: '삼기면',
-      station2: '팔봉동',
-      station3: '모현동',
-      station4: '용동면',
-      station5: '함열읍',
-      station6: '춘포면',
-      station7: '여산면',
-      station8: '금마면',
+      station: [
+        '삼기면',
+        '팔봉동',
+        '모현동',
+        '용동면',
+        '함열읍',
+        '춘포면',
+        '여산면',
+        '금마면',
+      ],
     },
     {
       name: '임실',
       district: '군',
       left: '264px',
       top: '277px',
-      station1: '운암면',
-      station2: '임실읍',
-      station3: '관촌면',
+      station: ['운암면', '임실읍', '관촌면'],
     },
     {
       name: '장수',
       district: '군',
       left: '357px',
       top: '260px',
-      station1: '장수읍',
+      station: ['장수읍'],
     },
     {
       name: '전주',
       district: '시',
       left: '229px',
       top: '197px',
-      station1: '삼천동',
-      station2: '팔복동',
-      station3: '송천동',
-      station4: '서신동',
-      station5: '혁신동',
-      station6: '여의동',
-      station7: '효자동',
-      station8: '노송동',
+      station: [
+        '삼천동',
+        '팔복동',
+        '송천동',
+        '서신동',
+        '혁신동',
+        '여의동',
+        '효자동',
+        '노송동',
+      ],
     },
     {
       name: '정읍',
       district: '시',
       left: '169px',
       top: '267px',
-      station1: '연지동',
-      station2: '신태인',
-      station3: '영파동',
+      station: ['연지동', '신태인', '영파동'],
     },
     {
       name: '진안',
       district: '군',
       left: '317px',
       top: '206px',
-      station1: '진안읍',
+      station: ['진안읍'],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -10499,217 +10229,7 @@ export const JeonbukInner = () => {
           fill="#BFD3E1"
           stroke="#9EAEC2"
           strokeMiterlimit="10"
-          d="M466.553,168.323c-0.434,0-0.867-1.55-1.947-2.294
-			c-1.08-0.743-4.459,0.564-4.773,0.646c-0.314,0.081-3.047,0.969-3.314,1.107c-0.266,0.134-5.744,1.295-5.891,1.183
-			c-0.148-0.112-1.404,0.983-2.658,2.025c-1.256,1.044-9.273,0.282-9.547-0.2c-0.275-0.483,1.314-1.194,1.234-1.507
-			c-0.08-0.315-7.461-2.832-7.576-2.686c-0.111,0.146-5.061-1.893-5.258-1.959c-0.203-0.066-4.727-3.002-4.76-3.26
-			c-0.035-0.261-0.246-4.592-0.311-5.163c-0.063-0.569-0.887-0.523-0.887-0.523s-2.17-0.615-2.377-0.629
-			c-0.201-0.014-3.104,2.56-3.553,3.094c-0.449,0.535,0.088,2.423,0.172,2.687c0.086,0.26-0.268,0.906-0.824,1.535
-			c-0.559,0.629-1.295,0.115-2.42,0.036c-1.125-0.077-0.582-3.432-0.602-3.896c-0.021-0.463-1.789-3.105-1.789-3.105l-1.541-2.987
-			c0,0-2.191-1.744-2.229-1.954l-0.973-2.038c0,0-4.756,2.378-5.402,2.81c-0.65,0.433-2.162,4.324-2.379,6.053
-			c-0.217,1.729,1.512,2.811,3.891,4.755c2.377,1.946,1.082,1.729,1.514,4.756c0.432,3.025-3.242,3.458-4.539,3.242
-			c-1.297-0.217-7.135-3.242-8.646-5.188c-1.514-1.945-3.242-4.106-5.838-6.268c-2.592-2.162-3.889-0.648-4.971-0.216
-			c-1.08,0.433-4.756,5.836-5.188,6.701c-0.432,0.864-1.514,7.998-1.945,9.943c-0.434,1.945-3.027,3.026-4.322,2.811
-			c-1.299-0.216-7.566-2.811-7.566-2.811s-5.621-1.081-6.701-0.865c-1.082,0.216-2.162-3.242-1.945-4.971
-			c0.215-1.73,1.082-5.837,0.648-7.565c-0.434-1.73-1.08-1.298-5.621-2.811c-4.539-1.513-2.594,6.052-3.025,6.917
-			c-0.432,0.865-6.27,2.594-7.133,2.378c0,0-4.035-1.369-4.541-4.323c0,0-0.432-2.81-0.215-4.324c0.215-1.513,2.377-2.81,3.674-4.323
-			s0.65-5.836,0.65-6.701c0-0.864-3.242-4.323-5.189-6.269c-1.945-1.945-1.08-4.106-1.297-7.782c-0.217-3.674-1.945-4.971-3.242-5.62
-			c-1.297-0.648-3.674-5.404-4.756-5.404c-1.08,0-3.025,3.243-3.891,5.188s-5.188,4.323-6.916,4.54
-			c-1.73,0.215-4.107-1.082-4.107-1.082s-3.025-1.513-4.973-1.513c-1.945,0-0.432,3.675-0.215,4.54
-			c0.215,0.864-3.027,1.296-3.891,1.081c-0.865-0.216-5.189-2.162-5.189-2.162s-6.484,2.377-7.564,2.377s-3.027-0.216-4.756-1.296
-			c-1.729-1.081-4.322-2.811-6.484-3.243c-2.162-0.433-5.404,2.594-6.053,3.675s-1.945,0.864-3.027,0.864s-5.404,0-6.053,0
-			c-0.646,0-3.891-2.377-6.701-4.107c-2.809-1.729-0.648-7.782-0.215-9.295c0.432-1.513-0.865-3.891-2.379-5.404
-			s-4.323-4.323-5.836-5.62c-1.514-1.296-5.121-2.205-7.781-1.946c-2.955,0.288-6.27-1.513-6.27-1.513l-4.971-0.215
-			c-6.485-2.162-5.404,0.432-9.512,1.513s-8.646,1.296-12.322,3.243c-3.674,1.945-0.646,3.891-2.377,8.43
-			c-1.729,4.54-2.81,2.811-4.106,4.972c0,0-3.459,6.485-4.323,7.133c0,0-2.378,3.891-2.595,4.54c-0.216,0.648-3.674,2.81-6.269,5.187
-			c-2.594,2.378-4.755,3.243-8.646,3.891c-3.891,0.649-5.623,1.292-6.916,2.378c-1.803,1.513-5.691,5.116-5.691,5.116
-			c0.647,2.449-1.01,4.035-1.01,4.035c-1.408,1.035-4.251,3.679-5.884,2.022c-1.632-1.655-2.101-2.304-2.758-1.733
-			c-0.656,0.572-4.626,2.968-6.387,3.153c-1.761,0.188-3.069-0.213-4.106-0.079c-1.038,0.134-5.304,0.865-6.436,0.889
-			c-1.133,0.026-2.887,0.109-3.704,0.051c-0.819-0.056-2.925-0.818-2.748-0.396c0.175,0.422,1.012,1.714,0.749,2.52
-			c-0.26,0.804-2.563-0.076-2.288-1.084c0.276-1.009-1.552-1.342-2.077-1.172c-0.527,0.168-4.357-0.92-5.803-0.816
-			c-1.447,0.105-5.547-0.077-6.781-0.06c-1.236,0.017-7.387-0.206-9.141-0.122c-1.754,0.085-3.338,0.695-3.338,0.695l0.257,0.737
-			c0,0-0.362,5.216-0.419,6.036c-0.057,0.818,0.288,1.767,0.742,2.621c0.456,0.854,1.383,0.815,1.383,0.815l-1.813,2.444
-			c0,0-0.386,1.104,0.95,1.095c1.338-0.009,1.798-0.698,1.798-0.698s0.86-0.557,0.921,0.063c0.06,0.621-0.05,0.717-0.129,1.842
-			c-0.077,1.126,0.283,3.309,0.33,4.134c0.045,0.827,0.099,1.549,0.099,1.549s3.675,0.359,4.707,1.768
-			c1.034,1.408,6.021,3.605,8.636,2.963l1.279-15.433c0,0,3.34,0.745,4.34,1.124c1.002,0.378,2.734,0.6,2.226,2.006
-			c-0.509,1.403-1.003,2.603-1.038,3.113c-0.037,0.513-0.697,2.626-0.811,4.26c-0.113,1.638,0.287,4.75,0.275,6.395
-			c-0.012,1.644,0.654,2.41,0.43,2.703c-0.226,0.292-2.653-0.288-1.416,1.134c1.238,1.422,3.211,1.148,5.023,1.686
-			c1.813,0.537,4.971,0.962,7.002,1.309c2.032,0.347,4.652-0.396,5.564-1.669c0.91-1.273,0.244-2.041,1.45-1.647
-			c1.206,0.391,5.129,0.151,5.641,0.187s6.254,3.21,6.854,3.456c0.6,0.248,1.904-0.792,2.648-1.151
-			c0.745-0.359,1.829,0.333,3.377,0.234c1.549-0.099,4.731-1.521,5.091-0.777c0.36,0.744,1.538,1.546,1.888,0.954
-			c0.349-0.594,2.672-4.439,5.148-4.578c2.477-0.135,5.951-1.332,7.364-0.926c1.409,0.405,3.458,4.968-0.13,4.821
-			s-3.654-0.665-4.008,1.469c-0.355,2.135-1.724,1.113-1.326,2.786c0.399,1.672,1.562,2.679-0.043,3.596
-			c-1.605,0.916-2.877,1.447-4.338,1.755c-1.459,0.309-0.706,1.286-2.35,1.274c-1.645-0.009-4.416-1.54-6.705-2.623
-			c-2.289-1.084-5.336-1.605-6.314-0.851c-0.977,0.756-2.887,0.109-4.403,1.236c-1.518,1.13-2.342,1.175-3.724,1.798
-			c-1.379,0.624-1.555,0.2-2.984,1.541c-1.431,1.34-1.86,1.617-1.896,2.13c-0.036,0.51-0.005,1.541-0.005,1.541
-			s1.951,0.033,4.16,0.803c2.207,0.77,5.815,3.591,6.679,4.473c0.863,0.883,2.747,3.378,5.401,5.104
-			c2.656,1.727,5.121,3.233,6.737,3.656c1.615,0.419,2.539,1.923,2.539,1.923l-0.245,2.039c0,0-0.209,1.529,0.035,2.47
-			c0.242,0.942,1.254,2.656,1.254,2.656s0.476,0.549,0.215,1.352c-0.262,0.805-1.014,1.266-1.014,1.266l-1.183,0.739
-			c0,0-1.827-0.331-2.758-1.733c-0.931-1.4-3.139-2.171-3.367-3.318c-0.229-1.146-2.515-3.772-3.062-3.295
-			c-0.545,0.476-2.396-0.989-3.83-1.088c-1.434-0.1-3.066,1.225-4.1-0.183c-1.032-1.409-2.736-2.04-3.766-2.01
-			c-1.031,0.032,1.045-0.237-3.814,0.146c-4.857,0.382-10.539,2.249-12.406-0.45c-1.87-2.701-3.242-2.178-3.926-1.197
-			c-0.686,0.979-3.008,1.845-2.479,3.116c0.528,1.27,2.325,0.573,1.752,2.898s0.28,9.271-0.403,10.25
-			c-0.686,0.981-2.238,2.622-3.1,3.179c-0.861,0.555-1.439,0.002-1.853,1.515c-0.414,1.514-1.616,2.56-2.856,4.119
-			c-1.238,1.56-1.822,2.547-3.668,3.959c-1.847,1.416-6.236,5.428-7.025,4.96c-0.791-0.466-3.584-1.688-3.921-1.3
-			c-0.335,0.388-1.298,0.937-3.114,1.943c-1.818,1.004-1.465-1.13-2.026-0.449c-0.56,0.679-1.196,0.942-1.331,2.887
-			c-0.135,1.944-1.475,0.515-2.385,1.789c-0.911,1.272-1.078,2.186-1.945,2.844c-0.868,0.661-2.107,2.218-3.363,2.544
-			c-1.258,0.322-2.491,0.34-3.251,0.904c-0.758,0.563-2.237,2.62-2.851,2.577c-0.615-0.042-0.548,0.475-1.094,0.953
-			c-0.549,0.477-1.652,0.09-3.682,1.184c-2.029,1.092-0.633,1.703-1.627,1.224c-0.994-0.48-2.476,0.135-1.482,0.614
-			c0.994,0.48,0.694,3.339,0.588,4.874c-0.106,1.534,0.691,3.338,0.682,4.982c-0.012,1.645-0.396,4.186,0.699,3.237
-			c1.095-0.953,2.196-2.008,2.855-1.14c0.66,0.87-0.139,0.505,1.113,1.723s0.187,1.761,1.849,3.006
-			c1.659,1.248,3.357,1.981,3.745,2.316c0.387,0.337,1.787,2.386,2.178,1.18c0.395-1.206,0.713-2.83,1.268-1.969
-			c0.558,0.863-0.092,1.332,0.392,1.776c0.483,0.445,3.106,1.142,3.765,0.568c0.656-0.571,1.85-2.954,2.925-2.16
-			c1.077,0.795,1.472,1.028,2.384,1.193c0.914,0.167,3.439-0.685,4.127-0.226c0.689,0.458,3.342,0.745,3.342,0.745l0.926-1.479
-			c0,0,4.092,0.283,4.678,0.737c0.586,0.451,2.461,0.068,3.361,0.44c0.899,0.369,2.682-0.124,3.889,0.269
-			c1.205,0.393,6.545,3.437,7.393,3.083c0.846-0.352,2.844-2.475,3.203-1.729c0.358,0.744-0.082,2.666,0.51,3.018
-			c0.592,0.349,0.99,2.02,0.99,2.02l-0.713,1.392c0,0-0.156,2.249-0.711,2.826c-0.555,0.579-2.992-2.776-3.229-3.819
-			c-0.234-1.046-1.1-1.928-2.342-1.809c-1.242,0.118-2.392-1.091-3.115-1.038c-0.723,0.054-1.182,0.74-1.211,1.148
-			c-0.027,0.41-0.881,0.864-0.881,0.864s-2.152-1.588-2.822-0.813c-0.672,0.776-0.686,0.98-0.902,2.611
-			c-0.215,1.631-0.932,1.58-0.932,1.58s-1.146,0.229-1.982,1.918c-0.838,1.688-4.673,2.143-5.39,2.093
-			c-0.715-0.049-0.606-0.146-2.155-0.048s-2.932-0.718-3.281-0.125s-1.922-0.442-1.922-0.442s-0.166,0.914,0.199,1.556
-			c0.368,0.644,0.406,1.57-0.084,1.228s-0.535-1.168-1.588-0.83l-1.171,1.084l-1.78,1.935c0,0-0.284-1.804-1.531-1.616
-			c-1.246,0.188-2.971-0.616-3.01-0.071c-0.037,0.546-2.71-0.463-3.158,0.053c-0.446,0.52-4.252,2.036-4.592,2.974
-			c-0.339,0.935-1.078,1.706-1.078,1.706l-2.154-0.561c0,0-1.043-0.76-1.539,0.44c-0.493,1.201-1.157,0.88-1.777,1.932
-			c-0.623,1.055,0.248,2.349-1.202,3.479c-1.45,1.134-3.281,5.804-4.32,6.965c-1.041,1.162-4.963,8.292-5.976,9.043
-			c0,0-3.236-0.147-2.516,1.582c0,0,1.585,0.721,3.025,1.008c1.441,0.289,0.577-0.432,4.611,0.722c4.035,1.152,5.477,1.729,4.9,2.594
-			c-0.576,0.864-1.441,3.024-2.018,3.746c-0.576,0.721-2.449,1.729-2.883,3.171c-0.432,1.441-2.45,3.604-1.008,4.756
-			c1.441,1.152,2.305,0.287,2.594,2.449c0.288,2.162-0.289,3.746-0.434,4.756c-0.143,1.009,0.146,3.746,0.146,3.746
-			s1.297,1.009,3.458,1.873c2.162,0.865,2.883,0.722,3.171,2.883s-0.576,4.611-0.864,5.476c-0.289,0.865-1.154,3.603-0.434,4.468
-			c0.722,0.865,1.873,1.874,3.171,2.161c1.297,0.289,3.458-0.72,5.331,0.432c1.875,1.153,3.459,2.738,4.324,1.874
-			c0.864-0.864,3.17-1.729,3.746-3.458c0.577-1.729,2.882-5.188,3.459-5.188c0.576,0,1.441-1.009,3.171,0.865
-			c1.729,1.873,4.899,3.891,4.899,4.756c0,0.863,3.025,1.009,4.035,0.576c1.008-0.433,4.179-1.009,4.179-1.009
-			c-0.181-1.333,0.536-2.912,0.536-2.912c0.65-1.465,1.531,0.652,2.814-1.04c1.281-1.691,1.053-2.325,1.234-2.997
-			c0.186-0.673,1.475-1.475,2.154-2.386c0.68-0.912,0.568-0.304,1.451-0.174c0.882,0.13,0.727,0.392,2.779,1.426
-			s0.57,0.657,1.346,0.367c0.773-0.288,0.943-0.756,1.596-1.259c0.65-0.503,1.436,0.03,2.061-0.063
-			c0.623-0.093,0.396-0.794,0.955-1.921c0.559-1.126,0.301-1.349,0.876-2.748c0.577-1.399,1.69,0.323,3.937,0.548
-			s1.912-0.895,3.035-2.256s1.252-2.244,1.371-3.949c0.118-1.704-0.344-1.941-0.654-3.403c-0.31-1.461-0.997-1.441-1.227-2.071
-			c-0.23-0.634,1.918-0.965,3.109-1.361c1.193-0.397,2.031-0.614,2.413-1.202c0.386-0.591,1.78-1.935,2.423-2.302
-			c0.642-0.364,0.938-0.686,1.315-2.166c0.377-1.484-0.593-1.346-0.716-2.52c-0.124-1.174,0.148-1.154,0.234-2.382
-			c0.084-1.226-1.361-1.122-2.357-1.603c-0.994-0.48-1.191-2.55-0.78-3.55c0.411-0.999,1.207-0.602,2.401-0.038
-			s2.563-2.358,3.092-3.075s1.614-1.532,2.524-1.813c0.911-0.279,1.571-0.917,2.214-1.284s1.667,0.664,3.622,1.143
-			c1.953,0.477,1.787-0.082,3.679,0.323c1.891,0.407,1.289,0.157,3.01,0.072c1.72-0.088,0.879-0.829,0.756-2.003
-			c-0.125-1.175-0.418-1.881,0.486-3.05c0.904-1.171,1.156-0.88,2.76-1.249c1.603-0.367,1.328,1.6,1.942,2.603
-			c0.616,1.001,2.009,0.689,2.596,2.1c0.588,1.412-0.414,2.027-0.608,2.837c-0.192,0.809-0.617,0.983,0.047,1.305
-			c0.663,0.32,1.484-0.65,2.308-0.662s0.706-0.293,2.446,0.307c1.74,0.601,4.046,1.926,4.363,2.292
-			c0.316,0.364,1.234,0.977,2.332,1.944c1.099,0.966,2.152,1.586,3.157,2.891c1.007,1.304,2.445,2.294,1.442,2.911
-			c-1.002,0.613-0.922,1.443-0.125,2.801c0.797,1.356-0.021,2.26,0.482,2.912c0.504,0.651,2.463,2.021,2.741,1.972
-			c0.277-0.049,1.724,1.833,1.184,2.687c-0.539,0.854-0.19,1.767-0.073,2.049c0.117,0.283,0,0,1.858-1.103
-			c1.858-1.104,1.564,0.178,1.912,1.091c0.347,0.917,0.062,2.062,0.696,2.791s2.096,0.419,4.975,0.415
-			c2.877-0.006,3.168,0.769,4.301,0.229c1.135-0.537,2.213-1.285,2.1-2.598c-0.115-1.308-0.422-3.796-1.493-6.132
-			c-1.071-2.334,1.019-1.848,2.462-1.886c1.441-0.037,1.764,0.26,2.055-0.953c0.288-1.214,0.712-1.391,1.884-2.474
-			c1.173-1.085,1.437-1.956,2.04-2.736c0.604-0.781,0.775-2.276,0.485-4.01c-0.291-1.734,0.85-1.381,1.347-1.62
-			c0.495-0.239,1.875,0.611,2.583,1.275c0.708,0.667,0.95,0.136,2.483-0.237c1.534-0.374,1.821-0.559,2.696-1.321
-			s1.853,0.952,1.692,3.27c-0.162,2.32-0.832,4.055-0.276,5.943c0.554,1.891,0.715,2.517,1.602,2.579
-			c0.886,0.061,1.327,0.64,1.735,0.669c0.411,0.029-0.152,2.183-0.801,3.646c-0.649,1.462-0.9,3.089-0.604,4.755
-			c0.296,1.664-0.63,1.188-1.671,2.351c-1.04,1.162-2.051-0.073-3.269-0.295s-0.166,2.387,1.411,4.347
-			c1.576,1.96,1.994,1.852,2.884,2.874c0.89,1.021,1.339-0.525,1.905-1.787c0.569-1.263,1.209,0.357,2.051,2.062
-			c0.841,1.702,0.657,2.375,0.985,3.564c0.329,1.187,1.069,1.376,0.21,2.893s-0.323,1.691,0.021,2.674
-			c0.343,0.982,0.024,2.605-0.202,3.892s-0.905,0.212-2.104,0.676c-1.197,0.465-1.102-0.897-1.668-1.623
-			c-0.565-0.725-0.926,2.472-1.867,4.188c-0.942,1.717-1.255,1.283-2.235,2.583c-0.981,1.306,1.786,1.908,3.218,2.009
-			c1.433,0.1,1.973,0.205,3.023,1.854c1.052,1.651,2.174,0.289,4.075,1.517c1.902,1.229,3.931,2.604,3.931,2.604
-			s1.281,0.295,2.423,0.649c1.141,0.354,0.741,0.188,3.679,0.323c2.936,0.138,2.54-1.057,3.03-2.188
-			c0.489-1.133,4.407-0.312,5.313-0.522c0.904-0.211,0.518-1.54,1.193-2.384c0.676-0.843,5-3.901,5.988-4.313
-			c0.986-0.41,1.947-0.412,3.131-0.672l1.375-0.044c0,0-0.713,2.351-0.482,2.981c0.23,0.634,0.951,1.096,2.186,2.07
-			c1.234,0.979,0.818,2.045,2.27,1.871c1.451-0.171,2.5,0.519,3.057-0.609c0.559-1.127,1.141-2.593,1.693-3.652
-			c0.553-1.057,1.34-2.511,2.271-2.102c0.932,0.406,2.324,0.093,2.652,1.279c0.328,1.188,0.861,2.392,1.711,2.997
-			c0.85,0.607,0.674,1.144,2.498,2.504s1.553,1.343,4.002,1.581c2.451,0.239,1.793-0.148,4.244,0.09s2.322,0.094,4.348,1.534
-			c2.023,1.443,1.295,2.077,3.223,1.938c1.93-0.141,1.447-0.105,3.551-0.78c2.102-0.677,1.029-1.024,3.074-1.843
-			c2.045-0.817,1.572-0.919,3.65-1.255c2.08-0.335,2.902-1.305,4.268-0.251c1.365,1.055,0.744,0.12,2.535,1.958
-			c1.791,1.837,0.527,2.298,2.242,3.239c1.717,0.943,1.225,1.114,2.447,0.308c1.221-0.806,2.096-1.567,2.898-2.266
-			c0.803-0.697,0.396-1.755,1.889-3.502c1.49-1.747,2.158-1.494,3.328-3.537c1.172-2.044,0.664-1.667,2.254-3.818
-			c1.588-2.152,5.34-6.824,6.748-5.425c1.412,1.398,1.523,0.791,3.057,0.418c1.535-0.374,3.125-1.564,5.25-0.595
-			s2.258,2.008,3.336,2.287c1.076,0.281,0.732-1.66,2.893-0.209c2.162,1.452,2.523,2.163,3.648,2.72
-			c1.127,0.559,1.723,1.834,2.584,2.304c0.857,0.473,1.686,1.352,2.365,2.426c0.68,1.075,0.484,0.926,1.99,1.922
-			c1.508,0.994,0.752,1.01,2.387,2.152c1.635,1.142,4.658,2.996,5.566,3.745c0.904,0.748,1.764,3.205,3.113,3.506
-			c1.35,0.298,2.145,0.697,3.912-0.071s3.82-1.722,4.096-2.731l0.326-4.494c0,0,0.576-6.053,0.719-7.35
-			c0.146-1.297-0.574-6.917,1.443-7.638c2.018-0.719,2.736-2.306,3.459-3.313c0.719-1.009,3.746-1.585,5.33-2.307
-			c1.586-0.72,4.18-2.449,4.756-3.17s2.307-1.01,2.738-2.594c0.432-1.586,1.008-3.604,0.865-4.757
-			c-0.145-1.152-1.297-4.61-1.73-4.755c-0.434-0.144-2.881-2.45-3.602-4.179s-2.451-4.035-0.434-5.188
-			c2.02-1.152,3.314-1.44,2.596-4.756c-0.721-3.313,0.432-4.899,0-6.628c-0.434-1.729-1.73-6.052-2.307-6.485
-			c-0.576-0.432-1.873-3.026-3.602-4.322c-1.73-1.298-3.027-3.604-4.469-4.324c-1.439-0.721-2.594-2.017-2.883-3.458
-			c-0.287-1.441-0.719-4.469-0.287-5.188c0.434-0.721,2.162-5.044,2.738-5.764c0.576-0.721,2.449-4.468,3.314-5.045
-			c0.863-0.575,2.305-2.737,2.449-3.458s0.721-3.747,0.145-5.043c-0.576-1.297-0.432-2.739,0.576-4.18
-			c1.008-1.441,1.729-2.162,2.594-3.747s3.027-3.747,3.314-5.045c0.289-1.297,2.018-5.188,1.73-6.053
-			c-0.289-0.864,0.863-4.611,2.016-6.917c1.154-2.306,2.451-5.764,2.451-6.484c0-0.72,0.719-2.305,0.145-2.594
-			c-0.576-0.288,0.863-2.738,0.145-4.468c-0.721-1.729,1.008-4.898,2.016-5.764c1.01-0.864,3.604-2.594,4.469-2.882
-			c0.863-0.288,4.756-3.025,5.332-3.314c0.576-0.288,1.729-2.018,1.729-2.018l3.359-1.793c0.816-0.904,2.818-3.094,2.738-3.921
-			c-0.078-0.828,0.557-2.088,1.479-2.503c0.916-0.415,0.594-2.63,1.541-3.457c0.947-0.825,1.721-2.072,1.781-2.958
-			c0.063-0.889,0.783-3.374,2.061-3.01c1.275,0.363,2.604,1.003,4.016,1.375s3.15,0.014,3.453-0.376
-			c0.289-0.375,3.559,1.431,4.936,0.793c0.059-0.027,3.002-1.531,2.594-3.603c-0.207-1.049,2.701-1.416,3.246-1.377
-			c0.547,0.039,0.973-1.166,2.195-1.97c1.219-0.806,2.508-2.568,3.775-2.069c1.266,0.499,3.273,0.229,3.73-0.425
-			c0.455-0.655,1.693-5.64,2.373-6.552s1.684-1.527,1.945-2.331c0.26-0.805-0.434-3.662,0.914-3.294
-			c1.346,0.368,1.51,0.928,2.834,0.608c1.322-0.319,2.283-1.281,2.693-1.252l2.563-1.399c-0.098-0.554,0.988-1.112,1.254-1.985
-			s6.865-5.156,6.918-5.908c0.051-0.75-1.318-3.937-1.039-4.015c3.631-1.028,1.58-3.158,1.471-5.496
-			c-0.111-2.336-5.596-2.192-5.543-2.941c0.053-0.75-1.229-2.074-1.049-2.677c0.18-0.605,1.543-0.511,0.338-1.896
-			c-1.207-1.388-2.287-1.598-2.889-2.805c-0.602-1.207-1.031-1.923-0.938-3.287c0.094-1.363-1.348-5.091-1.305-5.705
-			C468.426,168.323,466.824,168.323,466.553,168.323z
-			
-			M84.855,204.94l-1.884,0.486c0,0-0.444,0.484,0.462,0.751
-			c0.906,0.27,1.988,0.961,2.339,0.369c0.35-0.595,0.978-0.755,0.942-0.244c-0.036,0.513,0.843,1.19-0.129,1.842
-			c-0.97,0.653-1.835,2.751-2.465,2.914c-0.627,0.162-1.686,0.602-1.992,0.581c-0.307-0.021-2.865-0.2-3.158-0.426
-			s-2.436-1.916-2.436-1.916s-1.414-1.847-2.004-0.756s-1.232,1.455-0.777,2.31c0.455,0.855,0.392,1.774,0.684,2.001
-			c0.292,0.226,1.587,0.83,1.587,0.83s-1.704-0.632-1.63-0.217c0.074,0.417,0.871,0.781,0.71,1.592
-			c-0.157,0.811-0.646,1.908-0.366,2.337c0.279,0.432,0.967,0.891,1.85,0.026c0.881-0.863,1.102-1.054,0.952-1.887
-			c-0.147-0.832-0.647-2.511,0.319-1.621c0.966,0.889-0.092,1.33,1.018,1.612c1.111,0.283,2.024,0.449,2.347,0.266
-			c0.321-0.184,2.236,0.361,2.614-0.641c0.377-1.002,0.668-2.215,1.332-2.889c0.663-0.672,0.318-1.622,1.596-2.252
-			c1.277-0.632,1.468-0.413,2.27-1.591c0.799-1.178,1.257-3.305,1.257-3.305s-0.585-0.452-0.995-0.479
-			c-0.409-0.029-1.865-1.261-2.521-0.69C86.119,204.514,84.855,204.94,84.855,204.94z
-			
-			M69.443,215.179l1.909,0.646c0,0,1.138-0.125,1.222,0.189
-			c0.08,0.313-0.537,1.812-0.537,1.812s-0.592,1.09-1.029,1.471c-0.438,0.38-3.461,0.992-3.482,1.298
-			c-0.021,0.307-2.032-0.346-2.032-0.346s-1.639-1.553-0.901-1.81c0.736-0.258,0.972,0.788,1.803-0.799
-			c0.83-1.588-0.026-2.572,0.564-2.223c0.594,0.351,1.188,2.138,1.188,2.138l1.419,0.304l0.195-1.325
-			C69.762,216.535,67.75,215.883,69.443,215.179z
-			
-			M63.298,207.452c0,0-1.181,0.741-1.509,1.027
-			c-0.33,0.286-1.096,0.952,0.016,1.234c1.111,0.283,1.828,0.332,1.828,0.332s0.843,1.191,0.82,1.498
-			c-0.021,0.306,0.266,0.635-0.5,1.302s-2.022,0.99-2.052,1.4c-0.027,0.408-0.565,2.22-0.565,2.22l3.397-0.072
-			c0,0,1.157-1.872,1.179-2.178c0.021-0.308-0.229-1.147,0.788-0.975c1.017,0.174,1.761-0.186,1.761-0.186s-0.91-1.708-1.08-2.234
-			c-0.168-0.525-0.93-1.399-0.908-1.707c0.021-0.307-0.316-1.359-0.931-1.402C64.928,207.667,63.298,207.452,63.298,207.452z
-			
-			M58.629,211.035c0,0-0.215,1.629,0.275,1.972
-			c0.49,0.343,0.604,3.125,1.392,2.153c0.786-0.973,1.902-2.232,1.618-2.561C61.627,212.271,58.629,211.035,58.629,211.035z
-			
-			M53.338,210.256c0,0-2.079,4.79-0.882,5.284
-			c1.2,0.496,1.685,2.377,1.685,2.377s0.633-1.702,1.035-1.571c0.402,0.13,1.164,1.007,1.016,0.174
-			c-0.146-0.833-0.646-2.513-0.646-2.513s-0.366-0.643-0.624-1.38C54.664,211.89,53.338,210.256,53.338,210.256z
-			
-			M72.65,237.093c0,0-3.088,1.532-2.523,2.291
-			c0.563,0.759,3.158,1.865,3.158,1.865s-0.238,0.498-0.26,0.803c-0.021,0.307,0.996,1.919,0.996,1.919s0.753-0.461,0.884-0.864
-			c0.131-0.401,1.823-1.105,1.823-1.105s-0.439-1.058-0.608-1.585c-0.169-0.525-0.024-1.132-0.909-1.707
-			c-0.885-0.576-0.931-1.402-1.334-1.532C73.476,237.047,72.65,237.093,72.65,237.093z
-			
-			M21.88,272.422c0,0-1.651,0.09-1.177,0.639
-			c0.477,0.547,0.296,1.664,0.275,1.972c-0.021,0.308,1.513,0.414,1.513,0.414s1.701-0.809,1.651-0.092
-			c-0.051,0.717-0.128,1.843,0.281,1.87c0.409,0.029,0.188-1.22,1.108-1.156s2.185-0.362,2.001-0.685
-			c-0.184-0.32-0.055-2.161-0.648-2.512c-0.592-0.35-1.068-0.896-1.484-0.823c-0.416,0.074-1.322-0.194-1.322-0.194l-1.645-0.012
-			L21.88,272.422z
-			
-			M23.57,277.68c0,0-0.457,2.127-0.802,1.178
-			s-1.054-1.102-1.054-1.102s-0.611,1.397,0.164,2.068c0.775,0.669,2.232,1.902,2.232,1.902s-1.292,0.835-1.475,0.513
-			c-0.184-0.321-0.865-0.881-1.26-1.114c-0.395-0.234-1.479-0.925-1.479-0.925s-0.531,0.271-0.757,0.562
-			c-0.228,0.295-1.175,0.64-0.229,1.836c0.943,1.197,1.528,1.648,1.215,1.73c-0.314,0.08-1.336,0.009-1.645-0.012
-			c-0.307-0.021-1.262,0.427-1.549,0.099c-0.285-0.328-0.873-2.221-1.121-1.621c-0.246,0.602-1.15,1.771-0.463,2.23
-			c0.688,0.459,0.09,0.211,2.1,0.866c2.01,0.653,2.134,0.353,2.01,0.653c-0.123,0.3-2.477,0.137-2.988,0.101s-2.5-0.996-2.521-0.69
-			c-0.021,0.307-1.782,0.494-1.158,1.875c0.625,1.38,1.399,2.05,1.643,2.992c0.242,0.943-0.291,1.213,0.594,1.789
-			c0.886,0.576,1.874,1.158,2.166,1.385c0.293,0.225,0.768,0.771,0.695,0.356c-0.074-0.416-0.793-1.906,0.449-2.025
-			s3.835-0.453,3.856-0.761c0.021-0.306,1.493-2.261,1.72-2.552c0.227-0.293,1.16-0.433,1.611-1.021
-			c0.453-0.583,0.742-1.799,1.254-1.764c0.512,0.036-0.137,0.506,1.016,0.174c1.153-0.331,1.984-1.919,2.211-2.212
-			c0.225-0.292,1.197-0.944,1.785-2.035c0.59-1.089,0.976-2.192,0.49-2.639c-0.48-0.444-0.959-2.432-2.188-2.517
-			c-1.229-0.087-2.546-1.821-2.053-0.04c0.492,1.782,1.227,3.068,0.707,3.135c-0.518,0.066-1.403-0.509-1.637-0.115
-			c-0.232,0.396-0.759,0.565-0.759,0.565l-0.507-1.578l-0.879-0.678c0,0-0.713,1.39-0.692,1.084
-			C24.295,279.067,23.57,277.68,23.57,277.68z
-			
-			M38.195,198.948c-3.763,0.865-3.627-6.516,1.481-5.835
-			c1.566,0.209,3.145,0.827,5.051,0.828c0.814,0,1.817,0.162,2.612-0.001c0.625-0.128,1.679-1.349,2.41-0.837
-			c0.398,0.279,0.654,3.854,1.025,4.588c0.718,1.42,1.912,2.485,0.865,4.045c-1.512,2.253-2.68,0.222-4.066-0.239
-			c-2.385-0.793-2.803,1.457-5.017-0.208c-0.42-0.315-0.862-0.607-1.275-0.854c-0.279-1.518,0.833-2.619,0.8-4.066
-			C39.933,196.036,39.1,197.424,38.195,198.948z
-			
-			M55.232,202.486c0-0.588-0.094-1.301,0.056-1.848
-			c0.142-0.521,0.59-1.057,0.883-1.524c0.579-0.928,1.423-2.352,2.48-1.3c0.204,0.678,0.014,1.521,0.267,2.18
-			c0.143,0.371,1.269,1.677,0.344,1.95c-0.398,0.118-0.569-0.379-0.818-0.494c-0.37-0.169-0.794,0.015-1.144,0.151
-			C56.732,201.823,55.664,202.164,55.232,202.486z"
+          d={innerBackgroundPathData[regionData.num]}
         ></path>
 
         <g className="eng_map_hide" title="전북_말도_TXT">
@@ -10851,25 +10371,23 @@ export const JejuInner = () => {
       district: '시',
       left: '277px',
       top: '244px',
-      station1: '동홍동',
-      station2: '성산읍',
-      station3: '남원읍',
-      station4: '강정동',
-      station5: '대정읍',
+      station: ['동홍동', '성산읍', '남원읍', '강정동', '대정읍'],
     },
     {
       name: '제주',
       district: '시',
       left: '185px',
       top: '191px',
-      station1: '이도동',
-      station2: '연동',
-      station3: '조천읍',
-      station4: '한림읍',
-      station5: '화북동',
-      station6: '애월읍',
-      station7: '노형로',
-      station8: '고산리',
+      station: [
+        '이도동',
+        '연동',
+        '조천읍',
+        '한림읍',
+        '화북동',
+        '애월읍',
+        '노형로',
+        '고산리',
+      ],
     },
   ];
   const filterItems = detailData.filter((item) => {
@@ -10930,157 +10448,7 @@ export const JejuInner = () => {
           fill="#BFD3E1"
           stroke="#9EAEC2"
           strokeMiterlimit="10"
-          d="M115.759,359.054c-0.243,0.216-0.805,0.813-0.805,1.718
-			c0,0.546,0.151,1.145,0.285,1.673c0.105,0.414,0.194,0.767,0.194,1.013c0,0.318,0.254,0.748,0.618,1.048
-			c0.12,0.099,0.429,0.321,0.706,0.274l0.063-0.011l0.057-0.027c0.482-0.236,0.82-1.381,0.82-1.908l-0.05-0.352l-0.133-0.438
-			c-0.699-2.376-1.001-2.786-1.102-2.921l-0.288-0.393L115.759,359.054z
-			
-			M78.658,289.927c0,0-0.098-0.487-0.098-0.502
-			c0-0.399-0.453-0.606-0.721-0.695l-0.189-0.061l-0.103-0.171c0,0-0.944-1.57-0.967-1.615L75,283.553c0,0,1.585-2.11,1.589-2.116
-			l1.249-2.138c0,0,0.008-0.028-0.002-0.059l-1.421-2.13l-0.529-2.466l0.07-0.16c0,0,1.172-2.675,1.177-2.69l0.179-1.254
-			c0-0.024-0.017-0.576-1.434-2.522l-0.487-0.653l-0.172-0.194l0.087-0.264c0,0,0.038-0.115,0.043-0.115l0.003-0.308l0.09-0.131
-			c0.079-0.117,0.161-0.308,0.261-0.607c0.091-0.275,0.136-0.477,0.138-0.588l-0.048-0.274c0,0,0.249-0.355,0.26-0.369
-			c0.118-0.158,0.179-0.305,0.179-0.433c0-0.25-0.232-0.472-0.357-0.591l-0.35-0.454l0.007,0.027l-0.11-0.415
-			c0,0,0.313-0.405,0.318-0.411l0.313-0.395c0.545-0.727,0.545-0.92,0.545-1.636c0-0.532,0.526-1.387,0.75-1.729l0.12-0.182
-			l0.214-0.046c0,0,2.263-0.483,2.272-0.487l2.168-0.914c0.037-0.066,0.902-1.627,1.252-2.502c0.085-0.212,0.127-0.402,0.127-0.58
-			c0-0.219-0.065-0.396-0.134-0.588c-0.079-0.214-0.167-0.458-0.167-0.813c0-0.905,0.183-1.408,0.698-1.921
-			c0.542-0.542,1.797-0.874,2.459-0.874c0.519,0,1.273-0.554,1.761-1.029l0.048-0.048l0.059-0.033
-			c1.192-0.682,2.602-1.499,2.979-1.751c0.43-0.288,1.246-1.183,1.621-1.619l1.064-1.593l0.095-0.061
-			c0.322-0.204,1.406-0.905,1.901-1.397l0.511-0.428c0.337-0.26,0.655-0.504,0.893-0.981c0.276-0.55,0.446-1.416,0.505-1.761
-			l0.034-0.197l0.153-0.124c0,0,1.768-1.444,1.768-1.444c0.001,0,2.148-1.965,2.148-1.965l1.399,0.176c0,0,2.134,0.71,2.135,0.711
-			c0.019,0.006,0.041,0,0.055-0.014l1.079-1.079l0.886-1.415l1.726-1.232c0,0,0.768-0.548,0.766-0.546
-			c1-0.733,2.839-2.122,3.395-2.678c0.719-0.719,1.266-1.627,1.803-2.521c0,0,0.632-0.996,0.635-1.001
-			c0.452-0.695,0.963-1.485,1.319-2.193c0.508-1.016,0.872-1.895,1.252-3.037c0.36-1.078,0.36-2.156,0.36-3.394l-0.015-0.901
-			c0-0.677,0.1-1.119,0.72-2.108c0.447-0.714,0.675-0.872,0.84-0.932l0.167-0.043l0.246,0.045h0c0.006,0.001,0.551,0.068,0.551,0.068
-			l-0.066-0.004c0.292,0,0.615,0.093,0.958,0.19c0.466,0.133,0.948,0.271,1.374,0.166c0.46-0.115,0.633-0.554,0.91-1.341l0.553-1.361
-			c0.47-0.941,1.017-1.168,1.659-1.435c0.318-0.133,0.646-0.269,1-0.504c0.632-0.423,1.063-0.265,1.483-0.111
-			c0.271,0.098,0.528,0.191,0.819,0.119c0.335-0.084,0.739-0.354,1.169-0.641c0.483-0.323,1.03-0.688,1.503-0.783
-			c0.88-0.176,1.959-0.875,2.527-1.442c0.219-0.218,0.528-0.644,0.854-1.095c0.59-0.813,1.071-1.458,1.46-1.75
-			c0.455-0.341,0.623-1.139,0.818-2.063c0.12-0.57,0.245-1.158,0.449-1.705c0.445-1.181,1.157-1.63,1.979-2.148l0.549-0.349
-			l0.534-0.276l0.238,0.493c0.054,0.114,0.14,0.334,0.238,0.895c0,0,0.093,0.417,0.111,0.498c0.035,0.1,0.097,0.163,0.188,0.184
-			c0.339,0.08,1.064-0.44,2.218-1.593c0.657-0.656,0.875-0.77,1.363-0.864l0.757-0.192c0.564-0.187,0.915,0.197,1.254,0.57
-			c0.371,0.406,0.585,0.575,0.883,0.502c0.361-0.092,0.711-0.517,1.121-1.012c0.437-0.528,0.931-1.125,1.569-1.489
-			c0.744-0.425,1.226-0.332,1.737-0.232c0.331,0.063,0.672,0.131,1.099,0.06c1.09-0.181,2.004-1.276,2.888-2.335
-			c0.635-0.759,1.385-0.978,2.239-1.226l1.127-0.36c0.656-0.246,0.976-0.12,1.427,0.119c0.372,0.196,0.792,0.418,1.599,0.239
-			c0.998-0.22,1.539-0.731,2.063-1.225c0.337-0.317,0.685-0.645,1.184-0.93l1.099-0.571c0.483-0.235,0.832-0.404,1.387-0.848
-			c0.863-0.69,2.27-1.06,3.348-0.881c0.699,0.117,1.164,0.622,1.59,1.087c0,0,0.652,0.628,0.718,0.692
-			c0.727,0.535,1.641,0.538,2.697,0.538c0.84,0,0.945-0.219,1.265-0.882l0.387-0.749c0.55-0.962,1.084-0.942,2.365-0.893l1.157,0.029
-			c1.541,0,1.996-0.551,2.572-1.248c0.23-0.279,0.492-0.594,0.854-0.903c0.739-0.633,2.187-0.388,3.867-0.029
-			c0.738,0.158,1.321,0.283,1.639,0.219c0.596-0.12,2.132-0.787,3.258-1.276l1.197-0.504l0.327-0.1
-			c0.689-0.202,1.976-0.578,2.74-1.342c0.5-0.499,1.05-0.538,1.689-0.583c0.477-0.033,0.97-0.067,1.522-0.303l0.868-0.339
-			c0.662-0.244,1.062-0.391,1.458-0.92c0.903-1.202,1.523-2.193,1.791-2.864c0.179-0.444,0.613-0.46,1.214-0.481
-			c0.542-0.02,1.216-0.044,1.97-0.379c1.473-0.654,2.563-1.327,3.76-2.324c1.043-0.869,2.986-1.764,4.263-2.127
-			c1.121-0.32,2.223,0.081,2.433,0.165l0.031,0.012l0.029,0.016c0.163,0.09,1.617,0.883,2.483,1.056l0.384,0.083
-			c0.617,0.137,0.991,0.219,1.607-0.089c0.528-0.263,1.175-0.226,1.737-0.194l0.621,0.025l0.785,0.095
-			c0.539,0.091,1.15,0.194,1.837,0.079c1.032-0.172,1.245-0.342,2.039-0.977l0.127-0.103c0.864-0.689,1.374-0.872,3.371-1.416
-			c1.017-0.278,1.441-0.258,1.813,0.079c0.114,0.103,0.244,0.22,0.478,0.278l0.034,0.009l0.611,0.242
-			c0.303,0.146,0.59,0.286,1.154,0.286c0.6,0,1.206-0.16,1.808-0.321l0.878-0.215c0.557-0.11,0.783-0.296,1.063-0.522l0.526-0.357
-			l0.031-0.016c0.364-0.182,0.584-0.401,0.862-0.678c0.257-0.257,0.577-0.576,1.107-0.929c0.413-0.274,0.637-0.285,1.042-0.049
-			c0.271,0.159,0.552,0.323,1.095,0.053c0.703-0.352,1.103-0.393,1.456-0.427l0.673-0.104c0.807-0.2,1.66-0.136,2.282,0.174
-			c0.678,0.337,1.554,0.54,2.345,0.54c0.727,0,1.092,0,1.645-0.551c0.258-0.258,0.397-0.641,0.561-1.089
-			c0.179-0.495,0.402-1.113,0.872-1.767c0.543-0.761,0.944-0.912,1.438-1.02c0.006-0.001,0.591-0.188,0.695-0.221
-			c0.13-0.08,0.599-0.372,0.582-0.361c0.493-0.34,1.004-0.691,1.88-0.691c0.831,0,1.082,0.141,1.401,0.424l0.354,0.279
-			c0.501,0.335,0.824,0.232,1.685-0.113l0.115-0.045l0.858-0.411c0.275-0.151,0.534-0.293,1.135-0.495
-			c0.597-0.199,1.03-0.112,1.416-0.035c0.301,0.059,0.582,0.115,0.889,0.039l0.525-0.144c0.415-0.12,0.743-0.214,1.258-0.214
-			c0.381,0,0.663,0.22,0.991,0.476c0.258,0.202,0.553,0.431,0.949,0.589c0.768,0.306,1.164,0.096,1.886-0.288l0.479-0.248
-			c0.693-0.346,0.949-1.192,1.176-1.944c0.133-0.434,0.255-0.844,0.448-1.102c0.205-0.271,0.381-0.639,0.567-1.029
-			c0.324-0.675,0.658-1.373,1.207-1.812c0.634-0.506,1.254-0.645,2.027-0.817l0.988-0.242c0.822-0.236,1.01-0.237,1.465-0.206
-			l0.839,0.029c1.167,0,1.366,0.455,1.554,1.206c0.128,0.513,0.652,0.749,1.394,1.033l0.599,0.251
-			c0.709,0.355,1.445,0.722,2.714,0.359l0.869-0.209l0.037-0.053l0.319,0.122l-0.121-0.065c0.124-0.184,0.771-1.139,1.422-1.952
-			c0.561-0.698,0.785-0.842,1.383-1.225l0.589-0.38l0.263-0.158l0.395-0.199l0.295,0.316c0.201,0.217,0.504,0.543,1.106,0.944
-			c0.708,0.471,0.889,0.692,1.004,0.863c0.109,0.164,0.156,0.21,0.796,0.391c0.781,0.222,1.032-0.03,1.3-0.296
-			c0.17-0.171,0.348-0.348,0.688-0.415c0.896-0.181,1.612-0.537,3.038-1.248c0.972-0.484,1.315-0.412,1.956-0.109l0.688,0.286
-			c0.605,0.201,2.133,0.622,3.254,0.175c0.879-0.352,1.789-0.715,3.042-1.608c0.702-0.502,0.903-0.783,1.099-1.057
-			c0.153-0.214,0.299-0.418,0.687-0.727c0.878-0.7,1.375-0.7,2.463-0.7c0.619,0,0.857,0.169,1.126,0.41
-			c0.117,0.104,0.248,0.213,0.435,0.283l0.085-0.057l0.43,0.758c0.208,0.478,0.385,0.824,0.768,0.919
-			c0.577,0.144,0.706,0.064,1.334-0.321l0.669-0.396c1.22-0.697,1.267-0.717,2.485-1.063c0.835-0.238,1.156-0.084,1.624,0.193
-			l0.67,0.343c0,0,0.291,0.12,0.295,0.121c0.652,0.272,0.897,0.374,1.699,0.053c0.587-0.234,0.805-0.774,1.015-1.296
-			c0.12-0.297,0.244-0.604,0.436-0.859c0.535-0.714,1.636-1.061,2.465-1.227c0.866-0.173,1.378-0.015,2.285,0.711
-			c0,0,0.483,0.403,0.489,0.408c0.444,0.381,0.611,0.523,1.308,0.663c0.429,0.085,0.861-0.029,1.318-0.151
-			c0.536-0.14,1.142-0.3,1.897-0.206c1.621,0.202,2.919,0.864,3.548,1.24c0.375,0.225,0.615,0.764,0.894,1.447
-			c0.193,0.48,0.367,0.886,0.601,1.027c0.173-0.01,0.415-0.024,0.488-0.029c0.503-0.198,1.371-0.298,2.682-0.298
-			c0.585,0,2.908-0.558,3.959-1.257c1.021-0.68,2.585-0.54,3.346-0.348c0.683,0.17,2.455,1.392,3.187,2.124
-			c0.651,0.65,0.535,1.794,0.373,3.38l-0.032,0.316c-0.121,1.21,0.219,1.528,0.784,1.943l0.653,0.591
-			c0.446,0.553,1.044,0.984,1.543,1.345l0.736,0.578l0.049,0.04c0,0,0.443,0.536,0.453,0.548c0.543,0.697,1.286,1.649,2.246,1.786
-			l0.521,0.068c1.071,0.131,2.084,0.255,2.863,1.19l0.804,1.117c0.583,0.867,1.185,1.762,2.043,2.251
-			c1.23,0.703,1.603,0.915,2.545,0.539c0.658-0.263,1.229-0.724,2.096-1.425l1.129-0.898c0.841-0.652,1.193-0.72,1.894-0.361
-			c0.27,0.138,0.604,0.309,1.1,0.371c0.547,0.069,0.943,0.192,1.298,0.302c0.572,0.177,1.107,0.344,2.106,0.233
-			c0.975-0.108,1.813,0.658,2.626,1.399c0.499,0.454,0.969,0.885,1.448,1.091c1.498,0.641,1.574,1.703,1.574,1.91
-			c0,0.53,0,1.415-0.354,2.295c-0.112,0.286-0.17,0.56-0.17,0.811c0,0.235,0.051,0.45,0.152,0.631c0.18,0.318,0.5,0.518,0.952,0.594
-			c1.066,0.176,3.202,1.247,4.079,1.949c0.618,0.496,0.707,1.077,0.707,1.886c0,0.153-0.001,0.316-0.007,0.487l-0.007,0.613
-			c0,0.695-0.221,1.184-0.416,1.615c-0.164,0.367-0.32,0.716-0.32,1.136c0,0.092,0.006,0.188,0.023,0.286
-			c0.013,0.079,0.019,0.164,0.019,0.256c0,1.146-0.978,3.191-1.437,3.803l-0.263,0.345c-0.346,0.452-0.519,0.679-0.813,1.266
-			c-0.09,0.181-0.126,0.382-0.126,0.592c0,0.448,0.162,0.941,0.313,1.4l0.165,0.541c0.019,0.072,0.079,0.21,0.264,0.451l0.27,0.35
-			c0.254,0.229,1.758,1.594,1.764,1.598l0.928,0.833c0.726,0.725,2.346,1.262,2.877,1.44c0.416,0.138,2.175,0.988,2.681,1.681
-			c0,0,1.36,2.246,1.194,3.555c-0.116,0.513-1.243,1.637-1.748,1.972c-0.549,0.368-0.734,0.919-0.912,1.454
-			c-0.166,0.5-0.18,1.676-0.18,3.046c0,1.073,0.353,2.842,0.358,2.871c0.058,0.149,0.556,1.465,0.896,2.143
-			c0.156,0.309,0.571,0.811,1.019,1.353c0.813,0.982,1.213,1.507,1.298,1.843l0.02,0.115v0.066c0,0.584-0.786,1.694-1.402,1.978
-			l-0.311,0.144l-0.26-0.223c-0.379-0.326-0.869-1.309-1.179-2.141l-1.782-1.069c-0.021-0.012-0.045-0.01-0.063,0.003
-			c-0.007,0.005-0.729,0.552-1.262,1.441c-0.284,0.47-0.417,0.982-0.559,1.533c-0.13,0.489-0.264,0.995-0.515,1.5
-			c-0.354,0.707-0.476,1.263-0.623,1.921l-0.272,1.117c-0.164,0.569-0.436,1.17-0.725,1.807c-0.338,0.745-0.688,1.518-0.883,2.293
-			c0,0,0.003-0.023,0.006-0.044c-0.023,0.104-0.104,0.359-0.383,1.255c-0.295,0.859-0.6,1.748-0.6,2.663
-			c0,0.27,0.028,0.533,0.084,0.785c0.147,0.66,0.222,1.518,0.222,2.548l-0.036,1.332l-0.165,0.152
-			c-0.325,0.296-0.832,0.723-1.422,1.076c-0.627,0.375-1.71,0.574-2.854,0.785l-1.413,0.277c-1.396,0.31-2.279,0.766-2.927,1.101
-			l-0.298,0.152c-0.59,0.295-0.699,0.465-1.11,1.104l-0.337,0.518c-0.708,1.06-1.063,1.593-1.772,2.125
-			c-0.702,0.525-0.904,0.723-1.265,1.444c-0.25,0.498-0.327,1.169-0.412,1.896l-0.13,0.971c-0.104,0.632-0.529,0.939-1.021,1.294
-			c-0.319,0.231-0.647,0.468-0.93,0.818c-0.258,0.328-0.383,0.697-0.383,1.163c0,0,0.102,0.91,0.104,0.936l0.089,0.755v0.031
-			c0,0.845-0.847,2.931-1.421,4.074c-0.284,0.57-1.03,0.873-1.751,1.167c-0.571,0.234-1.112,0.454-1.268,0.76l-0.412,0.989
-			c-0.356,0.916-0.897,2.298-1.517,3.072l-0.052,0.063l-0.068,0.046c-0.379,0.253-3.734,2.5-4.912,3.508
-			c-0.81,0.693-0.919,1.238-0.919,1.679c0,0,0.107,0.902,0.109,0.912l0.078,0.487c0.076,0.522,0.117,1.177,0.117,1.841
-			c0,0.625-0.039,1.772-0.292,2.406c-0.232,0.578-1.293,1.607-2.766,2.99l-1.505,1.445c-1.206,1.206-2.329,0.867-3.294,0.578
-			c0,0-0.89-0.221-0.957-0.237c-0.937-0.127-1.559,0.318-2.429,0.944l-0.982,0.669c-1.092,0.682-2.077,0.515-3.208,0.324
-			l-1.048-0.155l-3.455-0.437l-5.102-0.633c-1.365-0.134-2.089,0.621-2.868,1.436l-0.723,0.7l-1.247,1.143
-			c-1.072,1.018-2.409,2.286-3.776,3.155l-2.652,1.584l-1.794,1.08c-0.575,0.383-0.905,1.233-1.228,2.059
-			c-0.295,0.76-0.599,1.545-1.101,2.047c-0.909,0.907-2.084,0.494-3.44,0.019l-0.608-0.209c-1.573-0.525-2.86-0.396-3.622,0.367
-			c-0.704,0.703-3.531,1.408-5.865,1.77l-1.185,0.167c-1.617,0.223-2.593,0.354-3.475,1.091c-0.692,0.574-2.377,0.696-4.205,0.779
-			c-0.562,0.026-1.046,0.048-1.304,0.1c-0.841,0.168-5.42,0.534-7.482,0.534c-1.951,0-3.017-0.534-3.724-0.887
-			c-0.631-0.317-2.017,0.14-3.8,1.251c-1.017,0.635-1.561,0.534-2.101,0.433c0,0-0.65-0.072-0.736-0.084
-			c-0.894,0.013-2.687,1.42-3.421,2.334c-0.173,0.218-0.239,0.409-0.239,0.606c0,0.208,0.073,0.42,0.169,0.663
-			c0.094,0.24,0.195,0.503,0.195,0.809c0,0.186-0.036,0.386-0.132,0.608c-0.396,0.923-1.184,1.144-2.482,1.507l-1.412,0.423
-			c-2.105,0.703-3.757,1.942-4.314,3.237c-0.55,1.285-2.006,2.123-2.814,2.286c-0.904,0.18-3.034,1.242-4.304,2.146
-			c-1.248,0.891-4.109,0.657-5.106-0.175c-1.077-0.896-4.339-2.34-5.37-2.683c-0.837-0.278-1.871,0.075-2.878,0.42l-0.902,0.292
-			c-0.972,0.278-1.204,0.763-1.508,1.394l-0.308,0.592c-0.501,0.833-1.886,1.051-2.79,0.689c-0.442-0.179-0.459-0.65-0.482-1.25
-			c-0.02-0.545-0.042-1.161-0.381-1.756c-0.2-0.348-0.482-0.56-0.837-0.626c-0.907-0.174-2.021,0.617-2.457,0.966
-			c-0.909,0.728-1.768,1.416-3.356,1.416c-0.716,0-1.181-0.072-1.593-0.136c-0.499-0.077-0.93-0.144-1.627-0.044
-			c-0.816,0.117-2.562,0.004-3.957-0.089l-1.745-0.09c-0.74,0-1.474,0.657-2.264,1.365l-1.126,0.937c0,0,0.02-0.041,0.025-0.053
-			c-0.17,0.165-0.517,0.429-1.228,0.97c-0.773,0.608-1.502,1.185-2.57,1.778c-0.999,0.554-1.656,0.181-2.487-0.29
-			c-0.462-0.263-1.038-0.589-1.753-0.784c-1.76-0.479-4.077,0.734-5.327,1.388l-0.414,0.216l-0.722,0.377
-			c-0.834,0.448-1.697,0.91-2.66,1.048c-1.02,0.144-1.785-0.43-2.75-1.152l-0.601-0.443c-0.83-0.591-2.352-2.347-3.571-3.752
-			l-1.417-1.586c-0.621-0.621-1.29-0.426-2.351-0.048l-1.268,0.389c-1.058,0.234-2.114,0.853-2.97,1.352l-1.142,0.609
-			c-0.897,0.359-4.824-0.202-5.662-0.708c-0.712-0.427-1.313-1.203-1.896-1.957l-0.408-0.524c-0.74-0.921-2.955-1.26-4.154-1.089
-			c-1.231,0.177-5.163,1.598-7.326,2.496l-5.892,2.496c-1.25,0.535-4.47,0.337-5.311,0l-0.028-0.012c0,0-0.66-0.345-0.679-0.355
-			c-0.729-0.415-1.632-0.932-2.723-0.523c-1.375,0.515-3.867-0.165-4.766-0.881c-0.651-0.521-1.295-0.4-2.481-0.117l-1.308,0.281
-			c-1.248,0.227-1.669-0.342-2.077-0.895c-0.219-0.296-0.425-0.575-0.749-0.704c-0.921-0.37-2.918-0.176-3.954-0.004
-			c-1.146,0.19-2.561,1.493-3.068,2.339l-0.319,0.539c-0.409,0.701-0.794,1.36-1.642,2.488c-0.619,0.825-1.439,1.046-2.238,1.265
-			c-0.594,0.16-1.154,0.312-1.676,0.685c-1.388,0.989-1.995,1.899-2.164,3.244c-0.145,1.16-0.895,2.087-1.843,3.265l-0.644,0.808
-			c-0.732,0.94-0.322,1.663,0.038,2.301c0.273,0.483,0.531,0.939,0.312,1.451c-0.366,0.855-1.288,0.841-2.438,0.824l-1.62,0.035
-			c-1.661,0.151-1.831,0.58-2.245,1.628l-0.298,0.721c-0.166,0.371-0.382,0.582-0.642,0.624c-0.632,0.099-1.386-0.61-2.835-2.241
-			c-0.749-0.842-1.002-1.836-1.207-2.636c-0.206-0.805-0.354-1.309-0.777-1.479c-0.898-0.356-2.128-1.262-2.645-2.64
-			c-0.604-1.607-1.812-2.994-3.59-4.125c-1.288-0.818-2.38-2.947-3.179-4.506c-0.44-0.857-0.788-1.532-1.092-1.898
-			c-0.876-1.05-5.368-3.936-6.095-4.116c0,0,0.024,0.004,0.043,0.006c-0.085-0.017-0.278-0.062-0.912-0.217l-4.84-1.214
-			c-1.958-0.535-4.433-1.592-4.959-2.818c-0.55-1.284-3.392-3.231-4.141-3.418c-0.755-0.188-2.122-1.081-2.46-1.929l-0.012-0.028
-			c0,0-0.294-1.05-0.3-1.069c-0.215-0.883-0.458-1.885-0.964-2.139c-0.646-0.322-2.47-2.111-2.646-3.167
-			c-0.089-0.534-0.349-1.313-0.604-2.08l-0.095-0.284l-0.032-0.124L78.658,289.927z
-			
-			M115.434,337.744c-0.141,0.081-1.381,0.809-1.669,1.285l0,0
-			c-0.288,0.481-0.595,1.208-0.595,1.605v0.255l0.168,0.13l0.487,0.301c0.411,0.227,0.92,0.507,0.92,0.799
-			c0,0.572,0.12,0.926,0.19,1.044l0.191,0.318l0.202-0.094l0.388-0.135c0.619-0.388,1.839-1.255,2.512-1.735l0.04-0.03
-			c0.063-0.048,1.006-0.813,1.006-1.383v-0.236l-0.194-0.163c-0.461-0.328-0.825-0.439-1.148-0.537c0,0-0.382-0.141-0.447-0.165
-			c-0.122-0.063-0.322-0.251-0.536-0.45c-0.656-0.616-0.966-0.834-1.231-0.866l-0.152-0.018L115.434,337.744z
-			
-			M416.826,173.522l-0.351,0.019l-0.295,2.069l1.056,0.906
-			l1.04-0.892l0.039-0.089c0.199-0.457,0.399-1.077,0.399-1.436l-0.049-0.397l-0.207-0.06
-			C418.092,173.472,417.194,173.501,416.826,173.522z
-			
-			M409.277,169.834c-0.791,0.261-1.75,0.65-2.106,0.934l-0.236,0.19
-			l0.057,0.299c0.106,0.554,0.138,1.638,0.141,2.191c-0.015,0.037-1.268,1.288-1.268,1.288l-0.094,0.096l-0.506,1.852l-0.683,1.365
-			c-0.036,0.056-0.841,1.191-0.841,1.842c0,0.676,0.171,2.191,0.498,2.684c0.271,0.404,0.983,1.792,1.36,2.548
-			c0.021,0.072,0.431,1.533,1.102,1.667l0.099,0.02l0.101-0.02c0.712-0.143,1.966-0.049,2.387,0c0.028,0.011,1.692,1.371,1.692,1.371
-			l0.185,0.152l0.235-0.046c0.434-0.087,1.214-0.302,1.573-0.779c0.354-0.473,1.175-1.628,1.175-2.174c0-0.57,0.369-1.578,0.863-2.07
-			c0.36-0.36,0.63-1.171,0.63-1.886c0-0.289-0.045-0.548-0.134-0.77c-0.139-0.346-0.191-0.653-0.242-0.951
-			c-0.071-0.419-0.133-0.775-0.424-1.067c-0.409-0.41-0.734-1.272-0.86-1.718c-0.004-0.118-0.042-1.011-0.818-1.322
-			c-0.869-0.348-1.044-0.876-1.216-1.388l-0.038-0.241c0-0.253,0.104-0.535,0.196-0.783c0.108-0.292,0.177-0.498,0.177-0.688
-			c0-0.42-0.136-1.307-0.654-1.653c-0.402-0.267-1.533-0.741-2-0.933l-0.174-0.07L409.277,169.834z"
+          d={innerBackgroundPathData[regionData.num]}
         ></path>
 
         <g className="eng_map_hide" title="제주_txt">
