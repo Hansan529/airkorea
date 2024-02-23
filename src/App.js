@@ -233,9 +233,9 @@ function App() {
             <MMWrapper>
               <MapNameButtons />
               {/* 서울 */}
-              <SeoulInner />
+              {/* <SeoulInner /> */}
               {/* 경기 */}
-              {/* <GyeonggiInner /> */}
+              <GyeonggiInner />
               {/* 인천 */}
               {/* <IncheonInner /> */}
               {/* 강원 */}
