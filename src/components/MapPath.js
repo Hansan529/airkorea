@@ -19,489 +19,6 @@ const {
 } = stationDataJson;
 
 /**
- * 상태
-경기
-연천군
-	연천(DMZ), 연천, 전곡
-포천시
-	관인면, 선단동, 일동면
-동두천시
-	보산동
-양주시
-	백석읍, 고읍
-파주시
-	금촌동, 운정, 파주, 파주읍
-가평군
-	가평, 설악면
-김포시
-	사우동, 고촌읍, 월곶면, 한강신도시, 한강로
-고양시
-	행신동, 식사동, 백마로(마두역), 신원동, 주엽동
-의정부시
-	의정부동, 의정부1동, 송산3동
-남양주시
-	금곡동, 오남읍, 별내동, 화도읍, 경춘로, 와부읍, 진접읍
-구리시
-	교문동, 동구동
-부천시
-	소사본동, 내동, 중동, 오정동, 송내대로(중동)
-광명시
-	철산동, 소하동
-과천시
-	별양동, 과천동
-하남시
-	신장동, 미사
-양평군
-	용문면, 양평읍
-시흥시
-	정왕동, 시화산단, 대야동, 목감동, 장현동, 서해안로, 배곧동
-안양시
-	안양8동, 부림동, 호계3동, 안양2동
-의왕시
-	부곡3동, 고천동
-성남시
-	대왕판교로(백현동), 단대동, 정자동, 수내동, 성남대로(모란역), 북정동, 운종동, 상대원동
-광주시
-	경안동, 오포1동, 곤지암,
-안산시
-	대부동, 호수동, 중앙대로(고잔동), 고잔동, 원시동, 본오동, 원곡동, 부곡동1,
-군포시
-	당동, 산본동
-수원시
-	신풍동, 인계동, 광교동, 영통동, 천천동, 경수대로(동수원), 고색동, 호매실
-화성시
-	남양읍, 향남읍, 동탄, 우정읍, 청계동, 새솔동, 봉담읍, 서신면
-오산시
-	오산동, 금암로(신장동)
-용인시
-	김량장동, 수지, 기흥, 중부대로(구갈동), 모현읍, 이동읍, 백암면
-이천시
-	설성면, 창전동, 장호원읍, 부발읍
-여주시
-	중앙동(경기), 대신면, 가남읍
-평택시
-	비전동, 안중, 평택항, 송북동, 청북읍, 고덕동
-안성시
-	봉산동, 공도읍, 죽산면
-
-강화군
-	송해, 길상, 석모리
-웅진군
-	덕적도, 백령도, 영흥, 연평도, 울도
-중구
-	신흥, 운서, 인천항, 서해, 영종, 인천 남항
-서구
-	연희, 검단, 석남, 청라, 원당, 경인항, 중봉, 인천 북항
-동구
-	송림, 송현, 
-계양구
-	계산
-미추홀구
-	숭의, 석바위, 주안
-부평구
-	부평역, 부평, 삼산
-남동구
-	구월동 남동, 고잔, 서창, 논현,
-연수구
-	동춘, 송도, 아암, 인천 신항
-
-도봉구
-	도봉구
-노원구
-	노원구, 화랑로
-강북구
-	강북구
-종로구
-	종로구, 종로
-은평구
-	은평구
-성북구
-	성북구, 정릉로
-서대문구
-	서대문구
-중구
-	중구
-동대문구
-	동대문구, 홍릉로
-중랑구
-	중랑구
-마포구
-	마포구, 신촌로
-용산구
-	한강대로, 용산구
-성동구
-	성동구, 강변북로
-광진구
-	광진구
-광서구
-	강서구, 공항대로
-양천구
-	양천구
-구로구
-	구로구
-영등포구
-	영등포구, 영등포로
-금천구
-	금천구, 시흥대로
-금천구
-	금천구, 시흥대로
-동작구
-	동작구, 동작대로 중앙차로
-관악구
-	관악구
-서초구
-	서초구, 강남대로
-강남구
-	강남구, 도산대로
-송파구
-	송파구
-강동구
-	강동구, 천호대로
-
-
-강원
-고성군
-	인제(DMZ), 고성(DMZ), 간성읍, 상리
-양구군
-	방산면, 양구읍
-화천군
-	화천(DMZ), 화천읍
-철원군
-	철원(DMZ), 갈말읍
-춘천시
-	중앙로, 석사동, 신사우동, 온의동
-인제군
-	인제읍
-속초시
-	금호동
-양양군
-	양양읍
-홍천군
-	홍천읍
-횡성군
-	치악산, 횡성읍, 우천면
-평창군
-	평창읍
-강릉시
-	주문진읍, 오겇ㄴ동
-원주시
-	중앙동(강원), 반곡동(명륜동), 문막읍, 지정면
-영월군
-	영월읍
-정선군
-	북평면, 정선읍
-동해시
-	동해항, 묵호항
-태백시
-	황지동
-삼척시
-	호산항, 삼척항, 남양동1
-
-
-	충청남도
-당진시
-	송산면, 당진시청사, 합덕읍, 복운리, 평택당진항, 평택당진항(당진항)
-태안군
-	파도리, 이원면, 태안읍, 격렬비열도, 원북면,태안항
-서산시
-	독곶리, 동문동, 대산리, 성영면, 대산항
-아산시
-	모종동, 배방읍, 도고면, 둔포면, 인주면, 장재리, 송악면
-천안시
-	성황동, 백석동, 성성동, 성거읍, 신방동
-예산군
-	예산군, 삽교읍, 고덕면(충남)
-홍성군
-	홍성읍, 내포
-보령시
-	대천2동 주교면, 외연도, 보령항
-청양군
-	청양읍, 정산면
-공주시
-	사곡면, 공주, 탄천면
-부여군
-	부여읍
-계룡시
-	엄사면
-서천군
-	서천읍, 서면, 장항읍, 장항항
-논산시
-	논산, 연무읍, 성동면
-금산군
-	금산읍
-
-
-	세종특별시
-	신흥동, 아름동, 한솔동, 부강면, 보람동, 전의면
-
-대전광역시
-대덕구
-	읍내동, 문평동
-유성구
-	구성동, 노은동, 상대동(대전), 관평동
-서구
-	정림동, 둔산동, 월평동
-동구
-	대성동, 성남동1
-중구
-	문창동, 대흥동1
-
-
-
-	충청북도
-음성
-	음성읍, 소이면, 금왕
-충주시
-	호암동, 칠금동, 중앙탑면, 살미면
-제천시
-	장락동, 영천동, 청풍면
-단양군
-	매포읍, 단성면, 단양읍
-진천군
-	진천읍, 덕산읍
-증평군
-	도안면, 증평읍
-괴산군
-	청천면, 괴산읍, 감물면
-청주시
-	용암동, 복대동, 오창읍, 산남동, 오송읍, 가덕면, 봉명동, 사천동, 용담동
-보은군
-	보은읍
-옥천군
-	옥천읍
-영동군
-	영동읍, 황간면
-
-
-
-경상북도
-문경시
-	문경시
-예천군
-	예천군
-영주시
-	가흥동, 영주동
-봉화군
-	석포면, 봉화군청
-울진군
-	울진군
-울릉군
-	태하리, 울릉읍
-영양군
-	영양군
-안동시
-	명륜동
-상주시
-	상주시
-의성군
-	안계면(교외), 의성읍, 안계면
-청송군
-	청송읍
-영덕군
-	영덕읍, 강구면, 영해면
-구미시
-	공단동, 원평동, 형곡동, 4공단, 진미동
-김천시
-	평화남산동, 대광동, 율곡동
-성주군
-	성주군
-칠곡군
-	칠곡군
-고령군
-	대가야읍
-영천시
-	화북면, 영천시
-포항시
-	우현동, 장흥동, 장량동, 대도동, 대송면, 3공단, 송도동, 오천읍, 청림동, 연일읍, 제철동, 양덕동, 포항항
-경산시
-	중방동, 하양읍, 진량읍
-청도군
-	화양읍
-경주시
-	성건동, 보덕동, 안강읍, 외동읍
-
-
-
-대구광역시
-군위군
-	군위읍
-동구
-	서호동, 신암동
-북구
-	산격동, 서변동, 침산동, 태전동
-서구
-	이현동, 평기동
-중구
-	남산1동, 수창동
-수성
-	지산동, 연호동, 만촌동, 시지동
-달서구
-	호림동, 이곡동, 진천동, 본동
-남구
-	대명동, 충혼탑
-달성군
-	유가읍, 다사읍, 화원읍
-
-
-
-전라북도
-군산시
-	신풍동(군산), 소룡동, 사정동, 옥산면, 비응도동, 말도, 소룡동2, 군산항
-익산시
-	삼기면, 팔봉동, 모현동, 용동면, 함열읍, 춘포면, 여산면, 금마면
-완주군
-	고산면, 봉동읍, 구이면
-무주군
-	무주읍, 안성면
-김제시
-	요촌동, 광할면
-전주시
-	삼천동, 팔복동, 송천동, 서신동, 혁신동, 여의동, 효자동, 노송동
-진안군
-	진안읍
-부안군
-	부안읍, 새만금, 계화면
-정읍시
-	연지동, 신태인, 영파동
-임실군
-	운암면, 임실읍, 관촌면
-장수군
-	장수읍
-고창군
-	고창읍, 심원면
-순창군
-	순창읍
-남원시
-	죽항동, 운봉읍
-
-
-
-전라남도
-영광군
-	영광읍, 안마도
-장성군
-	장성읍
-담양군
-	담양읍
-곡성군
-	곡성읍
-구례군
-	구례읍
-함평군
-	함평읍
-나주시
-	빛가람동
-화순군
-	송단리, 화순읍
-순천시
-	장천동, 연향동, 순천만, 호두리, 신대
-광양시
-	중동, 태인동, 광양읍, 봉강면, 진월면, 광양항, 광양 중마, 광양 유촌
-무안군
-	무안읍
-영암군
-	대불, 영암읍, 목포항
-신안군
-	신안군, 홍도, 가거도
-목포시
-	용당동, 부흥동
-진도군
-	진도읍
-해남군
-	해남읍
-강진군
-	강진읍
-장흥군
-	장흥읍
-보성군
-	벌교읍, 보성읍
-완도군
-	신지면
-고흥군
-	고흥읍
-여수시
-	월내동 문수동, 여천동(여수), 덕충동, 화양면, 율촌면, 삼일동, 여수항, 서강동
-
-
-
-
-경상남도
-거창군
-	거창읍, 남상면
-함양군
-	함양읍
-합천군
-	합천읍
-창녕군
-	창녕읍
-밀양시
-	내일동
-양산시
-	북부동, 삼호동, 물금읍
-산청군
-	산청읍
-의령군
-	의령읍
-진주시
-	상봉동, 대안동, 상대동(진주), 정촌면
-함안군
-	가야읍
-하동군
-	하동읍, 금성면, 하동항
-사천시
-	사천읍, 향촌동, 삼천포항
-남해군
-	남해읍
-고성군
-	고성읍
-통영시
-	무전동
-창원시
-	회원동, 봉암동, 내서읍, 명서동, 웅남동, 성주동, 용지동, 반송로, 사파동, 삼진로, 경화동, 월영동, 대산면, 마산항
-거제시
-	저구리 아주동, 고현동,
-김해시
-	동상동, 삼방동, 장유동, 진영읍, 김해대로, 진례면
-
-
-	부산광역시
-기장
-	기장읍, 용수리
-금정
-	청룡동, 부곡동, 회동동
-북구
-	덕천동
-동래
-	온천동, 명장동
-부산진
-	개금동, 전포동
-연제
-	연산동
-해운대
-	우동, 좌동, 재송동
-수영
-	광안동
-동구
-	수정동, 초량동, 부산북항
-서구
-	대신동
-사상
-	학장동, 삼락동, 덕포동
-강서
-	녹산동, 부산항, 부산신항, 대저동, 명지동
-사하
-	장림동, 당리동
-중구
-	광복동
-영도
-	태종대, 청학동
-남구
-	대연동
- * 
- */
-
-
-/**
  * 대기 정보 목록
  * 좋음 (0~50): #d0ecff / #7ed6ff
  * 보통 (51~100): #caf2de / #94edbc
@@ -512,7 +29,7 @@ const {
 
 // default, hover, button
 const getColorValue = (value) => {
-  if (value >= 0 && value <= 50) {
+  if (value >= 1 && value <= 50) {
     return ['#d0ecff', '#7ed6ff', '#6ac8fe'];
   } else if (value >= 51 && value <= 100) {
     return ['#caf2de', '#94edbc', '#59e494'];
@@ -985,9 +502,14 @@ export const SeoulInner = () => {
 
   const filterStationKhaiValue = list.map((region) => {
     return region.station.map((station) => {
-      return Number(
-        detailData.find((data) => data.stationName === station).khaiValue
-      );
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
@@ -1009,7 +531,7 @@ export const SeoulInner = () => {
         value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{result[key]}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -1685,7 +1207,7 @@ export const GyeonggiInner = () => {
         value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{result[key]}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -1722,13 +1244,13 @@ export const GyeonggiInner = () => {
 // ---------------------------------------------------------------------------------
 
 /** 인천 032 */
-export const IncheonPath = (props) => {
+export const IncheonPath = () => {
   const regionData = { num: '032', name: '인천' };
   return (
     <>
       <path
         title="인천 외각선"
-        fill={props.outlineColor || '#91A5BE'}
+        fill="#91A5BE"
         d="M231.436,220.113c0.371-0.284,0.756-0.532,1.129-0.771c0.644-0.413,1.252-0.804,1.646-1.302
 										  c2.215-2.8,5.993-8.894,4.963-12.491c-0.066-0.096-0.12-0.203-0.151-0.323c-0.095-0.373-0.486-0.586-1.3-0.951
 										  c-0.593-0.268-1.265-0.568-1.801-1.103c-1.523-1.51-1.91-3.405-1.01-4.948c0.323-0.558,0.701-1.044,1.065-1.516
@@ -1745,7 +1267,7 @@ export const IncheonPath = (props) => {
       ></path>
       <path
         title="인천 외각선"
-        fill={props.outlineColor || '#91A5BE'}
+        fill="#91A5BE"
         d="M211.332,181.228c-0.072-1.071-1.163-1.941-1.42-2.994c-0.232-0.941-0.015-1.946-0.275-2.879
 										  c-0.258-0.918-0.617-1.529-0.712-2.528c-0.065-0.688-0.097-1.381-0.114-2.073c-0.071-1.471-0.008-2.974,0.011-4.315
 										  c0.014-0.939,0.077-1.883,0.088-2.799c0.011-0.915-0.033-1.803-0.233-2.627c-0.04-0.165-0.087-0.328-0.141-0.488
@@ -1760,7 +1282,7 @@ export const IncheonPath = (props) => {
       ></path>
       <path
         title="인천 외각선"
-        fill={props.outlineColor || '#91A5BE'}
+        fill="#91A5BE"
         d="M174.73,160.544c0.66-0.629,0.547-0.79,1.587-0.906c0.858-0.097,1.703-0.113,2.606-0.113
 												  c0.887,0,1.846,0.106,2.608-0.225c0.587-0.253,1.173-0.665,1.697-0.908c0.832-1.168,2.611-2.253,2.267-3.968
 												  c-0.523-2.601-3.203-0.5-4.763-1.042c-0.714-0.247-1.223-0.963-2.03-1.116c-0.874-0.166-1.798-0.208-2.615-0.331
@@ -1769,7 +1291,7 @@ export const IncheonPath = (props) => {
       ></path>
       <path
         title="인천 외각선"
-        fill={props.outlineColor || '#91A5BE'}
+        fill="#91A5BE"
         d="M184.08,167.004c-0.12-1.073,0.371-1.643,0.78-2.505c0.207-0.436,0.892-2.072,0.468-2.539
 												  c-0.304-0.334-2.121,0.2-2.552,0.388c-0.422,0.183-0.764,0.29-1.246,0.351c-0.541,0.068-0.735,0.151-0.851,0.737
 												  c-0.173,0.892-0.229,1.844-0.228,2.775c0.004,1.258-0.701,1.065-1.477,1.743c-0.421,0.368-0.64,0.825-0.167,1.15
@@ -1781,7 +1303,7 @@ export const IncheonPath = (props) => {
       ></path>
       <path
         title="인천 외각선"
-        fill={props.outlineColor || '#91A5BE'}
+        fill="#91A5BE"
         d="M214.737,197.803c0.688-0.034,1.253-0.424,1.19-1.19c-0.146-1.733-2.031-1.438-3.189-1.063
 												  c-1.271,0.414-2.422,1.063-3.782,0.642c-0.501-0.156-1.418-0.396-1.953-0.176c-0.536,0.223-0.896,1.127-1.138,1.616
 												  c-0.281,0.574-0.715,0.955-0.995,1.521c-0.327,0.659-0.673,0.905-1.359,1.104c-1.383,0.399-2.713,0.508-4.16,0.65
@@ -1858,7 +1380,7 @@ export const IncheonInner = () => {
       top: '225px',
       station: [
         '연희',
-        '겸단',
+        '검단',
         '석남',
         '청라',
         '원당',
@@ -1890,24 +1412,28 @@ export const IncheonInner = () => {
     },
   ];
 
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -1918,10 +1444,10 @@ export const IncheonInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -1932,8 +1458,8 @@ export const IncheonInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -2545,24 +2071,29 @@ export const GangwonInner = () => {
       station: ['치악산', '횡성읍', '우천면'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -2573,10 +2104,10 @@ export const GangwonInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -2587,8 +2118,8 @@ export const GangwonInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -2973,7 +2504,7 @@ export const ChungnamInner = () => {
       district: '시',
       left: '157px',
       top: '154px',
-      station: ['독곶리', '동문동', '대산리', '성영면', '대산항'],
+      station: ['독곶리', '동문동', '대산리', '성연면', '대산항'],
     },
     {
       name: '서천',
@@ -2993,7 +2524,7 @@ export const ChungnamInner = () => {
         '도고면',
         '둔포면',
         '인주면',
-        '잠재리',
+        '장재리',
         '송악면',
       ],
     },
@@ -3040,24 +2571,29 @@ export const ChungnamInner = () => {
       station: ['엄사면'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -3068,10 +2604,10 @@ export const ChungnamInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -3082,8 +2618,8 @@ export const ChungnamInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -3348,11 +2884,11 @@ export const DaejeonInner = () => {
       station: ['정림동', '둔산동', '월평동'],
     },
     {
-      name: '유성',
+      name: '유구성',
       district: '구',
       left: '148px',
       top: '190px',
-      station: ['구성동', '노은동', '삼대동(대전)', '관평동'],
+      station: ['구성동', '노은동', '상대동(대전)', '관평동'],
     },
     {
       name: '중구',
@@ -3362,24 +2898,29 @@ export const DaejeonInner = () => {
       station: ['문창동', '대흥동1'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -3390,10 +2931,10 @@ export const DaejeonInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -3404,8 +2945,8 @@ export const DaejeonInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -3814,27 +3355,32 @@ export const ChungbukInner = () => {
       district: '시',
       left: '213px',
       top: '109px',
-      station: ['호암동', '칠금동', '중앙탑면', '살미연'],
+      station: ['호암동', '칠금동', '중앙탑면', '살미면'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -3845,10 +3391,10 @@ export const ChungbukInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -3859,8 +3405,8 @@ export const ChungbukInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -3956,24 +3502,29 @@ export const SejongInner = () => {
       station: ['신흥동', '아름동', '한솔동', '부강면', '보람동', '전의면'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -3984,10 +3535,10 @@ export const SejongInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -3998,8 +3549,8 @@ export const SejongInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -4243,24 +3794,29 @@ export const BusanInner = () => {
       station: ['우동', '좌동', '재송동'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -4271,10 +3827,10 @@ export const BusanInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -4285,8 +3841,8 @@ export const BusanInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -4437,7 +3993,7 @@ export const UlsanInner = () => {
       district: '',
       left: '196px',
       top: '229px',
-      station: ['덕산리', '화산리', '상남리', '상남읍', '웅촌면', '범서읍'],
+      station: ['덕신리', '화산리', '상남리', '삼남읍', '웅촌면', '범서읍'],
     },
     {
       name: '중구',
@@ -4447,24 +4003,29 @@ export const UlsanInner = () => {
       station: ['약사동', '성남동', '북부순환도로'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -4475,10 +4036,10 @@ export const UlsanInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -4489,8 +4050,8 @@ export const UlsanInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -4852,7 +4413,7 @@ export const DaeguInner = () => {
       district: '',
       left: '165px',
       top: '310px',
-      station: ['이현동', '평기동'],
+      station: ['이현동', '평리동'],
     },
     {
       name: '수성',
@@ -4866,7 +4427,7 @@ export const DaeguInner = () => {
       district: '',
       left: '210px',
       top: '320px',
-      station: ['남사1동', '수창동'],
+      station: ['남산1동', '수창동'],
     },
     {
       name: '군위군',
@@ -4876,24 +4437,29 @@ export const DaeguInner = () => {
       station: ['군위읍'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -4904,10 +4470,10 @@ export const DaeguInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -4918,8 +4484,8 @@ export const DaeguInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -5886,24 +5452,29 @@ export const GyeongbukInner = () => {
       ],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -5914,10 +5485,10 @@ export const GyeongbukInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -5928,8 +5499,8 @@ export const GyeongbukInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -6820,7 +6391,7 @@ export const GyeongnamInner = () => {
       district: '시',
       left: '384px',
       top: '206px',
-      station: ['북부동', '삼호동', '물금옵'],
+      station: ['북부동', '삼호동', '물금읍'],
     },
     {
       name: '의령',
@@ -6901,24 +6472,29 @@ export const GyeongnamInner = () => {
       station: ['합천읍'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -6929,10 +6505,10 @@ export const GyeongnamInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -6943,8 +6519,8 @@ export const GyeongnamInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -8032,7 +7608,7 @@ export const JeonnamInner = () => {
         '진월면',
         '광양항',
         '광양 중마',
-        '광양 유촌',
+        '광양 율촌',
       ],
     },
     {
@@ -8172,24 +7748,29 @@ export const JeonnamInner = () => {
       station: ['송단리', '화순읍'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -8200,10 +7781,10 @@ export const JeonnamInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -8214,8 +7795,8 @@ export const JeonnamInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -9695,24 +9276,29 @@ export const GwangjuInner = () => {
       station: ['유촌동', '농성동', '치평동'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -9723,10 +9309,10 @@ export const GwangjuInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -9737,8 +9323,8 @@ export const GwangjuInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -10048,8 +9634,8 @@ export const JeonbukInner = () => {
       name: '김제',
       district: '시',
       left: '174px',
-      top: '200px',
-      station: ['요촌동', '광할면'],
+      top: '200px제',
+      station: ['요촌동', '광활면'],
     },
     {
       name: '남원',
@@ -10147,24 +9733,29 @@ export const JeonbukInner = () => {
       station: ['진안읍'],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -10175,10 +9766,10 @@ export const JeonbukInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -10189,8 +9780,8 @@ export const JeonbukInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };
@@ -10366,24 +9957,29 @@ export const JejuInner = () => {
       ],
     },
   ];
-  const filterItems = detailData.filter((item) => {
-    return list.some((listItem) => {
-      const stationName = `${listItem.name}${listItem.district}`;
-      return item.stationName === stationName;
+
+  /**
+   * 해당 지역에 대한 대기 정보 출력
+   */
+
+  const filterStationKhaiValue = list.map((region) => {
+    return region.station.map((station) => {
+      const khaiValue = detailData.find(
+        (data) => data.stationName === station
+      )?.khaiValue;
+      if (khaiValue !== '-') {
+        return Number(khaiValue);
+      } else {
+        return 0;
+      }
     });
   });
 
-  const sortedArray = [...filterItems];
-
-  sortedArray.sort((a, b) => {
-    if (a.stationName < b.stationName) return -1;
-    if (a.stationName > b.stationName) return 1;
-    return 0;
+  const result = filterStationKhaiValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
   });
 
-  /**
-   * TODO: state를 통해서 출력 값을 변경되도록 설정하기
-   */
   const renderButton = (el, key) => {
     const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
@@ -10394,10 +9990,10 @@ export const JejuInner = () => {
           left: list[key].left,
           top: list[key].top,
         }}
-        value={getColorValue(sortedArray[key].khaiValue)[2]}
+        value={getColorValue(result[key])[2]}
       >
         {el.name}
-        <strong>{sortedArray[key].khaiValue}</strong>
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
       </InnerMapButton>
     );
   };
@@ -10408,8 +10004,8 @@ export const JejuInner = () => {
         id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
         title={`${regionData.name}_${el.name}${el.district}`}
         d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
-        fillColor={getColorValue(sortedArray[key].khaiValue)[0]}
-        fillHoverColor={getColorValue(sortedArray[key].khaiValue)[1]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
       ></InnerMapPath>
     );
   };

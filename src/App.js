@@ -235,7 +235,7 @@ function App() {
               {/* 서울 */}
               {/* <SeoulInner /> */}
               {/* 경기 */}
-              <GyeonggiInner />
+              {/* <GyeonggiInner /> */}
               {/* 인천 */}
               {/* <IncheonInner /> */}
               {/* 강원 */}
