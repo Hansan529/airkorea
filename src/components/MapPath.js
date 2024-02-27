@@ -6,6 +6,7 @@ import {
 } from '../paths/paths';
 import detailDataJson from '../data/getCtprvnRltmMesureDnsty.json';
 import stationDataJson from '../data/MsrstnInfoInqireSvc.json';
+import { useState } from 'react';
 
 const {
   response: {
@@ -261,349 +262,356 @@ const MapNameButton = styled.button`
   }
 `;
 
-	/**
-   * 전체 지역 평균값
-   * @param {*} order	순서
-   * @param {*} returnValue 출력 타입 value
-   * @returns
-   */
-	const regionAvgValue = (order, returnValue = 'khaiValue') => {
-    const regionList = {
-      '02': '서울',
-      '031': '경기',
-      '032': '인천',
-      '033': '강원',
-      '041': '충남',
-      '042': '대전',
-      '043': '충북',
-      '044': '세종',
-      '051': '부산',
-      '052': '울산',
-      '053': '대구',
-      '054': '경북',
-      '055': '경남',
-      '061': '전남',
-      '062': '광주',
-      '063': '전북',
-      '064': '제주',
-    };
-
-    const filterValue = Object.values(regionList).map((list) => {
-      return detailData.filter((data) => {
-        return data.sidoName === list;
-      });
-    });
-
-    const filterTotalValue = filterValue.map((arr) => {
-      return arr.reduce((accumulator, currentValue) => {
-        const valueToAdd = parseFloat(currentValue[returnValue]);
-        if (!isNaN(valueToAdd)) {
-          return accumulator + valueToAdd;
-        } else {
-          return accumulator;
-        }
-      }, 0);
-    });
-    return Math.round(filterTotalValue[order] / filterValue[order].length);
+/**
+ * 전체 지역 평균값
+ * @param {*} order	순서
+ * @param {*} returnValue 출력 타입 value
+ * @returns
+ */
+const regionAvgValue = (order, returnValue = 'khaiValue') => {
+  const regionList = {
+    '02': '서울',
+    '031': '경기',
+    '032': '인천',
+    '033': '강원',
+    '041': '충남',
+    '042': '대전',
+    '043': '충북',
+    '044': '세종',
+    '051': '부산',
+    '052': '울산',
+    '053': '대구',
+    '054': '경북',
+    '055': '경남',
+    '061': '전남',
+    '062': '광주',
+    '063': '전북',
+    '064': '제주',
   };
 
-	/**
-   * 상세 지역 측정소 값 총합, 평균값
-   * @param {*} props
-   * @param {*} list
-   * @returns
-   */
+  const filterValue = Object.values(regionList).map((list) => {
+    return detailData.filter((data) => {
+      return data.sidoName === list;
+    });
+  });
 
-	const filterStationReturnValue = (props, list) => {
-		const filterStationValue = list.map((region) => {
-		return region.station.map((station) => {
-			const returnValue = detailData.find(
-			(data) => data.stationName === station
-			)[props.returnValue];
-			if (returnValue !== '-') {
-			return Number(returnValue);
-			} else {
-			return 0;
-			}
-		});
-		});
+  const filterTotalValue = filterValue.map((arr) => {
+    return arr.reduce((accumulator, currentValue) => {
+      const valueToAdd = parseFloat(currentValue[returnValue]);
+      if (!isNaN(valueToAdd)) {
+        return accumulator + valueToAdd;
+      } else {
+        return accumulator;
+      }
+    }, 0);
+  });
+  return Math.round(filterTotalValue[order] / filterValue[order].length);
+};
 
-		const result = filterStationValue.map((val) => {
-		const sumValue = val.reduce((acc, cur) => acc + cur);
-		return Math.round(sumValue / val.length);
-		});
+/**
+ * 상세 지역 측정소 값 총합, 평균값
+ * @param {*} props
+ * @param {*} list
+ * @returns
+ */
 
-		const avgValue = Math.round(
-		result.reduce((acc, cur) => acc + cur) / result.length
-		);
+const filterStationReturnValue = (props, list) => {
+  const filterStationValue = list.map((region) => {
+    return region.station.map((station) => {
+      const returnValue = detailData.find(
+        (data) => data.stationName === station
+      )[props.returnValue];
+      if (returnValue !== '-') {
+        return Number(returnValue);
+      } else {
+        return 0;
+      }
+    });
+  });
 
-		return { result, avgValue };
-	};
+  const result = filterStationValue.map((val) => {
+    const sumValue = val.reduce((acc, cur) => acc + cur);
+    return Math.round(sumValue / val.length);
+  });
 
-  // ---------------------------------------------------------------------------------
+  const avgValue = Math.round(
+    result.reduce((acc, cur) => acc + cur) / result.length
+  );
 
-  /** 전국 버튼 위치, 대기 정보 출력 */
-	export const MapNameButtons = () => {
+  return { result, avgValue };
+};
+
+// ---------------------------------------------------------------------------------
+
+/** 전국 버튼 위치, 대기 정보 출력 */
+export const MapNameButtons = ({ onHover }) => {
+  return (
+    <MapNameButtonsWrapper>
+      {Object.values(namePositionVal).map((el, key) => {
+        return (
+          <MapNameButton
+            key={key}
+            left={el.left}
+            top={el.top}
+            bgColor={getColorValue(regionAvgValue(key))[2]}
+            onMouseEnter={() => onHover(el.name)}
+            onMouseLeave={() => onHover('')}
+          >
+            {el.name}
+            <span>{regionAvgValue(key)}</span>
+          </MapNameButton>
+        );
+      })}
+    </MapNameButtonsWrapper>
+  );
+};
+
+// ---------------------------------------------------------------------------------
+
+/** 서울 02 외각선의 경우, 경기도 외각선으로 대체 */
+export const SeoulPath = (props) => {
+  const regionData = { num: '02', name: '서울', order: 0 };
+
+  let color;
+
+  if (props.hoverEvent === regionData.name)
+    color = getColorValue(regionAvgValue(regionData.order))[1];
+  else color = getColorValue(regionAvgValue(regionData.order))[0];
+
+  return (
+    <>
+      <MapPath
+        title="서울 지도 배경"
+        id="totalMap_02"
+        fillColor={color}
+        onMouseEnter={() => props.hoverChange(regionData.name)}
+        onMouseOut={() => props.hoverChange('')}
+        d={backgroundPathData[regionData.num]}
+      ></MapPath>
+    </>
+  );
+};
+
+export const SeoulInner = (props) => {
+  const regionData = { num: '02', name: '서울' };
+  const list = [
+    {
+      name: '강남',
+      district: '구',
+      left: '310px',
+      top: '342px',
+      station: ['강남구', '도산대로'],
+    },
+    {
+      name: '강동',
+      district: '구',
+      left: '402px',
+      top: '256px',
+      station: ['강동구', '천호대로'],
+    },
+    {
+      name: '강북',
+      district: '구',
+      left: '261px',
+      top: '125px',
+      station: ['강북구'],
+    },
+    {
+      name: '강서',
+      district: '구',
+      left: '61px',
+      top: '225px',
+      station: ['강서구', '공항대로'],
+    },
+    {
+      name: '관악',
+      district: '구',
+      left: '194px',
+      top: '378px',
+      station: ['관악구'],
+    },
+    {
+      name: '광진',
+      district: '구',
+      left: '342px',
+      top: '262px',
+      station: ['광진구'],
+    },
+    {
+      name: '구로',
+      district: '구',
+      left: '87px',
+      top: '336px',
+      station: ['구로구'],
+    },
+    {
+      name: '금천',
+      district: '구',
+      left: '140px',
+      top: '377px',
+      station: ['금천구', '시흥대로'],
+    },
+    {
+      name: '노원',
+      district: '구',
+      left: '338px',
+      top: '116px',
+      station: ['노원구', '화랑로'],
+    },
+    {
+      name: '도봉',
+      district: '구',
+      left: '285px',
+      top: '83px',
+      station: ['도봉구'],
+    },
+    {
+      name: '동대문',
+      district: '구',
+      left: '307px',
+      top: '209px',
+      station: ['동대문구', '홍릉로'],
+    },
+    {
+      name: '동작',
+      district: '구',
+      left: '199px',
+      top: '322px',
+      station: ['동작구', '동작대로 중앙차로'],
+    },
+    {
+      name: '마포',
+      district: '구',
+      left: '150px',
+      top: '232px',
+      station: ['마포구', '신촌로'],
+    },
+    {
+      name: '서대문',
+      district: '구',
+      left: '194px',
+      top: '212px',
+      station: ['서대문구'],
+    },
+    {
+      name: '서초',
+      district: '구',
+      left: '255px',
+      top: '352px',
+      station: ['서초구', '강남대로'],
+    },
+    {
+      name: '성동',
+      district: '구',
+      left: '292px',
+      top: '257px',
+      station: ['성동구', '강변북로'],
+    },
+    {
+      name: '성북',
+      district: '구',
+      left: '268px',
+      top: '183px',
+      station: ['성북구', '정릉로'],
+    },
+    {
+      name: '송파',
+      district: '구',
+      left: '363px',
+      top: '312px',
+      station: ['송파구'],
+    },
+    {
+      name: '양천',
+      district: '구',
+      left: '97px',
+      top: '287px',
+      station: ['양천구'],
+    },
+    {
+      name: '영등포',
+      district: '구',
+      left: '150px',
+      top: '297px',
+      station: ['영등포구', '영등포로'],
+    },
+    {
+      name: '용산',
+      district: '구',
+      left: '230px',
+      top: '275px',
+      station: ['한강대로', '용산구'],
+    },
+    {
+      name: '은평',
+      district: '구',
+      left: '168px',
+      top: '154px',
+      station: ['은평구'],
+    },
+    {
+      name: '종로',
+      district: '구',
+      left: '220px',
+      top: '162px',
+      station: ['종로구', '종로'],
+    },
+    {
+      name: '중구',
+      district: '',
+      left: '250px',
+      top: '231px',
+      station: ['중구'],
+    },
+    {
+      name: '중랑',
+      district: '구',
+      left: '357px',
+      top: '189px',
+      station: ['중랑구'],
+    },
+  ];
+
+  const { result } = filterStationReturnValue(props, list);
+
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
     return (
-      <MapNameButtonsWrapper>
-        {Object.values(namePositionVal).map((el, key) => {
-          return (
-            <MapNameButton
-              key={key}
-              left={el.left}
-              top={el.top}
-              bgColor={getColorValue(regionAvgValue(key))[2]}
-            >
-              {el.name}
-              <span>{regionAvgValue(key)}</span>
-            </MapNameButton>
-          );
-        })}
-      </MapNameButtonsWrapper>
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: list[key].left,
+          top: list[key].top,
+        }}
+        value={getColorValue(result[key])[2]}
+      >
+        {el.name}
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
+      </InnerMapButton>
+    );
+  };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
+      ></InnerMapPath>
     );
   };
 
-  // ---------------------------------------------------------------------------------
-
-  /** 서울 02 외각선의 경우, 경기도 외각선으로 대체 */
-	export const SeoulPath = () => {
-    const regionData = { num: '02', name: '서울', order: 0 };
-
-    return (
-      <>
-        <MapPath
-          title="서울 지도 배경"
-          id="totalMap_02"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
-          d={backgroundPathData[regionData.num]}
-        ></MapPath>
-      </>
-    );
-  };
-
-  export const SeoulInner = (props) => {
-    const regionData = { num: '02', name: '서울' };
-    const list = [
-      {
-        name: '강남',
-        district: '구',
-        left: '310px',
-        top: '342px',
-        station: ['강남구', '도산대로'],
-      },
-      {
-        name: '강동',
-        district: '구',
-        left: '402px',
-        top: '256px',
-        station: ['강동구', '천호대로'],
-      },
-      {
-        name: '강북',
-        district: '구',
-        left: '261px',
-        top: '125px',
-        station: ['강북구'],
-      },
-      {
-        name: '강서',
-        district: '구',
-        left: '61px',
-        top: '225px',
-        station: ['강서구', '공항대로'],
-      },
-      {
-        name: '관악',
-        district: '구',
-        left: '194px',
-        top: '378px',
-        station: ['관악구'],
-      },
-      {
-        name: '광진',
-        district: '구',
-        left: '342px',
-        top: '262px',
-        station: ['광진구'],
-      },
-      {
-        name: '구로',
-        district: '구',
-        left: '87px',
-        top: '336px',
-        station: ['구로구'],
-      },
-      {
-        name: '금천',
-        district: '구',
-        left: '140px',
-        top: '377px',
-        station: ['금천구', '시흥대로'],
-      },
-      {
-        name: '노원',
-        district: '구',
-        left: '338px',
-        top: '116px',
-        station: ['노원구', '화랑로'],
-      },
-      {
-        name: '도봉',
-        district: '구',
-        left: '285px',
-        top: '83px',
-        station: ['도봉구'],
-      },
-      {
-        name: '동대문',
-        district: '구',
-        left: '307px',
-        top: '209px',
-        station: ['동대문구', '홍릉로'],
-      },
-      {
-        name: '동작',
-        district: '구',
-        left: '199px',
-        top: '322px',
-        station: ['동작구', '동작대로 중앙차로'],
-      },
-      {
-        name: '마포',
-        district: '구',
-        left: '150px',
-        top: '232px',
-        station: ['마포구', '신촌로'],
-      },
-      {
-        name: '서대문',
-        district: '구',
-        left: '194px',
-        top: '212px',
-        station: ['서대문구'],
-      },
-      {
-        name: '서초',
-        district: '구',
-        left: '255px',
-        top: '352px',
-        station: ['서초구', '강남대로'],
-      },
-      {
-        name: '성동',
-        district: '구',
-        left: '292px',
-        top: '257px',
-        station: ['성동구', '강변북로'],
-      },
-      {
-        name: '성북',
-        district: '구',
-        left: '268px',
-        top: '183px',
-        station: ['성북구', '정릉로'],
-      },
-      {
-        name: '송파',
-        district: '구',
-        left: '363px',
-        top: '312px',
-        station: ['송파구'],
-      },
-      {
-        name: '양천',
-        district: '구',
-        left: '97px',
-        top: '287px',
-        station: ['양천구'],
-      },
-      {
-        name: '영등포',
-        district: '구',
-        left: '150px',
-        top: '297px',
-        station: ['영등포구', '영등포로'],
-      },
-      {
-        name: '용산',
-        district: '구',
-        left: '230px',
-        top: '275px',
-        station: ['한강대로', '용산구'],
-      },
-      {
-        name: '은평',
-        district: '구',
-        left: '168px',
-        top: '154px',
-        station: ['은평구'],
-      },
-      {
-        name: '종로',
-        district: '구',
-        left: '220px',
-        top: '162px',
-        station: ['종로구', '종로'],
-      },
-      {
-        name: '중구',
-        district: '',
-        left: '250px',
-        top: '231px',
-        station: ['중구'],
-      },
-      {
-        name: '중랑',
-        district: '구',
-        left: '357px',
-        top: '189px',
-        station: ['중랑구'],
-      },
-    ];
-
-    const { result } = filterStationReturnValue(props, list);
-
-    const renderButton = (el, key) => {
-      const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
-      return (
-        <InnerMapButton
-          key={key}
-          id={id}
-          style={{
-            left: list[key].left,
-            top: list[key].top,
-          }}
-          value={getColorValue(result[key])[2]}
-        >
-          {el.name}
-          <strong>{result[key] === 0 ? '-' : result[key]}</strong>
-        </InnerMapButton>
-      );
-    };
-    const renderPath = (el, key) => {
-      return (
-        <InnerMapPath
-          key={key}
-          id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
-          title={`${regionData.name}_${el.name}${el.district}`}
-          d={
-            pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]
-          }
-          fillColor={getColorValue(result[key])[0]}
-          fillHoverColor={getColorValue(result[key])[1]}
-        ></InnerMapPath>
-      );
-    };
-
-    return (
-      <DetailContainer regionNum={regionData.num}>
-        {list.map(renderButton)}
-        <InnerMapSvg id="p_code_02">
-          <path
-            title="서울_한강"
-            fill="rgb(40, 124, 224)"
-            d="M454.622,234.526l-3.911-5.213c0,0-14.986,9.123-22.806,13.032
+  return (
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
+      <InnerMapSvg id="p_code_02">
+        <path
+          title="서울_한강"
+          fill="rgb(40, 124, 224)"
+          d="M454.622,234.526l-3.911-5.213c0,0-14.986,9.123-22.806,13.032
 				c-7.819,3.91-14.988,3.259-20.853,4.562s-19.549,13.032-22.806,19.548c0,0-0.045,1.623-0.581,4.838
 				c-1.016,6.1-2.324,11.904-7.892,20.574c-8.008,12.471-14.336,15.641-14.336,15.641c-21.503,5.863-21.503,1.303-30.625-2.607
 				c-9.122-3.908-14.987-11.076-22.807-11.076c-7.82,0-20.854,0.65-25.413,4.559c-4.561,3.912-21.503,22.156-25.413,25.414
@@ -620,41 +628,49 @@ const MapNameButton = styled.button`
 				c11.078-1.954,27.256-12.513,27.256-12.513S452.761,236.805,454.622,234.526z M192.005,294.514c2.144,0,15.896,9.287,18.04,12.504
 				c2.145,3.215,6.608,5.895,6.252,7.68c-0.357,1.787-10.003,1.43-13.039,1.25c-3.036-0.178-8.037-2.678-10.359-9.109
 				c-2.322-6.43-2.322-9.465-2.322-10.895C190.577,295.944,189.862,294.514,192.005,294.514z"
-          ></path>
-          <path
-            title="서울_BG"
-            fill="#BFD3E1"
-            stroke="#9EAEC2"
-            strokeMiterlimit="10"
-            d={innerBackgroundPathData[regionData.num]}
-          ></path>
-
-          {list.map(renderPath)}
-        </InnerMapSvg>
-        ;
-      </DetailContainer>
-    );
-  };
-
-  // ---------------------------------------------------------------------------------
-
-  /** 경기 031 */
-	export const GyeonggiPath = () => {
-    const regionData = { num: '031', name: '경기', order: 1 };
-    return (
-      <>
-        <MapPath
-          title="경기 지도 배경"
-          id="totalMap_031"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
-          d={backgroundPathData[regionData.num]}
-        ></MapPath>
-
+        ></path>
         <path
-          title="경기 외각선"
-          fill="#9EAEC2"
-          d="M224.013,159.703c0.157,0,0.306,0.022,0.455,0.069c0.355,0.111,0.665,0.416,0.921,0.906
+          title="서울_BG"
+          fill="#BFD3E1"
+          stroke="#9EAEC2"
+          strokeMiterlimit="10"
+          d={innerBackgroundPathData[regionData.num]}
+        ></path>
+
+        {list.map(renderPath)}
+      </InnerMapSvg>
+      ;
+    </DetailContainer>
+  );
+};
+
+// ---------------------------------------------------------------------------------
+
+/** 경기 031 */
+export const GyeonggiPath = (props) => {
+  const regionData = { num: '031', name: '경기', order: 1 };
+
+  let color;
+
+  if (props.hoverEvent === regionData.name)
+    color = getColorValue(regionAvgValue(regionData.order))[1];
+  else color = getColorValue(regionAvgValue(regionData.order))[0];
+
+  return (
+    <>
+      <MapPath
+        title="경기 지도 배경"
+        id="totalMap_031"
+        fillColor={color}
+        onMouseEnter={() => props.hoverChange(regionData.name)}
+        onMouseOut={() => props.hoverChange('')}
+        d={backgroundPathData[regionData.num]}
+      ></MapPath>
+
+      <path
+        title="경기 외각선"
+        fill="#9EAEC2"
+        d="M224.013,159.703c0.157,0,0.306,0.022,0.455,0.069c0.355,0.111,0.665,0.416,0.921,0.906
 													c0.715,1.372,0.73,3.643,0.427,4.604c-0.745,2.364-0.599,6.526,0.313,8.907c0.478,1.248,1.921,2.094,3.195,2.841
 													c0.503,0.295,0.978,0.574,1.281,0.815c1.482,1.178,3.468,2.457,5.183,3.336c1.52,0.78,2.602,1.463,4.08,2.416
 													c0.387,0.249,1.099,0.914,1.827,1.661c-0.394-0.103-0.833-0.154-1.321-0.154c-0.689,0-1.398,0.1-2.024,0.188
@@ -685,12 +701,12 @@ const MapNameButton = styled.button`
 													c-1.491-0.962-2.607-1.666-4.164-2.465c-1.637-0.84-3.587-2.093-5.017-3.229c-1.115-0.889-3.646-1.875-4.164-3.23
 													c-0.872-2.277-0.94-6.195-0.293-8.249c0.521-1.649,0.293-6.048-2.003-6.766C224.513,158.739,224.262,158.703,224.013,158.703
 													L224.013,158.703z"
-        ></path>
+      ></path>
 
-        <path
-          title="경기 외각선"
-          fill="#9EAEC2"
-          d="M279.401,79.396c0.005,0.001,0.01,0.003,0.016,0.005c0.684,0.212,1.064,2.021,1.128,5.375
+      <path
+        title="경기 외각선"
+        fill="#9EAEC2"
+        d="M279.401,79.396c0.005,0.001,0.01,0.003,0.016,0.005c0.684,0.212,1.064,2.021,1.128,5.375
 													c0.006,0.356,0.013,0.682,0.025,0.963c0.042,1.049,0.897,1.899,1.944,1.936c0.06,0.002,0.119,0.003,0.178,0.003
 													c0.97,0,1.83-0.294,2.536-0.536l0.066-0.022c0.288-0.099,0.604-0.208,0.855-0.254c0.007,0.032,0.014,0.064,0.02,0.096
 													c0.083,0.39,0.195,0.923,0.414,1.493c0.403,1.05,0.93,2.125,1.395,3.071c0.564,1.152,1.146,2.343,1.512,3.452
@@ -933,355 +949,360 @@ const MapNameButton = styled.button`
 													c-0.664,0.227-1.402,0.482-2.212,0.482c-0.047,0-0.094,0-0.141-0.002c-0.532-0.019-0.961-0.443-0.982-0.977
 													c-0.012-0.276-0.019-0.594-0.024-0.94c-0.039-2.02-0.113-5.78-1.832-6.313C279.532,78.39,279.383,78.286,279.264,78.156
 													L279.264,78.156z"
-        ></path>
-      </>
+      ></path>
+    </>
+  );
+};
+
+export const GyeonggiInner = (props) => {
+  const regionData = { num: '031', name: '경기' };
+  const list = [
+    {
+      name: '가평',
+      district: '군',
+      left: '297px',
+      top: '161px',
+      station: ['가평', '설악면'],
+    },
+    {
+      name: '고양',
+      district: '시',
+      left: '126px',
+      top: '200px',
+      station: ['행신동', '식사동', '백마로(마두역)', '신원동', '주엽동'],
+    },
+    {
+      name: '과천',
+      district: '시',
+      left: '179px',
+      top: '260px',
+      station: ['별양동', '과천동'],
+    },
+    {
+      name: '광명',
+      district: '시',
+      left: '137px',
+      top: '251px',
+      station: ['철산동', '소하동'],
+    },
+    {
+      name: '광주',
+      district: '시',
+      left: '251px',
+      top: '304px',
+      station: ['경안동', '오포1동', '곤지암'],
+    },
+    {
+      name: '구리',
+      district: '시',
+      left: '207px',
+      top: '210px',
+      station: ['교문동', '동구동'],
+    },
+    {
+      name: '군포',
+      district: '시',
+      left: '140px',
+      top: '333px',
+      station: ['당동', '산본동'],
+    },
+    {
+      name: '김포',
+      district: '시',
+      left: '62px',
+      top: '189px',
+      station: ['사우동', '고촌읍', '월곶면', '한강신도시', '한강로'],
+    },
+    {
+      name: '남양주',
+      district: '시',
+      left: '253px',
+      top: '203px',
+      station: [
+        '금곡동',
+        '오남읍',
+        '별내동',
+        '화도읍',
+        '경춘로',
+        '와부읍',
+        '진접읍',
+      ],
+    },
+    {
+      name: '동두천',
+      district: '시',
+      left: '206px',
+      top: '124px',
+      station: ['보산동'],
+    },
+    {
+      name: '부천',
+      district: '시',
+      left: '90px',
+      top: '254px',
+      station: ['소사본동', '내동', '중동', '오정동', '송내대로(중동)'],
+    },
+    {
+      name: '성남',
+      district: '시',
+      left: '209px',
+      top: '291px',
+      station: [
+        '대왕판교로(백현동)',
+        '단대동',
+        '정자동',
+        '수내동',
+        '성남대로(모란역)',
+        '복정동',
+        '운중동',
+        '상대원동',
+      ],
+    },
+    {
+      name: '수원',
+      district: '시',
+      left: '182px',
+      top: '342px',
+      station: [
+        '신풍동',
+        '인계동',
+        '광교동',
+        '영통동',
+        '천천동',
+        '경수대로(동수원)',
+        '고색동',
+        '호매실',
+      ],
+    },
+    {
+      name: '시흥',
+      district: '시',
+      left: '83px',
+      top: '297px',
+      station: [
+        '정왕동',
+        '시화산단',
+        '대야동',
+        '목감동',
+        '장현동',
+        '서해안로',
+        '배곧동',
+      ],
+    },
+    {
+      name: '안산',
+      district: '시',
+      left: '97px',
+      top: '338px',
+      station: [
+        '대부동',
+        '호수동',
+        '중앙대로(고잔동)',
+        '고잔동',
+        '원시동',
+        '본오동',
+        '원곡동',
+        '부곡동1',
+      ],
+    },
+    {
+      name: '안성',
+      district: '시',
+      left: '240px',
+      top: '425px',
+      station: ['봉산동', '공도읍', '죽산면'],
+    },
+    {
+      name: '안양',
+      district: '시',
+      left: '126px',
+      top: '292px',
+      station: ['안양8동', '부림동', '호계3동', '안양2동'],
+    },
+    {
+      name: '양주',
+      district: '시',
+      left: '164px',
+      top: '137px',
+      station: ['백석읍', '고읍'],
+    },
+    {
+      name: '양평',
+      district: '군',
+      left: '327px',
+      top: '273px',
+      station: ['용문면', '양평읍'],
+    },
+    {
+      name: '여주',
+      district: '시',
+      left: '336px',
+      top: '343px',
+      station: ['중앙동(경기)', '대신면', '가남읍'],
+    },
+    {
+      name: '연천',
+      district: '군',
+      left: '182px',
+      top: '59px',
+      station: ['연천(DMZ)', '연천', '전곡'],
+    },
+    {
+      name: '오산',
+      district: '시',
+      left: '165px',
+      top: '382px',
+      station: ['오산동', '금암로(신장동)'],
+    },
+    {
+      name: '용인',
+      district: '시',
+      left: '222px',
+      top: '364px',
+      station: [
+        '김량장동',
+        '수지',
+        '기흥',
+        '중부대로(구갈동)',
+        '모현읍',
+        '이동읍',
+        '백암면',
+      ],
+    },
+    {
+      name: '의왕',
+      district: '시',
+      left: '168px',
+      top: '301px',
+      station: ['부곡3동', '고천동'],
+    },
+    {
+      name: '의정부',
+      district: '시',
+      left: '177px',
+      top: '179px',
+      station: ['의정부동', '의정부1동', '송산3동'],
+    },
+    {
+      name: '이천',
+      district: '시',
+      left: '282px',
+      top: '358px',
+      station: ['설성면', '창전동', '장호원읍', '부발읍'],
+    },
+    {
+      name: '파주',
+      district: '시',
+      left: '116px',
+      top: '149px',
+      station: ['금촌동', '운정', '파주', '파주읍'],
+    },
+    {
+      name: '평택',
+      district: '시',
+      left: '163px',
+      top: '433px',
+      station: ['비전동', '안중', '평택항', '송북동', '청북읍', '고덕동'],
+    },
+    {
+      name: '포천',
+      district: '시',
+      left: '255px',
+      top: '95px',
+      station: ['관인면', '선단동', '일동면'],
+    },
+    {
+      name: '하남',
+      district: '시',
+      left: '241px',
+      top: '253px',
+      station: ['신장동', '미사'],
+    },
+    {
+      name: '화성',
+      district: '시',
+      left: '111px',
+      top: '387px',
+      station: [
+        '남양읍',
+        '향남읍',
+        '동탄',
+        '우정읍',
+        '청계동',
+        '새솔동',
+        '봉담읍',
+        '서신면',
+      ],
+    },
+  ];
+
+  const { result } = filterStationReturnValue(props, list);
+
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
+    return (
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: list[key].left,
+          top: list[key].top,
+        }}
+        value={getColorValue(result[key])[2]}
+      >
+        {el.name}
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
+      </InnerMapButton>
+    );
+  };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
+      ></InnerMapPath>
     );
   };
 
-	export const GyeonggiInner = (props) => {
-    const regionData = { num: '031', name: '경기' };
-    const list = [
-      {
-        name: '가평',
-        district: '군',
-        left: '297px',
-        top: '161px',
-        station: ['가평', '설악면'],
-      },
-      {
-        name: '고양',
-        district: '시',
-        left: '126px',
-        top: '200px',
-        station: ['행신동', '식사동', '백마로(마두역)', '신원동', '주엽동'],
-      },
-      {
-        name: '과천',
-        district: '시',
-        left: '179px',
-        top: '260px',
-        station: ['별양동', '과천동'],
-      },
-      {
-        name: '광명',
-        district: '시',
-        left: '137px',
-        top: '251px',
-        station: ['철산동', '소하동'],
-      },
-      {
-        name: '광주',
-        district: '시',
-        left: '251px',
-        top: '304px',
-        station: ['경안동', '오포1동', '곤지암'],
-      },
-      {
-        name: '구리',
-        district: '시',
-        left: '207px',
-        top: '210px',
-        station: ['교문동', '동구동'],
-      },
-      {
-        name: '군포',
-        district: '시',
-        left: '140px',
-        top: '333px',
-        station: ['당동', '산본동'],
-      },
-      {
-        name: '김포',
-        district: '시',
-        left: '62px',
-        top: '189px',
-        station: ['사우동', '고촌읍', '월곶면', '한강신도시', '한강로'],
-      },
-      {
-        name: '남양주',
-        district: '시',
-        left: '253px',
-        top: '203px',
-        station: [
-          '금곡동',
-          '오남읍',
-          '별내동',
-          '화도읍',
-          '경춘로',
-          '와부읍',
-          '진접읍',
-        ],
-      },
-      {
-        name: '동두천',
-        district: '시',
-        left: '206px',
-        top: '124px',
-        station: ['보산동'],
-      },
-      {
-        name: '부천',
-        district: '시',
-        left: '90px',
-        top: '254px',
-        station: ['소사본동', '내동', '중동', '오정동', '송내대로(중동)'],
-      },
-      {
-        name: '성남',
-        district: '시',
-        left: '209px',
-        top: '291px',
-        station: [
-          '대왕판교로(백현동)',
-          '단대동',
-          '정자동',
-          '수내동',
-          '성남대로(모란역)',
-          '복정동',
-          '운중동',
-          '상대원동',
-        ],
-      },
-      {
-        name: '수원',
-        district: '시',
-        left: '182px',
-        top: '342px',
-        station: [
-          '신풍동',
-          '인계동',
-          '광교동',
-          '영통동',
-          '천천동',
-          '경수대로(동수원)',
-          '고색동',
-          '호매실',
-        ],
-      },
-      {
-        name: '시흥',
-        district: '시',
-        left: '83px',
-        top: '297px',
-        station: [
-          '정왕동',
-          '시화산단',
-          '대야동',
-          '목감동',
-          '장현동',
-          '서해안로',
-          '배곧동',
-        ],
-      },
-      {
-        name: '안산',
-        district: '시',
-        left: '97px',
-        top: '338px',
-        station: [
-          '대부동',
-          '호수동',
-          '중앙대로(고잔동)',
-          '고잔동',
-          '원시동',
-          '본오동',
-          '원곡동',
-          '부곡동1',
-        ],
-      },
-      {
-        name: '안성',
-        district: '시',
-        left: '240px',
-        top: '425px',
-        station: ['봉산동', '공도읍', '죽산면'],
-      },
-      {
-        name: '안양',
-        district: '시',
-        left: '126px',
-        top: '292px',
-        station: ['안양8동', '부림동', '호계3동', '안양2동'],
-      },
-      {
-        name: '양주',
-        district: '시',
-        left: '164px',
-        top: '137px',
-        station: ['백석읍', '고읍'],
-      },
-      {
-        name: '양평',
-        district: '군',
-        left: '327px',
-        top: '273px',
-        station: ['용문면', '양평읍'],
-      },
-      {
-        name: '여주',
-        district: '시',
-        left: '336px',
-        top: '343px',
-        station: ['중앙동(경기)', '대신면', '가남읍'],
-      },
-      {
-        name: '연천',
-        district: '군',
-        left: '182px',
-        top: '59px',
-        station: ['연천(DMZ)', '연천', '전곡'],
-      },
-      {
-        name: '오산',
-        district: '시',
-        left: '165px',
-        top: '382px',
-        station: ['오산동', '금암로(신장동)'],
-      },
-      {
-        name: '용인',
-        district: '시',
-        left: '222px',
-        top: '364px',
-        station: [
-          '김량장동',
-          '수지',
-          '기흥',
-          '중부대로(구갈동)',
-          '모현읍',
-          '이동읍',
-          '백암면',
-        ],
-      },
-      {
-        name: '의왕',
-        district: '시',
-        left: '168px',
-        top: '301px',
-        station: ['부곡3동', '고천동'],
-      },
-      {
-        name: '의정부',
-        district: '시',
-        left: '177px',
-        top: '179px',
-        station: ['의정부동', '의정부1동', '송산3동'],
-      },
-      {
-        name: '이천',
-        district: '시',
-        left: '282px',
-        top: '358px',
-        station: ['설성면', '창전동', '장호원읍', '부발읍'],
-      },
-      {
-        name: '파주',
-        district: '시',
-        left: '116px',
-        top: '149px',
-        station: ['금촌동', '운정', '파주', '파주읍'],
-      },
-      {
-        name: '평택',
-        district: '시',
-        left: '163px',
-        top: '433px',
-        station: ['비전동', '안중', '평택항', '송북동', '청북읍', '고덕동'],
-      },
-      {
-        name: '포천',
-        district: '시',
-        left: '255px',
-        top: '95px',
-        station: ['관인면', '선단동', '일동면'],
-      },
-      {
-        name: '하남',
-        district: '시',
-        left: '241px',
-        top: '253px',
-        station: ['신장동', '미사'],
-      },
-      {
-        name: '화성',
-        district: '시',
-        left: '111px',
-        top: '387px',
-        station: [
-          '남양읍',
-          '향남읍',
-          '동탄',
-          '우정읍',
-          '청계동',
-          '새솔동',
-          '봉담읍',
-          '서신면',
-        ],
-      },
-    ];
-
-    const { result } = filterStationReturnValue(props, list);
-
-    const renderButton = (el, key) => {
-      const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
-      return (
-        <InnerMapButton
-          key={key}
-          id={id}
-          style={{
-            left: list[key].left,
-            top: list[key].top,
-          }}
-          value={getColorValue(result[key])[2]}
-        >
-          {el.name}
-          <strong>{result[key] === 0 ? '-' : result[key]}</strong>
-        </InnerMapButton>
-      );
-    };
-    const renderPath = (el, key) => {
-      return (
-        <InnerMapPath
-          key={key}
-          id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
-          title={`${regionData.name}_${el.name}${el.district}`}
-          d={
-            pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]
-          }
-          fillColor={getColorValue(result[key])[0]}
-          fillHoverColor={getColorValue(result[key])[1]}
-        ></InnerMapPath>
-      );
-    };
-
-    return (
-      <DetailContainer regionNum={regionData.num}>
-        {list.map(renderButton)}
-        <InnerMapSvg>
-          <path
-            title="경기_BG"
-            fill="#BFD3E1"
-            stroke="#9EAEC2"
-            d={innerBackgroundPathData[regionData.num]}
-          ></path>
-
-          {list.map(renderPath)}
-        </InnerMapSvg>
-      </DetailContainer>
-    );
-  };
-
-  // ---------------------------------------------------------------------------------
-
-  /** 인천 032 */
-  export const IncheonPath = () => {
-    const regionData = { num: '032', name: '인천', order: 2 };
-    return (
-      <>
+  return (
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
+      <InnerMapSvg>
         <path
-          title="인천 외각선"
-          fill="#91A5BE"
-          d="M231.436,220.113c0.371-0.284,0.756-0.532,1.129-0.771c0.644-0.413,1.252-0.804,1.646-1.302
+          title="경기_BG"
+          fill="#BFD3E1"
+          stroke="#9EAEC2"
+          d={innerBackgroundPathData[regionData.num]}
+        ></path>
+
+        {list.map(renderPath)}
+      </InnerMapSvg>
+    </DetailContainer>
+  );
+};
+
+// ---------------------------------------------------------------------------------
+
+/** 인천 032 */
+export const IncheonPath = (props) => {
+  const regionData = { num: '032', name: '인천', order: 2 };
+
+  let color;
+
+  if (props.hoverEvent === regionData.name)
+    color = getColorValue(regionAvgValue(regionData.order))[1];
+  else color = getColorValue(regionAvgValue(regionData.order))[0];
+
+  return (
+    <>
+      <path
+        title="인천 외각선"
+        fill="#91A5BE"
+        d="M231.436,220.113c0.371-0.284,0.756-0.532,1.129-0.771c0.644-0.413,1.252-0.804,1.646-1.302
 											c2.215-2.8,5.993-8.894,4.963-12.491c-0.066-0.096-0.12-0.203-0.151-0.323c-0.095-0.373-0.486-0.586-1.3-0.951
 											c-0.593-0.268-1.265-0.568-1.801-1.103c-1.523-1.51-1.91-3.405-1.01-4.948c0.323-0.558,0.701-1.044,1.065-1.516
 											c0.563-0.728,1.094-1.414,1.32-2.236c0.531-1.925,1.328-3.405,2.49-4.646c0.227-0.652,0.596-1.198,1.042-1.668
@@ -1294,11 +1315,11 @@ const MapNameButton = styled.button`
 											c-0.243,2.839,1.585,4.402,2.214,6.947c0.371,1.506-0.268,3.401,0.501,4.795c0.556,1.007,4.372,1.57,4.313,2.99
 											c-1.291-0.215-8.888,0.226-8.905,0.736c-0.048,1.303,4.066,1.722,5.287,1.539c1.896-0.283,4.066-0.443,5.771-1.256
 											c1.205-0.574,2.443-2.442,3.759-3.146C230.966,220.813,231.092,220.376,231.436,220.113z"
-        ></path>
-        <path
-          title="인천 외각선"
-          fill="#91A5BE"
-          d="M211.332,181.228c-0.072-1.071-1.163-1.941-1.42-2.994c-0.232-0.941-0.015-1.946-0.275-2.879
+      ></path>
+      <path
+        title="인천 외각선"
+        fill="#91A5BE"
+        d="M211.332,181.228c-0.072-1.071-1.163-1.941-1.42-2.994c-0.232-0.941-0.015-1.946-0.275-2.879
 											c-0.258-0.918-0.617-1.529-0.712-2.528c-0.065-0.688-0.097-1.381-0.114-2.073c-0.071-1.471-0.008-2.974,0.011-4.315
 											c0.014-0.939,0.077-1.883,0.088-2.799c0.011-0.915-0.033-1.803-0.233-2.627c-0.04-0.165-0.087-0.328-0.141-0.488
 											c-0.107-0.319-0.243-0.628-0.415-0.924c-0.258-0.444-0.594-0.858-1.031-1.237c-1.681-1.449-2.223-2.015-3.826-3.57
@@ -1309,20 +1330,20 @@ const MapNameButton = styled.button`
 											c1.563-0.057,2.753,0.049,4.216-0.213c1.237-0.222,2.032,0.331,2.933,0.767c0.113,0.05,0.519,0.213,0.97,0.362
 											c0.143,0.035,0.286,0.064,0.439,0.08c1.364,0.147,1.411-1.092,1.614-2.343c0.023-0.462,0.06-0.898,0.18-1.221
 											C209.999,182.814,211.412,182.389,211.332,181.228z"
-        ></path>
-        <path
-          title="인천 외각선"
-          fill="#91A5BE"
-          d="M174.73,160.544c0.66-0.629,0.547-0.79,1.587-0.906c0.858-0.097,1.703-0.113,2.606-0.113
+      ></path>
+      <path
+        title="인천 외각선"
+        fill="#91A5BE"
+        d="M174.73,160.544c0.66-0.629,0.547-0.79,1.587-0.906c0.858-0.097,1.703-0.113,2.606-0.113
 													c0.887,0,1.846,0.106,2.608-0.225c0.587-0.253,1.173-0.665,1.697-0.908c0.832-1.168,2.611-2.253,2.267-3.968
 													c-0.523-2.601-3.203-0.5-4.763-1.042c-0.714-0.247-1.223-0.963-2.03-1.116c-0.874-0.166-1.798-0.208-2.615-0.331
 													c-1.944-0.293-3.365,1.222-3.624,3.057c-0.108,0.765-0.18,1.545-0.425,2.267c-0.242,0.71-0.875,1.659-0.821,2.381
 													C171.361,161.601,173.744,161.485,174.73,160.544z"
-        ></path>
-        <path
-          title="인천 외각선"
-          fill="#91A5BE"
-          d="M184.08,167.004c-0.12-1.073,0.371-1.643,0.78-2.505c0.207-0.436,0.892-2.072,0.468-2.539
+      ></path>
+      <path
+        title="인천 외각선"
+        fill="#91A5BE"
+        d="M184.08,167.004c-0.12-1.073,0.371-1.643,0.78-2.505c0.207-0.436,0.892-2.072,0.468-2.539
 													c-0.304-0.334-2.121,0.2-2.552,0.388c-0.422,0.183-0.764,0.29-1.246,0.351c-0.541,0.068-0.735,0.151-0.851,0.737
 													c-0.173,0.892-0.229,1.844-0.228,2.775c0.004,1.258-0.701,1.065-1.477,1.743c-0.421,0.368-0.64,0.825-0.167,1.15
 													c0.273,0.188,0.809,0.158,1.121,0.29c0.773,0.326,1.316,1.174,1.953,1.735c0.631,0.556,1.34,0.995,1.897,1.556
@@ -1330,11 +1351,11 @@ const MapNameButton = styled.button`
 													c0.398,1.283,1.082,0.812,1.909,0.296c0.677-0.42,1.341-0.966,1.97-1.431c0.795-0.587,0.869-1.025,0.922-2.025
 													c0.021-0.442,0.104-0.873-0.003-1.3c-0.089-0.355-0.503-0.893-0.62-1.25c-0.843-0.396-1.763-0.136-2.664-0.228
 													c-0.713-0.071-1.248-0.972-1.697-1.483C185.122,168.455,184.188,167.957,184.08,167.004z"
-        ></path>
-        <path
-          title="인천 외각선"
-          fill="#91A5BE"
-          d="M214.737,197.803c0.688-0.034,1.253-0.424,1.19-1.19c-0.146-1.733-2.031-1.438-3.189-1.063
+      ></path>
+      <path
+        title="인천 외각선"
+        fill="#91A5BE"
+        d="M214.737,197.803c0.688-0.034,1.253-0.424,1.19-1.19c-0.146-1.733-2.031-1.438-3.189-1.063
 													c-1.271,0.414-2.422,1.063-3.782,0.642c-0.501-0.156-1.418-0.396-1.953-0.176c-0.536,0.223-0.896,1.127-1.138,1.616
 													c-0.281,0.574-0.715,0.955-0.995,1.521c-0.327,0.659-0.673,0.905-1.359,1.104c-1.383,0.399-2.713,0.508-4.16,0.65
 													c-1.249,0.123-2.949,0.333-3.905,1.179c-0.938,0.829-2.122,1.56-3.223,2.232c-0.849,0.52-2.958,1.008-3.071,2.146
@@ -1346,358 +1367,365 @@ const MapNameButton = styled.button`
 													c0.573-0.216,1.349-0.132,1.776-0.611c0.181-0.203,0.29-0.475,0.498-0.684c0.241-0.242,0.458-0.304,0.384-0.712
 													c-0.135-0.752-1.064-1.747-1.604-2.211c-0.342-0.295-0.663-0.626-1.012-0.899c-0.333-0.265-0.875-0.467-1.076-0.842
 													C213.02,197.596,214.233,197.828,214.737,197.803z"
-        ></path>
-        <MapPath
-          title="인천 지도 배경"
-          id="totalMap_032"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
-          d={backgroundPathData[regionData.num]}
-        ></MapPath>
-      </>
+      ></path>
+      <MapPath
+        title="인천 지도 배경"
+        id="totalMap_032"
+        fillColor={color}
+        onMouseEnter={() => props.hoverChange(regionData.name)}
+        onMouseOut={() => props.hoverChange('')}
+        d={backgroundPathData[regionData.num]}
+      ></MapPath>
+    </>
+  );
+};
+
+export const IncheonInner = (props) => {
+  const regionData = { num: '032', name: '인천' };
+  const list = [
+    {
+      name: '강화',
+      district: '군',
+      left: '253px',
+      top: '140px',
+      station: ['송해', '길상', '석모리'],
+    },
+    {
+      name: '계양',
+      district: '구',
+      left: '408px',
+      top: '242px',
+      station: ['계산'],
+    },
+    {
+      name: '미추홀',
+      district: '구',
+      left: '339px',
+      top: '333px',
+      station: ['숭의', '석바위', '주안'],
+    },
+    {
+      name: '남동구',
+      district: '',
+      left: '408px',
+      top: '342px',
+      station: ['구월동', '남동', '고잔', '서창', '논현'],
+    },
+    {
+      name: '동구',
+      district: '',
+      left: '338px',
+      top: '283px',
+      station: ['송림', '송현'],
+    },
+    {
+      name: '부평',
+      district: '구',
+      left: '403px',
+      top: '292px',
+      station: ['부평역', '부평', '삼산'],
+    },
+    {
+      name: '서구',
+      district: '',
+      left: '350px',
+      top: '225px',
+      station: [
+        '연희',
+        '검단',
+        '석남',
+        '청라',
+        '원당',
+        '경인항',
+        '중봉',
+        '인천 북항',
+      ],
+    },
+    {
+      name: '연수',
+      district: '구',
+      left: '367px',
+      top: '378px',
+      station: ['동춘', '송도', '아암', '인천 신항'],
+    },
+    {
+      name: '옹진',
+      district: '군',
+      left: '71px',
+      top: '269px',
+      station: ['덕적도', '백령도', '영흥', '연평도', '울도'],
+    },
+    {
+      name: '중구',
+      district: '',
+      left: '261px',
+      top: '300px',
+      station: ['신흥', '운서', '인천항', '서해', '영종', '인천 남항'],
+    },
+  ];
+
+  const { result } = filterStationReturnValue(props, list);
+  const renderButton = (el, key) => {
+    const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
+    return (
+      <InnerMapButton
+        key={key}
+        id={id}
+        style={{
+          left: list[key].left,
+          top: list[key].top,
+        }}
+        value={getColorValue(result[key])[2]}
+      >
+        {el.name}
+        <strong>{result[key] === 0 ? '-' : result[key]}</strong>
+      </InnerMapButton>
+    );
+  };
+  const renderPath = (el, key) => {
+    return (
+      <InnerMapPath
+        key={key}
+        id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
+        title={`${regionData.name}_${el.name}${el.district}`}
+        d={pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]}
+        fillColor={getColorValue(result[key])[0]}
+        fillHoverColor={getColorValue(result[key])[1]}
+      ></InnerMapPath>
     );
   };
 
-  export const IncheonInner = (props) => {
-    const regionData = { num: '032', name: '인천' };
-    const list = [
-      {
-        name: '강화',
-        district: '군',
-        left: '253px',
-        top: '140px',
-        station: ['송해', '길상', '석모리'],
-      },
-      {
-        name: '계양',
-        district: '구',
-        left: '408px',
-        top: '242px',
-        station: ['계산'],
-      },
-      {
-        name: '미추홀',
-        district: '구',
-        left: '339px',
-        top: '333px',
-        station: ['숭의', '석바위', '주안'],
-      },
-      {
-        name: '남동구',
-        district: '',
-        left: '408px',
-        top: '342px',
-        station: ['구월동', '남동', '고잔', '서창', '논현'],
-      },
-      {
-        name: '동구',
-        district: '',
-        left: '338px',
-        top: '283px',
-        station: ['송림', '송현'],
-      },
-      {
-        name: '부평',
-        district: '구',
-        left: '403px',
-        top: '292px',
-        station: ['부평역', '부평', '삼산'],
-      },
-      {
-        name: '서구',
-        district: '',
-        left: '350px',
-        top: '225px',
-        station: [
-          '연희',
-          '검단',
-          '석남',
-          '청라',
-          '원당',
-          '경인항',
-          '중봉',
-          '인천 북항',
-        ],
-      },
-      {
-        name: '연수',
-        district: '구',
-        left: '367px',
-        top: '378px',
-        station: ['동춘', '송도', '아암', '인천 신항'],
-      },
-      {
-        name: '옹진',
-        district: '군',
-        left: '71px',
-        top: '269px',
-        station: ['덕적도', '백령도', '영흥', '연평도', '울도'],
-      },
-      {
-        name: '중구',
-        district: '',
-        left: '261px',
-        top: '300px',
-        station: ['신흥', '운서', '인천항', '서해', '영종', '인천 남항'],
-      },
-    ];
+  return (
+    <DetailContainer regionNum={regionData.num}>
+      {list.map(renderButton)}
 
-    const { result } = filterStationReturnValue(props, list);
-    const renderButton = (el, key) => {
-      const id = `p_${regionData.num}_${String(key + 1).padStart(3, '0')}`;
-      return (
-        <InnerMapButton
-          key={key}
-          id={id}
-          style={{
-            left: list[key].left,
-            top: list[key].top,
-          }}
-          value={getColorValue(result[key])[2]}
-        >
-          {el.name}
-          <strong>{result[key] === 0 ? '-' : result[key]}</strong>
-        </InnerMapButton>
-      );
-    };
-    const renderPath = (el, key) => {
-      return (
-        <InnerMapPath
-          key={key}
-          id={`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`}
-          title={`${regionData.name}_${el.name}${el.district}`}
-          d={
-            pathData[`m_${regionData.num}_${String(key + 1).padStart(3, '0')}`]
-          }
-          fillColor={getColorValue(result[key])[0]}
-          fillHoverColor={getColorValue(result[key])[1]}
-        ></InnerMapPath>
-      );
-    };
+      <InnerMapSvg>
+        <rect
+          title="인천_백령도_BOX"
+          x="15.356"
+          y="39.72"
+          opacity="0.5"
+          fill="#FFFFFF"
+          stroke="#9EAEC2"
+          strokeMiterlimit="10"
+          width="106"
+          height="78.667"
+        ></rect>
+        <rect
+          title="인천_연평도_BOX"
+          x="15.356"
+          y="173.054"
+          opacity="0.5"
+          fill="#FFFFFF"
+          stroke="#9EAEC2"
+          strokeMiterlimit="10"
+          width="43.333"
+          height="28.667"
+        ></rect>
+        <rect
+          title="인천_울도_BOX"
+          x="15.356"
+          y="475.721"
+          opacity="0.5"
+          fill="#FFFFFF"
+          stroke="#9EAEC2"
+          strokeMiterlimit="10"
+          width="43.333"
+          height="28.666"
+        ></rect>
 
-    return (
-      <DetailContainer regionNum={regionData.num}>
-        {list.map(renderButton)}
+        <path
+          title="인천_BG"
+          fill="#CFCFCF"
+          stroke="#9EAEC2"
+          strokeMiterlimit="10"
+          d={innerBackgroundPathData[regionData.num]}
+        ></path>
 
-        <InnerMapSvg>
-          <rect
-            title="인천_백령도_BOX"
-            x="15.356"
-            y="39.72"
-            opacity="0.5"
-            fill="#FFFFFF"
-            stroke="#9EAEC2"
-            strokeMiterlimit="10"
-            width="106"
-            height="78.667"
-          ></rect>
-          <rect
-            title="인천_연평도_BOX"
-            x="15.356"
-            y="173.054"
-            opacity="0.5"
-            fill="#FFFFFF"
-            stroke="#9EAEC2"
-            strokeMiterlimit="10"
-            width="43.333"
-            height="28.667"
-          ></rect>
-          <rect
-            title="인천_울도_BOX"
-            x="15.356"
-            y="475.721"
-            opacity="0.5"
-            fill="#FFFFFF"
-            stroke="#9EAEC2"
-            strokeMiterlimit="10"
-            width="43.333"
-            height="28.666"
-          ></rect>
+        {list.map(renderPath)}
 
-          <path
-            title="인천_BG"
-            fill="#CFCFCF"
-            stroke="#9EAEC2"
-            strokeMiterlimit="10"
-            d={innerBackgroundPathData[regionData.num]}
-          ></path>
-
-          {list.map(renderPath)}
-
-          <g className="eng_map_hide" title="인천_섬_TXT">
-            <g title="인천_울도_TXTBG">
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M31.85,463.409v0.924h2.872v2.223h-5.798v1.001
+        <g className="eng_map_hide" title="인천_섬_TXT">
+          <g title="인천_울도_TXTBG">
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M31.85,463.409v0.924h2.872v2.223h-5.798v1.001
 						h6.095v0.704h-6.975v-2.365h5.787v-0.88h-5.809v-0.683h2.927v-0.924h-4.005v-0.726h8.911v0.726H31.85z M27.933,460.328
 						c0-1.111,1.298-1.716,3.465-1.716c2.178,0,3.466,0.604,3.466,1.716s-1.288,1.705-3.466,1.705
 						C29.231,462.033,27.933,461.439,27.933,460.328z M28.857,460.328c0,0.66,0.924,1.035,2.541,1.035s2.542-0.375,2.542-1.035
 						s-0.924-1.033-2.542-1.033S28.857,459.667,28.857,460.328z"
-              ></path>
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M44.918,466.378v0.748h-8.966v-0.748h4.016
+            ></path>
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M44.918,466.378v0.748h-8.966v-0.748h4.016
 						v-2.529h-2.872v-4.555h6.689v0.736h-5.787v3.092h5.886v0.727h-3.003v2.529H44.918z"
-              ></path>
-            </g>
-            <g title="인천_연평도_TXTBG">
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M27.161,161.644
+            ></path>
+          </g>
+          <g title="인천_연평도_TXTBG">
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M27.161,161.644
 						c-0.462,0.583-1.177,0.935-2.024,0.935c-1.452,0-2.541-1.034-2.541-2.475c0-1.441,1.089-2.476,2.541-2.476
 						c0.847,0,1.551,0.352,2.014,0.924h2.508v-1.541h0.913v7.283h-0.913v-2.651H27.161z M25.137,161.787
 						c0.958,0,1.672-0.704,1.672-1.683c0-0.979-0.715-1.684-1.672-1.684c-0.968,0-1.683,0.704-1.683,1.684
 						C23.454,161.083,24.169,161.787,25.137,161.787z M30.847,165.913v0.737h-6.59v-3.103h0.913v2.365H30.847z M27.535,159.279
 						c0.088,0.253,0.132,0.528,0.132,0.825c0,0.286-0.044,0.561-0.132,0.814h2.124v-1.639H27.535z"
-              ></path>
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M37.314,162.172
+            ></path>
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M37.314,162.172
 						c-1.903,0.297-4.125,0.33-5.721,0.33l-0.099-0.748c0.374,0,0.803,0,1.243-0.011v-3.268h-0.979v-0.726h5.192v0.726h-0.979v3.157
 						c0.44-0.033,0.88-0.077,1.287-0.132L37.314,162.172z M39.614,165.065c0,1.144-1.243,1.793-3.279,1.793
 						c-2.046,0-3.289-0.649-3.289-1.793c0-1.133,1.243-1.771,3.289-1.771C38.371,163.294,39.614,163.932,39.614,165.065z
 						M33.607,161.732c0.484-0.011,0.99-0.033,1.485-0.055v-3.202h-1.485V161.732z M38.723,165.065c0-0.671-0.891-1.078-2.388-1.078
 						c-1.496,0-2.387,0.407-2.387,1.078c0,0.693,0.891,1.089,2.387,1.089C37.832,166.155,38.723,165.759,38.723,165.065z
 						M38.679,161.27H37.05v-0.737h1.628v-1.034H37.05v-0.737h1.628v-1.75h0.913v6.073h-0.913V161.27z"
-              ></path>
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M49.437,164.878v0.748h-8.966v-0.748h4.016
+            ></path>
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M49.437,164.878v0.748h-8.966v-0.748h4.016
 						v-2.53h-2.872v-4.555h6.689v0.737h-5.787v3.091h5.886v0.726h-3.003v2.53H49.437z"
-              ></path>
-            </g>
-            <g title="인천_백령도_TXTBG">
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M30.711,53.231h-3.829v-4.587h0.858v1.551
+            ></path>
+          </g>
+          <g title="인천_백령도_TXTBG">
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M30.711,53.231h-3.829v-4.587h0.858v1.551
 						h2.123v-1.551h0.847V53.231z M29.864,50.91h-2.123v1.595h2.123V50.91z M28.137,54.53h6.634v3.344h-0.902v-2.618h-5.732V54.53z
 						M34.771,48.017v5.908h-0.869v-2.607h-1.254v2.563H31.79v-5.688h0.858v2.387h1.254v-2.563H34.771z"
-              ></path>
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M40.766,53.331
+            ></path>
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M40.766,53.331
 						c-1.21,0.209-2.211,0.242-4.181,0.242h-0.704v-2.927h3.333v-1.353h-3.366v-0.726h4.257v2.772h-3.333v1.496
 						c1.815,0,2.772-0.044,3.906-0.253L40.766,53.331z M43.626,56.103c0,1.166-1.254,1.826-3.278,1.826c-2.035,0-3.29-0.66-3.29-1.826
 						c0-1.155,1.254-1.815,3.29-1.815C42.372,54.288,43.626,54.948,43.626,56.103z M42.724,56.103c0-0.704-0.891-1.122-2.376-1.122
 						c-1.496,0-2.398,0.418-2.398,1.122c0,0.715,0.902,1.133,2.398,1.133C41.833,57.236,42.724,56.818,42.724,56.103z M42.691,52.296
 						h-1.925V51.57h1.925v-1.276h-1.925v-0.737h1.925v-1.541h0.891v6.095h-0.891V52.296z"
-              ></path>
-              <path
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-                d="M53.438,55.883v0.748h-8.966v-0.748h4.016
+            ></path>
+            <path
+              fill="#FFFFFF"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              d="M53.438,55.883v0.748h-8.966v-0.748h4.016
 						v-2.53h-2.872v-4.555h6.689v0.737h-5.787v3.091h5.886v0.726h-3.003v2.53H53.438z"
-              ></path>
-            </g>
-            <g title="인천_울도_TXT">
-              <path
-                fill="#646464"
-                d="M31.85,463.409v0.924h2.872v2.223h-5.798v1.001h6.095v0.704h-6.975v-2.365h5.787v-0.88h-5.809v-0.683
+            ></path>
+          </g>
+          <g title="인천_울도_TXT">
+            <path
+              fill="#646464"
+              d="M31.85,463.409v0.924h2.872v2.223h-5.798v1.001h6.095v0.704h-6.975v-2.365h5.787v-0.88h-5.809v-0.683
 						h2.927v-0.924h-4.005v-0.726h8.911v0.726H31.85z M27.933,460.328c0-1.111,1.298-1.716,3.465-1.716
 						c2.178,0,3.466,0.604,3.466,1.716s-1.288,1.705-3.466,1.705C29.231,462.033,27.933,461.439,27.933,460.328z M28.857,460.328
 						c0,0.66,0.924,1.035,2.541,1.035s2.542-0.375,2.542-1.035s-0.924-1.033-2.542-1.033S28.857,459.667,28.857,460.328z"
-              ></path>
-              <path
-                fill="#646464"
-                d="M44.918,466.378v0.748h-8.966v-0.748h4.016v-2.529h-2.872v-4.555h6.689v0.736h-5.787v3.092h5.886v0.727
+            ></path>
+            <path
+              fill="#646464"
+              d="M44.918,466.378v0.748h-8.966v-0.748h4.016v-2.529h-2.872v-4.555h6.689v0.736h-5.787v3.092h5.886v0.727
 						h-3.003v2.529H44.918z"
-              ></path>
-            </g>
-            <g title="인천_연평도_TXT">
-              <path
-                fill="#646464"
-                d="M27.161,161.644c-0.462,0.583-1.177,0.935-2.024,0.935c-1.452,0-2.541-1.034-2.541-2.475
+            ></path>
+          </g>
+          <g title="인천_연평도_TXT">
+            <path
+              fill="#646464"
+              d="M27.161,161.644c-0.462,0.583-1.177,0.935-2.024,0.935c-1.452,0-2.541-1.034-2.541-2.475
 						c0-1.441,1.089-2.476,2.541-2.476c0.847,0,1.551,0.352,2.014,0.924h2.508v-1.541h0.913v7.283h-0.913v-2.651H27.161z
 						M25.137,161.787c0.958,0,1.672-0.704,1.672-1.683c0-0.979-0.715-1.684-1.672-1.684c-0.968,0-1.683,0.704-1.683,1.684
 						C23.454,161.083,24.169,161.787,25.137,161.787z M30.847,165.913v0.737h-6.59v-3.103h0.913v2.365H30.847z M27.535,159.279
 						c0.088,0.253,0.132,0.528,0.132,0.825c0,0.286-0.044,0.561-0.132,0.814h2.124v-1.639H27.535z"
-              ></path>
-              <path
-                fill="#646464"
-                d="M37.314,162.172c-1.903,0.297-4.125,0.33-5.721,0.33l-0.099-0.748c0.374,0,0.803,0,1.243-0.011v-3.268
+            ></path>
+            <path
+              fill="#646464"
+              d="M37.314,162.172c-1.903,0.297-4.125,0.33-5.721,0.33l-0.099-0.748c0.374,0,0.803,0,1.243-0.011v-3.268
 						h-0.979v-0.726h5.192v0.726h-0.979v3.157c0.44-0.033,0.88-0.077,1.287-0.132L37.314,162.172z M39.614,165.065
 						c0,1.144-1.243,1.793-3.279,1.793c-2.046,0-3.289-0.649-3.289-1.793c0-1.133,1.243-1.771,3.289-1.771
 						C38.371,163.294,39.614,163.932,39.614,165.065z M33.607,161.732c0.484-0.011,0.99-0.033,1.485-0.055v-3.202h-1.485V161.732z
 						M38.723,165.065c0-0.671-0.891-1.078-2.388-1.078c-1.496,0-2.387,0.407-2.387,1.078c0,0.693,0.891,1.089,2.387,1.089
 						C37.832,166.155,38.723,165.759,38.723,165.065z M38.679,161.27H37.05v-0.737h1.628v-1.034H37.05v-0.737h1.628v-1.75h0.913v6.073
 						h-0.913V161.27z"
-              ></path>
-              <path
-                fill="#646464"
-                d="M49.437,164.878v0.748h-8.966v-0.748h4.016v-2.53h-2.872v-4.555h6.689v0.737h-5.787v3.091h5.886v0.726
+            ></path>
+            <path
+              fill="#646464"
+              d="M49.437,164.878v0.748h-8.966v-0.748h4.016v-2.53h-2.872v-4.555h6.689v0.737h-5.787v3.091h5.886v0.726
 						h-3.003v2.53H49.437z"
-              ></path>
-            </g>
-            <g title="인천_백령도_TXT">
-              <path
-                fill="#646464"
-                d="M30.711,53.231h-3.829v-4.587h0.858v1.551h2.123v-1.551h0.847V53.231z M29.864,50.91h-2.123v1.595h2.123
+            ></path>
+          </g>
+          <g title="인천_백령도_TXT">
+            <path
+              fill="#646464"
+              d="M30.711,53.231h-3.829v-4.587h0.858v1.551h2.123v-1.551h0.847V53.231z M29.864,50.91h-2.123v1.595h2.123
 						V50.91z M28.137,54.53h6.634v3.344h-0.902v-2.618h-5.732V54.53z M34.771,48.017v5.908h-0.869v-2.607h-1.254v2.563H31.79v-5.688
 						h0.858v2.387h1.254v-2.563H34.771z"
-              ></path>
-              <path
-                fill="#646464"
-                d="M40.766,53.331c-1.21,0.209-2.211,0.242-4.181,0.242h-0.704v-2.927h3.333v-1.353h-3.366v-0.726h4.257
+            ></path>
+            <path
+              fill="#646464"
+              d="M40.766,53.331c-1.21,0.209-2.211,0.242-4.181,0.242h-0.704v-2.927h3.333v-1.353h-3.366v-0.726h4.257
 						v2.772h-3.333v1.496c1.815,0,2.772-0.044,3.906-0.253L40.766,53.331z M43.626,56.103c0,1.166-1.254,1.826-3.278,1.826
 						c-2.035,0-3.29-0.66-3.29-1.826c0-1.155,1.254-1.815,3.29-1.815C42.372,54.288,43.626,54.948,43.626,56.103z M42.724,56.103
 						c0-0.704-0.891-1.122-2.376-1.122c-1.496,0-2.398,0.418-2.398,1.122c0,0.715,0.902,1.133,2.398,1.133
 						C41.833,57.236,42.724,56.818,42.724,56.103z M42.691,52.296h-1.925V51.57h1.925v-1.276h-1.925v-0.737h1.925v-1.541h0.891v6.095
 						h-0.891V52.296z"
-              ></path>
-              <path
-                fill="#646464"
-                d="M53.438,55.883v0.748h-8.966v-0.748h4.016v-2.53h-2.872v-4.555h6.689v0.737h-5.787v3.091h5.886v0.726
+            ></path>
+            <path
+              fill="#646464"
+              d="M53.438,55.883v0.748h-8.966v-0.748h4.016v-2.53h-2.872v-4.555h6.689v0.737h-5.787v3.091h5.886v0.726
 						h-3.003v2.53H53.438z"
-              ></path>
-            </g>
+            ></path>
           </g>
-        </InnerMapSvg>
-      </DetailContainer>
-    );
-  };
+        </g>
+      </InnerMapSvg>
+    </DetailContainer>
+  );
+};
 
-  // ---------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
 
-  /** 강원 033 */
-  export const GangwonPath = () => {
-    const regionData = { num: '033', name: '강원', order: 3 };
-    return (
-      <>
-        <MapPath
-          title="강원 지도 배경"
-          id="totalMap_033"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
-          d={backgroundPathData[regionData.num]}
-        ></MapPath>
+/** 강원 033 */
+export const GangwonPath = (props) => {
+  const regionData = { num: '033', name: '강원', order: 3 };
 
-        <path
-          title="강원 외각선"
-          fill="#9EAEC2"
-          d="M435.9,26.19c0.206,0.476,0.379,1.239,0.456,2.054c0.018,0.176,0.01,0.384,0.001,0.604
+  let color;
+
+  if (props.hoverEvent === regionData.name)
+    color = getColorValue(regionAvgValue(regionData.order))[1];
+  else color = getColorValue(regionAvgValue(regionData.order))[0];
+
+  return (
+    <>
+      <MapPath
+        title="강원 지도 배경"
+        id="totalMap_033"
+        fillColor={color}
+        onMouseEnter={() => props.hoverChange(regionData.name)}
+        onMouseOut={() => props.hoverChange('')}
+        d={backgroundPathData[regionData.num]}
+      ></MapPath>
+
+      <path
+        title="강원 외각선"
+        fill="#9EAEC2"
+        d="M435.9,26.19c0.206,0.476,0.379,1.239,0.456,2.054c0.018,0.176,0.01,0.384,0.001,0.604
 													c-0.02,0.535-0.044,1.2,0.288,1.858c0.235,0.464,0.664,0.89,1.043,1.266c0.14,0.139,0.273,0.269,0.374,0.385l0.057,0.065
 													c0.421,0.482,0.897,1.03,1.472,1.444c0.249,0.181,0.521,0.317,0.76,0.438c0.252,0.126,0.536,0.269,0.637,0.396
 													c0.367,0.466,0.556,1.904,0.669,2.763c0.027,0.21,0.053,0.407,0.079,0.583c0.35,2.361,0.851,5.088,2.396,7.562
@@ -1947,10 +1975,10 @@ const MapNameButton = styled.button`
 													c-1.369-2.192-1.875-4.614-2.254-7.178c-0.162-1.098-0.314-3.01-0.951-3.818c-0.385-0.487-1.111-0.673-1.596-1.024
 													c-0.506-0.365-0.949-0.885-1.361-1.357c-0.354-0.406-1.039-0.973-1.279-1.446c-0.327-0.648-0.116-1.397-0.186-2.106
 													c-0.078-0.822-0.291-2.022-0.726-2.728C436.408,25.067,436.352,24.93,436.234,24.93L436.234,24.93z"
-        ></path>
-      </>
-    );
-  };
+      ></path>
+    </>
+  );
+};
 
   export const GangwonInner = (props) => {
     const regionData = { num: '033', name: '강원' };
@@ -2140,15 +2168,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 충남 041 */
-	export const ChungnamPath = () => {
+	export const ChungnamPath = (props) => {
     const regionData = { num: '041', name: '충남', order: 4 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="충남 지도 배경"
           id="totalMap_041"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -2774,16 +2810,24 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 대전 042 */
-  export const DaejeonPath = () => {
+  export const DaejeonPath = (props) => {
     const regionData = { num: '042', name: '대전', order: 5 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="대전 지도 배경"
           className="svgmap map_08 mType_2"
           id="totalMap_042"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -2937,15 +2981,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 충북 043 */
-	export const ChungbukPath = () => {
+	export const ChungbukPath = (props) => {
     const regionData = { num: '043', name: '충북', order: 6 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="충북 지도 배경"
           id="totalMap_043"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -3379,15 +3431,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 세종 044 */
-  export const SejongPath = () => {
+  export const SejongPath = (props) => {
     const regionData = { num: '044', name: '세종', order: 7 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="세종 지도 배경"
           id="totalMap_044"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -3505,15 +3565,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 부산 051 */
-	export const BusanPath = () => {
+	export const BusanPath = (props) => {
     const regionData = { num: '051', name: '부산', order: 8 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="부산 지도 배경"
           id="totalMap_051"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -3779,16 +3847,24 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 울산 052 */
-  export const UlsanPath = () => {
+  export const UlsanPath = (props) => {
     const regionData = { num: '052', name: '울산', order: 9 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="울산 지도 배경"
           className="svgmap map_12 mType_1"
           id="totalMap_052"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -3970,16 +4046,24 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 대구 053 */
-	export const DaeguPath = () => {
+	export const DaeguPath = (props) => {
     const regionData = { num: '053', name: '대구', order: 10 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="대구 지도 배경"
           className="svgmap map_11 mType_2"
           id="totalMap_053"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -4386,15 +4470,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 경북 054 */
-  export const GyeongbukPath = () => {
+  export const GyeongbukPath = (props) => {
     const regionData = { num: '054', name: '경북', order: 11 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="경북 지도 배경"
           id="totalMap_054"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -5779,15 +5871,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 경남 055 */
-	export const GyeongnamPath = () => {
+	export const GyeongnamPath = (props) => {
     const regionData = { num: '055', name: '경남', order: 12 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="경남 지도 배경"
           id="totalMap_055"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -6799,15 +6899,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 전남 061 */
-  export const JeonnamPath = () => {
+  export const JeonnamPath = (props) => {
     const regionData = { num: '061', name: '전남', order: 13 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="전남 지도 배경"
           id="totalMap_061"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -8999,15 +9107,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 광주 062 */
-	export const GwangjuPath = () => {
+	export const GwangjuPath = (props) => {
     const regionData = { num: '062', name: '광주', order: 14 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="광주 지도 배경"
           id="totalMap_062 "
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -9153,15 +9269,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 전북 063 */
-  export const JeonbukPath = () => {
+  export const JeonbukPath = (props) => {
     const regionData = { num: '063', name: '전북', order: 15 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="전북 지도 배경"
           id="totalMap_063"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 
@@ -9627,15 +9751,23 @@ const MapNameButton = styled.button`
   // ---------------------------------------------------------------------------------
 
   /** 제주 064 */
-	export const JejuPath = () => {
+	export const JejuPath = (props) => {
     const regionData = { num: '064', name: '제주', order: 16 };
+
+    let color;
+
+    if (props.hoverEvent === regionData.name)
+      color = getColorValue(regionAvgValue(regionData.order))[1];
+    else color = getColorValue(regionAvgValue(regionData.order))[0];
+
     return (
       <>
         <MapPath
           title="제주 지도 배경"
           id="totalMap_064"
-          fillColor={getColorValue(regionAvgValue(regionData.order))[0]}
-          fillHoverColor={getColorValue(regionAvgValue(regionData.order))[1]}
+          fillColor={color}
+          onMouseEnter={() => props.hoverChange(regionData.name)}
+          onMouseOut={() => props.hoverChange('')}
           d={backgroundPathData[regionData.num]}
         ></MapPath>
 

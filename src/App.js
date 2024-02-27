@@ -164,6 +164,11 @@ const InfoContainer = styled.div``;
 
 function App() {
   const [mMOSelect, setMMOSelect] = useState('khaiValue');
+  const [hover, setHover] = useState('');
+
+  const hoverHandle = (element) => {
+    setHover(element);
+  };
 
   const mMoSelectChange = (e) => {
     const { value } = e.currentTarget;
@@ -236,7 +241,7 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapNameButtons />
+              <MapNameButtons onHover={hoverHandle} />
               {/* 서울 */}
               <SeoulInner returnValue={mMOSelect} />
               {/* 경기 */}
@@ -285,23 +290,23 @@ function App() {
                 xmlSpace="preserve"
               >
                 <g>
-                  <SeoulPath />
-                  <GyeonggiPath />
-                  <IncheonPath />
-                  <GangwonPath />
-                  <ChungnamPath />
-                  <DaejeonPath />
-                  <ChungbukPath />
-                  <SejongPath />
-                  <BusanPath />
-                  <UlsanPath />
-                  <DaeguPath />
-                  <GyeongbukPath />
-                  <GyeongnamPath />
-                  <JeonnamPath />
-                  <GwangjuPath />
-                  <JeonbukPath />
-                  <JejuPath />
+                  <SeoulPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <GyeonggiPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <IncheonPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <GangwonPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <ChungnamPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <DaejeonPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <ChungbukPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <SejongPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <BusanPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <UlsanPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <DaeguPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <GyeongbukPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <GyeongnamPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <JeonnamPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <GwangjuPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <JeonbukPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  <JejuPath hoverEvent={hover} hoverChange={hoverHandle} />
                 </g>
               </svg>
               <Time>
