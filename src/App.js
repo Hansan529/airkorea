@@ -38,6 +38,7 @@ import {
   UlsanInner,
   UlsanPath,
 } from './components/MapPath';
+import { useState } from 'react';
 
 const Select = styled.select`
   -o-appearance: none;
@@ -159,11 +160,15 @@ const MMWrapper = styled.div`
   }
 `;
 
-//
-
 const InfoContainer = styled.div``;
 
 function App() {
+  const [mMOSelect, setMMOSelect] = useState('khaiValue');
+
+  const mMoSelectChange = (e) => {
+    const { value } = e.currentTarget;
+    setMMOSelect(value);
+  };
   return (
     <>
       <Headers />
@@ -192,14 +197,14 @@ function App() {
               </MMOList>
               <MMOContainer>
                 <MMOSelectWrapper>
-                  <MMOSelect bg width="188px">
-                    <option value="KHAI">통합대기환경지수(CAI)</option>
-                    <option value="10008">초미세먼지 (PM-2.5)</option>
-                    <option value="10007">미세먼지 (PM-10)</option>
-                    <option value="10003">오존(O₃)</option>
-                    <option value="10006">이산화질소(NO₂)</option>
-                    <option value="10002">일산화탄소 (CO)</option>
-                    <option value="10001">아황산가스 (SO₂)</option>
+                  <MMOSelect bg width="188px" onChange={mMoSelectChange}>
+                    <option value="khaiValue">통합대기환경지수(CAI)</option>
+                    <option value="pm25Value">초미세먼지 (PM-2.5)</option>
+                    <option value="pm10Value">미세먼지 (PM-10)</option>
+                    <option value="o3Value">오존(O₃)</option>
+                    <option value="no2Value">이산화질소(NO₂)</option>
+                    <option value="coValue">일산화탄소 (CO)</option>
+                    <option value="so2Value">아황산가스 (SO₂)</option>
                   </MMOSelect>
                 </MMOSelectWrapper>
                 <MMOSelectWrapper>
@@ -233,39 +238,39 @@ function App() {
             <MMWrapper>
               <MapNameButtons />
               {/* 서울 */}
-              {/* <SeoulInner /> */}
+              <SeoulInner returnValue={mMOSelect} />
               {/* 경기 */}
-              {/* <GyeonggiInner /> */}
+              <GyeonggiInner />
               {/* 인천 */}
-              {/* <IncheonInner /> */}
+              <IncheonInner />
               {/* 강원 */}
-              {/* <GangwonInner /> */}
+              <GangwonInner />
               {/* 충남 */}
-              {/* <ChungnamInner /> */}
+              <ChungnamInner />
               {/* 대전 */}
-              {/* <DaejeonInner /> */}
+              <DaejeonInner />
               {/* 충북 */}
-              {/* <ChungbukInner /> */}
+              <ChungbukInner />
               {/* 세종 */}
-              {/* <SejongInner /> */}
+              <SejongInner />
               {/* 부산 */}
-              {/* <BusanInner /> */}
+              <BusanInner />
               {/* 울산 */}
-              {/* <UlsanInner /> */}
+              <UlsanInner />
               {/* 대구 */}
-              {/* <DaeguInner /> */}
+              <DaeguInner />
               {/* 경북 */}
-              {/* <GyeongbukInner /> */}
+              <GyeongbukInner />
               {/* 경남 */}
-              {/* <GyeongnamInner /> */}
+              <GyeongnamInner />
               {/* 전남 */}
-              {/* <JeonnamInner /> */}
+              <JeonnamInner />
               {/* 광주 */}
-              {/* <GwangjuInner /> */}
+              <GwangjuInner />
               {/* 전북 */}
-              {/* <JeonbukInner /> */}
+              <JeonbukInner />
               {/* 제주 */}
-              {/* <JejuInner /> */}
+              <JejuInner />
               <svg
                 version="1.1"
                 id="map_svg_city"
