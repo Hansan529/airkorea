@@ -240,37 +240,37 @@ function App() {
               {/* 서울 */}
               <SeoulInner returnValue={mMOSelect} />
               {/* 경기 */}
-              <GyeonggiInner />
+              <GyeonggiInner returnValue={mMOSelect} />
               {/* 인천 */}
-              <IncheonInner />
+              <IncheonInner returnValue={mMOSelect} />
               {/* 강원 */}
-              <GangwonInner />
+              <GangwonInner returnValue={mMOSelect} />
               {/* 충남 */}
-              <ChungnamInner />
+              <ChungnamInner returnValue={mMOSelect} />
               {/* 대전 */}
-              <DaejeonInner />
+              <DaejeonInner returnValue={mMOSelect} />
               {/* 충북 */}
-              <ChungbukInner />
+              <ChungbukInner returnValue={mMOSelect} />
               {/* 세종 */}
-              <SejongInner />
+              <SejongInner returnValue={mMOSelect} />
               {/* 부산 */}
-              <BusanInner />
+              <BusanInner returnValue={mMOSelect} />
               {/* 울산 */}
-              <UlsanInner />
+              <UlsanInner returnValue={mMOSelect} />
               {/* 대구 */}
-              <DaeguInner />
+              <DaeguInner returnValue={mMOSelect} />
               {/* 경북 */}
-              <GyeongbukInner />
+              <GyeongbukInner returnValue={mMOSelect} />
               {/* 경남 */}
-              <GyeongnamInner />
+              <GyeongnamInner returnValue={mMOSelect} />
               {/* 전남 */}
-              <JeonnamInner />
+              <JeonnamInner returnValue={mMOSelect} />
               {/* 광주 */}
-              <GwangjuInner />
+              <GwangjuInner returnValue={mMOSelect} />
               {/* 전북 */}
-              <JeonbukInner />
+              <JeonbukInner returnValue={mMOSelect} />
               {/* 제주 */}
-              <JejuInner />
+              <JejuInner returnValue={mMOSelect} />
               <svg
                 version="1.1"
                 id="map_svg_city"
@@ -285,22 +285,22 @@ function App() {
                 xmlSpace="preserve"
               >
                 <g>
-                  <IncheonPath />
                   <SeoulPath />
                   <GyeonggiPath />
+                  <IncheonPath />
                   <GangwonPath />
-                  <ChungbukPath />
                   <ChungnamPath />
-                  <SejongPath />
                   <DaejeonPath />
+                  <ChungbukPath />
+                  <SejongPath />
+                  <BusanPath />
+                  <UlsanPath />
+                  <DaeguPath />
                   <GyeongbukPath />
                   <GyeongnamPath />
-                  <DaeguPath />
-                  <UlsanPath />
-                  <BusanPath />
-                  <JeonbukPath />
                   <JeonnamPath />
                   <GwangjuPath />
+                  <JeonbukPath />
                   <JejuPath />
                 </g>
               </svg>
