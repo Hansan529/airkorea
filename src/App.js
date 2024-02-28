@@ -38,7 +38,7 @@ import {
   UlsanInner,
   UlsanPath,
 } from './components/MapPath';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Select = styled.select`
   -o-appearance: none;
@@ -241,40 +241,25 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapNameButtons onHover={hoverHandle} />
-              {/* 서울 */}
+              {/* 지역 지수 버튼 */}
+              <MapNameButtons returnValue={mMOSelect} onHover={hoverHandle} />
+              {/* 상세 지역 지도 */}
               <SeoulInner returnValue={mMOSelect} />
-              {/* 경기 */}
               <GyeonggiInner returnValue={mMOSelect} />
-              {/* 인천 */}
               <IncheonInner returnValue={mMOSelect} />
-              {/* 강원 */}
               <GangwonInner returnValue={mMOSelect} />
-              {/* 충남 */}
               <ChungnamInner returnValue={mMOSelect} />
-              {/* 대전 */}
               <DaejeonInner returnValue={mMOSelect} />
-              {/* 충북 */}
               <ChungbukInner returnValue={mMOSelect} />
-              {/* 세종 */}
               <SejongInner returnValue={mMOSelect} />
-              {/* 부산 */}
               <BusanInner returnValue={mMOSelect} />
-              {/* 울산 */}
               <UlsanInner returnValue={mMOSelect} />
-              {/* 대구 */}
               <DaeguInner returnValue={mMOSelect} />
-              {/* 경북 */}
               <GyeongbukInner returnValue={mMOSelect} />
-              {/* 경남 */}
               <GyeongnamInner returnValue={mMOSelect} />
-              {/* 전남 */}
               <JeonnamInner returnValue={mMOSelect} />
-              {/* 광주 */}
               <GwangjuInner returnValue={mMOSelect} />
-              {/* 전북 */}
               <JeonbukInner returnValue={mMOSelect} />
-              {/* 제주 */}
               <JejuInner returnValue={mMOSelect} />
               <svg
                 version="1.1"
@@ -290,23 +275,92 @@ function App() {
                 xmlSpace="preserve"
               >
                 <g>
-                  <SeoulPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <GyeonggiPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <IncheonPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <GangwonPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <ChungnamPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <DaejeonPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <ChungbukPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <SejongPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <BusanPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <UlsanPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <DaeguPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <GyeongbukPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <GyeongnamPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <JeonnamPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <GwangjuPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <JeonbukPath hoverEvent={hover} hoverChange={hoverHandle} />
-                  <JejuPath hoverEvent={hover} hoverChange={hoverHandle} />
+                  {/* 전체 지역 지도 */}
+                  <SeoulPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <GyeonggiPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <IncheonPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <GangwonPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <ChungnamPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <DaejeonPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <ChungbukPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <SejongPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <BusanPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <UlsanPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <DaeguPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <GyeongbukPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <GyeongnamPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <JeonnamPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <GwangjuPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <JeonbukPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
+                  <JejuPath
+                    returnValue={mMOSelect}
+                    hoverEvent={hover}
+                    hoverChange={hoverHandle}
+                  />
                 </g>
               </svg>
               <Time>
