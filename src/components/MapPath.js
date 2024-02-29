@@ -13,11 +13,6 @@ const {
     body: { items: detailData },
   },
 } = detailDataJson;
-const {
-  response: {
-    body: { items: stationData },
-  },
-} = stationDataJson;
 
 /**
  * 대기 정보 목록
@@ -27,6 +22,8 @@ const {
  * 매우나쁨 (251~): #ffd6da / #ffc1c5
  * 데이터없음: #cbd0d3 / #c1c5c7
  */
+
+export const dateTime = detailData[0].dataTime;
 
 // default, hover, button
 const getColorValue = (value, type) => {
