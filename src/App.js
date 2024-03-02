@@ -59,6 +59,8 @@ const FirstSection = styled(Section)`
 const MMLayout = styled.div``;
 const MMOptionLayout = styled.div`
   width: 710px;
+  position: relative;
+  z-index: 10;
 `;
 const MMOList = styled.ul`
   display: flex;
