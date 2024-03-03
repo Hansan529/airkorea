@@ -50,13 +50,20 @@ const Select = styled.select`
 `;
 
 const Main = styled.main``;
-const Section = styled.section``;
+const Section = styled.section`
+    position: relative;
+    width: 1400px;
+    margin: 0 auto;
+`;
 
 const FirstSection = styled(Section)`
   background: url('/img_main_bg.png') repeat-x 0 0;
+  display: flex;
 `;
 
-const MMLayout = styled.div``;
+const MMLayout = styled.div`
+    width: 710px;
+`;
 const MMOptionLayout = styled.div`
   width: 710px;
   position: relative;
@@ -162,7 +169,11 @@ const MMWrapper = styled.div`
   }
 `;
 
-const InfoContainer = styled.div``;
+const InfoContainer = styled.div`
+    width: 660px;
+    height: 833px;
+    overflow: hidden;
+`;
 
 // ------------------------------------------------ component
 
