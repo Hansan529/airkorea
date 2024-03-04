@@ -52,13 +52,17 @@ const Select = styled.select`
 const Main = styled.main``;
 const Section = styled.section`
     position: relative;
-    width: 1400px;
-    margin: 0 auto;
+`;
+
+const Icon = styled.button`
+  background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
 `;
 
 const FirstSection = styled(Section)`
   background: url('/img_main_bg.png') repeat-x 0 0;
   display: flex;
+  justify-content: center;
+  gap: 30px;
 `;
 
 const MMLayout = styled.div`
@@ -175,6 +179,64 @@ const InfoContainer = styled.div`
     overflow: hidden;
 `;
 
+const InfoWrapper = styled.div`
+  border: 5px solid #00aeee;
+  border-radius: 20px;
+  padding: 15px;
+  background-color: #fff;
+
+  > div:first-of-type{
+    background: url('/img_bg01.png') no-repeat;
+    height: 55px;
+    line-height: 55px;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+
+    h2 {
+      font-size: 30px;
+      font-weight: 700;
+      text-align: center;
+
+      > span {
+        color: #0f62cc;
+      }
+    }
+  }
+
+  div:nth-of-type(2) {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    > div {
+      display: flex;
+      gap: 10px;
+
+      > p  {
+        font-size: 18px;
+        > strong { color: #0f62cc; font-weight: bold; }
+        > span { display: block; margin-top: 5px; font-size: 14px; }
+      }
+    }
+
+    button {
+      font-size: 0;
+    }
+  }
+`;
+
+const InfoButton = styled(Icon)`
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #c6ccd4;
+    border-radius: 5px;
+    background-size: ${props => props.ico === 'bg_search' && '70%'};
+    background-repeat: no-repeat;
+    background-position: center;
+`
+
+
 // ------------------------------------------------ component
 
 const Time = ({refresh}) => {
@@ -183,11 +245,27 @@ const Time = ({refresh}) => {
   const month = String(updateTime.getMonth() + 1).padStart(2, '0');
   const day = String(updateTime.getDate()).padStart(2, '0');
   const hour = String(updateTime.getHours()).padStart(2, '0');
+
+  const SpanStyle = styled.span`
+    display: flex;
+    gap: 5px;
+    > strong {
+      font-weight: bold;
+    }
+  `;
+  const ButtonStyle = styled.button`
+    display: inline-block;
+    background: url('/img_refresh.png') no-repeat top 0 center;
+    width: 16px;
+    height: 20px;
+    border: none;
+  `;
+
   return (
-    <span>
+    <SpanStyle>
       {year}년 {month}월 {day}일 <strong>{hour}시</strong>
-      {refresh && <button>새로고침</button>}
-    </span>
+      {refresh && <ButtonStyle>새로고침</ButtonStyle>}
+    </SpanStyle>
   )
 };
 
@@ -401,20 +479,26 @@ function App() {
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
           <InfoContainer>
-            <div>
-              <h2>
-                우리동네 <span>대기정보</span>
-              </h2>
+            <InfoWrapper>
               <div>
-                <button>검색</button>
-                <button>현위치</button>
-                <p>
-                  <strong>중구</strong> 중심으로 측정
-                  <span>(서울 중구 중구 측정소 기준)</span>
-                </p>
-                <Time refresh />
+                <h2>
+                  우리동네 <span>대기정보</span>
+                </h2>
               </div>
-            </div>
+              <div>
+                <div>
+                  <InfoButton ico={'bg_search'}>검색</InfoButton>
+                  <InfoButton ico={'pos'}>현위치</InfoButton>
+                  <p>
+                    <strong>중구</strong> 중심으로 측정
+                    <span>(서울 중구 중구 측정소 기준)</span>
+                  </p>
+                </div>
+                <div>
+                  <Time refresh />
+                </div>
+              </div>
+            </InfoWrapper>
           </InfoContainer>
         </FirstSection>
       </Main>
