@@ -56,6 +56,9 @@ const Section = styled.section`
 
 const Icon = styled.button`
   background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
+  &:hover {
+      cursor: pointer;
+    }
 `;
 
 const FirstSection = styled(Section)`
@@ -63,6 +66,7 @@ const FirstSection = styled(Section)`
   display: flex;
   justify-content: center;
   gap: 30px;
+  padding-top: 20px;
 `;
 
 const MMLayout = styled.div`
@@ -72,17 +76,28 @@ const MMOptionLayout = styled.div`
   width: 710px;
   position: relative;
   z-index: 10;
+  background-color: #fff;
+  border-radius: 10px;
 `;
 const MMOList = styled.ul`
   display: flex;
   margin: 0;
-  margin-bottom: 10px;
-
+  margin-bottom: 5px;
+  
   li {
     flex: 1;
     text-align: center;
     border: 1px solid #d2d2d2;
     border-bottom: none;
+    overflow: hidden;
+
+    &:first-of-type {
+      border-top-left-radius: 10px;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: 10px;
+    }
 
     a {
       display: block;
@@ -91,6 +106,11 @@ const MMOList = styled.ul`
       letter-spacing: -0.6px;
       font-weight: 500;
       background: #fff;
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
     a.on {
       background: #0f62cc;
@@ -143,33 +163,11 @@ const MMWrapper = styled.div`
   box-sizing: border-box;
   background: url('/map_svg_warp_bg.png') no-repeat;
   position: relative;
+  margin-top: 20px;
 
   /* 맵 */
   > svg {
     margin-top: -25px;
-  }
-
-  /* 기준 날짜 */
-  > span {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 0;
-    min-width: 143px;
-    height: 30px;
-    padding: 0 20px;
-    background: #fff;
-    font-size: 14px;
-    color: #6e6e6e;
-    line-height: 30px;
-    font-weight: 400;
-    border-radius: 15px;
-    text-align: center;
-    border: 1px solid #d2d2d2;
-
-    strong {
-      color: #000;
-    }
   }
 `;
 
@@ -203,7 +201,7 @@ const InfoWrapper = styled.div`
     }
   }
 
-  div:nth-of-type(2) {
+  > div:nth-of-type(2) {
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -231,41 +229,62 @@ const InfoButton = styled(Icon)`
     height: 24px;
     border: 1px solid #c6ccd4;
     border-radius: 5px;
+    background-color: #fff;
     background-size: ${props => props.ico === 'bg_search' && '70%'};
     background-repeat: no-repeat;
     background-position: center;
+
+    &:hover {
+      background-color: rgba(0,0,0,0.2);
+    }
 `
 
 
 // ------------------------------------------------ component
 
-const Time = ({refresh}) => {
+const Time = ({ refresh }) => {
   const updateTime = new Date(dateTime);
   const year = updateTime.getFullYear();
   const month = String(updateTime.getMonth() + 1).padStart(2, '0');
   const day = String(updateTime.getDate()).padStart(2, '0');
   const hour = String(updateTime.getHours()).padStart(2, '0');
 
-  const SpanStyle = styled.span`
+  const DivStyle = styled.div`
     display: flex;
-    gap: 5px;
+    gap: 5px !important;
+    background-color: ${refresh ? '#e4f7ff' : '#fff'};
+    height: 20px;
+    padding: 5px 10px;
+    border-radius: 25px;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+
     > strong {
       font-weight: bold;
     }
   `;
-  const ButtonStyle = styled.button`
+  const ButtonStyle = styled(Icon)`
     display: inline-block;
-    background: url('/img_refresh.png') no-repeat top 0 center;
+    background: url('/img_refresh.png') no-repeat center;
     width: 16px;
     height: 20px;
     border: none;
+    transition: transform 0.5s;
+    position: relative;
+    transform-origin: center;
+
+    /* &:hover {
+      transform: rotate(-360deg);
+    } */
   `;
 
   return (
-    <SpanStyle>
-      {year}년 {month}월 {day}일 <strong>{hour}시</strong>
+    <DivStyle>
+      <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
       {refresh && <ButtonStyle>새로고침</ButtonStyle>}
-    </SpanStyle>
+    </DivStyle>
   )
 };
 
@@ -273,10 +292,23 @@ function App() {
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
   const [hover, setHover] = useState('');
+  const [tapSelect, setTapSelect] = useState(0);
 
   const hoverHandle = (element) => {
     setHover(element);
   };
+
+  const tapSelectHandle = (e) => {
+    const { currentTarget } = e
+    const liElement = e.currentTarget.parentNode;
+    const ulElement = liElement.closest('ul');
+    const selectIndex = Array.prototype.indexOf.call(ulElement.children, liElement);
+    Array.prototype.forEach.call(ulElement.children, el => {
+      el.querySelector('a').classList.remove('on');
+    })
+    currentTarget.classList.add('on');
+    setTapSelect(selectIndex);
+  }
 
   const mMoSelectChange = (e) => {
     const { value } = e.currentTarget;
@@ -297,23 +329,26 @@ function App() {
             <MMOptionLayout>
               <MMOList>
                 <li>
-                  <a className="on" href>
+                  <a onClick={tapSelectHandle} className="on" href>
                     실시간 대기정보
                   </a>
                 </li>
                 <li>
-                  <a href>오늘/내일/모레 대기정보</a>
+                  <a onClick={tapSelectHandle} href>오늘/내일/모레 대기정보</a>
                 </li>
                 <li>
-                  <a href>실시간 기상정보</a>
+                  <a onClick={tapSelectHandle} href>실시간 기상정보</a>
                 </li>
                 <li>
-                  <a href>오늘/내일/모레 기상정보</a>
+                  <a onClick={tapSelectHandle} href>오늘/내일/모레 기상정보</a>
                 </li>
               </MMOList>
               <MMOContainer>
                 <MMOSelectWrapper>
-                  <MMOSelect bg width="188px" onChange={mMoSelectChange}>
+                  <label htmlFor="area1" style={{ marginRight: '5px' }}>
+                    종류
+                  </label>
+                  <MMOSelect bg id="area1" width="188px" onChange={mMoSelectChange}>
                     <option value="khaiValue">통합대기환경지수(CAI)</option>
                     <option value="pm25Value">초미세먼지 (PM-2.5)</option>
                     <option value="pm10Value">미세먼지 (PM-10)</option>
@@ -324,10 +359,10 @@ function App() {
                   </MMOSelect>
                 </MMOSelectWrapper>
                 <MMOSelectWrapper>
-                  <label htmlFor="area1" style={{ marginRight: '5px' }}>
+                  <label htmlFor="area2" style={{ marginRight: '5px' }}>
                     시/도
                   </label>
-                  <MMOSelect bg id="area1" width="130px" onChange={mMoSelectChange}>
+                  <MMOSelect bg id="area2" width="130px" onChange={mMoSelectChange}>
                     <option value="none">-전체-</option>
                     <option value="02">서울특별시</option>
                     <option value="031">경기도</option>
@@ -494,9 +529,7 @@ function App() {
                     <span>(서울 중구 중구 측정소 기준)</span>
                   </p>
                 </div>
-                <div>
-                  <Time refresh />
-                </div>
+                <Time refresh />
               </div>
             </InfoWrapper>
           </InfoContainer>
