@@ -39,7 +39,9 @@ import {
   UlsanPath,
   dateTime,
 } from './components/MapPath';
-import { useState } from 'react';
+import TodayAirQuality from './components/TodayAirQuality';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // ------------------------------------------------ styled
 const Select = styled.select`
@@ -242,7 +244,7 @@ const InfoButton = styled(Icon)`
 
 // ------------------------------------------------ component
 
-const Time = ({ refresh }) => {
+const Time = ({ refresh, onClick }) => {
   const updateTime = new Date(dateTime);
   const year = updateTime.getFullYear();
   const month = String(updateTime.getMonth() + 1).padStart(2, '0');
@@ -283,17 +285,54 @@ const Time = ({ refresh }) => {
   return (
     <DivStyle>
       <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
-      {refresh && <ButtonStyle>새로고침</ButtonStyle>}
+      {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
     </DivStyle>
   )
 };
 
 function App() {
+
+  // ------------------------------------------------ setting
+  
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
   const [hover, setHover] = useState('');
   const [tapSelect, setTapSelect] = useState(0);
 
+  const [count, setCount] = useState(0);
+  // const [latitude, setLatitude] = useState('197806.5250901809');
+  // const [longitude, setLongitude] = useState('451373.25740676327');
+  const [station, setStation] = useState([{ stationCode: "111121", tm: 0.4, addr: "서울 중구 덕수궁길 15 시청서소문별관 3동", stationName: "중구" }]);
+
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    if('geolocation' in navigator) {
+      const success = async (pos) => {
+        let { latitude, longitude } = pos.coords;
+        if(latitude === undefined) latitude = '197806.5250901809';
+        if(longitude === undefined) longitude = '451373.25740676327';
+        // setLatitude(latitude);
+        // setLongitude(longitude);
+        
+        const { data } = await axios.post('http://localhost:3500/api/coordinate', { latitude, longitude});
+        const { x, y } = data.documents[0];
+        
+        const { data: stations } = await axios.post('http://localhost:3500/api/station', {x, y});
+        setStation(stations);
+        setLoading(true);
+      }
+      // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
+      const error = (err) => console.error('에러', err);
+      
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+  }, [count]);
+
+  const refreshHandleClick = () => {
+    setCount(count + 1);
+  };
+  
   const hoverHandle = (element) => {
     setHover(element);
   };
@@ -525,12 +564,13 @@ function App() {
                   <InfoButton ico={'bg_search'}>검색</InfoButton>
                   <InfoButton ico={'pos'}>현위치</InfoButton>
                   <p>
-                    <strong>중구</strong> 중심으로 측정
-                    <span>(서울 중구 중구 측정소 기준)</span>
+                    <strong>{loading ? station[0].stationName : '중구'}</strong> 중심으로 측정
+                    <span>(서울 중구 {station[0].stationName || '중구'} 측정소 기준)</span>
                   </p>
                 </div>
-                <Time refresh />
+                <Time refresh onClick={refreshHandleClick} />
               </div>
+              <TodayAirQuality />
             </InfoWrapper>
           </InfoContainer>
         </FirstSection>
