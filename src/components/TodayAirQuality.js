@@ -94,7 +94,11 @@ const Component = ({ stationName }) => {
                 default:
                     return '데이터 없음';
             }
-        }
+        };
+
+    const pm25Index = (colorList.indexOf(pm25) + 1) !== 0 ? colorList.indexOf(pm25) + 1 : 5;
+    const pm10Index = (colorList.indexOf(pm10) + 1) !== 0 ? colorList.indexOf(pm10) + 1 : 5;
+    const o3Index = (colorList.indexOf(o3) + 1) !== 0 ? colorList.indexOf(o3) + 1 : 5;
 
     return (
         <Container>
@@ -103,7 +107,7 @@ const Component = ({ stationName }) => {
                 <ul>
                     <li>
                         <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                        <img src={`./img_na0${colorList.indexOf(pm25) + 1}.png`} alt="대기질" />
+                        <img src={`./img_na0${pm25Index}.png`} alt="대기질" />
                         <span style={{color: pm25}}>
                             <strong className="colorValue">{currentLocation.pm25Value}</strong>
                             <small style={{color: 'initial'}}>㎍/㎥</small>
@@ -112,7 +116,7 @@ const Component = ({ stationName }) => {
                     </li>
                     <li>
                         <span><strong>미세먼지</strong>(PM-10)</span>
-                        <img src={`./img_na0${colorList.indexOf(pm10) + 1}.png`} alt="대기질" />
+                        <img src={`./img_na0${pm10Index}.png`} alt="대기질" />
                         <span style={{color: pm10}}>
                             <strong className="colorValue">{currentLocation.pm10Value}</strong>
                             <small style={{color: 'initial'}}>㎍/㎥</small>
@@ -121,7 +125,7 @@ const Component = ({ stationName }) => {
                     </li>
                     <li>
                         <span><strong>오존</strong>(O3)</span>
-                        <img src={`./img_na0${colorList.indexOf(o3) + 1}.png`} alt="대기질" />
+                        <img src={`./img_na0${o3Index}.png`} alt="대기질" />
                         <span style={{color: o3}}>
                             <strong className="colorValue">{String(currentLocation.o3Value).padEnd(6, '0')}</strong>
                             <small style={{color: 'initial'}}>ppm</small>
