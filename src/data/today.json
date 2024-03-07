@@ -1,0 +1,25 @@
+{
+    "response": {
+        "body": {
+            "totalCount": 1,
+            "items": [
+                {
+                    "msurDt": "2024-03-05",
+                    "so2Value": ".003",
+                    "coValue": ".4",
+                    "msrstnName": "중구",
+                    "pm10Value": "36",
+                    "no2Value": ".027",
+                    "o3Value": ".03",
+                    "pm25Value": "24"
+                }
+            ],
+            "pageNo": 1,
+            "numOfRows": 100
+        },
+        "header": {
+            "resultMsg": "NORMAL_CODE",
+            "resultCode": "00"
+        }
+    }
+}

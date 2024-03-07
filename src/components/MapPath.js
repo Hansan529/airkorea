@@ -5,8 +5,6 @@ import {
   pathData,
 } from '../paths/paths';
 import detailDataJson from '../data/getCtprvnRltmMesureDnsty.json';
-import stationDataJson from '../data/MsrstnInfoInqireSvc.json';
-import { useState } from 'react';
 
 const {
   response: {
@@ -25,8 +23,8 @@ const {
 
 export const dateTime = detailData[0].dataTime;
 
-// default, hover, button
-const getColorValue = (value, type) => {
+// default, hover, button, textColor
+export const getColorValue = (value, type) => {
   const typeRangeValue = {
     khaiValue: [1, 50, 51, 100, 101, 250, 251],
     pm25Value: [1, 15, 16, 35, 36, 75, 76],
@@ -41,15 +39,15 @@ const getColorValue = (value, type) => {
   const values = Object.values(typeRangeValue)[index];
 
   if (value >= values[0] && value <= values[1]) {
-    return ['#d0ecff', '#7ed6ff', '#6ac8fe'];
+    return ['#d0ecff', '#7ed6ff', '#6ac8fe', '#1c67d7'];
   } else if (value >= values[2] && value <= values[3]) {
-    return ['#caf2de', '#94edbc', '#59e494'];
+    return ['#caf2de', '#94edbc', '#59e494', '#01b56e'];
   } else if (value >= values[4] && value <= values[5]) {
-    return ['#f8f7c6', '#ffeb8b', '#ffda58'];
+    return ['#f8f7c6', '#ffeb8b', '#ffda58', '#937200'];
   } else if (value >= values[6]) {
-    return ['#ffd6da', '#ffc1c5', '#ffa8a8'];
+    return ['#ffd6da', '#ffc1c5', '#ffa8a8', '#c00d0d'];
   } else {
-    return ['#cbd0d3', '#c1c5c7', '#abb0b3'];
+    return ['#cbd0d3', '#c1c5c7', '#abb0b3', '#0a0a0a'];
   }
 };
 
@@ -142,33 +140,6 @@ const InnerMapPath = ({
   ></InnerMapPathStyle>
 );
 
-const MapNameButtonsWrapper = styled.div`
-  position: absolute;
-`;
-const MapNameButton = styled.button`
-  position: absolute;
-  left: ${(props) => props.left};
-  top: ${(props) => props.top};
-  border: none;
-  background-color: ${(props) => props.bgColor};
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
-  text-align: center;
-  line-height: 17px;
-  opacity: 1;
-  cursor: pointer;
-  font-weight: bold;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  > span {
-    display: block;
-  }
-`;
-
 /**
  * 전체 지역 평균값
  * @param {*} order	순서
@@ -259,131 +230,157 @@ const filterStationReturnValue = (props, list) => {
 
 /** 전국 버튼 위치, 대기 정보 출력 */
 export const MapNameButtons = ({ onHover, returnValue }) => {
-  const namePositionVal = {
-    '02': {
-      num: '02',
-      name: '서울',
-      left: '241px',
-      top: '120px',
-    },
-    '031': {
-      num: '031',
-      name: '경기',
-      left: '290px',
-      top: '175px',
-    },
-    '032': {
-      num: '032',
-      name: '인천',
-      left: '180px',
-      top: '160px',
-    },
-    '033': {
-      num: '033',
-      name: '강원',
-      left: '401px',
-      top: '105px',
-    },
-    '041': {
-      num: '041',
-      name: '충남',
-      left: '206px',
-      top: '325px',
-    },
-    '042': {
-      num: '042',
-      name: '대전',
-      left: '310px',
-      top: '330px',
-    },
-    '043': {
-      num: '043',
-      name: '충북',
-      left: '333px',
-      top: '251px',
-    },
-    '044': {
-      num: '044',
-      name: '세종',
-      left: '262px',
-      top: '280px',
-    },
-    '051': {
-      num: '051',
-      name: '부산',
-      left: '496px',
-      top: '518px',
-    },
-    '052': {
-      num: '052',
-      name: '울산',
-      left: '516px',
-      top: '441px',
-    },
-    '053': {
-      num: '053',
-      name: '대구',
-      left: '435px',
-      top: '385px',
-    },
-    '054': {
-      num: '054',
-      name: '경북',
-      left: '470px',
-      top: '280px',
-    },
-    '055': {
-      num: '055',
-      name: '경남',
-      left: '380px',
-      top: '483px',
-    },
-    '061': {
-      num: '061',
-      name: '전남',
-      left: '269px',
-      top: '543px',
-    },
-    '062': {
-      num: '062',
-      name: '광주',
-      left: '213px',
-      top: '503px',
-    },
-    '063': {
-      num: '063',
-      name: '전북',
-      left: '257px',
-      top: '422px',
-    },
-    '064': {
-      num: '064',
-      name: '제주',
-      left: '45px',
-      top: '640px',
-    },
-  };
-  return (
-    <MapNameButtonsWrapper>
-      {Object.values(namePositionVal).map((el, key) => {
-        return (
-          <MapNameButton
-            key={key}
-            left={el.left}
-            top={el.top}
-            bgColor={
-              getColorValue(regionAvgValue(key, returnValue), returnValue)[2]
-            }
-            onMouseEnter={() => onHover(el.name)}
-            onMouseLeave={() => onHover('')}
-          >
-            {el.name}
-            <span>{regionAvgValue(key, returnValue)}</span>
-          </MapNameButton>
-        );
-      })}
-    </MapNameButtonsWrapper>
-  );
+	const MapNameButtonsWrapper = styled.div`
+		position: absolute;
+	`;
+	const MapNameButton = styled.button`
+		position: absolute;
+		left: ${(props) => props.left};
+		top: ${(props) => props.top};
+		border: none;
+		background-color: ${(props) => props.bgColor};
+		width: 60px;
+		height: 60px;
+		border-radius: 30px;
+		text-align: center;
+		line-height: 17px;
+		opacity: 1;
+		cursor: pointer;
+		font-weight: bold;
+
+		&:hover {
+			text-decoration: underline;
+		}
+
+		> span {
+			display: block;
+		}
+	`;
+	const namePositionVal = {
+		'02': {
+		num: '02',
+		name: '서울',
+		left: '241px',
+		top: '120px',
+		},
+		'031': {
+		num: '031',
+		name: '경기',
+		left: '290px',
+		top: '175px',
+		},
+		'032': {
+		num: '032',
+		name: '인천',
+		left: '180px',
+		top: '160px',
+		},
+		'033': {
+		num: '033',
+		name: '강원',
+		left: '401px',
+		top: '105px',
+		},
+		'041': {
+		num: '041',
+		name: '충남',
+		left: '206px',
+		top: '325px',
+		},
+		'042': {
+		num: '042',
+		name: '대전',
+		left: '310px',
+		top: '330px',
+		},
+		'043': {
+		num: '043',
+		name: '충북',
+		left: '333px',
+		top: '251px',
+		},
+		'044': {
+		num: '044',
+		name: '세종',
+		left: '262px',
+		top: '280px',
+		},
+		'051': {
+		num: '051',
+		name: '부산',
+		left: '496px',
+		top: '518px',
+		},
+		'052': {
+		num: '052',
+		name: '울산',
+		left: '516px',
+		top: '441px',
+		},
+		'053': {
+		num: '053',
+		name: '대구',
+		left: '435px',
+		top: '385px',
+		},
+		'054': {
+		num: '054',
+		name: '경북',
+		left: '470px',
+		top: '280px',
+		},
+		'055': {
+		num: '055',
+		name: '경남',
+		left: '380px',
+		top: '483px',
+		},
+		'061': {
+		num: '061',
+		name: '전남',
+		left: '269px',
+		top: '543px',
+		},
+		'062': {
+		num: '062',
+		name: '광주',
+		left: '213px',
+		top: '503px',
+		},
+		'063': {
+		num: '063',
+		name: '전북',
+		left: '257px',
+		top: '422px',
+		},
+		'064': {
+		num: '064',
+		name: '제주',
+		left: '45px',
+		top: '640px',
+		},
+	};
+	return (
+		<MapNameButtonsWrapper>
+		{Object.values(namePositionVal).map((el, key) => {
+			return (
+			<MapNameButton
+				key={key}
+				left={el.left}
+				top={el.top}
+				bgColor={
+				getColorValue(regionAvgValue(key, returnValue), returnValue)[2]
+				}
+				onMouseEnter={() => onHover(el.name)}
+				onMouseLeave={() => onHover('')}
+			>
+				{el.name}
+				<span>{regionAvgValue(key, returnValue)}</span>
+			</MapNameButton>
+			);
+		})}
+		</MapNameButtonsWrapper>
+	);
 };
 
 // ---------------------------------------------------------------------------------

@@ -565,12 +565,12 @@ function App() {
                   <InfoButton ico={'pos'}>현위치</InfoButton>
                   <p>
                     <strong>{loading ? station[0].stationName : '중구'}</strong> 중심으로 측정
-                    <span>(서울 중구 {station[0].stationName || '중구'} 측정소 기준)</span>
+                    <span>({station[0].addr.split(' ')[0] || '서울'} {station[0].addr.split(' ')[1] || '중구'} {station[0].stationName || '중구'} 측정소 기준)</span>
                   </p>
                 </div>
                 <Time refresh onClick={refreshHandleClick} />
               </div>
-              <TodayAirQuality />
+              <TodayAirQuality stationName={station[0].stationName} />
             </InfoWrapper>
           </InfoContainer>
         </FirstSection>
