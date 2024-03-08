@@ -40,6 +40,11 @@ const Part = styled.div`
     flex-grow: 1;
     background-color: #eaedee;
     overflow: hidden;
+    margin-bottom: 20px;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
     
     h3 {
         padding: 10px 0;
@@ -49,13 +54,14 @@ const Part = styled.div`
     }
     
     > ul{
-        padding: 25px 0px;
+        padding: 30px 0px 25px;
         background-color: #fff;
+        display: flex;
+        align-items: center;
 
         > li {
-            display: inline-block;
+            flex: 1;
             text-align: center;
-            width: 33.33%;
             box-sizing: border-box;
 
             &:not(:last-child){
@@ -85,7 +91,41 @@ const Part = styled.div`
         }
     }
 
+    .miniText{
+        line-height: 2;
+        text-indent: 20%;
+        background-repeat: no-repeat;
+        background-position: 40% center;
+    }
+
+    .miniTextIco_1{ background-image: url('./img_yebo_na01.png'); }
+    .miniTextIco_2{ background-image: url('./img_yebo_na02.png'); }
+    .miniTextIco_3{ background-image: url('./img_yebo_na03.png'); }
+    .miniTextIco_4{ background-image: url('./img_yebo_na04.png'); }
+    .miniTextIco_5{ background-image: url('./img_yebo_na05.png'); }
 `
+
+const AirForecastUl = styled.ul`
+    li {
+        position: relative;
+
+        p {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 33px;
+            line-height: 25px;
+        }
+        &:nth-of-type(2) p {
+            background: url('./img_bg_to01.png') no-repeat 0 0;
+        }
+        &:nth-of-type(3) p {
+            background: url('./img_bg_to02.png') no-repeat 0 0;
+        }
+    }
+`;
 
 const Component = ({ stationName }) => {
         const { items: dnstyItems } = dnsty.response.body
@@ -125,14 +165,13 @@ const Component = ({ stationName }) => {
             }
             const area = forecast.informGrade.split(',');
 
-            const region = area.map(region => {
+            area.forEach(region => {
                 const [location, condition] = region.split(" : ");
                 objectCurrentStationInfo[objectKey][location] = condition;
             });
         });
-        console.log('filterForecast: ', filterForecast, "objectCurrentStationInfo: ", objectCurrentStationInfo);
 
-        const [state, city] = currentStationInfo.addr.split(' ');
+        const [state] = currentStationInfo.addr.split(' ');
         let stateNickname = state.substring(0, 2);
 
         if((gyeonggiBukCheck || yeongdongCheck) && stateNickname === '경기') {
@@ -147,28 +186,43 @@ const Component = ({ stationName }) => {
 
         const colorList = ['#1c67d7','#01b56e','#937200','#c00d0d','#0a0a0a'];
 
+        // 오늘의 대기질
         const pm25 = getColorValue(currentLocation.pm25Value, 'pm25Value')[3];
         const pm10 = getColorValue(currentLocation.pm10Value, 'pm10Value')[3];
         const o3 = getColorValue(currentLocation.o3Value, 'o3Value')[3];
 
+        /**
+         * 
+         * @param {number|string} 값
+         * @returns {Array} [상태, 색상코드, 인덱스]
+         */
         const airState = (value) => {
-            switch(value){
-                case 0:
-                    return '좋음';
-                case 1:
-                    return '보통';
-                case 2:
-                    return '나쁨';
-                case 3:
-                    return '매우나쁨';
-                default:
-                    return '데이터 없음';
+            if(value === 0 || value === '좋음'){
+                return ['좋음', '#1c67d7', 1];
+            } else if(value === 1 || value === '보통'){
+                return ['보통', '#01b56e', 2];
+            } else if(value === 2 || value === '나쁨'){
+                return ['나쁨', '#937200', 3];
+            } else if(value === 3 || value === '매우나쁨'){
+                return ['매우나쁨', '#c00d0d', 4];
+            } else {
+                return ['데이터 없음', '#0a0a0a', 5];
             }
         };
 
     const pm25Index = (colorList.indexOf(pm25) + 1) !== 0 ? colorList.indexOf(pm25) + 1 : 5;
     const pm10Index = (colorList.indexOf(pm10) + 1) !== 0 ? colorList.indexOf(pm10) + 1 : 5;
     const o3Index = (colorList.indexOf(o3) + 1) !== 0 ? colorList.indexOf(o3) + 1 : 5;
+
+    // 대기정보 예보
+    const pm25Today = objectCurrentStationInfo.pm25Today[stateNickname];
+    const pm25TodayIndex = airState(pm25Today)[2];
+    const pm10Today = objectCurrentStationInfo.pm10Today[stateNickname];
+    const pm10TodayIndex = airState(pm10Today)[2];
+    const pm25Tomorrow = objectCurrentStationInfo.pm25Tomorrow[stateNickname];
+    const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
+    const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
+    const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
     return (
         <Container>
             <Part>
@@ -180,7 +234,7 @@ const Component = ({ stationName }) => {
                         <span style={{color: pm25}}>
                             <strong className="colorValue">{currentLocation.pm25Value}</strong>
                             <small style={{color: 'initial'}}>㎍/㎥</small>
-                            {airState(colorList.indexOf(pm25))}
+                            {airState(colorList.indexOf(pm25))[0]}
                         </span>
                     </li>
                     <li>
@@ -189,7 +243,7 @@ const Component = ({ stationName }) => {
                         <span style={{color: pm10}}>
                             <strong className="colorValue">{currentLocation.pm10Value}</strong>
                             <small style={{color: 'initial'}}>㎍/㎥</small>
-                            {airState(colorList.indexOf(pm10))}
+                            {airState(colorList.indexOf(pm10))[0]}
                             </span>
                     </li>
                     <li>
@@ -198,14 +252,14 @@ const Component = ({ stationName }) => {
                         <span style={{color: o3}}>
                             <strong className="colorValue">{String(currentLocation.o3Value).padEnd(6, '0')}</strong>
                             <small style={{color: 'initial'}}>ppm</small>
-                            {airState(colorList.indexOf(o3))}
+                            {airState(colorList.indexOf(o3))[0]}
                         </span>
                     </li>
                 </ul>
             </Part>
             <Part>
                 <h3>대기정보 예보</h3>
-                <ul>
+                <AirForecastUl>
                     <li>
                         <p></p>
                         <span><strong>초미세먼지</strong>(PM-2.5)</span>
@@ -213,15 +267,15 @@ const Component = ({ stationName }) => {
                     </li>
                     <li>
                         <p>오늘</p>
-                        {objectCurrentStationInfo.pm25Today[stateNickname]}
-                        {objectCurrentStationInfo.pm10Today[stateNickname]}
+                        <span className={`miniText miniTextIco_${pm25TodayIndex}`} style={{color: airState(pm25Today)[1]}}>{pm25Today}</span>
+                        <span className={`miniText miniTextIco_${pm10TodayIndex}`} style={{color: airState(pm10Today)[1]}}>{pm10Today}</span>
                     </li>
                     <li>
                         <p>내일</p>
-                        {objectCurrentStationInfo.pm25Tomorrow[stateNickname]}
-                        {objectCurrentStationInfo.pm10Tomorrow[stateNickname]}
+                        <span className={`miniText miniTextIco_${pm25TomorrowIndex}`} style={{color: airState(pm25Tomorrow)[1]}}>{pm25Tomorrow}</span>
+                        <span className={`miniText miniTextIco_${pm10TomorrowIndex}`} style={{color: airState(pm10Tomorrow)[1]}}>{pm10Tomorrow}</span>
                     </li>
-                </ul>
+                </AirForecastUl>
             </Part>
         </Container>
     )

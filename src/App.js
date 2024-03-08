@@ -241,6 +241,8 @@ const InfoButton = styled(Icon)`
     }
 `
 
+const InfoInteraction = styled.div`margin-bottom: 20px;`;
+
 
 // ------------------------------------------------ component
 
@@ -559,7 +561,7 @@ function App() {
                   우리동네 <span>대기정보</span>
                 </h2>
               </div>
-              <div>
+              <InfoInteraction>
                 <div>
                   <InfoButton ico={'bg_search'}>검색</InfoButton>
                   <InfoButton ico={'pos'}>현위치</InfoButton>
@@ -569,7 +571,7 @@ function App() {
                   </p>
                 </div>
                 <Time refresh onClick={refreshHandleClick} />
-              </div>
+              </InfoInteraction>
               <TodayAirQuality stationName={station[0].stationName} />
             </InfoWrapper>
           </InfoContainer>
