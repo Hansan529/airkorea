@@ -36,6 +36,18 @@ const Container = styled.div`
         vertical-align: sub;
         font-size: smaller;
     }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
 `
 
 const Part = styled.div`
@@ -281,9 +293,18 @@ const Component = ({ stationName }) => {
 
     const [selectLegend, setSelectLegend] = useState('CAI');
     const legendClickHandle = (e) => {
-        const { innerText } = e.currentTarget;
-        const regex = /\((.*?)\)/;
-        setSelectLegend(innerText.match(regex)[1]);
+        const node = e.currentTarget;
+        const { parentNode: { parentNode } } = node;
+        const value = node.getAttribute('value');
+        
+        const nodeList = parentNode.querySelectorAll('.legendFlex');
+        nodeList.forEach(div => {
+            Array.from(div.children).forEach(child => {
+                child.classList.remove('on');
+            });
+        });
+        node.classList.add('on');
+        setSelectLegend(value);
     }
     return (
         <Container>
@@ -348,15 +369,15 @@ const Component = ({ stationName }) => {
                     </div>
                     <div>
                         <div className="legendFlex">
-                            <div onClick={legendClickHandle}>통합대기환경지수 (CAI)</div>
-                            <div onClick={legendClickHandle}>초미세먼지 (PM-2.5)</div>
-                            <div onClick={legendClickHandle}>미세먼지 (PM-10)</div>
+                            <div onClick={legendClickHandle} value="khai">통합대기환경지수 (CAI)</div>
+                            <div onClick={legendClickHandle} value="pm25">초미세먼지 (PM-2.5)</div>
+                            <div onClick={legendClickHandle} value="pm10">미세먼지 (PM-10)</div>
                         </div>
                         <div className="legendFlex">
-                            <div onClick={legendClickHandle}>오존 (O<sub>3</sub>)</div>
-                            <div onClick={legendClickHandle}>이산화질소 (NO<sub>2</sub>)</div>
-                            <div onClick={legendClickHandle}>일산화탄소 (CO)</div>
-                            <div onClick={legendClickHandle}>아황산가스 (SO<sub>2</sub>)</div>
+                            <div onClick={legendClickHandle} value="o3">오존 (O<sub>3</sub>)</div>
+                            <div onClick={legendClickHandle} value="no2">이산화질소 (NO<sub>2</sub>)</div>
+                            <div onClick={legendClickHandle} value="co">일산화탄소 (CO)</div>
+                            <div onClick={legendClickHandle} value="so2">아황산가스 (SO<sub>2</sub>)</div>
                         </div>
                         <ul>
                         </ul>
