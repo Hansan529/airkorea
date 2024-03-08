@@ -175,8 +175,7 @@ const MMWrapper = styled.div`
 
 const InfoContainer = styled.div`
     width: 660px;
-    height: 833px;
-    overflow: hidden;
+    /* overflow: hidden; */
 `;
 
 const InfoWrapper = styled.div`

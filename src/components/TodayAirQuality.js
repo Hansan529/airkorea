@@ -30,7 +30,12 @@ const { items: stationsInfo } = stationJson;
  */
 
 const Container = styled.div`
-    /* display: flex; */
+    position: relative;
+
+    sub {
+        vertical-align: sub;
+        font-size: smaller;
+    }
 `
 
 const Part = styled.div`
@@ -57,7 +62,7 @@ const Part = styled.div`
         padding: 30px 0px 25px;
         background-color: #fff;
         display: flex;
-        align-items: center;
+        align-items: flex-end;
 
         > li {
             flex: 1;
@@ -75,10 +80,6 @@ const Part = styled.div`
                 &:not(strong:first-of-type){
                     margin: 10px 0;
                 }
-            }
-            sub {
-                vertical-align: sub;
-                font-size: smaller;
             }
 
             .colorValue {
@@ -104,6 +105,60 @@ const Part = styled.div`
     .miniTextIco_4{ background-image: url('./img_yebo_na04.png'); }
     .miniTextIco_5{ background-image: url('./img_yebo_na05.png'); }
 `
+
+const Legend = styled.div`
+    text-align: center;
+
+    button {
+        border:none;
+        width: 70px;
+        text-align: left;
+        background: url('./img_handong_more.png') no-repeat center right;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+
+    .legendPopup {
+        /* display: none; */
+        position: absolute;
+        bottom: -100px;
+        width: 100%;
+        border: 1px solid #0a0a0a;
+        background-color: #fafafa;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .legendTitle {
+        background-color: #414d5d;
+        color: #fafafa;
+        padding: 10px;
+    }
+
+    .legendFlex {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        height: 30px;
+        padding: 15px 10px 0 10px;
+
+        &:last-of-type{ padding-bottom: 15px; }
+
+        > div {
+            flex: 1;
+            border: 1px solid #d2d2d2;
+            padding: 5px 0;
+
+            &.on {
+                border: 1px solid #0f62cc;
+                color: #0f62cc;
+            }
+        }
+    }
+`;
 
 const AirForecastUl = styled.ul`
     li {
@@ -223,6 +278,13 @@ const Component = ({ stationName }) => {
     const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
     const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
     const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
+
+    const [selectLegend, setSelectLegend] = useState('CAI');
+    const legendClickHandle = (e) => {
+        const { innerText } = e.currentTarget;
+        const regex = /\((.*?)\)/;
+        setSelectLegend(innerText.match(regex)[1]);
+    }
     return (
         <Container>
             <Part>
@@ -277,6 +339,30 @@ const Component = ({ stationName }) => {
                     </li>
                 </AirForecastUl>
             </Part>
+            <Legend>
+                <button>범례보기</button>
+                <div className="legendPopup">
+                    <div className="legendTitle">
+                        <h2>범례보기</h2>
+                        {/* <button>나가기</button> */}
+                    </div>
+                    <div>
+                        <div className="legendFlex">
+                            <div onClick={legendClickHandle}>통합대기환경지수 (CAI)</div>
+                            <div onClick={legendClickHandle}>초미세먼지 (PM-2.5)</div>
+                            <div onClick={legendClickHandle}>미세먼지 (PM-10)</div>
+                        </div>
+                        <div className="legendFlex">
+                            <div onClick={legendClickHandle}>오존 (O<sub>3</sub>)</div>
+                            <div onClick={legendClickHandle}>이산화질소 (NO<sub>2</sub>)</div>
+                            <div onClick={legendClickHandle}>일산화탄소 (CO)</div>
+                            <div onClick={legendClickHandle}>아황산가스 (SO<sub>2</sub>)</div>
+                        </div>
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+            </Legend>
         </Container>
     )
 }
