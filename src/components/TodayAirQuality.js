@@ -140,14 +140,27 @@ const Legend = styled.div`
         width: 100%;
         border: 1px solid #0a0a0a;
         background-color: #fafafa;
-        border-radius: 20px;
+        border-radius: 10px;
         overflow: hidden;
     }
 
     .legendTitle {
         background-color: #414d5d;
         color: #fafafa;
-        padding: 10px;
+        padding: 10px 0;
+        position: relative;
+        height: 15px;
+
+        button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translate(-5px, 7.5px);
+            font-size: 0;
+            background: url('./img_cau_close.png') no-repeat center;
+            width: 22px;
+            height: 22px;
+        }
     }
 
     .legendFlex {
@@ -157,7 +170,7 @@ const Legend = styled.div`
         height: 30px;
         padding: 15px 10px 0 10px;
 
-        &:last-of-type{ padding-bottom: 15px; }
+        &:last-of-type{ padding: 10px 10px 15px 10px; }
 
         > div {
             flex: 1;
@@ -365,7 +378,7 @@ const Component = ({ stationName }) => {
                 <div className="legendPopup">
                     <div className="legendTitle">
                         <h2>범례보기</h2>
-                        {/* <button>나가기</button> */}
+                        <button>나가기</button>
                     </div>
                     <div>
                         <div className="legendFlex">
