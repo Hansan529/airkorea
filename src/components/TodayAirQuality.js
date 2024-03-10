@@ -319,6 +319,10 @@ const Component = ({ stationName }) => {
         node.classList.add('on');
         setSelectLegend(value);
     }
+
+    const legendPopupCloseHandle = () => {
+
+    }
     return (
         <Container>
             <Part>
@@ -378,7 +382,7 @@ const Component = ({ stationName }) => {
                 <div className="legendPopup">
                     <div className="legendTitle">
                         <h2>범례보기</h2>
-                        <button>나가기</button>
+                        <button onClick={legendPopupCloseHandle}>나가기</button>
                     </div>
                     <div>
                         <div className="legendFlex">
