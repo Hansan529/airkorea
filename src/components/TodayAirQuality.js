@@ -4,7 +4,7 @@ import airQualityJson from "../data/todayDaily.json";
 import dnsty from "../data/getCtprvnRltmMesureDnsty.json";
 import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const { response: { body: { items : airQuality }}} = airQualityJson;
 const filterQuality = airQuality.filter((item, index) => index < 4);
@@ -134,7 +134,7 @@ const Legend = styled.div`
     }
 
     .legendPopup {
-        /* display: none; */
+        display: none;
         position: absolute;
         bottom: -100px;
         width: 100%;
@@ -142,6 +142,10 @@ const Legend = styled.div`
         background-color: #fafafa;
         border-radius: 10px;
         overflow: hidden;
+
+        &.open {
+            display: block;
+        }
     }
 
     .legendTitle {
@@ -320,8 +324,17 @@ const Component = ({ stationName }) => {
         setSelectLegend(value);
     }
 
-    const legendPopupCloseHandle = () => {
+    const legendPopupRef = useRef();
 
+    const legendPopupHandle = () => {
+        const { current, current:{ classList: { value } } } = legendPopupRef;
+        console.log('value: ', value);
+        
+        const reg = value.match(/open/);
+        if(reg !== null) {
+            return current.classList.remove('open');
+        } 
+        current.classList.add('open');
     }
     return (
         <Container>
@@ -378,11 +391,11 @@ const Component = ({ stationName }) => {
                 </AirForecastUl>
             </Part>
             <Legend>
-                <button>범례보기</button>
-                <div className="legendPopup">
+                <button onClick={legendPopupHandle}>범례보기</button>
+                <div ref={legendPopupRef} className="legendPopup">
                     <div className="legendTitle">
                         <h2>범례보기</h2>
-                        <button onClick={legendPopupCloseHandle}>나가기</button>
+                        <button onClick={legendPopupHandle}>나가기</button>
                     </div>
                     <div>
                         <div className="legendFlex">
