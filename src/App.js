@@ -101,22 +101,25 @@ const MMOList = styled.ul`
       border-top-right-radius: 10px;
     }
 
-    a {
+    button {
       display: block;
       height: 50px;
       line-height: 50px;
       letter-spacing: -0.6px;
       font-weight: 500;
       background: #fff;
+      width: 100%;
+      border: none;
 
       &:hover {
         text-decoration: underline;
         cursor: pointer;
       }
-    }
-    a.on {
-      background: #0f62cc;
-      color: #fff;
+
+      &.on {
+        background: #0f62cc;
+        color: #fff;
+      }
     }
   }
 `;
@@ -344,7 +347,7 @@ function App() {
     const ulElement = liElement.closest('ul');
     const selectIndex = Array.prototype.indexOf.call(ulElement.children, liElement);
     Array.prototype.forEach.call(ulElement.children, el => {
-      el.querySelector('a').classList.remove('on');
+      el.querySelector('button').classList.remove('on');
     })
     currentTarget.classList.add('on');
     setTapSelect(selectIndex);
@@ -369,18 +372,18 @@ function App() {
             <MMOptionLayout>
               <MMOList>
                 <li>
-                  <a onClick={tapSelectHandle} className="on" href>
+                  <button onClick={tapSelectHandle} className="on">
                     실시간 대기정보
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a onClick={tapSelectHandle} href>오늘/내일/모레 대기정보</a>
+                  <button onClick={tapSelectHandle}>오늘/내일/모레 대기정보</button>
                 </li>
                 <li>
-                  <a onClick={tapSelectHandle} href>실시간 기상정보</a>
+                  <button onClick={tapSelectHandle}>실시간 기상정보</button>
                 </li>
                 <li>
-                  <a onClick={tapSelectHandle} href>오늘/내일/모레 기상정보</a>
+                  <button onClick={tapSelectHandle}>오늘/내일/모레 기상정보</button>
                 </li>
               </MMOList>
               <MMOContainer>
@@ -560,7 +563,7 @@ function App() {
                   우리동네 <span>대기정보</span>
                 </h2>
               </div>
-              <InfoInteraction>
+              <div>
                 <div>
                   <InfoButton ico={'bg_search'}>검색</InfoButton>
                   <InfoButton ico={'pos'}>현위치</InfoButton>
@@ -570,7 +573,7 @@ function App() {
                   </p>
                 </div>
                 <Time refresh onClick={refreshHandleClick} />
-              </InfoInteraction>
+              </div>
               <TodayAirQuality stationName={station[0].stationName} />
             </InfoWrapper>
           </InfoContainer>

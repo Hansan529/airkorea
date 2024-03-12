@@ -4,7 +4,7 @@ import airQualityJson from "../data/todayDaily.json";
 import dnsty from "../data/getCtprvnRltmMesureDnsty.json";
 import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const { response: { body: { items : airQuality }}} = airQualityJson;
 const filterQuality = airQuality.filter((item, index) => index < 4);
@@ -180,6 +180,7 @@ const Legend = styled.div`
             flex: 1;
             border: 1px solid #d2d2d2;
             padding: 5px 0;
+            cursor: pointer;
 
             &.on {
                 border: 1px solid #0f62cc;
@@ -212,6 +213,11 @@ const AirForecastUl = styled.ul`
 `;
 
 const Component = ({ stationName }) => {
+        const legendPopupRef = useRef();
+        useEffect(() => {
+            legendPopupRef.current.focus();
+        },[]);
+
         const { items: dnstyItems } = dnsty.response.body
 
         // 사용자 지역에 대한 대기 정보 수치 값
@@ -324,11 +330,8 @@ const Component = ({ stationName }) => {
         setSelectLegend(value);
     }
 
-    const legendPopupRef = useRef();
-
     const legendPopupHandle = () => {
         const { current, current:{ classList: { value } } } = legendPopupRef;
-        console.log('value: ', value);
         
         const reg = value.match(/open/);
         if(reg !== null) {
