@@ -23,8 +23,8 @@ const {
 
 export const dateTime = detailData[0].dataTime;
 
-// default, hover, button, textColor
-export const getColorValue = (value, type) => {
+// typeRangeValue | default, hover, button, textColor
+export const getColorValue = (value, type, rangeValueShow) => {
   const typeRangeValue = {
     khaiValue: [1, 50, 51, 100, 101, 250, 251],
     pm25Value: [1, 15, 16, 35, 36, 75, 76],
@@ -37,6 +37,10 @@ export const getColorValue = (value, type) => {
 
   const index = Object.keys(typeRangeValue).indexOf(type);
   const values = Object.values(typeRangeValue)[index];
+
+  if(rangeValueShow){
+	return typeRangeValue[type];
+  };
 
   if (value >= values[0] && value <= values[1]) {
     return ['#d0ecff', '#7ed6ff', '#6ac8fe', '#1c67d7'];

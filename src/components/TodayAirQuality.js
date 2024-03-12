@@ -188,6 +188,54 @@ const Legend = styled.div`
             }
         }
     }
+
+    .legendRange {
+        display: flex;
+        padding: 0 10px 10px 10px;
+        
+        li {
+            flex: 1;
+            background-color: #f1fbff;
+            padding: 5px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #c6eeff;
+            border-left: none;
+            border-right: none;
+            &:first-of-type{
+                border-left: 1px solid #c6eeff;
+                border-radius: 5px 0 0 5px;
+            }
+            &:last-of-type {
+                border-right: 1px solid #c6eeff;
+                border-radius: 0 5px 5px 0;
+            }
+        }
+
+        span {
+            display: block;
+            position: relative;
+            font-size: 11px;
+            padding-left: 20px;
+            text-align: left;
+
+            &::after {
+                display: block;
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 10px;
+                height: 10px;
+                background: no-repeat 0 0;
+            }
+            &.legendRange_1::after { background-image: url('./img_ch01.png'); }
+            &.legendRange_2::after { background-image: url('./img_ch02.png'); }
+            &.legendRange_3::after { background-image: url('./img_ch03.png'); }
+            &.legendRange_4::after { background-image: url('./img_ch04.png'); }
+            &.legendRange_5::after { background-image: url('./img_ch05.png'); }
+        }
+    }
 `;
 
 const AirForecastUl = styled.ul`
@@ -213,10 +261,17 @@ const AirForecastUl = styled.ul`
 `;
 
 const Component = ({ stationName }) => {
+        const [legendRange, setLegendRange] = useState([]);
         const legendPopupRef = useRef();
+        const [selectLegend, setSelectLegend] = useState('khai');
+        
         useEffect(() => {
             legendPopupRef.current.focus();
         },[]);
+
+        useEffect(() => {
+            setLegendRange(getColorValue(0, `${selectLegend}Value`, true));
+        }, [selectLegend]);
 
         const { items: dnstyItems } = dnsty.response.body
 
@@ -314,7 +369,6 @@ const Component = ({ stationName }) => {
     const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
     const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
 
-    const [selectLegend, setSelectLegend] = useState('khai');
     const legendClickHandle = (e) => {
         const node = e.currentTarget;
         const { parentNode: { parentNode } } = node;
@@ -339,6 +393,16 @@ const Component = ({ stationName }) => {
         } 
         current.classList.add('open');
     }
+
+    const legendFormatNumber = (num, decimalPlaces) => {
+        if(Number.isInteger(num)) 
+            return num.toString();
+        else {
+            const multiplier = Math.pow(10, decimalPlaces);
+            return Math.floor(num * multiplier) / multiplier;
+        } 
+    }
+
     return (
         <Container>
             <Part>
@@ -412,7 +476,12 @@ const Component = ({ stationName }) => {
                             <div onClick={legendClickHandle} value="co">일산화탄소 (CO)</div>
                             <div onClick={legendClickHandle} value="so2">아황산가스 (SO<sub>2</sub>)</div>
                         </div>
-                        <ul>
+                        <ul className="legendRange">
+                            <li><span className="legendRange_1">{`좋음(0 ~ ${legendFormatNumber(legendRange[1], 3)})`}</span></li>
+                            <li><span className="legendRange_2">{`보통(${legendFormatNumber(legendRange[2], 3)} ~ ${legendFormatNumber(legendRange[3], 3)})`}</span></li>
+                            <li><span className="legendRange_3">{`나쁨(${legendFormatNumber(legendRange[4], 3)} ~ ${legendFormatNumber(legendRange[5], 3)})`}</span></li>
+                            <li><span className="legendRange_4">{`매우나쁨(${legendFormatNumber(legendRange[6], 3)} ~ )`}</span></li>
+                            <li><span className="legendRange_5">데이터 없음</span></li>
                         </ul>
                     </div>
                 </div>
