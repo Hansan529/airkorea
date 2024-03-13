@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import './App.css';
 import Headers from './components/Header';
 import {
+  MapPaths,
   BusanInner,
   BusanPath,
   ChungbukInner,
@@ -42,6 +43,19 @@ import {
 import TodayAirQuality from './components/TodayAirQuality';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
+// ------------------------------------------------ fetch
+
+const fetchData = async () => {
+  try {
+    const detailDataJson = await axios.get('http://localhost:3500/api/getCtprvnRltmMesureDnsty');
+    return detailDataJson.data;
+  } catch (err) {
+    console.error("Error: ", err);
+    return null;
+  }
+}
+
 
 // ------------------------------------------------ styled
 const Select = styled.select`
@@ -215,7 +229,7 @@ const InfoWrapper = styled.div`
 
       > p  {
         font-size: 18px;
-        > strong { color: #0f62cc; font-weight: bold; }
+        > strong { color: #0f62cc; }
         > span { display: block; margin-top: 5px; font-size: 14px; }
       }
     }
@@ -283,8 +297,8 @@ const Time = ({ refresh, onClick }) => {
     top: 0;
     right: 0;
 
-    > strong {
-      font-weight: bold;
+    strong {
+      font-weight: 900;
     }
   `;
   const ButtonStyle = styled(Icon)`
@@ -320,9 +334,9 @@ function App() {
   const [tapSelect, setTapSelect] = useState(0);
 
   const [count, setCount] = useState(0);
-  // const [latitude, setLatitude] = useState('197806.5250901809');
-  // const [longitude, setLongitude] = useState('451373.25740676327');
   const [station, setStation] = useState([{ stationCode: "111121", tm: 0.4, addr: "서울 중구 덕수궁길 15 시청서소문별관 3동", stationName: "중구" }]);
+  // const [detailData, setDetailData] = useState();
+  const [data, setData] = useState(null);
 
   const [loading, setLoading] = useState(false);
   
@@ -348,6 +362,30 @@ function App() {
       navigator.geolocation.getCurrentPosition(success, error);
     }
   }, [count]);
+
+  useEffect(() => {
+    // 로컬 스토리지에서 데이터를 가져옴
+    const storedData = JSON.parse(localStorage.getItem('storedData'));
+    const expireTime = localStorage.getItem('expireTime');
+  
+    // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
+    if (!storedData || !expireTime || new Date(expireTime) < new Date()) {
+      fetchData().then((result) => {
+        if (result) {
+          localStorage.setItem('storedData', JSON.stringify(result));
+          
+          const expireData = new Date();
+          expireData.setHours(expireData.getHours() + 1, 0, 0, 0);
+          localStorage.setItem('expireTime', expireData);
+  
+          setData(result);
+        }
+      });
+    } else {
+      setData(storedData);
+    }
+  }, []);
+  
 
   const refreshHandleClick = () => {
     setCount(count + 1);
@@ -446,26 +484,10 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
+              <MapPaths type={mMOSelect_return}></MapPaths>
               {/* 지역 지수 버튼 */}
-              <MapNameButtons returnValue={mMOSelect_return} onHover={hoverHandle} />
+              {/* <MapNameButtons returnValue={mMOSelect_return} onHover={hoverHandle} /> */}
               {/* 상세 지역 지도 */}
-              <SeoulInner returnValue={mMOSelect_return} />
-              <GyeonggiInner returnValue={mMOSelect_return} />
-              <IncheonInner returnValue={mMOSelect_return} />
-              <GangwonInner returnValue={mMOSelect_return} />
-              <ChungnamInner returnValue={mMOSelect_return} />
-              <DaejeonInner returnValue={mMOSelect_return} />
-              <ChungbukInner returnValue={mMOSelect_return} />
-              <SejongInner returnValue={mMOSelect_return} />
-              <BusanInner returnValue={mMOSelect_return} />
-              <UlsanInner returnValue={mMOSelect_return} />
-              <DaeguInner returnValue={mMOSelect_return} />
-              <GyeongbukInner returnValue={mMOSelect_return} />
-              <GyeongnamInner returnValue={mMOSelect_return} />
-              <JeonnamInner returnValue={mMOSelect_return} />
-              <GwangjuInner returnValue={mMOSelect_return} />
-              <JeonbukInner returnValue={mMOSelect_return} />
-              <JejuInner returnValue={mMOSelect_return} />
               <InnerPathSvg>
                 <g>
                   {/* 전체 지역 지도 */}

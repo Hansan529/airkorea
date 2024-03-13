@@ -21,8 +21,18 @@ router.post('/station', async (req, res) => {
         const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${process.env.REACT_APP_AIRKOREA_SERVICEKEY}&returnType=json&tmX=${x}&tmY=${y}&ver=1.1`)).data;
         return res.json(items)
     } catch(err) {
-        console.error("error: ", err);;
+        console.error("error: ", err);
         return res.end();
+    }
+})
+
+router.get('/getCtprvnRltmMesureDnsty', async (req, res) => {
+    try {
+        const {response: {body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${process.env.REACT_APP_AIRKOREA_SERVICEKEY}&returnType=json&numOfRows=700&pageNo=1&sidoName=전국&ver=1.0`)).data;
+        return res.json(items);
+    } catch(err) {
+        console.error("error: ", err);
+        return res.end;
     }
 })
 
