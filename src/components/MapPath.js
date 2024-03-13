@@ -92,7 +92,6 @@ const InnerMapButton = styled.button`
   }
 `;
 
-const InnerMapSvgStyle = styled.svg``;
 const InnerMapSvg = ({
   id,
   width,
@@ -102,7 +101,7 @@ const InnerMapSvg = ({
   children,
 }) => {
   return (
-    <InnerMapSvgStyle
+    <svg
       version="1.1"
       id={id}
       xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +115,7 @@ const InnerMapSvg = ({
       xmlSpace="preserve"
     >
       {children}
-    </InnerMapSvgStyle>
+    </svg>
   );
 };
 
@@ -126,14 +125,7 @@ const InnerMapPathStyle = styled.path`
     fill: ${(props) => props.fillHoverColor || ''};
   }
 `;
-const InnerMapPath = ({
-  id,
-  className,
-  title,
-  d,
-  fillColor,
-  fillHoverColor,
-}) => (
+const InnerMapPath = ({ id, className, title, d, fillColor, fillHoverColor }) => (
   <InnerMapPathStyle
     id={id}
     className={className}

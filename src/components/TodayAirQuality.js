@@ -260,7 +260,7 @@ const AirForecastUl = styled.ul`
     }
 `;
 
-const Component = ({ stationName }) => {
+const Component = ({ $stationName }) => {
         const [legendRange, setLegendRange] = useState([]);
         const legendPopupRef = useRef();
         const [selectLegend, setSelectLegend] = useState('khai');
@@ -276,7 +276,7 @@ const Component = ({ stationName }) => {
         const { items: dnstyItems } = dnsty.response.body
 
         // 사용자 지역에 대한 대기 정보 수치 값
-        const currentLocation = dnstyItems.find(el => el.stationName === stationName);
+        const currentLocation = dnstyItems.find(el => el.stationName === $stationName);
         // 사용자 지역에 가까운 측정소에 대한 정보
         const currentStationInfo = stationsInfo.find(item => item.stationName === currentLocation.stationName);
 
