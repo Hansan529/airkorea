@@ -3,41 +3,6 @@ import './App.css';
 import Headers from './components/Header';
 import {
   MapPaths,
-  BusanInner,
-  BusanPath,
-  ChungbukInner,
-  ChungbukPath,
-  ChungnamInner,
-  ChungnamPath,
-  DaeguInner,
-  DaeguPath,
-  DaejeonInner,
-  DaejeonPath,
-  GangwonInner,
-  GangwonPath,
-  GwangjuInner,
-  GwangjuPath,
-  GyeongbukInner,
-  GyeongbukPath,
-  GyeonggiInner,
-  GyeonggiPath,
-  GyeongnamInner,
-  GyeongnamPath,
-  IncheonInner,
-  IncheonPath,
-  JejuInner,
-  JejuPath,
-  JeonbukInner,
-  JeonbukPath,
-  JeonnamInner,
-  JeonnamPath,
-  MapNameButtons,
-  SejongInner,
-  SejongPath,
-  SeoulInner,
-  SeoulPath,
-  UlsanInner,
-  UlsanPath,
   dateTime,
 } from './components/MapPath';
 import TodayAirQuality from './components/TodayAirQuality';
@@ -485,12 +450,9 @@ function App() {
             {/* Main Map 전국 지도 */}
             <MMWrapper>
               <MapPaths type={mMOSelect_return}></MapPaths>
-              {/* 지역 지수 버튼 */}
-              {/* <MapNameButtons returnValue={mMOSelect_return} onHover={hoverHandle} /> */}
               {/* 상세 지역 지도 */}
-              <InnerPathSvg>
+              {/* <InnerPathSvg>
                 <g>
-                  {/* 전체 지역 지도 */}
                   <SeoulPath returnValue={mMOSelect_return} hoverEvent={hover} hoverChange={hoverHandle} />
                   <GyeonggiPath returnValue={mMOSelect_return} hoverEvent={hover} hoverChange={hoverHandle} />
                   <IncheonPath returnValue={mMOSelect_return} hoverEvent={hover} hoverChange={hoverHandle} />
@@ -509,7 +471,7 @@ function App() {
                   <JeonbukPath returnValue={mMOSelect_return} hoverEvent={hover} hoverChange={hoverHandle} />
                   <JejuPath returnValue={mMOSelect_return} hoverEvent={hover} hoverChange={hoverHandle} />
                 </g>
-                </InnerPathSvg>
+                </InnerPathSvg> */}
               <Time />
             </MMWrapper>
           </MMLayout>
