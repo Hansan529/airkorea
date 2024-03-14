@@ -82,6 +82,11 @@ const DetailContainer = styled.div`
   position: absolute;
   opacity: 0;
   visibility: hidden;
+
+  &.open {
+	opacity: 1;
+	visibility: visible;
+  }
 `;
 
 const MapPath = styled.path`
@@ -241,11 +246,34 @@ const filterStationReturnValue = (type, list) => {
 
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState('');
+	const [mapPopup, setMapPopup] = useState(false);
 
 	const hoverHandle = (element) => {
-		setHover(element);
-	  };
+		if(!mapPopup) setHover(element);
+	};
 
+	const innerClickHandle = (element) => {
+		setMapPopup(true);
+		const { currentTarget: { nextSibling, parentNode, id } } = element;
+		console.log('parentNode: ', parentNode);
+
+		if(parentNode.tagName === 'DIV'){
+			console.log('parentNode.parentNode: ', parentNode.parentNode);
+			if(nextSibling.classList.length === 3) {
+				nextSibling.classList.add('open');
+			};
+		} else if(parentNode.tagName === 'svg') {
+			const num = id.match(/\d+/g)[0];
+			parentNode.parentNode.querySelectorAll('.detailRegion').forEach(item => item.classList.remove('open'))
+			const detailMap = parentNode.parentNode.querySelector(`.detailRegion_${num}`);
+			if(detailMap.classList.length === 3) {
+				detailMap.classList.add('open');
+			}
+		}
+		const buttons = parentNode.parentNode.querySelectorAll('.regionButton');
+		buttons.forEach(item => item.classList.add('hide'));
+	};
+	
 	/** 상세 지역 컴포넌트 (버튼)  */
 	const InnerComponent = ({ regionNum, regionName, children }) => {
 		const { result } = filterStationReturnValue(props.type, regionList[regionName]);
@@ -302,7 +330,7 @@ export const MapPaths = (props) => {
 		const InnerComponent = Components[regionName];
 
 		return (
-			<DetailContainer regionNum={regionNum}>
+			<DetailContainer className={`detailRegion detailRegion_${regionNum}`} regionNum={regionNum}>
 				{/* 버튼 */}
 				{regionList[regionName].map(renderButton)}
 				<InnerMapSvg id={`p_code_${regionNum}`}>
@@ -342,13 +370,11 @@ export const MapPaths = (props) => {
 		cursor: pointer;
 		font-weight: bold;
 
-		&:hover {
-			text-decoration: underline;
-		}
+		&.hide { display: none; }
 
-		> span {
-			display: block;
-		}
+		&:hover { text-decoration: underline; }
+
+		> span { display: block; }
 	`;
 	const namePositionVal = [
 		{ num: '02',  name: '서울', left: '241px', top: '120px'},
@@ -416,7 +442,8 @@ export const MapPaths = (props) => {
 						fillColor={color}
 						hoverConnection={hoverChk}
 						onMouseOver={() => hoverHandle(region.name)}
-						onMouseOut={() => hoverHandle('')}
+						onMouseExit={() => hoverHandle('')}
+						onClick={innerClickHandle}
 						d={backgroundPathData[region.num]}
 						></MapPath>
 					{(region.name !== '인천' && PathComponent) && <PathComponent />}
@@ -450,11 +477,13 @@ export const MapPaths = (props) => {
 					return (
 						<div key={key} className={el.name}>
 							<MapNameButton
+								className="regionButton"
 								left={el.left}
 								top={el.top}
 								bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
 								onMouseOver={() => hoverHandle(el.name)}
-								onMouseOut={() => hoverHandle('')}
+								onMouseExit={() => hoverHandle('')}
+								onClick={innerClickHandle}
 							>
 								{el.name}
 								<span>{regionAvgValue(key, props.type)}</span>
@@ -468,68 +497,3 @@ export const MapPaths = (props) => {
 		</>
 	)
 }
-
-// ---------------------------------------------------------------------------------
-
-/** 서울 02 외각선의 경우, 경기도 외각선으로 대체 */
-
-// ---------------------------------------------------------------------------------
-
-/** 인천 032 */
-
-// ---------------------------------------------------------------------------------
-
-/** 강원 033 */
-
-/** 충남 041 */
-
-// ---------------------------------------------------------------------------------
-
-/** 대전 042 */
-
-
-// ---------------------------------------------------------------------------------
-
-/** 충북 043 */
-
-
-// ---------------------------------------------------------------------------------
-
-/** 세종 044 */
-
-// ---------------------------------------------------------------------------------
-
-/** 부산 051 */
-
-// ---------------------------------------------------------------------------------
-
-/** 울산 052 */
-
-// ---------------------------------------------------------------------------------
-
-/** 대구 053 */
-
-// ---------------------------------------------------------------------------------
-
-/** 경북 054 */
-
-// ---------------------------------------------------------------------------------
-
-/** 경남 055 */
-
-// ---------------------------------------------------------------------------------
-
-/** 전남 061 */
-
-
-// ---------------------------------------------------------------------------------
-
-/** 광주 062 */
-
-// ---------------------------------------------------------------------------------
-
-/** 전북 063 */
-
-// ---------------------------------------------------------------------------------
-
-/** 제주 064 */
