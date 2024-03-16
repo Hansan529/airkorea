@@ -84,6 +84,7 @@ const DetailContainer = styled.div`
   visibility: hidden;
 
   &.open {
+	z-index: 50;
 	opacity: 1;
 	visibility: visible;
   }
@@ -105,9 +106,6 @@ const MapPath = styled.path`
   cursor: pointer;
 
   filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
-  /* &:hover {
-	filter: drop-shadow(5px 5px 3px rgba(0,0,0,0.2));
-  } */
 `;
 
 const InnerMapButton = styled.button`
@@ -267,21 +265,14 @@ export const MapPaths = (props) => {
 	};
 	
 	const innerClickHandle = (element) => {
-		const { currentTarget: { parentNode } } = element;
-		const [$regions, regionNumString] = parentNode.classList;
-		const [regionNum] = regionNumString.match(/\d+/g);
-
-		const mapList = mapName.current.querySelectorAll('.regions');
-		mapList.forEach(item => {
-			const [btn, div] = item.children;
-			btn.classList.add('hide');
-			div.classList.remove('open');
+		const { currentTarget } = element;
+		const targetNode = currentTarget.closest('div.regions');
+		const map = targetNode.querySelector('.innerMap');
+		const initialization = mapName.current.querySelectorAll('.innerMap').forEach(item => {
+			item.classList.remove('open');
 		});
+		map.classList.add('open');
 
-		const [$btn, div] = mapName.current.querySelector(`div.region_${regionNum}`).children;
-		div.classList.add('open');
-
-		setHover('');
 		setMapPopup(true);
 	};
 
@@ -307,8 +298,6 @@ export const MapPaths = (props) => {
 		cursor: pointer;
 		font-weight: bold;
 		z-index: 10;
-
-		&.hide { display: none; }
 
 		&:hover { text-decoration: underline; }
 
@@ -391,7 +380,7 @@ export const MapPaths = (props) => {
 		const InnerComponent = Components[regionName];
 
 		return (
-			<DetailContainer regionNum={regionNum}>
+			<DetailContainer className="innerMap" regionNum={regionNum}>
 				{/* 버튼 */}
 				{regionList[regionName].map(renderButton)}
 				<InnerMapSvg id={`p_code_${regionNum}`}>
@@ -563,7 +552,7 @@ export const MapPaths = (props) => {
 							</MapNameButton>
 							<InnerComponent regionNum={el.num} regionName={el.name} />
 							<MapSvg 
-								className={`regions region_${el.num}`} 
+								className={`region_${el.num}`} 
 								key={key}
 								version="1.1" 
 								xmlns="http://www.w3.org/2000/svg" 
