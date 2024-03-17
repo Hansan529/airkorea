@@ -245,7 +245,7 @@
         "전북": [
             {"name": "고창","district": "군","left": "91px","top": "315px","station": ["고창읍", "심원면"]},
             {"name": "군산","district": "시","left": "129px","top": "151px","station": ["신풍동(군산)","소룡동","사정동","옥산면","비응도동","말도","소룡동2","군산항"]},
-            {"name": "김제","district": "시","left": "174px","top": "200px제","station": ["요촌동", "광활면"]},
+            {"name": "김제","district": "시","left": "174px","top": "200px","station": ["요촌동", "광활면"]},
             {"name": "남원","district": "시","left": "317px","top": "337px","station": ["죽항동", "운봉읍"]},
             {"name": "무주","district": "군","left": "403px","top": "175px","station": ["무주읍", "안성면"]},
             {"name": "부안","district": "군","left": "101px","top": "242px","station": ["부안읍", "새만금", "계화면"]},
