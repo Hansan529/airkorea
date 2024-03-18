@@ -221,24 +221,7 @@ const InfoInteraction = styled.div`margin-bottom: 20px;`;
 
 // ------------------------------------------------ component
 const Main = ({ children }) => <main>{children}</main>;
-const InnerPathSvg = ({ children }) => {
-  return (
-    <svg 
-      version="1.1" 
-      id="map_svg_city" 
-      xmlns="http://www.w3.org/2000/svg" 
-      xmlnsXlink="http://www.w3.org/1999/xlink" 
-      x="0px" 
-      y="0px"
-      width="700px"
-      height="730px"
-      viewBox="0 0 700 730"
-      enableBackground="new 0 0 700 730"
-      xmlSpace="preserve"
-    >{children}</svg>
-  )
-}
-const Time = ({ refresh, onClick }) => {
+export const Time = ({ top, left, right, refresh, onClick }) => {
   const updateTime = new Date(dateTime);
   const year = updateTime.getFullYear();
   const month = String(updateTime.getMonth() + 1).padStart(2, '0');
@@ -249,13 +232,15 @@ const Time = ({ refresh, onClick }) => {
     display: flex;
     gap: 5px !important;
     background-color: ${refresh ? '#e4f7ff' : '#fff'};
-    height: 20px;
-    padding: 5px 10px;
+    height: 15px;
+    padding: 5px 15px;
     border-radius: 25px;
     align-items: center;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: ${top || 0};
+    right: ${right || 0};
+    left: ${left};
+    font-size: 14px;
 
     strong {
       font-weight: 900;

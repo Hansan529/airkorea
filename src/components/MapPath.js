@@ -25,6 +25,7 @@ import { UlsanPath } from './Ulsan';
 import { DaeguPath } from './Daegu';
 import { GwangjuPath } from './Gwangju';
 import { ChungbukPath } from './Chungbuk';
+import { Time } from '../App';
 
 const {
   response: {
@@ -287,7 +288,7 @@ export const MapPaths = (props) => {
 
 
 	/** 상세 지역 컴포넌트 (버튼)  */
-	const InnerComponent = ({ regionNum, regionName, fullName, children }) => {
+	const InnerComponent = ({ regionNum, regionName, fullName }) => {
 		const { result } = filterStationReturnValue(props.type, regionList[regionName]);
 		
 		const renderButton = (el, key) => {
@@ -350,6 +351,9 @@ export const MapPaths = (props) => {
 			position: absolute;
 			opacity: 0;
 			visibility: hidden;
+			border-radius: 10px;
+			border: 1px solid #000;
+			overflow: hidden;
 
 			&.open {
 				z-index: 50;
@@ -413,6 +417,7 @@ export const MapPaths = (props) => {
 					<h2>{fullName}</h2>
 					<button onClick={() => innerClickHandle(0)}>창 닫기</button>
 				</Title>
+				<Time top="50px" left="15px" right="initial" />
 				{/* 버튼 */}
 				<ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>
 				{/* SVG */}
