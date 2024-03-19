@@ -118,7 +118,7 @@ const Part = styled.div`
     .miniTextIco_5{ background-image: url('./img_yebo_na05.png'); }
 `
 
-const Legend = styled.div`
+const LegendBase = styled.div`
     text-align: center;
 
     button {
@@ -142,10 +142,6 @@ const Legend = styled.div`
         background-color: #fafafa;
         border-radius: 10px;
         overflow: hidden;
-
-        &.open {
-            display: block;
-        }
     }
 
     .legendTitle {
@@ -181,11 +177,6 @@ const Legend = styled.div`
             border: 1px solid #d2d2d2;
             padding: 5px 0;
             cursor: pointer;
-
-            &.on {
-                border: 1px solid #0f62cc;
-                color: #0f62cc;
-            }
         }
     }
 
@@ -262,6 +253,7 @@ const AirForecastUl = styled.ul`
 
 const Component = ({ $stationName }) => {
         const [legendRange, setLegendRange] = useState([]);
+        const [legendPopupState, setLegendPopupState] = useState(false);
         const legendPopupRef = useRef();
         const [selectLegend, setSelectLegend] = useState('khai');
         
@@ -369,30 +361,30 @@ const Component = ({ $stationName }) => {
     const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
     const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
 
+    // ---------------------------------------------------- Dyanmic Styled
+    const Legend = styled(LegendBase)`
+        .legendPopup {
+                display: ${legendPopupState && "block"};
+        }
+        .legendFlex {
+            > div {
+                &[data-value="${selectLegend}"] {
+                    border: 1px solid #0f62cc;
+                    color: #0f62cc;
+                }
+            }
+        }
+    `
+
+    // ---------------------------------------------------- Event
     const legendClickHandle = (e) => {
         const node = e.currentTarget;
-        const { parentNode: { parentNode } } = node;
-        const value = node.getAttribute('value');
+        const value = node.dataset.value;
 
-        const nodeList = parentNode.querySelectorAll('.legendFlex');
-        nodeList.forEach(div => {
-            Array.from(div.children).forEach(child => {
-                child.classList.remove('on');
-            });
-        });
-        node.classList.add('on');
         setSelectLegend(value);
     }
 
-    const legendPopupHandle = () => {
-        const { current, current:{ classList: { value } } } = legendPopupRef;
-        
-        const reg = value.match(/open/);
-        if(reg !== null) {
-            return current.classList.remove('open');
-        } 
-        current.classList.add('open');
-    }
+    const legendPopupHandle = () => setLegendPopupState(!legendPopupState);
 
     const legendFormatNumber = (num, decimalPlaces) => {
         if(Number.isInteger(num)) 
@@ -466,15 +458,15 @@ const Component = ({ $stationName }) => {
                     </div>
                     <div>
                         <div className="legendFlex">
-                            <div onClick={legendClickHandle} className="on" value="khai">통합대기환경지수 (CAI)</div>
-                            <div onClick={legendClickHandle} value="pm25">초미세먼지 (PM-2.5)</div>
-                            <div onClick={legendClickHandle} value="pm10">미세먼지 (PM-10)</div>
+                            <div onClick={legendClickHandle} data-value="khai">통합대기환경지수 (CAI)</div>
+                            <div onClick={legendClickHandle} data-value="pm25">초미세먼지 (PM-2.5)</div>
+                            <div onClick={legendClickHandle} data-value="pm10">미세먼지 (PM-10)</div>
                         </div>
                         <div className="legendFlex">
-                            <div onClick={legendClickHandle} value="o3">오존 (O<sub>3</sub>)</div>
-                            <div onClick={legendClickHandle} value="no2">이산화질소 (NO<sub>2</sub>)</div>
-                            <div onClick={legendClickHandle} value="co">일산화탄소 (CO)</div>
-                            <div onClick={legendClickHandle} value="so2">아황산가스 (SO<sub>2</sub>)</div>
+                            <div onClick={legendClickHandle} data-value="o3">오존 (O<sub>3</sub>)</div>
+                            <div onClick={legendClickHandle} data-value="no2">이산화질소 (NO<sub>2</sub>)</div>
+                            <div onClick={legendClickHandle} data-value="co">일산화탄소 (CO)</div>
+                            <div onClick={legendClickHandle} data-value="so2">아황산가스 (SO<sub>2</sub>)</div>
                         </div>
                         <ul className="legendRange">
                             <li><span className="legendRange_1">{`좋음(0 ~ ${legendFormatNumber(legendRange[1], 3)})`}</span></li>

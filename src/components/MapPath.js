@@ -74,8 +74,94 @@ export const getColorValue = (value, type, rangeValueShow) => {
   }
 };
 
+// ------------------------------------------------------- Styled
+const InnerMapButton = styled.button`
+	position: absolute;
+	width: 42px;
+	height: 42px;
+	border-radius: 50px;
+	border: none;
+	text-align: center;
+	line-height: 17px;
+	font-size: 13px;
+	background-color: ${(props) => props.value || '#abb0b3'};
+	padding: 0;
+	strong {
+	display: block;
+	}
+`;
+const MapPath = styled.path`
+	fill: ${(props) => props.fillColor || '#cbd0d3'};
+	cursor: pointer;
 
-// !---------------------------------------------------------------------------------
+	filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
+`;
+const MapSvg = ({ className, children }) => {
+	const Style = styled.svg`
+		position: absolute;
+		left: 0;
+		top: 0;
+		pointer-events: none;
+		margin-top: -25px;
+
+		path {
+			pointer-events: auto;
+		}
+	`
+	return (
+		<Style
+			className={className}
+			version="1.1" 
+			xmlns="http://www.w3.org/2000/svg" 
+			xmlnsXlink="http://www.w3.org/1999/xlink" 
+			x="0px" 
+			y="0px"
+			width="700px"
+			height="730px"
+			viewBox="0 0 700 730"
+			enableBackground="new 0 0 700 730"
+			xmlSpace="preserve"
+		>{children}</Style>
+	)
+
+	}
+const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor }) => {
+const InnerMapPathStyle = styled.path`
+	fill: ${fillColor || '#cbd0d3'};
+	&:hover {
+	fill: ${fillHoverColor || '#c1c5c7'};
+	}
+`;
+return (
+<InnerMapPathStyle id={id} title={title} d={d} ></InnerMapPathStyle>
+)};
+const MainContainer = styled.div`
+		position: absolute;
+	`;
+const LoopContainer = styled.div`
+	position: relative;
+`
+const MapNameButton = styled.button`
+	position: absolute;
+	left: ${(props) => props.left};
+	top: ${(props) => props.top};
+	border: none;
+	background-color: ${(props) => props.bgColor};
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	text-align: center;
+	line-height: 17px;
+	opacity: 1;
+	cursor: pointer;
+	font-weight: bold;
+	z-index: 10;
+
+	&:hover { text-decoration: underline; }
+
+	> span { display: block; }
+`;
+// ^-------------------------------------------------------------- JSON
 
 /** JSON 사용 */
 export const dateTime = detailData[0].dataTime;
@@ -164,7 +250,7 @@ const filterStationReturnValue = (type, list) => {
 
   return { result, avgValue };
 };
-// !---------------------------------------------------------------------------------
+// ^-------------------------------------------------------------- JSON
 
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
@@ -172,100 +258,10 @@ export const MapPaths = (props) => {
 	const mapName = useRef();
 	
 	const hoverHandle = (element) => setHover(element);
-	const innerClickHandle = (element) => setOpenMap(element);
+	const innerClickHandle = (element) => {
+		setOpenMap(element)
+	};
 
-
-	const MapSvg = ({ className, children }) => {
-	const Style = styled.svg`
-		position: absolute;
-		left: 0;
-		top: 0;
-		pointer-events: none;
-		margin-top: -25px;
-
-		path {
-			pointer-events: auto;
-		}
-	`
-	return (
-		<Style
-			className={className}
-			version="1.1" 
-			xmlns="http://www.w3.org/2000/svg" 
-			xmlnsXlink="http://www.w3.org/1999/xlink" 
-			x="0px" 
-			y="0px"
-			width="700px"
-			height="730px"
-			viewBox="0 0 700 730"
-			enableBackground="new 0 0 700 730"
-			xmlSpace="preserve"
-		>{children}</Style>
-	)
-
-	}
-
-	const MapPath = styled.path`
-	fill: ${(props) => props.fillColor || '#cbd0d3'};
-	cursor: pointer;
-
-	filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
-	`;
-
-	const InnerMapButton = styled.button`
-	position: absolute;
-	width: 42px;
-	height: 42px;
-	border-radius: 50px;
-	border: none;
-	text-align: center;
-	line-height: 17px;
-	font-size: 13px;
-	background-color: ${(props) => props.value || '#abb0b3'};
-	padding: 0;
-	strong {
-	display: block;
-	}
-	`;
-
-	const InnerMapPath = ({ id, className, title, d, fillColor, fillHoverColor }) => {
-	const InnerMapPathStyle = styled.path`
-		fill: ${fillColor || '#cbd0d3'};
-		&:hover {
-		fill: ${fillHoverColor || '#c1c5c7'};
-		}
-	`;
-	return (
-	<InnerMapPathStyle id={id} className={className} title={title} d={d} ></InnerMapPathStyle>
-	)};
-
-	/** 전국 버튼 위치, 대기 정보 출력 */
-	const MainContainer = styled.div`
-		position: absolute;
-	`;
-	const LoopContainer = styled.div`
-		position: relative;
-	`
-	const MapNameButton = styled.button`
-		position: absolute;
-		left: ${(props) => props.left};
-		top: ${(props) => props.top};
-		border: none;
-		background-color: ${(props) => props.bgColor};
-		width: 60px;
-		height: 60px;
-		border-radius: 30px;
-		text-align: center;
-		line-height: 17px;
-		opacity: 1;
-		cursor: pointer;
-		font-weight: bold;
-		z-index: 10;
-
-		&:hover { text-decoration: underline; }
-
-		> span { display: block; }
-	`;
 	const namePositionVal = [
 		{ num: '02',  name: '서울', fullName: '서울특별시', left: '241px', top: '120px'},
 		{ num: '031', name: '경기', fullName: '경기도', left: '290px', top: '175px'},
@@ -285,7 +281,6 @@ export const MapPaths = (props) => {
 		{ num: '063', name: '전북', fullName: '전라북도', left: '257px', top: '422px'},
 		{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45px', top: '640px'},
 	];
-
 
 	/** 상세 지역 컴포넌트 (버튼)  */
 	const InnerComponent = ({ regionNum, regionName, fullName }) => {
@@ -349,13 +344,14 @@ export const MapPaths = (props) => {
 				props.noImage === 'true' ? '' : `url('/map_bg_${props.regionNum}.jpg')`
 			} no-repeat center 35px`};
 			position: absolute;
-			opacity: 0;
-			visibility: hidden;
 			border-radius: 10px;
 			border: 1px solid #000;
 			overflow: hidden;
+			opacity: 0;
+			visibility: hidden;
 
-			&.open {
+			/* dynamic */
+			&[data-region_num="${openMap}"]{
 				z-index: 50;
 				opacity: 1;
 				visibility: visible;
@@ -412,7 +408,7 @@ export const MapPaths = (props) => {
 		};
 
 		return (
-			<DetailContainer className={regionNum === openMap ? 'open' : null} regionNum={regionNum}>
+			<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
 				<Title>
 					<h2>{fullName}</h2>
 					<button onClick={() => innerClickHandle(0)}>창 닫기</button>

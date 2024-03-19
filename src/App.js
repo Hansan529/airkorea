@@ -6,7 +6,7 @@ import {
   dateTime,
 } from './components/MapPath';
 import TodayAirQuality from './components/TodayAirQuality';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 // ------------------------------------------------ fetch
@@ -21,19 +21,7 @@ const fetchData = async () => {
   }
 }
 
-
 // ------------------------------------------------ styled
-const Select = styled.select`
-  -o-appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-`;
-
-const Section = styled.section`
-    position: relative;
-`;
-
 const Icon = styled.button`
   background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
   &:hover {
@@ -41,186 +29,7 @@ const Icon = styled.button`
     }
 `;
 
-const FirstSection = styled(Section)`
-  background: url('/img_main_bg.png') repeat-x 0 0;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  padding-top: 20px;
-`;
-
-const MMLayout = styled.div`
-    width: 710px;
-`;
-const MMOptionLayout = styled.div`
-  width: 710px;
-  position: relative;
-  z-index: 10;
-  background-color: #fff;
-  border-radius: 10px;
-`;
-const MMOList = styled.ul`
-  display: flex;
-  margin: 0;
-  margin-bottom: 5px;
-  
-  li {
-    flex: 1;
-    text-align: center;
-    border: 1px solid #d2d2d2;
-    border-bottom: none;
-    overflow: hidden;
-
-    &:first-of-type {
-      border-top-left-radius: 10px;
-    }
-
-    &:last-of-type {
-      border-top-right-radius: 10px;
-    }
-
-    button {
-      display: block;
-      height: 50px;
-      line-height: 50px;
-      letter-spacing: -0.6px;
-      font-weight: 500;
-      background: #fff;
-      width: 100%;
-      border: none;
-
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-      }
-
-      &.on {
-        background: #0f62cc;
-        color: #fff;
-      }
-    }
-  }
-`;
-const MMOContainer = styled.div`
-  height: 50px;
-  background: linear-gradient(to right, #009ffa, #00c36a);
-  border-radius: 6px;
-  display: flex;
-`;
-const MMOSelectWrapper = styled.div`
-  flex: 1;
-  padding: 10px;
-  font-size: 14px;
-  color: #0a0a0a;
-`;
-const MMOSelect = styled(Select)`
-  border-radius: 30px;
-  background: #fff no-repeat right 10px center;
-  background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
-  width: ${(props) => props.$width};
-  height: 30px;
-  padding: ${(props) => (props.flex ? '0 3px' : '0 15px')};
-  border: none;
-  display: ${(props) => props.flex && 'flex'};
-  justify-content: center;
-  align-items: center;
-
-  button {
-    flex: 1;
-    color: #0a0a0a;
-    border: none;
-    background: none;
-    border-radius: 30px;
-    height: 24px;
-
-    &.on {
-      color: #fff;
-      background-color: #414d5d;
-    }
-  }
-`;
-
-const MMWrapper = styled.div`
-  width: 700px;
-  height: 705px;
-  box-sizing: border-box;
-  background: url('/map_svg_warp_bg.png') no-repeat;
-  position: relative;
-  margin-top: 20px;
-`;
-
-const InfoContainer = styled.div`
-    width: 660px;
-    /* overflow: hidden; */
-`;
-
-const InfoWrapper = styled.div`
-  border: 5px solid #00aeee;
-  border-radius: 20px;
-  padding: 15px;
-  background-color: #fff;
-
-  > div:first-of-type{
-    background: url('/img_bg01.png') no-repeat;
-    height: 55px;
-    line-height: 55px;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    margin-bottom: 15px;
-
-    h2 {
-      font-size: 30px;
-      font-weight: 700;
-      text-align: center;
-
-      > span {
-        color: #0f62cc;
-      }
-    }
-  }
-
-  > div:nth-of-type(2) {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-
-    > div {
-      display: flex;
-      gap: 10px;
-
-      > p  {
-        font-size: 18px;
-        > strong { color: #0f62cc; }
-        > span { display: block; margin-top: 5px; font-size: 14px; }
-      }
-    }
-
-    button {
-      font-size: 0;
-    }
-  }
-`;
-
-const InfoButton = styled(Icon)`
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 1px solid #c6ccd4;
-    border-radius: 5px;
-    background-color: #fff;
-    background-size: ${props => props.ico === 'bg_search' && '70%'};
-    background-repeat: no-repeat;
-    background-position: center;
-
-    &:hover {
-      background-color: rgba(0,0,0,0.2);
-    }
-`
-
-const InfoInteraction = styled.div`margin-bottom: 20px;`;
-
-
 // ------------------------------------------------ component
-const Main = ({ children }) => <main>{children}</main>;
 export const Time = ({ top, left, right, refresh, onClick }) => {
   const updateTime = new Date(dateTime);
   const year = updateTime.getFullYear();
@@ -270,28 +79,238 @@ export const Time = ({ top, left, right, refresh, onClick }) => {
 };
 
 function App() {
+  // ------------------------------------------------ component
+  const Main = ({ children }) => <main>{children}</main>;
 
   // ------------------------------------------------ setting
-  
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
+  const [mMoSelect_info, setMMOSelect_info] = useState('air');
+
   const [tapSelect, setTapSelect] = useState(0);
 
   const [count, setCount] = useState(0);
   const [station, setStation] = useState([{ stationCode: "111121", tm: 0.4, addr: "서울 중구 덕수궁길 15 시청서소문별관 3동", stationName: "중구" }]);
-  // const [detailData, setDetailData] = useState();
   const [data, setData] = useState(null);
 
   const [loading, setLoading] = useState(false);
   
+  // ------------------------------------------------ style
+  const Select = styled.select`
+  -o-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  `;
+  const Section = styled.section`
+      position: relative;
+  `;
+  const FirstSection = styled(Section)`
+    background: url('/img_main_bg.png') repeat-x 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding-top: 20px;
+  `;
+  const MMLayout = styled.div`
+      width: 710px;
+  `;
+  const MMOptionLayout = styled.div`
+    width: 710px;
+    position: relative;
+    z-index: 10;
+    background-color: #fff;
+    border-radius: 10px;
+  `;
+  const MMOList = styled.ul`
+    display: flex;
+    margin: 0;
+    margin-bottom: 5px;
+    
+    li {
+      flex: 1;
+      text-align: center;
+      border: 1px solid #d2d2d2;
+      border-bottom: none;
+      overflow: hidden;
+
+      &:first-of-type {
+        border-top-left-radius: 10px;
+      }
+
+      &:last-of-type {
+        border-top-right-radius: 10px;
+      }
+
+      button {
+        display: block;
+        height: 50px;
+        line-height: 50px;
+        letter-spacing: -0.6px;
+        font-weight: 500;
+        background: #fff;
+        width: 100%;
+        border: none;
+
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+
+      &:nth-of-type(${tapSelect + 1}){
+        button {
+          background: #0f62cc;
+          color: #fff;
+        }
+      }
+    }
+  `;
+  const MMOContainer = styled.div`
+    height: 50px;
+    background: linear-gradient(to right, #009ffa, #00c36a);
+    border-radius: 6px;
+    display: flex;
+    padding: 10px;
+    box-sizing: border-box;
+  `;
+  const MMOBorder = `
+    border-radius: 30px;
+    background: #fff no-repeat right 10px center;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    border: none;
+  `
+  const MMOSelectWrapper = styled.div`
+    flex: 1 1 calc(33.333% - 20px);
+    text-align: center;
+    font-size: 14px;
+    color: #0a0a0a;
+    `;
+  const MMOSelect = styled(Select)`
+    ${MMOBorder}
+    background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
+    width: ${props => props.$width};
+    padding: ${(props) => (props.flex ? '0 3px' : '0 15px')};
+    display: ${(props) => props.flex && 'flex'};
+
+    button {
+      flex: 1;
+      color: #0a0a0a;
+      border: none;
+      background: none;
+      border-radius: 30px;
+      height: 24px;
+
+      &.on {
+        color: #fff;
+        background-color: #414d5d;
+      }
+    }
+  `;
+  const MMOBorderDiv = styled(MMOSelectWrapper)`
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    ${MMOBorder}
+    padding: 0 5px;
+    box-sizing: border-box;
+
+    button {
+      flex: 1;
+      border: none;
+      background: none;
+      border-radius: 30px;
+      height: calc(100% - 5px);
+    }
+
+    button[data-information="${mMoSelect_info}"]{
+      font-weight: bold;
+      background-color: #414d5d;
+      color: #fff;
+    }
+  `
+  const MMWrapper = styled.div`
+    width: 700px;
+    height: 705px;
+    box-sizing: border-box;
+    background: url('/map_svg_warp_bg.png') no-repeat;
+    position: relative;
+    margin-top: 20px;
+  `;
+  const InfoContainer = styled.div`
+      width: 660px;
+      /* overflow: hidden; */
+  `;
+  const InfoWrapper = styled.div`
+    border: 5px solid #00aeee;
+    border-radius: 20px;
+    padding: 15px;
+    background-color: #fff;
+
+    > div:first-of-type{
+      background: url('/img_bg01.png') no-repeat;
+      height: 55px;
+      line-height: 55px;
+      border-bottom: 1px solid rgba(0,0,0,0.3);
+      margin-bottom: 15px;
+
+      h2 {
+        font-size: 30px;
+        font-weight: 700;
+        text-align: center;
+
+        > span {
+          color: #0f62cc;
+        }
+      }
+    }
+
+    > div:nth-of-type(2) {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+
+      > div {
+        display: flex;
+        gap: 10px;
+
+        > p  {
+          font-size: 18px;
+          > strong { color: #0f62cc; }
+          > span { display: block; margin-top: 5px; font-size: 14px; }
+        }
+      }
+
+      button {
+        font-size: 0;
+      }
+    }
+  `;
+  const InfoButton = styled(Icon)`
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 1px solid #c6ccd4;
+      border-radius: 5px;
+      background-color: #fff;
+      background-size: ${props => props.ico === 'bg_search' && '70%'};
+      background-repeat: no-repeat;
+      background-position: center;
+
+      &:hover {
+        background-color: rgba(0,0,0,0.2);
+      }
+  `
+  const InfoInteraction = styled.div`margin-bottom: 20px;`;
+
   useEffect(() => {
     if('geolocation' in navigator) {
       const success = async (pos) => {
         let { latitude, longitude } = pos.coords;
         if(latitude === undefined) latitude = '197806.5250901809';
         if(longitude === undefined) longitude = '451373.25740676327';
-        // setLatitude(latitude);
-        // setLongitude(longitude);
         
         const { data } = await axios.post('http://localhost:3500/api/coordinate', { latitude, longitude});
         const { x, y } = data.documents[0];
@@ -330,29 +349,29 @@ function App() {
     }
   }, []);
   
-
-  const refreshHandleClick = () => {
-    setCount(count + 1);
-  };
+  // ------------------------------------------------ event
+  const refreshHandleClick = () => setCount(count + 1);
   
   const tapSelectHandle = (e) => {
-    const { currentTarget } = e
     const liElement = e.currentTarget.parentNode;
     const ulElement = liElement.closest('ul');
     const selectIndex = Array.prototype.indexOf.call(ulElement.children, liElement);
-    Array.prototype.forEach.call(ulElement.children, el => {
-      el.querySelector('button').classList.remove('on');
-    })
-    currentTarget.classList.add('on');
     setTapSelect(selectIndex);
   }
 
-  const mMoSelectChange = (e) => {
-    const { value } = e.currentTarget;
+  const mMoSelectHandle = (e) => {
+    const { value, dataset: { information } } = e.currentTarget;
+    
+    // 대기/경보 정보, 측정소 정보 클릭 시
+    if(information){
+      setMMOSelect_info(information);
+    } else {
+      if(value.match(/Value/gi) === null) setMMOSelect_region(value);
+      else setMMOSelect_return(value);
+    }
 
-    if(value.match(/Value/gi) === null) setMMOSelect_region(value);
-    else setMMOSelect_return(value);
   };
+
 
   return (
     <>
@@ -385,7 +404,7 @@ function App() {
                   <label htmlFor="area1" style={{ marginRight: '5px' }}>
                     종류
                   </label>
-                  <MMOSelect id="area1" bg $width="188px" onChange={mMoSelectChange}>
+                  <MMOSelect id="area1" bg $width="180px" onChange={mMoSelectHandle}>
                     <option value="khaiValue">통합대기환경지수(CAI)</option>
                     <option value="pm25Value">초미세먼지 (PM-2.5)</option>
                     <option value="pm10Value">미세먼지 (PM-10)</option>
@@ -399,7 +418,7 @@ function App() {
                   <label htmlFor="area2" style={{ marginRight: '5px' }}>
                     시/도
                   </label>
-                  <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectChange}>
+                  <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectHandle}>
                     <option value="none">-전체-</option>
                     <option value="02">서울특별시</option>
                     <option value="031">경기도</option>
@@ -420,6 +439,10 @@ function App() {
                     <option value="064">제주특별자치도</option>
                   </MMOSelect>
                 </MMOSelectWrapper>
+                <MMOBorderDiv>
+                  <button onClick={mMoSelectHandle} data-information="air" className="on">대기/경보 정보</button>
+                  <button onClick={mMoSelectHandle} data-information="station">측정소 정보</button>
+                  </MMOBorderDiv>
               </MMOContainer>
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
@@ -441,8 +464,8 @@ function App() {
                   <InfoButton ico={'bg_search'}>검색</InfoButton>
                   <InfoButton ico={'pos'}>현위치</InfoButton>
                   <p>
-                    <strong>{loading ? station[0].stationName : '중구'}</strong> 중심으로 측정
-                    <span>({station[0].addr.split(' ')[0] || '서울'} {station[0].addr.split(' ')[1] || '중구'} {station[0].stationName || '중구'} 측정소 기준)</span>
+                    <strong>{loading ? station[0]?.stationName : '중구'}</strong> 중심으로 측정
+                    <span>({station[0]?.addr.split(' ')[0] || '서울'} {station[0].addr.split(' ')[1] || '중구'} {station[0].stationName || '중구'} 측정소 기준)</span>
                   </p>
                 </InfoInteraction>
                 <Time refresh onClick={refreshHandleClick} />
