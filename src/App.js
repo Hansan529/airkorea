@@ -88,9 +88,20 @@ function App() {
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
 
   const [tapSelect, setTapSelect] = useState(0);
+  const [station, setStation] = useState({
+    "dmX": "37.564639",
+    "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+    "mangName": "도시대기",
+    "year": "1995",
+    "addr": "서울 중구 덕수궁길 15 시청서소문별관 3동",
+    "stationName": "중구",
+    "dmY": "126.975961",
+    "top" : "136",
+    "left" : "264"
+});
 
   const [count, setCount] = useState(0);
-  const [station, setStation] = useState([{ stationCode: "111121", tm: 0.4, addr: "서울 중구 덕수궁길 15 시청서소문별관 3동", stationName: "중구" }]);
+  // const [station, setStation] = useState([{ stationCode: "111121", tm: 0.4, addr: "서울 중구 덕수궁길 15 시청서소문별관 3동", stationName: "중구" }]);
   const [data, setData] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -316,7 +327,11 @@ function App() {
         const { x, y } = data.documents[0];
         
         const { data: stations } = await axios.post('http://localhost:3500/api/station', {x, y});
-        setStation(stations);
+        // 가까운 거리의 측정소 3개
+        // setStation(stations);
+
+        // 가까운 측정소
+        setStation(stations[0]);
         setLoading(true);
       }
       // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
@@ -371,7 +386,6 @@ function App() {
     }
 
   };
-
 
   return (
     <>
@@ -447,7 +461,7 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapPaths info={mMoSelect_info} type={mMOSelect_return}></MapPaths>
+              <MapPaths stationSelect={setStation} info={mMoSelect_info} type={mMOSelect_return}></MapPaths>
               <Time />
             </MMWrapper>
           </MMLayout>
@@ -464,13 +478,13 @@ function App() {
                   <InfoButton ico={'bg_search'}>검색</InfoButton>
                   <InfoButton ico={'pos'}>현위치</InfoButton>
                   <p>
-                    <strong>{loading ? station[0]?.stationName : '중구'}</strong> 중심으로 측정
-                    <span>({station[0]?.addr.split(' ')[0] || '서울'} {station[0].addr.split(' ')[1] || '중구'} {station[0].stationName || '중구'} 측정소 기준)</span>
+                    <strong>{loading && (station.stationName)}</strong> 중심으로 측정
+                    <span>({station.addr.split(' ')[0]} {station.addr.split(' ')[1]} {station.stationName} 측정소 기준)</span>
                   </p>
                 </InfoInteraction>
                 <Time refresh onClick={refreshHandleClick} />
               </div>
-              <TodayAirQuality $stationName={station[0].stationName} />
+              <TodayAirQuality $stationName={station.stationName} />
             </InfoWrapper>
           </InfoContainer>
         </FirstSection>

@@ -605,8 +605,9 @@ export const MapPaths = (props) => {
 					const matchStation = detailData.find(item => item.stationName === station.stationName);
 					return (
 						<Station key={key} 
-							onMouseOver={() => hoverStationHandle(station.stationName)} 
+							onMouseEnter={() => hoverStationHandle(station.stationName)} 
 							onMouseOut={() => hoverStationHandle('')}
+							onClick={() => props.stationSelect(station)}
 							top={station.top} 
 							left={station.left} 
 							ico={getColorValue(matchStation?.[props.type], props.type)[4]}
