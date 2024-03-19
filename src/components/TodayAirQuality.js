@@ -5,6 +5,8 @@ import dnsty from "../data/getCtprvnRltmMesureDnsty.json";
 import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
 import { useEffect, useRef, useState } from "react";
+import { Time } from "../App";
+import axios from "axios";
 
 const { response: { body: { items : airQuality }}} = airQualityJson;
 const filterQuality = airQuality.filter((item, index) => index < 4);
@@ -28,6 +30,73 @@ const { items: stationsInfo } = stationJson;
  * 대기정보 예보 / 가장 최근 업데이트인 4개의 정보 (PM25, PM10 금일, 익일 정보)
  * 대기오염정보: 대기질 예보통보 조회(getMinuDustFrcstDspth)
  */
+const InfoContainer = styled.div`
+    width: 660px;
+    /* overflow: hidden; */
+`;
+const InfoWrapper = styled.div`
+border: 5px solid #00aeee;
+border-radius: 20px;
+padding: 15px;
+background-color: #fff;
+
+> div:first-of-type{
+    background: url('/img_bg01.png') no-repeat;
+    height: 55px;
+    line-height: 55px;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+
+    h2 {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+
+    > span {
+        color: #0f62cc;
+    }
+    }
+}
+
+> div:nth-of-type(2) {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    > div {
+    display: flex;
+    gap: 10px;
+
+    > p  {
+        font-size: 18px;
+        > strong { color: #0f62cc; }
+        > span { display: block; margin-top: 5px; font-size: 14px; }
+    }
+    }
+
+    button {
+    font-size: 0;
+    }
+}
+`;
+const InfoButton = styled.button`
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #c6ccd4;
+    border-radius: 5px;
+    background: #fff ${props => props.ico && `url('/img_${props.ico}.png')`} no-repeat center;
+    /* background-color: #fff;
+    background-size: ${props => props.ico === 'bg_search' && '70%'};
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: ${props => props.ico && `url('/img_${props.ico}.png')`}; */
+    &:hover {
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.2);
+    }
+`
+const InfoInteraction = styled.div`margin-bottom: 20px;`;
 
 const Container = styled.div`
     position: relative;
@@ -251,12 +320,13 @@ const AirForecastUl = styled.ul`
     }
 `;
 
-const Component = ({ $stationName }) => {
+const Component = (props) => {
+        const [count, setCount] = useState(0);
         const [legendRange, setLegendRange] = useState([]);
         const [legendPopupState, setLegendPopupState] = useState(false);
         const legendPopupRef = useRef();
         const [selectLegend, setSelectLegend] = useState('khai');
-        
+
         useEffect(() => {
             legendPopupRef.current.focus();
         },[]);
@@ -265,12 +335,38 @@ const Component = ({ $stationName }) => {
             setLegendRange(getColorValue(0, `${selectLegend}Value`, true));
         }, [selectLegend]);
 
-        const { items: dnstyItems } = dnsty.response.body
+        useEffect(() => {
+            if('geolocation' in navigator) {
+              const success = async (pos) => {
+                let { latitude, longitude } = pos.coords;
+                if(latitude === undefined) latitude = '197806.5250901809';
+                if(longitude === undefined) longitude = '451373.25740676327';
+                
+                const { data } = await axios.post('http://localhost:3500/api/coordinate', { latitude, longitude});
+                const { x, y } = data.documents[0];
+                
+                const { data: stations } = await axios.post('http://localhost:3500/api/station', {x, y});
+                // 가까운 거리의 측정소 3개
+                // setStation(stations);
+        
+                // 가까운 측정소
+                const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
+                props.setStation(stationInfo);
+                props.loading(true);
+              }
+              // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
+              const error = (err) => console.error('에러', err);
+              
+              navigator.geolocation.getCurrentPosition(success, error);
+            }
+          }, [props, count]);
+
+        const { items: dnstyItems } = dnsty.response.body;
 
         // 사용자 지역에 대한 대기 정보 수치 값
-        const currentLocation = dnstyItems.find(el => el.stationName === $stationName);
+        const currentLocation = dnstyItems.find(el => el.stationName === props.station.stationName);
         // 사용자 지역에 가까운 측정소에 대한 정보
-        const currentStationInfo = stationsInfo.find(item => item.stationName === currentLocation.stationName);
+        const currentStationInfo = stationsInfo.find(item => item?.stationName === currentLocation?.stationName);
 
         // 경기북부, 경기남부 / 영동, 영서
         const gyeonggiBukList = ['고양시', '의정부시', '파주시', '양주시', '구리시', '남양주시', '동두천시', '포천시', '가평군', '연천군'];
@@ -377,6 +473,7 @@ const Component = ({ $stationName }) => {
     `
 
     // ---------------------------------------------------- Event
+    const refreshHandleClick = () => setCount(count + 1);
     const legendClickHandle = (e) => {
         const node = e.currentTarget;
         const value = node.dataset.value;
@@ -396,89 +493,107 @@ const Component = ({ $stationName }) => {
     }
 
     return (
-        <Container>
-            <Part>
-                <h3>오늘의 대기질</h3>
-                <ul>
-                    <li>
-                        <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                        <img src={`./img_na0${pm25Index}.png`} alt="대기질" />
-                        <span style={{color: pm25}}>
-                            <strong className="colorValue">{currentLocation.pm25Value}</strong>
-                            <small style={{color: 'initial'}}>㎍/㎥</small>
-                            {airState(colorList.indexOf(pm25))[0]}
-                        </span>
-                    </li>
-                    <li>
-                        <span><strong>미세먼지</strong>(PM-10)</span>
-                        <img src={`./img_na0${pm10Index}.png`} alt="대기질" />
-                        <span style={{color: pm10}}>
-                            <strong className="colorValue">{currentLocation.pm10Value}</strong>
-                            <small style={{color: 'initial'}}>㎍/㎥</small>
-                            {airState(colorList.indexOf(pm10))[0]}
-                            </span>
-                    </li>
-                    <li>
-                        <span><strong>오존</strong>(O<sub>3</sub>)</span>
-                        <img src={`./img_na0${o3Index}.png`} alt="대기질" />
-                        <span style={{color: o3}}>
-                            <strong className="colorValue">{String(currentLocation.o3Value).padEnd(6, '0')}</strong>
-                            <small style={{color: 'initial'}}>ppm</small>
-                            {airState(colorList.indexOf(o3))[0]}
-                        </span>
-                    </li>
-                </ul>
-            </Part>
-            <Part>
-                <h3>대기정보 예보</h3>
-                <AirForecastUl>
-                    <li>
-                        <p></p>
-                        <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                        <span><strong>미세먼지</strong>(PM-10)</span>
-                    </li>
-                    <li>
-                        <p>오늘</p>
-                        <span className={`miniText miniTextIco_${pm25TodayIndex}`} style={{color: airState(pm25Today)[1]}}>{pm25Today}</span>
-                        <span className={`miniText miniTextIco_${pm10TodayIndex}`} style={{color: airState(pm10Today)[1]}}>{pm10Today}</span>
-                    </li>
-                    <li>
-                        <p>내일</p>
-                        <span className={`miniText miniTextIco_${pm25TomorrowIndex}`} style={{color: airState(pm25Tomorrow)[1]}}>{pm25Tomorrow}</span>
-                        <span className={`miniText miniTextIco_${pm10TomorrowIndex}`} style={{color: airState(pm10Tomorrow)[1]}}>{pm10Tomorrow}</span>
-                    </li>
-                </AirForecastUl>
-            </Part>
-            <Legend>
-                <button onClick={legendPopupHandle}>범례보기</button>
-                <div ref={legendPopupRef} className="legendPopup">
-                    <div className="legendTitle">
-                        <h2>범례보기</h2>
-                        <button onClick={legendPopupHandle}>나가기</button>
-                    </div>
-                    <div>
-                        <div className="legendFlex">
-                            <div onClick={legendClickHandle} data-value="khai">통합대기환경지수 (CAI)</div>
-                            <div onClick={legendClickHandle} data-value="pm25">초미세먼지 (PM-2.5)</div>
-                            <div onClick={legendClickHandle} data-value="pm10">미세먼지 (PM-10)</div>
-                        </div>
-                        <div className="legendFlex">
-                            <div onClick={legendClickHandle} data-value="o3">오존 (O<sub>3</sub>)</div>
-                            <div onClick={legendClickHandle} data-value="no2">이산화질소 (NO<sub>2</sub>)</div>
-                            <div onClick={legendClickHandle} data-value="co">일산화탄소 (CO)</div>
-                            <div onClick={legendClickHandle} data-value="so2">아황산가스 (SO<sub>2</sub>)</div>
-                        </div>
-                        <ul className="legendRange">
-                            <li><span className="legendRange_1">{`좋음(0 ~ ${legendFormatNumber(legendRange[1], 3)})`}</span></li>
-                            <li><span className="legendRange_2">{`보통(${legendFormatNumber(legendRange[2], 3)} ~ ${legendFormatNumber(legendRange[3], 3)})`}</span></li>
-                            <li><span className="legendRange_3">{`나쁨(${legendFormatNumber(legendRange[4], 3)} ~ ${legendFormatNumber(legendRange[5], 3)})`}</span></li>
-                            <li><span className="legendRange_4">{`매우나쁨(${legendFormatNumber(legendRange[6], 3)} ~ )`}</span></li>
-                            <li><span className="legendRange_5">데이터 없음</span></li>
-                        </ul>
-                    </div>
+        <InfoContainer>
+            <InfoWrapper>
+                <div>
+                    <h2>우리동네 <span>대기정보</span></h2>
                 </div>
-            </Legend>
-        </Container>
+                <div>
+                <InfoInteraction>
+                    <InfoButton ico={'bg_search'}>검색</InfoButton>
+                    <InfoButton ico={'pos'}>현위치</InfoButton>
+                    <p>
+                    <strong>{props.loading && (props.station.stationName)}</strong> 중심으로 측정
+                    <span>({props.station.addr.split(' ')[0]} {props.station.addr.split(' ')[1]} {props.station.stationName} 측정소 기준)</span>
+                    </p>
+                </InfoInteraction>
+                <Time refresh onClick={refreshHandleClick} />
+                </div>
+            <Container>
+                <Part>
+                    <h3>오늘의 대기질</h3>
+                    <ul>
+                        <li>
+                            <span><strong>초미세먼지</strong>(PM-2.5)</span>
+                            <img src={`./img_na0${pm25Index}.png`} alt="대기질" />
+                            <span style={{color: pm25}}>
+                                <strong className="colorValue">{currentLocation.pm25Value}</strong>
+                                <small style={{color: 'initial'}}>㎍/㎥</small>
+                                {airState(colorList.indexOf(pm25))[0]}
+                            </span>
+                        </li>
+                        <li>
+                            <span><strong>미세먼지</strong>(PM-10)</span>
+                            <img src={`./img_na0${pm10Index}.png`} alt="대기질" />
+                            <span style={{color: pm10}}>
+                                <strong className="colorValue">{currentLocation.pm10Value}</strong>
+                                <small style={{color: 'initial'}}>㎍/㎥</small>
+                                {airState(colorList.indexOf(pm10))[0]}
+                                </span>
+                        </li>
+                        <li>
+                            <span><strong>오존</strong>(O<sub>3</sub>)</span>
+                            <img src={`./img_na0${o3Index}.png`} alt="대기질" />
+                            <span style={{color: o3}}>
+                                <strong className="colorValue">{String(currentLocation.o3Value).padEnd(6, '0')}</strong>
+                                <small style={{color: 'initial'}}>ppm</small>
+                                {airState(colorList.indexOf(o3))[0]}
+                            </span>
+                        </li>
+                    </ul>
+                </Part>
+                <Part>
+                    <h3>대기정보 예보</h3>
+                    <AirForecastUl>
+                        <li>
+                            <p></p>
+                            <span><strong>초미세먼지</strong>(PM-2.5)</span>
+                            <span><strong>미세먼지</strong>(PM-10)</span>
+                        </li>
+                        <li>
+                            <p>오늘</p>
+                            <span className={`miniText miniTextIco_${pm25TodayIndex}`} style={{color: airState(pm25Today)[1]}}>{pm25Today}</span>
+                            <span className={`miniText miniTextIco_${pm10TodayIndex}`} style={{color: airState(pm10Today)[1]}}>{pm10Today}</span>
+                        </li>
+                        <li>
+                            <p>내일</p>
+                            <span className={`miniText miniTextIco_${pm25TomorrowIndex}`} style={{color: airState(pm25Tomorrow)[1]}}>{pm25Tomorrow}</span>
+                            <span className={`miniText miniTextIco_${pm10TomorrowIndex}`} style={{color: airState(pm10Tomorrow)[1]}}>{pm10Tomorrow}</span>
+                        </li>
+                    </AirForecastUl>
+                </Part>
+                <Legend>
+                    <button onClick={legendPopupHandle}>범례보기</button>
+                    <div ref={legendPopupRef} className="legendPopup">
+                        <div className="legendTitle">
+                            <h2>범례보기</h2>
+                            <button onClick={legendPopupHandle}>나가기</button>
+                        </div>
+                        <div>
+                            <div className="legendFlex">
+                                <div onClick={legendClickHandle} data-value="khai">통합대기환경지수 (CAI)</div>
+                                <div onClick={legendClickHandle} data-value="pm25">초미세먼지 (PM-2.5)</div>
+                                <div onClick={legendClickHandle} data-value="pm10">미세먼지 (PM-10)</div>
+                            </div>
+                            <div className="legendFlex">
+                                <div onClick={legendClickHandle} data-value="o3">오존 (O<sub>3</sub>)</div>
+                                <div onClick={legendClickHandle} data-value="no2">이산화질소 (NO<sub>2</sub>)</div>
+                                <div onClick={legendClickHandle} data-value="co">일산화탄소 (CO)</div>
+                                <div onClick={legendClickHandle} data-value="so2">아황산가스 (SO<sub>2</sub>)</div>
+                            </div>
+                            <ul className="legendRange">
+                                <li><span className="legendRange_1">{`좋음(0 ~ ${legendFormatNumber(legendRange[1], 3)})`}</span></li>
+                                <li><span className="legendRange_2">{`보통(${legendFormatNumber(legendRange[2], 3)} ~ ${legendFormatNumber(legendRange[3], 3)})`}</span></li>
+                                <li><span className="legendRange_3">{`나쁨(${legendFormatNumber(legendRange[4], 3)} ~ ${legendFormatNumber(legendRange[5], 3)})`}</span></li>
+                                <li><span className="legendRange_4">{`매우나쁨(${legendFormatNumber(legendRange[6], 3)} ~ )`}</span></li>
+                                <li><span className="legendRange_5">데이터 없음</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </Legend>
+            </Container>
+            </InfoWrapper>
+        </InfoContainer>
     )
 }
 

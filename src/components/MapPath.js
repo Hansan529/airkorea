@@ -6,7 +6,7 @@ import {
 } from '../paths/paths';
 import detailDataJson from '../data/getCtprvnRltmMesureDnsty.json';
 import regionList from "../data/regionList.json";
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 import { SeoulInner } from './Seoul';
 import { IncheonInner, IncheonPath } from './Incheon';
@@ -255,14 +255,16 @@ const filterStationReturnValue = (type, list) => {
 
   return { result, avgValue };
 };
+
 // ^-------------------------------------------------------------- JSON
 
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
-	const [hoverStation, setHoverStation] = useState();
-	const [openMap, setOpenMap] = useState();
+	const [hoverStation, setHoverStation] = useState({});
+	const [hoverStationData, setHoverStationData] = useState({});
+	const [openMap, setOpenMap] = useState(0);
 	const mapName = useRef();
-	
+
 	const hoverHandle = (element) => setHover(element);
 	const innerClickHandle = (element) => setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
@@ -540,13 +542,15 @@ export const MapPaths = (props) => {
 		const StationPopup = styled.div`
 			position: absolute;
 			visibility: hidden;
-			bottom: 20px;
 			transform: translateX(-50%);
 			background-color: #414d52;
 			white-space: nowrap;
 			padding: 10px;
 			color: #fff;
 			border-radius: 10px;
+			top: ${hoverStation?.top}px;
+			left: ${hoverStation?.left}px;
+			transform : translate(-50%, -90px);
 
 			&::after {
 				content: "";
@@ -571,11 +575,16 @@ export const MapPaths = (props) => {
 				color: #ffea5c;
 			}
 
-			&[data-name="${hoverStation}"]{
+			&[data-name="${hoverStation?.stationName}"]{
 				z-index: 10;
 				visibility: visible;
 			}
 		`;
+
+		const stationHoverHandle = ({station, stationAirData}) => {
+			setHoverStation(station)
+			setHoverStationData(stationAirData);
+		};
 
 		const legend = (() => {
 			switch(props.type) {
@@ -596,30 +605,35 @@ export const MapPaths = (props) => {
 				default:
 					return;
 			}
-		})()
+		})();
 
+		// const stationData = stationsInfo.find(item => item.stationName === hoverStation);
 		return (
 			<Div>
 				{stationsInfo.map((station, key) => {
 					// 장계면 데이터 없음
-					const matchStation = detailData.find(item => item.stationName === station.stationName);
+					const stationAirData = detailData.find(item => item.stationName === station.stationName);
 					return (
 						<Station key={key} 
-							onMouseEnter={() => hoverStationHandle(station.stationName)} 
+							onMouseEnter={() => stationHoverHandle({station, stationAirData})} 
 							onMouseOut={() => hoverStationHandle('')}
 							onClick={() => props.stationSelect(station)}
 							top={station.top} 
 							left={station.left} 
-							ico={getColorValue(matchStation?.[props.type], props.type)[4]}
+							ico={getColorValue(stationAirData?.[props.type], props.type)[4]}
 						>
-							<StationPopup data-name={station.stationName}>
-								<div><strong>측정소 명:</strong> <span>{station.stationName}</span></div>
-								<div><strong>위치:</strong> <span>{station.addr}</span></div>
-								<div><strong>농도:</strong> <span>{matchStation?.[props.type]}{legend}, </span></div>
-							</StationPopup>
 						</Station>
 					)
 				})}
+				<StationPopup 
+					data-name={hoverStation?.stationName}
+					top={hoverStation?.top}
+					left={hoverStation?.left}
+				>
+					<div><strong>측정소 명:</strong> <span>{hoverStation.stationName}</span></div>
+					<div><strong>위치:</strong> <span>{hoverStation.addr}</span></div>
+					<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]}</span></div>
+				</StationPopup>
 			</Div>
 		)
 	}

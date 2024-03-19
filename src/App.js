@@ -10,7 +10,6 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 // ------------------------------------------------ fetch
-
 const fetchData = async () => {
   try {
     const detailDataJson = await axios.get('http://localhost:3500/api/getCtprvnRltmMesureDnsty');
@@ -20,14 +19,6 @@ const fetchData = async () => {
     return null;
   }
 }
-
-// ------------------------------------------------ styled
-const Icon = styled.button`
-  background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
-  &:hover {
-      cursor: pointer;
-    }
-`;
 
 // ------------------------------------------------ component
 export const Time = ({ top, left, right, refresh, onClick }) => {
@@ -55,7 +46,8 @@ export const Time = ({ top, left, right, refresh, onClick }) => {
       font-weight: 900;
     }
   `;
-  const ButtonStyle = styled(Icon)`
+  const ButtonStyle = styled.button`
+    background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
     display: inline-block;
     background: url('/img_refresh.png') no-repeat center;
     width: 16px;
@@ -64,10 +56,10 @@ export const Time = ({ top, left, right, refresh, onClick }) => {
     transition: transform 0.5s;
     position: relative;
     transform-origin: center;
-
-    /* &:hover {
-      transform: rotate(-360deg);
-    } */
+    
+    &:hover {
+        cursor: pointer;
+      }
   `;
 
   return (
@@ -99,9 +91,8 @@ function App() {
     "top" : "136",
     "left" : "264"
 });
+console.log("station: ", station);
 
-  const [count, setCount] = useState(0);
-  // const [station, setStation] = useState([{ stationCode: "111121", tm: 0.4, addr: "서울 중구 덕수궁길 15 시청서소문별관 3동", stationName: "중구" }]);
   const [data, setData] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -250,96 +241,7 @@ function App() {
     position: relative;
     margin-top: 20px;
   `;
-  const InfoContainer = styled.div`
-      width: 660px;
-      /* overflow: hidden; */
-  `;
-  const InfoWrapper = styled.div`
-    border: 5px solid #00aeee;
-    border-radius: 20px;
-    padding: 15px;
-    background-color: #fff;
 
-    > div:first-of-type{
-      background: url('/img_bg01.png') no-repeat;
-      height: 55px;
-      line-height: 55px;
-      border-bottom: 1px solid rgba(0,0,0,0.3);
-      margin-bottom: 15px;
-
-      h2 {
-        font-size: 30px;
-        font-weight: 700;
-        text-align: center;
-
-        > span {
-          color: #0f62cc;
-        }
-      }
-    }
-
-    > div:nth-of-type(2) {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-
-      > div {
-        display: flex;
-        gap: 10px;
-
-        > p  {
-          font-size: 18px;
-          > strong { color: #0f62cc; }
-          > span { display: block; margin-top: 5px; font-size: 14px; }
-        }
-      }
-
-      button {
-        font-size: 0;
-      }
-    }
-  `;
-  const InfoButton = styled(Icon)`
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      border: 1px solid #c6ccd4;
-      border-radius: 5px;
-      background-color: #fff;
-      background-size: ${props => props.ico === 'bg_search' && '70%'};
-      background-repeat: no-repeat;
-      background-position: center;
-
-      &:hover {
-        background-color: rgba(0,0,0,0.2);
-      }
-  `
-  const InfoInteraction = styled.div`margin-bottom: 20px;`;
-
-  useEffect(() => {
-    if('geolocation' in navigator) {
-      const success = async (pos) => {
-        let { latitude, longitude } = pos.coords;
-        if(latitude === undefined) latitude = '197806.5250901809';
-        if(longitude === undefined) longitude = '451373.25740676327';
-        
-        const { data } = await axios.post('http://localhost:3500/api/coordinate', { latitude, longitude});
-        const { x, y } = data.documents[0];
-        
-        const { data: stations } = await axios.post('http://localhost:3500/api/station', {x, y});
-        // 가까운 거리의 측정소 3개
-        // setStation(stations);
-
-        // 가까운 측정소
-        setStation(stations[0]);
-        setLoading(true);
-      }
-      // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
-      const error = (err) => console.error('에러', err);
-      
-      navigator.geolocation.getCurrentPosition(success, error);
-    }
-  }, [count]);
 
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
@@ -365,8 +267,6 @@ function App() {
   }, []);
   
   // ------------------------------------------------ event
-  const refreshHandleClick = () => setCount(count + 1);
-  
   const tapSelectHandle = (e) => {
     const liElement = e.currentTarget.parentNode;
     const ulElement = liElement.closest('ul');
@@ -461,32 +361,20 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapPaths stationSelect={setStation} info={mMoSelect_info} type={mMOSelect_return}></MapPaths>
+              <MapPaths 
+                station={station} 
+                info={mMoSelect_info} 
+                type={mMOSelect_return}
+              ></MapPaths>
               <Time />
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
-          <InfoContainer>
-            <InfoWrapper>
-              <div>
-                <h2>
-                  우리동네 <span>대기정보</span>
-                </h2>
-              </div>
-              <div>
-                <InfoInteraction>
-                  <InfoButton ico={'bg_search'}>검색</InfoButton>
-                  <InfoButton ico={'pos'}>현위치</InfoButton>
-                  <p>
-                    <strong>{loading && (station.stationName)}</strong> 중심으로 측정
-                    <span>({station.addr.split(' ')[0]} {station.addr.split(' ')[1]} {station.stationName} 측정소 기준)</span>
-                  </p>
-                </InfoInteraction>
-                <Time refresh onClick={refreshHandleClick} />
-              </div>
-              <TodayAirQuality $stationName={station.stationName} />
-            </InfoWrapper>
-          </InfoContainer>
+            <TodayAirQuality 
+              station={station} 
+              setStation={setStation} 
+              loading={setLoading}
+              />
         </FirstSection>
       </Main>
     </>
