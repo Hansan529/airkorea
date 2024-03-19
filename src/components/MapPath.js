@@ -26,7 +26,9 @@ import { DaeguPath } from './Daegu';
 import { GwangjuPath } from './Gwangju';
 import { ChungbukPath } from './Chungbuk';
 import { Time } from '../App';
+import stationJson from "../data/stationInfo.json";
 
+const { items: stationsInfo } = stationJson;
 const {
   response: {
     body: { items: detailData },
@@ -42,7 +44,7 @@ const {
  * 데이터없음: #cbd0d3 / #c1c5c7
  */
 
-// typeRangeValue | default, hover, button, textColor
+// typeRangeValue | default, hover, button, textColor, step
 export const getColorValue = (value, type, rangeValueShow) => {
   const typeRangeValue = {
     khaiValue: [1, 50, 51, 100, 101, 250, 251],
@@ -62,15 +64,15 @@ export const getColorValue = (value, type, rangeValueShow) => {
   };
 
   if (value >= values[0] && value <= values[1]) {
-    return ['#d0ecff', '#7ed6ff', '#6ac8fe', '#1c67d7'];
+    return ['#d0ecff', '#7ed6ff', '#6ac8fe', '#1c67d7', 1];
   } else if (value >= values[2] && value <= values[3]) {
-    return ['#caf2de', '#94edbc', '#59e494', '#01b56e'];
+    return ['#caf2de', '#94edbc', '#59e494', '#01b56e', 2];
   } else if (value >= values[4] && value <= values[5]) {
-    return ['#f8f7c6', '#ffeb8b', '#ffda58', '#937200'];
+    return ['#f8f7c6', '#ffeb8b', '#ffda58', '#937200', 3];
   } else if (value >= values[6]) {
-    return ['#ffd6da', '#ffc1c5', '#ffa8a8', '#c00d0d'];
+    return ['#ffd6da', '#ffc1c5', '#ffa8a8', '#c00d0d', 4];
   } else {
-    return ['#cbd0d3', '#c1c5c7', '#abb0b3', '#0a0a0a'];
+    return ['#cbd0d3', '#c1c5c7', '#abb0b3', '#0a0a0a', 5];
   }
 };
 
@@ -92,6 +94,9 @@ const InnerMapButton = styled.button`
 `;
 const MapPath = styled.path`
 	fill: ${(props) => props.fillColor || '#cbd0d3'};
+	&:hover{
+		fill: ${props => props.hoverColor || null}
+	}
 	cursor: pointer;
 
 	filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
@@ -102,7 +107,8 @@ const MapSvg = ({ className, children }) => {
 		left: 0;
 		top: 0;
 		pointer-events: none;
-		margin-top: -25px;
+		margin-top: -35px;
+		margin-left: 5px;
 
 		path {
 			pointer-events: auto;
@@ -124,16 +130,16 @@ const MapSvg = ({ className, children }) => {
 		>{children}</Style>
 	)
 
-	}
+}
 const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor }) => {
-const InnerMapPathStyle = styled.path`
-	fill: ${fillColor || '#cbd0d3'};
-	&:hover {
-	fill: ${fillHoverColor || '#c1c5c7'};
-	}
-`;
+	const InnerMapPathStyle = styled.path`
+		fill: ${fillColor || '#cbd0d3'};
+		&:hover {
+		fill: ${fillHoverColor || '#c1c5c7'};
+		}
+	`;
 return (
-<InnerMapPathStyle id={id} title={title} d={d} ></InnerMapPathStyle>
+<InnerMapPathStyle id={id} title={title} d={d}></InnerMapPathStyle>
 )};
 const MainContainer = styled.div`
 		position: absolute;
@@ -165,7 +171,6 @@ const MapNameButton = styled.button`
 
 /** JSON 사용 */
 export const dateTime = detailData[0].dataTime;
-
 /**
  * 전체 지역 평균값
  * @param {*} order	순서
@@ -254,13 +259,13 @@ const filterStationReturnValue = (type, list) => {
 
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
+	const [hoverStation, setHoverStation] = useState();
 	const [openMap, setOpenMap] = useState();
 	const mapName = useRef();
 	
 	const hoverHandle = (element) => setHover(element);
-	const innerClickHandle = (element) => {
-		setOpenMap(element)
-	};
+	const innerClickHandle = (element) => setOpenMap(element);
+	const hoverStationHandle = (element) => setHoverStation(element);
 
 	const namePositionVal = [
 		{ num: '02',  name: '서울', fullName: '서울특별시', left: '241px', top: '120px'},
@@ -282,227 +287,347 @@ export const MapPaths = (props) => {
 		{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45px', top: '640px'},
 	];
 
-	/** 상세 지역 컴포넌트 (버튼)  */
-	const InnerComponent = ({ regionNum, regionName, fullName }) => {
-		const { result } = filterStationReturnValue(props.type, regionList[regionName]);
-		
-		const renderButton = (el, key) => {
-			const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
+	/** 지역별 컴포넌트 */
+	const RegionComponents = () => {
+
+		/** 상세 지역 컴포넌트 (버튼)  */
+		const InnerComponent = ({ regionNum, regionName, fullName }) => {
+			const { result } = filterStationReturnValue(props.type, regionList[regionName]);
+			
+			const renderButton = (el, key) => {
+				const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
+				return (
+				<InnerMapButton
+					key={key}
+					id={id}
+					style={{
+					left: regionList[regionName][key].left,
+					top: regionList[regionName][key].top,
+					}}
+					value={getColorValue(result[key], props.type)[2]}
+				>
+					{el.name}
+					<strong>{result[key] === 0 ? '-' : result[key]}</strong>
+				</InnerMapButton>
+				);
+			};
+			const renderPath = (el, key) => {
+				return (
+				<InnerMapPath
+					key={key}
+					id={`m_${regionNum}_${String(key + 1).padStart(3, '0')}`}
+					title={`${regionName}_${el.name}${el.district}`}
+					d={pathData[`m_${regionNum}_${String(key + 1).padStart(3, '0')}`]}
+					fillColor={getColorValue(result[key], props.type)[0]}
+					fillHoverColor={getColorValue(result[key], props.type)[1]}
+				></InnerMapPath>
+				);
+			};
+
+			const Components = {
+				서울: SeoulInner,
+				경기: null,
+				인천: IncheonInner,
+				강원: null,
+				충남: ChungnamInner,
+				대전: null,
+				충북: null,
+				세종: null,
+				부산: null,
+				울산: null,
+				대구: null,
+				경북: GyeongbukInner,
+				경남: GyeongnamInner,
+				전남: JeonnamInner,
+				광주: null,
+				전북: JeonbukInner,
+				제주: JejuInner,
+			}
+			const InnerComponent = Components[regionName];
+
+			// Styled
+			const DetailContainer = styled.div`
+				background: ${(props) =>
+				`#dff6ff ${
+					props.noImage === 'true' ? '' : `url('/map_bg_${props.regionNum}.jpg')`
+				} no-repeat center 35px`};
+				position: absolute;
+				border-radius: 10px;
+				border: 1px solid #000;
+				overflow: hidden;
+				opacity: 0;
+				visibility: hidden;
+
+				/* dynamic */
+				&[data-region_num="${openMap}"]{
+					z-index: 50;
+					opacity: 1;
+					visibility: visible;
+				}
+			`;
+			const Title = styled.div`
+				position: relative;
+				height: 35px;
+				background-color: #414d5d;
+				text-align: center;
+				line-height: 35px;
+
+				h2 {
+					color: #fff;
+					font-weight: 600;
+				}
+
+				button {
+					position: absolute;
+					top: 50%;
+					right: 10px;
+					transform: translateY(-50%);
+					font-size: 0;
+					width: 22px;
+					height: 22px;
+					background: url('./img_cau_close.png') no-repeat center;
+					border-radius: 50%;
+					border: none;
+					cursor: pointer;
+				}
+			`
+			const ButtonWrap = styled.div`
+				width: 100%;
+				height: 100%;
+				position: relative;
+			`
+			const InnerMapSvg = ({ children }) => {
+				return (
+					<svg
+						version="1.1"
+						xmlns="http://www.w3.org/2000/svg"
+						xmlnsXlink="http://www.w3.org/1999/xlink"
+						x="0px"
+						y="0px"
+						width='492px'
+						height='548px'
+						viewBox='0 0 492 548'
+						enableBackground='new 0 0 492 548'
+						xmlSpace="preserve"
+					>
+					{children}
+					</svg>
+				);
+			};
+
 			return (
-			<InnerMapButton
-				key={key}
-				id={id}
-				style={{
-				left: regionList[regionName][key].left,
-				top: regionList[regionName][key].top,
-				}}
-				value={getColorValue(result[key], props.type)[2]}
-			>
-				{el.name}
-				<strong>{result[key] === 0 ? '-' : result[key]}</strong>
-			</InnerMapButton>
-			);
-		};
-		const renderPath = (el, key) => {
-			return (
-			<InnerMapPath
-				key={key}
-				id={`m_${regionNum}_${String(key + 1).padStart(3, '0')}`}
-				title={`${regionName}_${el.name}${el.district}`}
-				d={pathData[`m_${regionNum}_${String(key + 1).padStart(3, '0')}`]}
-				fillColor={getColorValue(result[key], props.type)[0]}
-				fillHoverColor={getColorValue(result[key], props.type)[1]}
-			></InnerMapPath>
+				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
+					<Title>
+						<h2>{fullName}</h2>
+						<button onClick={() => innerClickHandle(0)}>창 닫기</button>
+					</Title>
+					<Time top="50px" left="15px" right="initial" />
+					{/* 버튼 */}
+					<ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>
+					{/* SVG */}
+					<InnerMapSvg>
+						{InnerComponent && <InnerComponent />}
+
+						{/* 지역 배경 Path */}
+						<path
+						title={`${regionName}_BG`}
+						fill="#BFD3E1"
+						stroke="#9EAEC2"
+						d={innerBackgroundPathData[regionNum]}
+						></path>
+				
+						{/* 지역 SVG */}
+						{regionList[regionName].map(renderPath)}
+					</InnerMapSvg>
+				</DetailContainer>
 			);
 		};
 
+		/** 패스 컴포넌트 */
 		const Components = {
-			서울: SeoulInner,
-			경기: null,
-			인천: IncheonInner,
-			강원: null,
-			충남: ChungnamInner,
-			대전: null,
-			충북: null,
-			세종: null,
-			부산: null,
-			울산: null,
-			대구: null,
-			경북: GyeongbukInner,
-			경남: GyeongnamInner,
-			전남: JeonnamInner,
-			광주: null,
-			전북: JeonbukInner,
-			제주: JejuInner,
+			서울: null,
+			경기: GyeonggiPath,
+			인천: IncheonPath,
+			강원: GangwonPath,
+			충남: ChungnamPath,
+			대전: DaejeonPath,
+			충북: ChungbukPath,
+			세종: SejongPath,
+			부산: BusanPath,
+			울산: UlsanPath,
+			대구: DaeguPath,
+			경북: GyeongbukPath,
+			경남: GyeongnamPath,
+			전남: JeonnamPath,
+			광주: GwangjuPath,
+			전북: JeonbukPath,
+			제주: JejuPath,
 		}
-		const InnerComponent = Components[regionName];
 
-		// Styled
-		const DetailContainer = styled.div`
-			background: ${(props) =>
-			`#dff6ff ${
-				props.noImage === 'true' ? '' : `url('/map_bg_${props.regionNum}.jpg')`
-			} no-repeat center 35px`};
+		/** 전체 맵 버튼, 상세 지역, 전체 맵 SVG */
+		return namePositionVal.map((el, key) => {
+			let color;
+			let hoverColor;
+			let hoverChk = false;
+			const ifResult = getColorValue(regionAvgValue(key, props.type), props.type);
+
+			color = ifResult[0];
+			hoverChk = false;
+			if (hover === el.num) {
+				color = ifResult[1];
+				hoverChk = true;
+			}
+
+			if(props.info === 'station'){
+				color = '#fff';
+				hoverColor = "#f5fcff";
+			}
+
+			const PathComponent = Components[el.name];
+
+			return (
+				<LoopContainer key={key} 
+					className={`regions region_${el.num}`}
+					onMouseOver={() => hoverHandle(el.num)}
+					onMouseOut={() => hoverHandle('')}
+				>
+					{props.info === 'air' && 
+					<MapNameButton 
+						left={el.left} 
+						top={el.top} 
+						bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
+						onClick={() => innerClickHandle(el.num)}
+					>
+						{el.name}
+						<span>{regionAvgValue(key, props.type)}</span>
+					</MapNameButton>
+					}
+					<InnerComponent regionNum={el.num} regionName={el.name} fullName={el.fullName} />
+					<MapSvg className={`region_${el.num}`}  key={key}>
+						{(el.name === '인천' && PathComponent) && <PathComponent />}
+						<MapPath
+							key={key}
+							title={`${el.name} 지도 배경`}
+							fillColor={color}
+							hoverColor={hoverColor}
+							hoverConnection={hoverChk}
+							onClick={() => innerClickHandle(el.num)}
+							d={backgroundPathData[el.num]}
+							></MapPath>
+						{(el.name !== '인천' && PathComponent) && <PathComponent />}
+					</MapSvg>
+				</LoopContainer>
+			);
+		})
+	}
+
+	/** 측정소 컴포넌트 */
+	const StationComponent = () => {
+		const Div = styled.div`
+			position: relative;
+		`
+		const Station = styled.div`
 			position: absolute;
-			border-radius: 10px;
-			border: 1px solid #000;
-			overflow: hidden;
-			opacity: 0;
+			top: ${props => `${props.top}px`};
+			left: ${props => `${props.left}px`};
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background-color: #000;
+			background-image: url('./img_ch0${props => props.ico}.png');
+			cursor: pointer;
+		`
+		const StationPopup = styled.div`
+			position: absolute;
 			visibility: hidden;
+			bottom: 20px;
+			transform: translateX(-50%);
+			background-color: #414d52;
+			white-space: nowrap;
+			padding: 10px;
+			color: #fff;
+			border-radius: 10px;
 
-			/* dynamic */
-			&[data-region_num="${openMap}"]{
-				z-index: 50;
-				opacity: 1;
+			&::after {
+				content: "";
+				display: block;
+				position: absolute;
+				width: 0;
+				height: 0;
+				left: 50%;
+				transform: translateX(calc(-50% + 5px));
+				border-top: calc(10px * 1.732) solid #414d52;
+				border-left: 10px solid transparent;
+				border-right: 10px solid transparent;
+			}
+			
+			div{
+				margin-bottom: 5px;
+				&:last-of-type{margin-bottom: 0;}
+			}
+
+
+			strong {
+				color: #ffea5c;
+			}
+
+			&[data-name="${hoverStation}"]{
+				z-index: 10;
 				visibility: visible;
 			}
 		`;
-		const Title = styled.div`
-			position: relative;
-			height: 35px;
-			background-color: #414d5d;
-			text-align: center;
-			line-height: 35px;
 
-			h2 {
-				color: #fff;
-				font-weight: 600;
+		const legend = (() => {
+			switch(props.type) {
+				case "khaiValue":
+					return "CAI";
+				case "pm25Value":
+					return "㎍/㎥";
+				case "pm10Value":
+					return "㎍/㎥";
+				case "o3Value":
+					return "ppm";
+				case "no2Value":
+					return "ppm";
+				case "coValue":
+					return "ppm";
+				case "so2Value":
+					return "ppm";
+				default:
+					return;
 			}
-
-			button {
-				position: absolute;
-				top: 50%;
-				right: 10px;
-				transform: translateY(-50%);
-				font-size: 0;
-				width: 22px;
-				height: 22px;
-				background: url('./img_cau_close.png') no-repeat center;
-				border-radius: 50%;
-				border: none;
-				cursor: pointer;
-			}
-		`
-		const ButtonWrap = styled.div`
-			width: 100%;
-			height: 100%;
-			position: relative;
-		`
-		const InnerMapSvg = ({ children }) => {
-			return (
-				<svg
-					version="1.1"
-					xmlns="http://www.w3.org/2000/svg"
-					xmlnsXlink="http://www.w3.org/1999/xlink"
-					x="0px"
-					y="0px"
-					width='492px'
-					height='548px'
-					viewBox='0 0 492 548'
-					enableBackground='new 0 0 492 548'
-					xmlSpace="preserve"
-				>
-				{children}
-				</svg>
-			);
-		};
+		})()
 
 		return (
-			<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
-				<Title>
-					<h2>{fullName}</h2>
-					<button onClick={() => innerClickHandle(0)}>창 닫기</button>
-				</Title>
-				<Time top="50px" left="15px" right="initial" />
-				{/* 버튼 */}
-				<ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>
-				{/* SVG */}
-				<InnerMapSvg>
-					{InnerComponent && <InnerComponent />}
-
-					{/* 지역 배경 Path */}
-					<path
-					title={`${regionName}_BG`}
-					fill="#BFD3E1"
-					stroke="#9EAEC2"
-					d={innerBackgroundPathData[regionNum]}
-					></path>
-			
-					{/* 지역 SVG */}
-					{regionList[regionName].map(renderPath)}
-				</InnerMapSvg>
-			</DetailContainer>
-		);
-	};
-
-	const Components = {
-		서울: null,
-		경기: GyeonggiPath,
-		인천: IncheonPath,
-		강원: GangwonPath,
-		충남: ChungnamPath,
-		대전: DaejeonPath,
-		충북: ChungbukPath,
-		세종: SejongPath,
-		부산: BusanPath,
-		울산: UlsanPath,
-		대구: DaeguPath,
-		경북: GyeongbukPath,
-		경남: GyeongnamPath,
-		전남: JeonnamPath,
-		광주: GwangjuPath,
-		전북: JeonbukPath,
-		제주: JejuPath,
+			<Div>
+				{stationsInfo.map((station, key) => {
+					// 장계면 데이터 없음
+					const matchStation = detailData.find(item => item.stationName === station.stationName);
+					return (
+						<Station key={key} 
+							onMouseOver={() => hoverStationHandle(station.stationName)} 
+							onMouseOut={() => hoverStationHandle('')}
+							top={station.top} 
+							left={station.left} 
+							ico={getColorValue(matchStation?.[props.type], props.type)[4]}
+						>
+							<StationPopup data-name={station.stationName}>
+								<div><strong>측정소 명:</strong> <span>{station.stationName}</span></div>
+								<div><strong>위치:</strong> <span>{station.addr}</span></div>
+								<div><strong>농도:</strong> <span>{matchStation?.[props.type]}{legend}, </span></div>
+							</StationPopup>
+						</Station>
+					)
+				})}
+			</Div>
+		)
 	}
 
 	return (
 		<>
 			<MainContainer ref={mapName}>
-				{namePositionVal.map((el, key) => {
-					let color;
-					let hoverChk = false;
-					const ifResult = getColorValue(regionAvgValue(key, props.type), props.type);
-		
-					color = ifResult[0];
-					hoverChk = false;
-					if (hover === el.num) {
-						color = ifResult[1];
-						hoverChk = true;
-					}
-		
-					const PathComponent = Components[el.name];
-
-					return (
-						<LoopContainer key={key} 
-							className={`regions region_${el.num}`}
-							onMouseEnter={() => hoverHandle(el.num)}
-							onMouseOut={() => hoverHandle('')}
-						>
-							<MapNameButton 
-								left={el.left} 
-								top={el.top} 
-								bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
-								onClick={() => innerClickHandle(el.num)}
-							>
-								{el.name}
-								<span>{regionAvgValue(key, props.type)}</span>
-							</MapNameButton>
-							<InnerComponent regionNum={el.num} regionName={el.name} fullName={el.fullName} />
-							<MapSvg className={`region_${el.num}`}  key={key}>
-								{(el.name === '인천' && PathComponent) && <PathComponent />}
-								<MapPath
-									key={key}
-									title={`${el.name} 지도 배경`}
-									fillColor={color}
-									hoverConnection={hoverChk}
-									onClick={() => innerClickHandle(el.num)}
-									d={backgroundPathData[el.num]}
-									></MapPath>
-								{(el.name !== '인천' && PathComponent) && <PathComponent />}
-							</MapSvg>
-						</LoopContainer>
-					);
-				})}
+				<RegionComponents />
+				{props.info === 'station' && <StationComponent />}
 			</MainContainer>
 		</>
 	)

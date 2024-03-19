@@ -235,7 +235,7 @@ function App() {
     width: 700px;
     height: 705px;
     box-sizing: border-box;
-    background: url('/map_svg_warp_bg.png') no-repeat;
+    background: url('/map_svg_warp_bg.png') no-repeat 5px -10px;
     position: relative;
     margin-top: 20px;
   `;
@@ -447,7 +447,7 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapPaths type={mMOSelect_return}></MapPaths>
+              <MapPaths info={mMoSelect_info} type={mMOSelect_return}></MapPaths>
               <Time />
             </MMWrapper>
           </MMLayout>
