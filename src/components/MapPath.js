@@ -632,7 +632,7 @@ export const MapPaths = (props) => {
 				>
 					<div><strong>측정소 명:</strong> <span>{hoverStation.stationName}</span></div>
 					<div><strong>위치:</strong> <span>{hoverStation.addr}</span></div>
-					<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]}</span></div>
+					<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
 				</StationPopup>
 			</Div>
 		)
