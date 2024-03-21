@@ -117,10 +117,10 @@ const MapSvg = ({ className, children }) => {
 	return (
 		<Style
 			className={className}
-			version="1.1" 
-			xmlns="http://www.w3.org/2000/svg" 
-			xmlnsXlink="http://www.w3.org/1999/xlink" 
-			x="0px" 
+			version="1.1"
+			xmlns="http://www.w3.org/2000/svg"
+			xmlnsXlink="http://www.w3.org/1999/xlink"
+			x="0px"
 			y="0px"
 			width="700px"
 			height="730px"
@@ -232,7 +232,7 @@ const regionAvgValue = (order, returnValue) => {
  * @returns 상세 지역 측정소 총합 평균값
  */
 
-const filterStationReturnValue = (type, list) => { 
+const filterStationReturnValue = (type, list) => {
   const filterStationValue = list.map((region) => {
     return region.station.map((station) => {
       const findData = detailData.find((data) => data.stationName === station)[type];
@@ -285,7 +285,7 @@ export const MapPaths = (props) => {
 		{ num: '055', name: '경남', fullName: '경상남도', left: '380px', top: '483px'},
 		{ num: '061', name: '전남', fullName: '전라남도', left: '269px', top: '543px'},
 		{ num: '062', name: '광주', fullName: '광주광역시', left: '213px', top: '503px'},
-		{ num: '063', name: '전북', fullName: '전라북도', left: '257px', top: '422px'},
+		{ num: '063', name: '전북', fullName: '전북특별자치도', left: '257px', top: '422px'},
 		{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45px', top: '640px'},
 	];
 
@@ -295,7 +295,7 @@ export const MapPaths = (props) => {
 		/** 상세 지역 컴포넌트 (버튼)  */
 		const InnerComponent = ({ regionNum, regionName, fullName }) => {
 			const { result } = filterStationReturnValue(props.type, regionList[regionName]);
-			
+
 			const renderButton = (el, key) => {
 				const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
 				return (
@@ -398,6 +398,20 @@ export const MapPaths = (props) => {
 				height: 100%;
 				position: relative;
 			`
+			const StationCollection = styled.div`
+				top:10px;
+				left:-5px;
+				position: relative;
+				`
+			const StationCollectionList = styled.div`
+				position: absolute;
+				top: ${props => props.top || 0};
+				left: ${props => props.left || 0};
+				width: 10px;
+				height: 10px;
+				background-color: red;
+				border-radius: 50%;
+			`
 			const InnerMapSvg = ({ children }) => {
 				return (
 					<svg
@@ -416,6 +430,34 @@ export const MapPaths = (props) => {
 					</svg>
 				);
 			};
+			const SelectDiv = styled.div`
+				height: 20px;
+				position: absolute;
+				top: 50px;
+				right: 15px;
+				background-color: #fff;
+				border-radius: 25px;
+				border: 5px solid #fff;
+
+				button {
+					border: none;
+					background: #fff;
+					border-radius: 25px;
+
+					&:hover {
+						text-decoration: underline;
+					}
+
+					&:first-of-type {
+						background-color: #0f62cc;
+						color: #fff;
+					}
+				}
+			`
+			const filterStationData = stationsInfo.filter(item => {
+				return item.city === fullName;
+			});
+
 
 			return (
 				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
@@ -423,9 +465,20 @@ export const MapPaths = (props) => {
 						<h2>{fullName}</h2>
 						<button onClick={() => innerClickHandle(0)}>창 닫기</button>
 					</Title>
-					<Time top="50px" left="15px" right="initial" />
+					<Time top="50px" left="15px" height="20px" right="initial" />
+					<SelectDiv>
+						<button>대기/경보 정보</button>
+						<button>측정소 정보</button>
+					</SelectDiv>
 					{/* 버튼 */}
 					<ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>
+					<StationCollection>
+						{filterStationData.map((el, key) => {
+							return (
+								<StationCollectionList key={key} top={`${el.innerTop}px`} left={`${el.innerLeft}px`} data-station_name={el.stationName}></StationCollectionList>
+							)
+						})}
+					</StationCollection>
 					{/* SVG */}
 					<InnerMapSvg>
 						{InnerComponent && <InnerComponent />}
@@ -437,7 +490,7 @@ export const MapPaths = (props) => {
 						stroke="#9EAEC2"
 						d={innerBackgroundPathData[regionNum]}
 						></path>
-				
+
 						{/* 지역 SVG */}
 						{regionList[regionName].map(renderPath)}
 					</InnerMapSvg>
@@ -488,15 +541,15 @@ export const MapPaths = (props) => {
 			const PathComponent = Components[el.name];
 
 			return (
-				<LoopContainer key={key} 
+				<LoopContainer key={key}
 					className={`regions region_${el.num}`}
 					onMouseOver={() => hoverHandle(el.num)}
 					onMouseOut={() => hoverHandle('')}
 				>
-					{props.info === 'air' && 
-					<MapNameButton 
-						left={el.left} 
-						top={el.top} 
+					{props.info === 'air' &&
+					<MapNameButton
+						left={el.left}
+						top={el.top}
 						bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
 						onClick={() => innerClickHandle(el.num)}
 					>
@@ -564,7 +617,7 @@ export const MapPaths = (props) => {
 				border-left: 10px solid transparent;
 				border-right: 10px solid transparent;
 			}
-			
+
 			div{
 				margin-bottom: 5px;
 				&:last-of-type{margin-bottom: 0;}
@@ -614,18 +667,18 @@ export const MapPaths = (props) => {
 					// 장계면 데이터 없음
 					const stationAirData = detailData.find(item => item.stationName === station.stationName);
 					return (
-						<Station key={key} 
-							onMouseEnter={() => stationHoverHandle({station, stationAirData})} 
+						<Station key={key}
+							onMouseEnter={() => stationHoverHandle({station, stationAirData})}
 							onMouseOut={() => hoverStationHandle('')}
 							onClick={() => props.stationSelect(station)}
-							top={station.top} 
-							left={station.left} 
+							top={station.top}
+							left={station.left}
 							ico={getColorValue(stationAirData?.[props.type], props.type)[4]}
 						>
 						</Station>
 					)
 				})}
-				<StationPopup 
+				<StationPopup
 					data-name={hoverStation?.stationName}
 					top={hoverStation?.top}
 					left={hoverStation?.left}
