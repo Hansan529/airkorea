@@ -21,7 +21,7 @@ const fetchData = async () => {
 }
 
 // ------------------------------------------------ component
-export const Time = ({ top, left, right, refresh, onClick }) => {
+export const Time = ({ top, left, right, height, refresh, onClick }) => {
   const updateTime = new Date(dateTime);
   const year = updateTime.getFullYear();
   const month = String(updateTime.getMonth() + 1).padStart(2, '0');
@@ -32,7 +32,7 @@ export const Time = ({ top, left, right, refresh, onClick }) => {
     display: flex;
     gap: 5px !important;
     background-color: ${refresh ? '#e4f7ff' : '#fff'};
-    height: 15px;
+    height: ${height || "15px"};
     padding: 5px 15px;
     border-radius: 25px;
     align-items: center;
@@ -91,10 +91,8 @@ function App() {
     "top" : "136",
     "left" : "264"
 });
-console.log("station: ", station);
 
   const [data, setData] = useState(null);
-
   const [loading, setLoading] = useState(false);
   
   // ------------------------------------------------ style
@@ -225,6 +223,7 @@ console.log("station: ", station);
       background: none;
       border-radius: 30px;
       height: calc(100% - 5px);
+      cursor: pointer;
     }
 
     button[data-information="${mMoSelect_info}"]{
