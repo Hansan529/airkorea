@@ -250,12 +250,14 @@ const LegendBase = styled.div`
     }
 
     .legendRange {
-        display: flex;
         padding: 0 10px 10px 10px;
+        white-space: nowrap;
         
         li {
-            flex: 1;
+            display: inline-block;
+            width: 20%;
             background-color: #f1fbff;
+            box-sizing: border-box;
             padding: 5px;
             border-width: 1px;
             border-style: solid;
@@ -276,7 +278,7 @@ const LegendBase = styled.div`
             display: block;
             position: relative;
             font-size: 11px;
-            padding-left: 20px;
+            padding-left: 25px;
             text-align: left;
 
             &::after {
@@ -284,7 +286,7 @@ const LegendBase = styled.div`
                 content: "";
                 position: absolute;
                 top: 0;
-                left: 0;
+                left: 10px;
                 width: 10px;
                 height: 10px;
                 background: no-repeat 0 0;
@@ -359,7 +361,7 @@ const Component = (props) => {
               
               navigator.geolocation.getCurrentPosition(success, error);
             }
-          }, [props, count]);
+        }, [props, count]);
 
         const { items: dnstyItems } = dnsty.response.body;
 
