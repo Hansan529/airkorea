@@ -167,6 +167,17 @@ const MapNameButton = styled.button`
 
 	> span { display: block; }
 `;
+const Station = styled.div`
+	position: absolute;
+	top: ${props => `${props.top}px`};
+	left: ${props => `${props.left}px`};
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: #000;
+	background-image: url('./img_ch0${props => props.ico}.png');
+	cursor: pointer;
+`
 // ^-------------------------------------------------------------- JSON
 
 /** JSON 사용 */
@@ -402,15 +413,6 @@ export const MapPaths = (props) => {
 				top:10px;
 				left:-5px;
 				position: relative;
-				`
-			const StationCollectionList = styled.div`
-				position: absolute;
-				top: ${props => props.top || 0};
-				left: ${props => props.left || 0};
-				width: 10px;
-				height: 10px;
-				background-color: red;
-				border-radius: 50%;
 			`
 			const InnerMapSvg = ({ children }) => {
 				return (
@@ -458,7 +460,6 @@ export const MapPaths = (props) => {
 				return item.city === fullName;
 			});
 
-
 			return (
 				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
 					<Title>
@@ -474,8 +475,15 @@ export const MapPaths = (props) => {
 					<ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>
 					<StationCollection>
 						{filterStationData.map((el, key) => {
+							const filterStationAirData = detailData.find(item => item.stationName === el.stationName);
 							return (
-								<StationCollectionList key={key} top={`${el.innerTop}px`} left={`${el.innerLeft}px`} data-station_name={el.stationName}></StationCollectionList>
+								<Station
+									key={key}
+									top={el.innerTop}
+									left={el.innerLeft}
+									data-station_name={el.stationName}
+									ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
+								></Station>
 							)
 						})}
 					</StationCollection>
@@ -581,17 +589,6 @@ export const MapPaths = (props) => {
 		const Div = styled.div`
 			position: relative;
 		`
-		const Station = styled.div`
-			position: absolute;
-			top: ${props => `${props.top}px`};
-			left: ${props => `${props.left}px`};
-			width: 10px;
-			height: 10px;
-			border-radius: 50%;
-			background-color: #000;
-			background-image: url('./img_ch0${props => props.ico}.png');
-			cursor: pointer;
-		`
 		const StationPopup = styled.div`
 			position: absolute;
 			visibility: hidden;
@@ -633,7 +630,6 @@ export const MapPaths = (props) => {
 				visibility: visible;
 			}
 		`;
-
 		const stationHoverHandle = ({station, stationAirData}) => {
 			setHoverStation(station)
 			setHoverStationData(stationAirData);
@@ -666,6 +662,7 @@ export const MapPaths = (props) => {
 				{stationsInfo.map((station, key) => {
 					// 장계면 데이터 없음
 					const stationAirData = detailData.find(item => item.stationName === station.stationName);
+
 					return (
 						<Station key={key}
 							onMouseEnter={() => stationHoverHandle({station, stationAirData})}
