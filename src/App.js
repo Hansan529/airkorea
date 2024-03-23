@@ -20,56 +20,6 @@ const fetchData = async () => {
   }
 }
 
-// ------------------------------------------------ component
-export const Time = ({ top, left, right, height, refresh, onClick }) => {
-  const updateTime = new Date(dateTime);
-  const year = updateTime.getFullYear();
-  const month = String(updateTime.getMonth() + 1).padStart(2, '0');
-  const day = String(updateTime.getDate()).padStart(2, '0');
-  const hour = String(updateTime.getHours()).padStart(2, '0');
-
-  const DivStyle = styled.div`
-    display: flex;
-    gap: 5px !important;
-    background-color: ${refresh ? '#e4f7ff' : '#fff'};
-    height: ${height || "15px"};
-    padding: 5px 15px;
-    border-radius: 25px;
-    align-items: center;
-    position: absolute;
-    top: ${top || 0};
-    right: ${right || 0};
-    left: ${left};
-    font-size: 14px;
-
-    strong {
-      font-weight: 900;
-    }
-  `;
-  const ButtonStyle = styled.button`
-    background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
-    display: inline-block;
-    background: url('/img_refresh.png') no-repeat center;
-    width: 16px;
-    height: 20px;
-    border: none;
-    transition: transform 0.5s;
-    position: relative;
-    transform-origin: center;
-    
-    &:hover {
-        cursor: pointer;
-      }
-  `;
-
-  return (
-    <DivStyle>
-      <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
-      {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
-    </DivStyle>
-  )
-};
-
 function App() {
   // ------------------------------------------------ component
   const Main = ({ children }) => <main>{children}</main>;
@@ -94,7 +44,29 @@ function App() {
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+  useEffect(() => {
+    // 로컬 스토리지에서 데이터를 가져옴
+    const storedData = JSON.parse(localStorage.getItem('storedData'));
+    const expireTime = localStorage.getItem('expireTime');
+
+    // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
+    if (!storedData || !expireTime || new Date(expireTime) < new Date()) {
+      fetchData().then((result) => {
+        if (result) {
+          localStorage.setItem('storedData', JSON.stringify(result));
+
+          const expireData = new Date();
+          expireData.setHours(expireData.getHours() + 1, 0, 0, 0);
+          localStorage.setItem('expireTime', expireData);
+
+          setData(result);
+        }
+      });
+    } else {
+      setData(storedData);
+    }
+  }, []);
+
   // ------------------------------------------------ style
   const Select = styled.select`
   -o-appearance: none;
@@ -126,7 +98,7 @@ function App() {
     display: flex;
     margin: 0;
     margin-bottom: 5px;
-    
+
     li {
       flex: 1;
       text-align: center;
@@ -187,7 +159,7 @@ function App() {
     text-align: center;
     font-size: 14px;
     color: #0a0a0a;
-    `;
+  `;
   const MMOSelect = styled(Select)`
     ${MMOBorder}
     background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
@@ -240,31 +212,56 @@ function App() {
     position: relative;
     margin-top: 20px;
   `;
+// ------------------------------------------------ component
+  const Time = ({ top, left, right, height, refresh, onClick }) => {
+    const updateTime = new Date(data[0].dataTime);
+    const year = updateTime.getFullYear();
+    const month = String(updateTime.getMonth() + 1).padStart(2, '0');
+    const day = String(updateTime.getDate()).padStart(2, '0');
+    const hour = String(updateTime.getHours()).padStart(2, '0');
 
+    const DivStyle = styled.div`
+      display: flex;
+      gap: 5px !important;
+      background-color: ${refresh ? '#e4f7ff' : '#fff'};
+      height: ${height || "15px"};
+      padding: 5px 15px;
+      border-radius: 25px;
+      align-items: center;
+      position: absolute;
+      top: ${top || 0};
+      right: ${right || 0};
+      left: ${left};
+      font-size: 14px;
 
-  useEffect(() => {
-    // 로컬 스토리지에서 데이터를 가져옴
-    const storedData = JSON.parse(localStorage.getItem('storedData'));
-    const expireTime = localStorage.getItem('expireTime');
-  
-    // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
-    if (!storedData || !expireTime || new Date(expireTime) < new Date()) {
-      fetchData().then((result) => {
-        if (result) {
-          localStorage.setItem('storedData', JSON.stringify(result));
-          
-          const expireData = new Date();
-          expireData.setHours(expireData.getHours() + 1, 0, 0, 0);
-          localStorage.setItem('expireTime', expireData);
-  
-          setData(result);
+      strong {
+        font-weight: 900;
+      }
+    `;
+    const ButtonStyle = styled.button`
+      background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
+      display: inline-block;
+      background: url('/img_refresh.png') no-repeat center;
+      width: 16px;
+      height: 20px;
+      border: none;
+      transition: transform 0.5s;
+      position: relative;
+      transform-origin: center;
+
+      &:hover {
+          cursor: pointer;
         }
-      });
-    } else {
-      setData(storedData);
-    }
-  }, []);
-  
+    `;
+
+    return (
+      <DivStyle>
+        <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
+        {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
+      </DivStyle>
+    )
+  };
+
   // ------------------------------------------------ event
   const tapSelectHandle = (e) => {
     const liElement = e.currentTarget.parentNode;
@@ -275,7 +272,7 @@ function App() {
 
   const mMoSelectHandle = (e) => {
     const { value, dataset: { information } } = e.currentTarget;
-    
+
     // 대기/경보 정보, 측정소 정보 클릭 시
     if(information){
       setMMOSelect_info(information);
@@ -360,19 +357,23 @@ function App() {
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapPaths 
-                station={station} 
-                info={mMoSelect_info} 
+              <MapPaths
+                childrenComponents={{Time}}
+                station={station}
+                setStation={setStation}
+                info={mMoSelect_info}
                 type={mMOSelect_return}
               ></MapPaths>
               <Time />
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
-            <TodayAirQuality 
-              station={station} 
-              setStation={setStation} 
+            <TodayAirQuality
+              childrenComponents={{Time}}
+              station={station}
+              setStation={setStation}
               loading={setLoading}
+              airData={data}
               />
         </FirstSection>
       </Main>

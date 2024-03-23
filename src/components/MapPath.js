@@ -25,7 +25,6 @@ import { UlsanPath } from './Ulsan';
 import { DaeguPath } from './Daegu';
 import { GwangjuPath } from './Gwangju';
 import { ChungbukPath } from './Chungbuk';
-import { Time } from '../App';
 import stationJson from "../data/stationInfo.json";
 
 const { items: stationsInfo } = stationJson;
@@ -269,7 +268,7 @@ const filterStationReturnValue = (type, list) => {
 
 // ^-------------------------------------------------------------- JSON
 
-export const MapPaths = (props) => {
+export const MapPaths = ({childrenComponents, station, setStation, info, type}) => {
 	const [hover, setHover] = useState();
 	const [hoverStation, setHoverStation] = useState({});
 	const [hoverStationData, setHoverStationData] = useState({});
@@ -305,7 +304,7 @@ export const MapPaths = (props) => {
 
 		/** 상세 지역 컴포넌트 (버튼)  */
 		const InnerComponent = ({ regionNum, regionName, fullName }) => {
-			const { result } = filterStationReturnValue(props.type, regionList[regionName]);
+			const { result } = filterStationReturnValue(type, regionList[regionName]);
 
 			const renderButton = (el, key) => {
 				const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
@@ -317,7 +316,7 @@ export const MapPaths = (props) => {
 					left: regionList[regionName][key].left,
 					top: regionList[regionName][key].top,
 					}}
-					value={getColorValue(result[key], props.type)[2]}
+					value={getColorValue(result[key], type)[2]}
 				>
 					{el.name}
 					<strong>{result[key] === 0 ? '-' : result[key]}</strong>
@@ -331,8 +330,8 @@ export const MapPaths = (props) => {
 					id={`m_${regionNum}_${String(key + 1).padStart(3, '0')}`}
 					title={`${regionName}_${el.name}${el.district}`}
 					d={pathData[`m_${regionNum}_${String(key + 1).padStart(3, '0')}`]}
-					fillColor={getColorValue(result[key], props.type)[0]}
-					fillHoverColor={getColorValue(result[key], props.type)[1]}
+					fillColor={getColorValue(result[key], type)[0]}
+					fillHoverColor={getColorValue(result[key], type)[1]}
 				></InnerMapPath>
 				);
 			};
@@ -357,6 +356,8 @@ export const MapPaths = (props) => {
 				제주: JejuInner,
 			}
 			const InnerComponent = Components[regionName];
+
+			const TimeComponent = childrenComponents.Time;
 
 			// Styled
 			const DetailContainer = styled.div`
@@ -466,7 +467,7 @@ export const MapPaths = (props) => {
 						<h2>{fullName}</h2>
 						<button onClick={() => innerClickHandle(0)}>창 닫기</button>
 					</Title>
-					<Time top="50px" left="15px" height="20px" right="initial" />
+					<TimeComponent top="50px" left="15px" height="20px" right="initial" />
 					<SelectDiv>
 						<button>대기/경보 정보</button>
 						<button>측정소 정보</button>
@@ -482,7 +483,7 @@ export const MapPaths = (props) => {
 									top={el.innerTop}
 									left={el.innerLeft}
 									data-station_name={el.stationName}
-									ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
+									ico={getColorValue(filterStationAirData?.[type], type)[4]}
 								></Station>
 							)
 						})}
@@ -532,7 +533,7 @@ export const MapPaths = (props) => {
 			let color;
 			let hoverColor;
 			let hoverChk = false;
-			const ifResult = getColorValue(regionAvgValue(key, props.type), props.type);
+			const ifResult = getColorValue(regionAvgValue(key, type), type);
 
 			color = ifResult[0];
 			hoverChk = false;
@@ -541,7 +542,7 @@ export const MapPaths = (props) => {
 				hoverChk = true;
 			}
 
-			if(props.info === 'station'){
+			if(info === 'station'){
 				color = '#fff';
 				hoverColor = "#f5fcff";
 			}
@@ -554,15 +555,15 @@ export const MapPaths = (props) => {
 					onMouseOver={() => hoverHandle(el.num)}
 					onMouseOut={() => hoverHandle('')}
 				>
-					{props.info === 'air' &&
+					{info === 'air' &&
 					<MapNameButton
 						left={el.left}
 						top={el.top}
-						bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
+						bgColor={getColorValue(regionAvgValue(key, type), type)[2]}
 						onClick={() => innerClickHandle(el.num)}
 					>
 						{el.name}
-						<span>{regionAvgValue(key, props.type)}</span>
+						<span>{regionAvgValue(key, type)}</span>
 					</MapNameButton>
 					}
 					<InnerComponent regionNum={el.num} regionName={el.name} fullName={el.fullName} />
@@ -636,7 +637,7 @@ export const MapPaths = (props) => {
 		};
 
 		const legend = (() => {
-			switch(props.type) {
+			switch(type) {
 				case "khaiValue":
 					return "CAI";
 				case "pm25Value":
@@ -667,10 +668,10 @@ export const MapPaths = (props) => {
 						<Station key={key}
 							onMouseEnter={() => stationHoverHandle({station, stationAirData})}
 							onMouseOut={() => hoverStationHandle('')}
-							onClick={() => props.stationSelect(station)}
+							onClick={() => setStation(station)}
 							top={station.top}
 							left={station.left}
-							ico={getColorValue(stationAirData?.[props.type], props.type)[4]}
+							ico={getColorValue(stationAirData?.[type], type)[4]}
 						>
 						</Station>
 					)
@@ -682,7 +683,7 @@ export const MapPaths = (props) => {
 				>
 					<div><strong>측정소 명:</strong> <span>{hoverStation.stationName}</span></div>
 					<div><strong>위치:</strong> <span>{hoverStation.addr}</span></div>
-					<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
+					<div><strong>농도:</strong> <span>{hoverStationData?.[type]} {legend}</span></div>
 				</StationPopup>
 			</Div>
 		)
@@ -692,7 +693,7 @@ export const MapPaths = (props) => {
 		<>
 			<MainContainer ref={mapName}>
 				<RegionComponents />
-				{props.info === 'station' && <StationComponent />}
+				{info === 'station' && <StationComponent />}
 			</MainContainer>
 		</>
 	)
