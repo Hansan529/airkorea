@@ -4,7 +4,6 @@ import {
   innerBackgroundPathData,
   pathData,
 } from '../paths/paths';
-import detailDataJson from '../data/getCtprvnRltmMesureDnsty.json';
 import regionList from "../data/regionList.json";
 import { Fragment, useEffect, useRef, useState } from 'react';
 
@@ -28,11 +27,6 @@ import { ChungbukPath } from './Chungbuk';
 import stationJson from "../data/stationInfo.json";
 
 const { items: stationsInfo } = stationJson;
-const {
-  response: {
-    body: { items: detailData },
-  },
-} = detailDataJson;
 
 /**
  * 대기 정보 목록
@@ -140,12 +134,8 @@ const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor }) => {
 return (
 <InnerMapPathStyle id={id} title={title} d={d}></InnerMapPathStyle>
 )};
-const MainContainer = styled.div`
-		position: absolute;
-	`;
-const LoopContainer = styled.div`
-	position: relative;
-`
+const MainContainer = styled.div`position: absolute;`;
+const LoopContainer = styled.div`position: relative;`;
 const MapNameButton = styled.button`
 	position: absolute;
 	left: ${(props) => props.left};
@@ -177,107 +167,22 @@ const Station = styled.div`
 	background-image: url('./img_ch0${props => props.ico}.png');
 	cursor: pointer;
 `
-// ^-------------------------------------------------------------- JSON
-
-/** JSON 사용 */
-export const dateTime = detailData[0].dataTime;
+// ------------------------------------------------------- Styled
 /**
- * 전체 지역 평균값
- * @param {*} order	순서
- * @param {*} returnValue 출력 타입 value
- * @returns 지역 측정소별 측정 총합의 평균값
+ * {childrenComponents, station, setStation, info, type, airData}
  */
-const regionAvgValue = (order, returnValue) => {
-  const regionList = {
-    '02': '서울',
-    '031': '경기',
-    '032': '인천',
-    '033': '강원',
-    '041': '충남',
-    '042': '대전',
-    '043': '충북',
-    '044': '세종',
-    '051': '부산',
-    '052': '울산',
-    '053': '대구',
-    '054': '경북',
-    '055': '경남',
-    '061': '전남',
-    '062': '광주',
-    '063': '전북',
-    '064': '제주',
-  };
-
-  const filterValue = Object.values(regionList).map((list) => {
-    return detailData.filter((data) => {
-      return data.sidoName === list;
-    });
-  });
-
-  const filterTotalValue = filterValue.map((arr) => {
-    return arr.reduce((accumulator, currentValue) => {
-      const valueToAdd = parseFloat(currentValue[returnValue]);
-      if (!isNaN(valueToAdd)) {
-        return accumulator + valueToAdd;
-      } else {
-        return accumulator;
-      }
-    }, 0);
-  });
-  const result = filterTotalValue[order] / filterValue[order].length;
-
-  const fixedValue = ['o3Value', 'no2Value', 'so2Value'];
-  if (fixedValue.includes(returnValue)) {
-    return result.toFixed(4);
-  } else if (returnValue === 'coValue') {
-	return result.toFixed(2);
-  } else return Math.round(result);
-};
-
-/**
- * JSON 사용
- * 상세 지역 측정소 값 총합, 평균값
- * @param {*} props
- * @param {*} list
- * @returns 상세 지역 측정소 총합 평균값
- */
-
-const filterStationReturnValue = (type, list) => {
-  const filterStationValue = list.map((region) => {
-    return region.station.map((station) => {
-      const findData = detailData.find((data) => data.stationName === station)[type];
-      if (findData !== '-') {
-        return Number(findData);
-      } else {
-        return 0;
-      }
-    });
-  });
-
-  const result = filterStationValue.map((val) => {
-    const sumValue = val.reduce((acc, cur) => acc + cur);
-    return Math.round(sumValue / val.length);
-  });
-
-  const avgValue = Math.round(
-    result.reduce((acc, cur) => acc + cur) / result.length
-  );
-
-  return { result, avgValue };
-};
-
-// ^-------------------------------------------------------------- JSON
-
-export const MapPaths = ({childrenComponents, station, setStation, info, type}) => {
+export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
 	const [hoverStation, setHoverStation] = useState({});
 	const [hoverStationData, setHoverStationData] = useState({});
 	const [openMap, setOpenMap] = useState(0);
+	const [airStation, setAirStation] = useState('air');
 	const mapName = useRef();
 
 	const hoverHandle = (element) => setHover(element);
 	const innerClickHandle = (element) => setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
+	const airStationHandle = (element) => setAirStation(element);
 
 	const namePositionVal = [
 		{ num: '02',  name: '서울', fullName: '서울특별시', left: '241px', top: '120px'},
@@ -299,12 +204,109 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 		{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45px', top: '640px'},
 	];
 
+	useEffect(() => {
+		if(props.airData) {
+			props.setLoading(true);
+		} else {
+			props.setLoading(false);
+		}
+	},[props.airData]);
+
+	// ^-------------------------------------------------------------- JSON
+	/** JSON 사용 */
+	/**
+	 * 전체 지역 평균값
+	 * @param {*} order	순서
+	 * @param {*} returnValue 출력 타입 value
+	 * @returns 지역 측정소별 측정 총합의 평균값
+	 */
+	const regionAvgValue = (order, returnValue) => {
+		const regionList = {
+		'02': '서울',
+		'031': '경기',
+		'032': '인천',
+		'033': '강원',
+		'041': '충남',
+		'042': '대전',
+		'043': '충북',
+		'044': '세종',
+		'051': '부산',
+		'052': '울산',
+		'053': '대구',
+		'054': '경북',
+		'055': '경남',
+		'061': '전남',
+		'062': '광주',
+		'063': '전북',
+		'064': '제주',
+		};
+		if(props.airData){
+			const filterValue = Object.values(regionList).map((list) => {
+					return props.airData.filter((data) => {
+						return data.sidoName === list;
+					});
+			});
+
+			const filterTotalValue = filterValue.map((arr) => {
+			return arr.reduce((accumulator, currentValue) => {
+				const valueToAdd = parseFloat(currentValue[returnValue]);
+				if (!isNaN(valueToAdd)) {
+				return accumulator + valueToAdd;
+				} else {
+				return accumulator;
+				}
+			}, 0);
+			});
+			const result = filterTotalValue[order] / filterValue[order].length;
+			const fixedValue = ['o3Value', 'no2Value', 'so2Value'];
+			if (fixedValue.includes(returnValue)) {
+				return result.toFixed(4);
+			} else if (returnValue === 'coValue') {
+				return result.toFixed(2);
+			} else return Math.round(result);
+		} else {
+			return 0;
+		}
+	};
+	/**
+	 * JSON 사용
+	 * 상세 지역 측정소 값 총합, 평균값
+	 * @param {*} props
+	 * @param {*} list
+	 * @returns 상세 지역 측정소 총합 평균값
+	 */
+	const filterStationReturnValue = (type, list) => {
+		if(props.airData){
+			const filterStationValue = list.map((region) => {
+			return region.station.map((station) => {
+				const findData = props.airData.find((data) => data.stationName === station)[type];
+				if (findData !== '-') {
+					return Number(findData);
+				} else {
+					return 0;
+				}
+			});
+			});
+			const result = filterStationValue.map((val) => {
+			const sumValue = val.reduce((acc, cur) => acc + cur);
+			return Math.round(sumValue / val.length);
+			});
+			const avgValue = Math.round(
+			result.reduce((acc, cur) => acc + cur) / result.length
+			);
+			return { result, avgValue };
+		} else {
+			return { result: null, avgValue: null }
+		}
+	};
+	// ^-------------------------------------------------------------- JSON
+
 	/** 지역별 컴포넌트 */
 	const RegionComponents = () => {
 
 		/** 상세 지역 컴포넌트 (버튼)  */
 		const InnerComponent = ({ regionNum, regionName, fullName }) => {
-			const { result } = filterStationReturnValue(type, regionList[regionName]);
+			const { result } = filterStationReturnValue(props.type, regionList[regionName]);
 
 			const renderButton = (el, key) => {
 				const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
@@ -316,10 +318,11 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 					left: regionList[regionName][key].left,
 					top: regionList[regionName][key].top,
 					}}
-					value={getColorValue(result[key], type)[2]}
+					value={getColorValue(props.loading ? result[key] : 0, props.type)[2]}
+					onClick={() => airStationHandle('station')}
 				>
 					{el.name}
-					<strong>{result[key] === 0 ? '-' : result[key]}</strong>
+					<strong>{props.loading && (result[key] === 0 ? '-' : result[key])}</strong>
 				</InnerMapButton>
 				);
 			};
@@ -330,8 +333,9 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 					id={`m_${regionNum}_${String(key + 1).padStart(3, '0')}`}
 					title={`${regionName}_${el.name}${el.district}`}
 					d={pathData[`m_${regionNum}_${String(key + 1).padStart(3, '0')}`]}
-					fillColor={getColorValue(result[key], type)[0]}
-					fillHoverColor={getColorValue(result[key], type)[1]}
+					fillColor={airStation === 'air' ? getColorValue(props.loading ? result[key] : 0, props.type)[0] : '#fff'}
+					fillHoverColor={airStation === 'air' ? getColorValue(props.loading ? result[key] : 0, props.type)[1] : '#fff'}
+					onClick={() => airStationHandle('station')}
 				></InnerMapPath>
 				);
 			};
@@ -357,14 +361,14 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 			}
 			const InnerComponent = Components[regionName];
 
-			const TimeComponent = childrenComponents.Time;
+			const TimeComponent = props.childrenComponents.Time;
 
 			// Styled
 			const DetailContainer = styled.div`
-				background: ${(props) =>
-				`#dff6ff ${
-					props.noImage === 'true' ? '' : `url('/map_bg_${props.regionNum}.jpg')`
-				} no-repeat center 35px`};
+				background-color: '#dff6ff';
+				background-image: ${props => props.noImage ? '' : `url('/${props.regionNum}.png'), url('/map_bg_${props.regionNum}.jpg')`};
+				background-repeat: no-repeat;
+				background-position: center 35px;
 				position: absolute;
 				border-radius: 10px;
 				border: 1px solid #000;
@@ -428,6 +432,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 						viewBox='0 0 492 548'
 						enableBackground='new 0 0 492 548'
 						xmlSpace="preserve"
+						style={{visibility: airStation === 'station' && 'hidden'}}
 					>
 					{children}
 					</svg>
@@ -451,7 +456,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 						text-decoration: underline;
 					}
 
-					&:first-of-type {
+					&[data-type="${airStation}"] {
 						background-color: #0f62cc;
 						color: #fff;
 					}
@@ -465,29 +470,29 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
 					<Title>
 						<h2>{fullName}</h2>
-						<button onClick={() => innerClickHandle(0)}>창 닫기</button>
+						<button onClick={() => {innerClickHandle(0); airStationHandle('air')}}>창 닫기</button>
 					</Title>
 					<TimeComponent top="50px" left="15px" height="20px" right="initial" />
 					<SelectDiv>
-						<button>대기/경보 정보</button>
-						<button>측정소 정보</button>
+						<button data-type="air" onClick={() => airStationHandle('air')}>대기/경보 정보</button>
+						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
 					</SelectDiv>
 					{/* 버튼 */}
-					<ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>
-					<StationCollection>
+					{airStation === 'air' && <ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>}
+					{airStation === 'station' && <StationCollection>
 						{filterStationData.map((el, key) => {
-							const filterStationAirData = detailData.find(item => item.stationName === el.stationName);
+							const filterStationAirData = props.airData.find(item => item.stationName === el.stationName);
 							return (
 								<Station
 									key={key}
 									top={el.innerTop}
 									left={el.innerLeft}
 									data-station_name={el.stationName}
-									ico={getColorValue(filterStationAirData?.[type], type)[4]}
+									ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
 								></Station>
 							)
 						})}
-					</StationCollection>
+					</StationCollection>}
 					{/* SVG */}
 					<InnerMapSvg>
 						{InnerComponent && <InnerComponent />}
@@ -533,7 +538,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 			let color;
 			let hoverColor;
 			let hoverChk = false;
-			const ifResult = getColorValue(regionAvgValue(key, type), type);
+			const ifResult = getColorValue(regionAvgValue(key, props.type), props.type);
 
 			color = ifResult[0];
 			hoverChk = false;
@@ -542,7 +547,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 				hoverChk = true;
 			}
 
-			if(info === 'station'){
+			if(props.info === 'station'){
 				color = '#fff';
 				hoverColor = "#f5fcff";
 			}
@@ -555,15 +560,15 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 					onMouseOver={() => hoverHandle(el.num)}
 					onMouseOut={() => hoverHandle('')}
 				>
-					{info === 'air' &&
+					{props.info === 'air' &&
 					<MapNameButton
 						left={el.left}
 						top={el.top}
-						bgColor={getColorValue(regionAvgValue(key, type), type)[2]}
+						bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
 						onClick={() => innerClickHandle(el.num)}
 					>
 						{el.name}
-						<span>{regionAvgValue(key, type)}</span>
+						<span>{regionAvgValue(key, props.type)}</span>
 					</MapNameButton>
 					}
 					<InnerComponent regionNum={el.num} regionName={el.name} fullName={el.fullName} />
@@ -587,9 +592,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 
 	/** 측정소 컴포넌트 */
 	const StationComponent = () => {
-		const Div = styled.div`
-			position: relative;
-		`
+		const Div = styled.div`position: relative;`
 		const StationPopup = styled.div`
 			position: absolute;
 			visibility: hidden;
@@ -637,7 +640,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 		};
 
 		const legend = (() => {
-			switch(type) {
+			switch(props.type) {
 				case "khaiValue":
 					return "CAI";
 				case "pm25Value":
@@ -662,16 +665,16 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 			<Div>
 				{stationsInfo.map((station, key) => {
 					// 장계면 데이터 없음
-					const stationAirData = detailData.find(item => item.stationName === station.stationName);
+					const stationAirData = props.airData.find(item => item.stationName === station.stationName);
 
 					return (
 						<Station key={key}
 							onMouseEnter={() => stationHoverHandle({station, stationAirData})}
 							onMouseOut={() => hoverStationHandle('')}
-							onClick={() => setStation(station)}
+							onClick={() => props.setStation(station)}
 							top={station.top}
 							left={station.left}
-							ico={getColorValue(stationAirData?.[type], type)[4]}
+							ico={getColorValue(stationAirData?.[props.type], props.type)[4]}
 						>
 						</Station>
 					)
@@ -683,7 +686,7 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 				>
 					<div><strong>측정소 명:</strong> <span>{hoverStation.stationName}</span></div>
 					<div><strong>위치:</strong> <span>{hoverStation.addr}</span></div>
-					<div><strong>농도:</strong> <span>{hoverStationData?.[type]} {legend}</span></div>
+					<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
 				</StationPopup>
 			</Div>
 		)
@@ -692,8 +695,9 @@ export const MapPaths = ({childrenComponents, station, setStation, info, type}) 
 	return (
 		<>
 			<MainContainer ref={mapName}>
+				{/* {props.loading && <RegionComponents />} */}
 				<RegionComponents />
-				{info === 'station' && <StationComponent />}
+				{props.info === 'station' && <StationComponent />}
 			</MainContainer>
 		</>
 	)

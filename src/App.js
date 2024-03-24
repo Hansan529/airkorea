@@ -6,7 +6,7 @@ import {
 } from './components/MapPath';
 import stationInfoJSON from './data/stationInfo.json';
 import TodayAirQuality from './components/TodayAirQuality';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // ------------------------------------------------ fetch
@@ -32,27 +32,17 @@ function App() {
 
   const [tapSelect, setTapSelect] = useState(0);
   const [station, setStation] = useState(stationInfo.find(item => item.stationName === '중구'));
-  const [data, setData] = useState([{
-      "khaiValue": null,
-      "so2Value": null,
-      "coValue": null,
-      "pm10Value": null,
-      "pm25Value": null,
-      "dataTime": "0000-00-00 00:00",
-      "no2Value": null,
-      "stationName": null,
-      "o3Value": null,
-  }]);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
     const storedData = JSON.parse(localStorage.getItem('storedData'));
     const expireTime = new Date(localStorage.getItem('expireTime'));
 
-    const dataTime = new Date(storedData[0].dataTime);
+    const dataTime = storedData && new Date(storedData[0].dataTime);
     const now = new Date();
-    const dot = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), 0, 0);
-
+    const dot = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0);
 
     // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
     if (!storedData || !expireTime || (expireTime < now) || (dataTime < dot < expireTime)) {
@@ -70,6 +60,7 @@ function App() {
     } else {
       setData(storedData);
     }
+    // setLoading(true);
   }, []);
 
   // ------------------------------------------------ style
@@ -369,7 +360,7 @@ function App() {
                   </MMOSelect>
                 </MMOSelectWrapper>
                 <MMOBorderDiv>
-                  <button onClick={mMoSelectHandle} data-information="air" className="on">대기/경보 정보</button>
+                  <button onClick={mMoSelectHandle} data-information="air">대기/경보 정보</button>
                   <button onClick={mMoSelectHandle} data-information="station">측정소 정보</button>
                   </MMOBorderDiv>
               </MMOContainer>
@@ -380,8 +371,11 @@ function App() {
                 childrenComponents={{Time}}
                 station={station}
                 setStation={setStation}
+                loading={loading}
+                setLoading={setLoading}
                 info={mMoSelect_info}
                 type={mMOSelect_return}
+                airData={data}
               ></MapPaths>
               <Time />
             </MMWrapper>
@@ -391,7 +385,8 @@ function App() {
               childrenComponents={{Time}}
               station={station}
               setStation={setStation}
-              loading={setLoading}
+              loading={loading}
+              setLoading={setLoading}
               airData={data}
               />
         </FirstSection>

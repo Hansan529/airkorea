@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { getColorValue } from "./MapPath";
-import airQualityJson from "../data/todayDaily.json";
+// import airQualityJson from "../data/todayDaily.json";
 import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-const { response: { body: { items : airQuality }}} = airQualityJson;
-const filterQuality = airQuality.filter((item, index) => index < 4);
+// const { response: { body: { items : airQuality }}} = airQualityJson;
+// const filterQuality = airQuality.filter((item, index) => index < 4);
 
 const { response: { body: { items : forecast }}} = forecastJSON;
 const filterForecast = forecast.filter((item, index) => index < 4);
@@ -320,7 +320,7 @@ const AirForecastUl = styled.ul`
     }
 `;
 
-const Component = ({childrenComponents, station, setStation, loading, airData}) => {
+const Component = (props) => {
         const [count, setCount] = useState(0);
         const [legendRange, setLegendRange] = useState([]);
         const [legendPopupState, setLegendPopupState] = useState(false);
@@ -351,20 +351,19 @@ const Component = ({childrenComponents, station, setStation, loading, airData}) 
 
                 // 가까운 측정소
                 const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
-                setStation(stationInfo);
-                loading(true);
+                props.setStation(stationInfo);
               }
               // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
               const error = (err) => console.error('에러', err);
 
               navigator.geolocation.getCurrentPosition(success, error);
             }
-        }, [loading, setStation, count]);
+        }, [count]);
 
         // const { items: dnstyItems } = dnsty.response.body;
 
         // 사용자 지역에 대한 대기 정보 수치 값
-        const currentLocation = airData?.find(el => el.stationName === station.stationName);
+        const currentLocation = props.airData?.find(el => el.stationName === props.station.stationName);
         // 사용자 지역에 가까운 측정소에 대한 정보
         const currentStationInfo = stationsInfo.find(item => item?.stationName === currentLocation?.stationName);
 
@@ -492,7 +491,7 @@ const Component = ({childrenComponents, station, setStation, loading, airData}) 
     }
 
     // ---------------------------------------------------- Components
-    const TimeComponent = childrenComponents.Time;
+    const TimeComponent = props.childrenComponents.Time;
 
     return (
         <InfoContainer>
@@ -505,8 +504,8 @@ const Component = ({childrenComponents, station, setStation, loading, airData}) 
                     <InfoButton ico={'bg_search'}>검색</InfoButton>
                     <InfoButton ico={'pos'}>현위치</InfoButton>
                     <p>
-                    <strong>{loading && (station.stationName)}</strong> 중심으로 측정
-                    <span>({station.addr.split(' ')[0]} {station.addr.split(' ')[1]} {station.stationName} 측정소 기준)</span>
+                    <strong>{props.loading && (props.station.stationName)}</strong> 중심으로 측정
+                    <span>({props.station.addr.split(' ')[0]} {props.station.addr.split(' ')[1]} {props.station.stationName} 측정소 기준)</span>
                     </p>
                 </InfoInteraction>
                 <TimeComponent refresh onClick={refreshHandleClick} />
@@ -517,27 +516,27 @@ const Component = ({childrenComponents, station, setStation, loading, airData}) 
                     <ul>
                         <li>
                             <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                            <img src={`./img_na0${loading ? pm25Index : 5}.png`} alt="대기질" />
+                            <img src={`./img_na0${props.loading ? pm25Index : 5}.png`} alt="대기질" />
                             <span style={{color: pm25}}>
-                                <strong className="colorValue">{loading ? currentLocation?.pm25Value : '-'}</strong>
+                                <strong className="colorValue">{props.loading ? currentLocation?.pm25Value : '-'}</strong>
                                 <small style={{color: 'initial'}}>㎍/㎥</small>
                                 {airState(colorList.indexOf(pm25))[0]}
                             </span>
                         </li>
                         <li>
                             <span><strong>미세먼지</strong>(PM-10)</span>
-                            <img src={`./img_na0${loading ? pm10Index : 5}.png`} alt="대기질" />
+                            <img src={`./img_na0${props.loading ? pm10Index : 5}.png`} alt="대기질" />
                             <span style={{color: pm10}}>
-                                <strong className="colorValue">{loading ? currentLocation?.pm10Value : '-'}</strong>
+                                <strong className="colorValue">{props.loading ? currentLocation?.pm10Value : '-'}</strong>
                                 <small style={{color: 'initial'}}>㎍/㎥</small>
                                 {airState(colorList.indexOf(pm10))[0]}
                                 </span>
                         </li>
                         <li>
                             <span><strong>오존</strong>(O<sub>3</sub>)</span>
-                            <img src={`./img_na0${loading ? o3Index : 5}.png`} alt="대기질" />
+                            <img src={`./img_na0${props.loading ? o3Index : 5}.png`} alt="대기질" />
                             <span style={{color: o3}}>
-                                <strong className="colorValue">{String(loading ? currentLocation?.o3Value : '-').padEnd(6, '0')}</strong>
+                                <strong className="colorValue">{props.loading ? String(currentLocation?.o3Value).padEnd(6, '0') : '-'}</strong>
                                 <small style={{color: 'initial'}}>ppm</small>
                                 {airState(colorList.indexOf(o3))[0]}
                             </span>
@@ -554,13 +553,13 @@ const Component = ({childrenComponents, station, setStation, loading, airData}) 
                         </li>
                         <li>
                             <p>오늘</p>
-                            <span className={`miniText miniTextIco_${pm25TodayIndex}`} style={{color: airState(pm25Today)[1]}}>{pm25Today}</span>
-                            <span className={`miniText miniTextIco_${pm10TodayIndex}`} style={{color: airState(pm10Today)[1]}}>{pm10Today}</span>
+                            <span className={`miniText miniTextIco_${props.loading ? pm25TodayIndex : '5'}`} style={{color: airState(pm25Today)[1]}}>{props.loading ? pm25Today : '-'}</span>
+                            <span className={`miniText miniTextIco_${props.loading ? pm10TodayIndex : '5'}`} style={{color: airState(pm10Today)[1]}}>{props.loading ? pm10Today : '-'}</span>
                         </li>
                         <li>
                             <p>내일</p>
-                            <span className={`miniText miniTextIco_${pm25TomorrowIndex}`} style={{color: airState(pm25Tomorrow)[1]}}>{pm25Tomorrow}</span>
-                            <span className={`miniText miniTextIco_${pm10TomorrowIndex}`} style={{color: airState(pm10Tomorrow)[1]}}>{pm10Tomorrow}</span>
+                            <span className={`miniText miniTextIco_${props.loading ? pm25TomorrowIndex : '5'}`} style={{color: airState(pm25Tomorrow)[1]}}>{props.loading ? pm25Tomorrow : '-'}</span>
+                            <span className={`miniText miniTextIco_${props.loading ? pm10TomorrowIndex : '5'}`} style={{color: airState(pm10Tomorrow)[1]}}>{props.loading ? pm10Tomorrow : '-'}</span>
                         </li>
                     </AirForecastUl>
                 </Part>
