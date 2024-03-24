@@ -3,8 +3,8 @@ import './App.css';
 import Headers from './components/Header';
 import {
   MapPaths,
-  dateTime,
 } from './components/MapPath';
+import stationInfoJSON from './data/stationInfo.json';
 import TodayAirQuality from './components/TodayAirQuality';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
@@ -19,6 +19,7 @@ const fetchData = async () => {
     return null;
   }
 }
+const {items: stationInfo} = stationInfoJSON;
 
 function App() {
   // ------------------------------------------------ component
@@ -30,27 +31,31 @@ function App() {
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
 
   const [tapSelect, setTapSelect] = useState(0);
-  const [station, setStation] = useState({
-    "dmX": "37.564639",
-    "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-    "mangName": "도시대기",
-    "year": "1995",
-    "addr": "서울 중구 덕수궁길 15 시청서소문별관 3동",
-    "stationName": "중구",
-    "dmY": "126.975961",
-    "top" : "136",
-    "left" : "264"
-});
-
-  const [data, setData] = useState(null);
+  const [station, setStation] = useState(stationInfo.find(item => item.stationName === '중구'));
+  const [data, setData] = useState([{
+      "khaiValue": null,
+      "so2Value": null,
+      "coValue": null,
+      "pm10Value": null,
+      "pm25Value": null,
+      "dataTime": "0000-00-00 00:00",
+      "no2Value": null,
+      "stationName": null,
+      "o3Value": null,
+  }]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
     const storedData = JSON.parse(localStorage.getItem('storedData'));
-    const expireTime = localStorage.getItem('expireTime');
+    const expireTime = new Date(localStorage.getItem('expireTime'));
+
+    const dataTime = new Date(storedData[0].dataTime);
+    const now = new Date();
+    const dot = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), 0, 0);
+
 
     // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
-    if (!storedData || !expireTime || new Date(expireTime) < new Date()) {
+    if (!storedData || !expireTime || (expireTime < now) || (dataTime < dot < expireTime)) {
       fetchData().then((result) => {
         if (result) {
           localStorage.setItem('storedData', JSON.stringify(result));
@@ -214,12 +219,6 @@ function App() {
   `;
 // ------------------------------------------------ component
   const Time = ({ top, left, right, height, refresh, onClick }) => {
-    const updateTime = new Date(data[0].dataTime);
-    const year = updateTime.getFullYear();
-    const month = String(updateTime.getMonth() + 1).padStart(2, '0');
-    const day = String(updateTime.getDate()).padStart(2, '0');
-    const hour = String(updateTime.getHours()).padStart(2, '0');
-
     const DivStyle = styled.div`
       display: flex;
       gap: 5px !important;
@@ -254,12 +253,32 @@ function App() {
         }
     `;
 
-    return (
-      <DivStyle>
-        <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
-        {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
-      </DivStyle>
-    )
+    const storedDataString = localStorage.getItem('storedData');
+    if(storedDataString) {
+      const storedData = JSON.parse(storedDataString);
+      if(Array.isArray(storedData) && storedData.length > 0) {
+          const dataTime = storedData[0].dataTime;
+          const updateTime = new Date(dataTime);
+          const year = updateTime.getFullYear();
+          const month = String(updateTime.getMonth() + 1).padStart(2, '0');
+          const day = String(updateTime.getDate()).padStart(2, '0');
+          const hour = String(updateTime.getHours()).padStart(2, '0');
+
+          return (
+            <DivStyle>
+              <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
+              {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
+            </DivStyle>
+          )
+      }
+    } else {
+      return (
+            <DivStyle>
+              <span>0000년 00월 00일 <strong>00시</strong></span>
+              {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
+            </DivStyle>
+      )
+    }
   };
 
   // ------------------------------------------------ event
