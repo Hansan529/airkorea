@@ -33,6 +33,7 @@ function App() {
   const [tapSelect, setTapSelect] = useState(0);
   const [station, setStation] = useState(stationInfo.find(item => item.stationName === '중구'));
   const [data, setData] = useState();
+  const [openMap, setOpenMap] = useState(0);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -287,8 +288,13 @@ function App() {
     if(information){
       setMMOSelect_info(information);
     } else {
-      if(value.match(/Value/gi) === null) setMMOSelect_region(value);
-      else setMMOSelect_return(value);
+      if(value.match(/Value/gi)){
+        setMMOSelect_return(value);
+      }
+      else {
+        setOpenMap(value);
+        setMMOSelect_region(value);
+      }
     }
 
   };
@@ -324,7 +330,7 @@ function App() {
                   <label htmlFor="area1" style={{ marginRight: '5px' }}>
                     종류
                   </label>
-                  <MMOSelect id="area1" bg $width="180px" onChange={mMoSelectHandle}>
+                  <MMOSelect id="area1" bg $width="180px" onChange={mMoSelectHandle} value={mMOSelect_return}>
                     <option value="khaiValue">통합대기환경지수(CAI)</option>
                     <option value="pm25Value">초미세먼지 (PM-2.5)</option>
                     <option value="pm10Value">미세먼지 (PM-10)</option>
@@ -338,7 +344,7 @@ function App() {
                   <label htmlFor="area2" style={{ marginRight: '5px' }}>
                     시/도
                   </label>
-                  <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectHandle}>
+                  <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectHandle} value={mMOSelect_region}>
                     <option value="none">-전체-</option>
                     <option value="02">서울특별시</option>
                     <option value="031">경기도</option>
@@ -376,6 +382,7 @@ function App() {
                 info={mMoSelect_info}
                 type={mMOSelect_return}
                 airData={data}
+                mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
               ></MapPaths>
               <Time />
             </MMWrapper>

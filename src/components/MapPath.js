@@ -439,8 +439,8 @@ export const MapPaths = (props) => {
 
 			// Styled
 			const DetailContainer = styled.div`
-				background-color: '#dff6ff';
 				background-image: ${props => props.noImage ? '' : `url('/${props.regionNum}.png'), url('/map_bg_${props.regionNum}.jpg')`};
+				background-color: #dff6ff;
 				background-repeat: no-repeat;
 				background-position: center 35px;
 				position: absolute;
@@ -451,7 +451,7 @@ export const MapPaths = (props) => {
 				visibility: hidden;
 
 				/* dynamic */
-				&[data-region_num="${openMap}"]{
+				&[data-region_num="${openMap || props.mapSetting.openMap}"]{
 					z-index: 50;
 					opacity: 1;
 					visibility: visible;
@@ -463,6 +463,7 @@ export const MapPaths = (props) => {
 				background-color: #414d5d;
 				text-align: center;
 				line-height: 35px;
+				border-radius: 10px 10px 0 0;
 
 				h2 {
 					color: #fff;
@@ -544,7 +545,13 @@ export const MapPaths = (props) => {
 				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
 					<Title>
 						<h2>{fullName}</h2>
-						<button onClick={() => {innerClickHandle(0); airStationHandle('air')}}>창 닫기</button>
+						<button onClick={() => {
+							innerClickHandle(0);
+							airStationHandle('air');
+							props.mapSetting.setOpenMap('none');
+							props.mapSetting.setMMOSelect_region('none');
+							setOpenMap("none")
+						}}>창 닫기</button>
 					</Title>
 					<TimeComponent top="50px" left="15px" height="20px" right="initial" />
 					<SelectDiv>
@@ -694,8 +701,7 @@ export const MapPaths = (props) => {
 	return (
 		<>
 			<MainContainer ref={mapName}>
-				{/* {props.loading && <RegionComponents />} */}
-				<RegionComponents />
+				{props.loading && <RegionComponents />}
 				{props.info === 'station' && <StationComponent />}
 			</MainContainer>
 		</>
