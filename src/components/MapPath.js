@@ -173,7 +173,7 @@ const Station = styled.div`
  */
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
-	const [hoverStation, setHoverStation] = useState({});
+	const [hoverStation, setHoverStation] = useState({top: null, left: null, innerTop: null, innerLeft: null});
 	const [hoverStationData, setHoverStationData] = useState({});
 	const [openMap, setOpenMap] = useState(0);
 	const [airStation, setAirStation] = useState('air');
@@ -183,6 +183,11 @@ export const MapPaths = (props) => {
 	const innerClickHandle = (element) => setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
 	const airStationHandle = (element) => setAirStation(element);
+
+	const stationPopupHandle = (hoverStation, data) => {
+		setHoverStation(hoverStation);
+		setHoverStationData(data);
+	};
 
 	const namePositionVal = [
 		{ num: '02',  name: '서울', fullName: '서울특별시', left: '241px', top: '120px'},
@@ -300,7 +305,76 @@ export const MapPaths = (props) => {
 		}
 	};
 	// ^-------------------------------------------------------------- JSON
+	/** */
+	const StationPopup = ({top, left}) => {
+		const Style = styled.div`
+		position: absolute;
+		visibility: hidden;
+		transform: translateX(-50%);
+		background-color: #414d52;
+		white-space: nowrap;
+		padding: 10px;
+		color: #fff;
+		border-radius: 10px;
+		top: ${top}px;
+		left: ${left}px;
+		transform : translate(-50%, -90px);
 
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			width: 0;
+			height: 0;
+			left: 50%;
+			transform: translateX(calc(-50% + 5px));
+			border-top: calc(10px * 1.732) solid #414d52;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+		}
+
+		div{
+			margin-bottom: 5px;
+			&:last-of-type{margin-bottom: 0;}
+		}
+
+		strong {
+			color: #ffea5c;
+		}
+
+		&[data-name="${hoverStation?.stationName}"]{
+			z-index: 10;
+			visibility: visible;
+		}
+		`;
+		const legend = (() => {
+			switch(props.type) {
+				case "khaiValue":
+					return "CAI";
+				case "pm25Value":
+					return "㎍/㎥";
+				case "pm10Value":
+					return "㎍/㎥";
+				case "o3Value":
+					return "ppm";
+				case "no2Value":
+					return "ppm";
+				case "coValue":
+					return "ppm";
+				case "so2Value":
+					return "ppm";
+				default:
+					return;
+			}
+		})();
+		return (
+			<Style data-name={hoverStation?.stationName}>
+				<div><strong>측정소 명:</strong> <span>{hoverStation?.stationName}</span></div>
+				<div><strong>위치:</strong> <span>{hoverStation?.addr}</span></div>
+				<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
+			</Style>
+		)
+	}
 	/** 지역별 컴포넌트 */
 	const RegionComponents = () => {
 
@@ -372,7 +446,7 @@ export const MapPaths = (props) => {
 				position: absolute;
 				border-radius: 10px;
 				border: 1px solid #000;
-				overflow: hidden;
+				/* overflow: hidden; */
 				opacity: 0;
 				visibility: hidden;
 
@@ -483,15 +557,17 @@ export const MapPaths = (props) => {
 						{filterStationData.map((el, key) => {
 							const filterStationAirData = props.airData.find(item => item.stationName === el.stationName);
 							return (
-								<Station
-									key={key}
+								<Station key={key}
+									onMouseEnter={() => stationPopupHandle(el, filterStationAirData)}
+									onMouseOut={() => hoverStationHandle('')}
+									onClick={() => props.setStation(el)}
 									top={el.innerTop}
 									left={el.innerLeft}
-									data-station_name={el.stationName}
 									ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
-								></Station>
+								/>
 							)
 						})}
+						<StationPopup top={hoverStation.innerTop} left={hoverStation.innerLeft} />
 					</StationCollection>}
 					{/* SVG */}
 					<InnerMapSvg>
@@ -593,101 +669,24 @@ export const MapPaths = (props) => {
 	/** 측정소 컴포넌트 */
 	const StationComponent = () => {
 		const Div = styled.div`position: relative;`
-		const StationPopup = styled.div`
-			position: absolute;
-			visibility: hidden;
-			transform: translateX(-50%);
-			background-color: #414d52;
-			white-space: nowrap;
-			padding: 10px;
-			color: #fff;
-			border-radius: 10px;
-			top: ${hoverStation?.top}px;
-			left: ${hoverStation?.left}px;
-			transform : translate(-50%, -90px);
-
-			&::after {
-				content: "";
-				display: block;
-				position: absolute;
-				width: 0;
-				height: 0;
-				left: 50%;
-				transform: translateX(calc(-50% + 5px));
-				border-top: calc(10px * 1.732) solid #414d52;
-				border-left: 10px solid transparent;
-				border-right: 10px solid transparent;
-			}
-
-			div{
-				margin-bottom: 5px;
-				&:last-of-type{margin-bottom: 0;}
-			}
-
-
-			strong {
-				color: #ffea5c;
-			}
-
-			&[data-name="${hoverStation?.stationName}"]{
-				z-index: 10;
-				visibility: visible;
-			}
-		`;
-		const stationHoverHandle = ({station, stationAirData}) => {
-			setHoverStation(station)
-			setHoverStationData(stationAirData);
-		};
-
-		const legend = (() => {
-			switch(props.type) {
-				case "khaiValue":
-					return "CAI";
-				case "pm25Value":
-					return "㎍/㎥";
-				case "pm10Value":
-					return "㎍/㎥";
-				case "o3Value":
-					return "ppm";
-				case "no2Value":
-					return "ppm";
-				case "coValue":
-					return "ppm";
-				case "so2Value":
-					return "ppm";
-				default:
-					return;
-			}
-		})();
-
 		// const stationData = stationsInfo.find(item => item.stationName === hoverStation);
 		return (
 			<Div>
 				{stationsInfo.map((station, key) => {
 					// 장계면 데이터 없음
-					const stationAirData = props.airData.find(item => item.stationName === station.stationName);
-
+					const filterStationAirData = props.airData.find(item => item.stationName === station.stationName);
 					return (
 						<Station key={key}
-							onMouseEnter={() => stationHoverHandle({station, stationAirData})}
+							onMouseEnter={() => stationPopupHandle(station, filterStationAirData)}
 							onMouseOut={() => hoverStationHandle('')}
 							onClick={() => props.setStation(station)}
 							top={station.top}
 							left={station.left}
-							ico={getColorValue(stationAirData?.[props.type], props.type)[4]}
-						>
-						</Station>
+							ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
+						/>
 					)
 				})}
-				<StationPopup
-					data-name={hoverStation?.stationName}
-					top={hoverStation?.top}
-					left={hoverStation?.left}
-				>
-					<div><strong>측정소 명:</strong> <span>{hoverStation.stationName}</span></div>
-					<div><strong>위치:</strong> <span>{hoverStation.addr}</span></div>
-					<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
-				</StationPopup>
+				<StationPopup top={hoverStation.top} left={hoverStation.left} />
 			</Div>
 		)
 	}
