@@ -124,15 +124,15 @@ const MapSvg = ({ className, children }) => {
 	)
 
 }
-const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor }) => {
+const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) => {
 	const InnerMapPathStyle = styled.path`
 		fill: ${fillColor || '#cbd0d3'};
 		&:hover {
 		fill: ${fillHoverColor || '#c1c5c7'};
 		}
 	`;
-return (
-<InnerMapPathStyle id={id} title={title} d={d}></InnerMapPathStyle>
+	return (
+	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick}></InnerMapPathStyle>
 )};
 const MainContainer = styled.div`position: absolute;`;
 const LoopContainer = styled.div`position: relative;`;
