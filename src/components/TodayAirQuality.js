@@ -4,7 +4,6 @@ import { getColorValue } from "./MapPath";
 import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 
 // const { response: { body: { items : airQuality }}} = airQualityJson;
 // const filterQuality = airQuality.filter((item, index) => index < 4);
@@ -320,8 +319,16 @@ const AirForecastUl = styled.ul`
     }
 `;
 
+/**
+ * childrenComponents={Time}
+ * station
+ * setStation
+ * loading
+ * setLoading
+ * airData
+ * counts={count, setCount}
+ */
 const Component = (props) => {
-        const [count, setCount] = useState(0);
         const [legendRange, setLegendRange] = useState([]);
         const [legendPopupState, setLegendPopupState] = useState(false);
         const legendPopupRef = useRef();
@@ -334,31 +341,6 @@ const Component = (props) => {
         useEffect(() => {
             setLegendRange(getColorValue(0, `${selectLegend}Value`, true));
         }, [selectLegend]);
-
-        useEffect(() => {
-            if('geolocation' in navigator) {
-              const success = async (pos) => {
-                let { latitude, longitude } = pos.coords;
-                if(latitude === undefined) latitude = '197806.5250901809';
-                if(longitude === undefined) longitude = '451373.25740676327';
-
-                const { data } = await axios.post('http://localhost:3500/api/coordinate', { latitude, longitude});
-                const { x, y } = data.documents[0];
-
-                const { data: stations } = await axios.post('http://localhost:3500/api/station', {x, y});
-                // 가까운 거리의 측정소 3개
-                // setStation(stations);
-
-                // 가까운 측정소
-                const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
-                props.setStation(stationInfo);
-              }
-              // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
-              const error = (err) => console.error('에러', err);
-
-              navigator.geolocation.getCurrentPosition(success, error);
-            }
-        }, [count]);
 
         // const { items: dnstyItems } = dnsty.response.body;
 
@@ -471,7 +453,7 @@ const Component = (props) => {
     `
 
     // ---------------------------------------------------- Event
-    const refreshHandleClick = () => setCount(count + 1);
+    const refreshHandleClick = () => props.counts.setCount(props.counts.count + 1);
     const legendClickHandle = (e) => {
         const node = e.currentTarget;
         const value = node.dataset.value;

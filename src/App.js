@@ -19,19 +19,20 @@ const fetchData = async () => {
     return null;
   }
 }
-const {items: stationInfo} = stationInfoJSON;
+const {items: stationsInfo} = stationInfoJSON;
 
 function App() {
   // ------------------------------------------------ component
   const Main = ({ children }) => <main>{children}</main>;
 
   // ------------------------------------------------ setting
+  const [count, setCount] = useState(0);
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
 
   const [tapSelect, setTapSelect] = useState(0);
-  const [station, setStation] = useState(stationInfo.find(item => item.stationName === '중구'));
+  const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
   const [data, setData] = useState();
   const [openMap, setOpenMap] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,31 @@ function App() {
     }
     // setLoading(true);
   }, []);
+
+  useEffect(() => {
+    if('geolocation' in navigator) {
+      const success = async (pos) => {
+        let { latitude, longitude } = pos.coords;
+        if(latitude === undefined) latitude = '197806.5250901809';
+        if(longitude === undefined) longitude = '451373.25740676327';
+
+        const { data } = await axios.post('http://localhost:3500/api/coordinate', { latitude, longitude});
+        const { x, y } = data.documents[0];
+
+        const { data: stations } = await axios.post('http://localhost:3500/api/station', {x, y});
+        // 가까운 거리의 측정소 3개
+        // setStation(stations);
+
+        // 가까운 측정소
+        const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
+        setStation(stationInfo);
+      }
+      // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
+      const error = (err) => console.error('에러', err);
+
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+}, [count]);
 
   // ------------------------------------------------ style
   const Select = styled.select`
@@ -395,6 +421,7 @@ function App() {
               loading={loading}
               setLoading={setLoading}
               airData={data}
+              counts={{count, setCount}}
               />
         </FirstSection>
       </Main>

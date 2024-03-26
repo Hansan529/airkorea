@@ -134,7 +134,11 @@ const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) => {
 	return (
 	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick}></InnerMapPathStyle>
 )};
-const MainContainer = styled.div`position: absolute;`;
+const MainContainer = styled.div`
+	position: absolute;
+	width: 100%;
+	height: 100%;
+`;
 const LoopContainer = styled.div`position: relative;`;
 const MapNameButton = styled.button`
 	position: absolute;
@@ -167,6 +171,65 @@ const Station = styled.div`
 	background-image: url('./img_ch0${props => props.ico}.png');
 	cursor: pointer;
 `
+const Legend = styled.div`
+	position: absolute;
+	width: 150px;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+
+	&.on {
+		div {
+			background-color: #0f6ecc;
+			transform: translateY(0);
+
+			button {
+				color: #fff;
+				background-image: url(./img_bottom_arr_down.png);
+			}
+		}
+		ul {
+			transform: translateY(0);
+		}
+	}
+
+	> * {
+		transform: translateY(62px);
+		transition: transform 0.5s;
+	}
+
+	div {
+		background-color: #f6fdff;
+
+		button {
+			background: no-repeat right 14px center;
+			background-image: url(./img_bottom_arr_up.png);
+			border: none;
+			width: 100%;
+			text-align: left;
+			text-indent: 14px;
+			cursor: pointer;
+			padding: 5px 0;
+			border: 1px solid rgba(0,0,0,0.3);
+
+			&:hover {
+				text-decoration: underline;
+			}
+	}}
+	ul {
+		border: 1px solid rgba(0,0,0,0.3);
+		padding: 5px 10px;
+		li{
+		text-indent: 20px;
+		background: no-repeat left center / 12px;
+		padding: 5px 0;
+		small { font-size: 14px;}
+
+		&:first-of-type {background-image: url(./img_cau01.png);}
+		&:last-of-type {background-image: url(./img_cau02.png);}
+	}}
+
+`
 // ------------------------------------------------------- Styled
 /**
  * {childrenComponents, station, setStation, info, type, airData}
@@ -177,12 +240,20 @@ export const MapPaths = (props) => {
 	const [hoverStationData, setHoverStationData] = useState({});
 	const [openMap, setOpenMap] = useState(0);
 	const [airStation, setAirStation] = useState('air');
+	const [legendPopup, setLegendPopup] = useState('on');
 	const mapName = useRef();
 
 	const hoverHandle = (element) => setHover(element);
 	const innerClickHandle = (element) => setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
 	const airStationHandle = (element) => setAirStation(element);
+	const legendPopupHandle = (element) => {
+		if(legendPopup === 'on'){
+			setLegendPopup('off')
+		} else {
+			setLegendPopup('on');
+		}
+	}
 
 	const stationPopupHandle = (hoverStation, data) => {
 		setHoverStation(hoverStation);
@@ -283,21 +354,25 @@ export const MapPaths = (props) => {
 	const filterStationReturnValue = (type, list) => {
 		if(props.airData){
 			const filterStationValue = list.map((region) => {
-			return region.station.map((station) => {
-				const findData = props.airData.find((data) => data.stationName === station)[type];
-				if (findData !== '-') {
-					return Number(findData);
-				} else {
-					return 0;
-				}
-			});
+				return region.station.map((station) => {
+					const findData = props.airData.find((data) => data.stationName === station)[type];
+					if (findData !== '-') {
+						return Number(findData);
+					} else {
+						return 0;
+					}
+				});
 			});
 			const result = filterStationValue.map((val) => {
-			const sumValue = val.reduce((acc, cur) => acc + cur);
-			return Math.round(sumValue / val.length);
+				const sumValue = val.reduce((acc, cur) => acc + cur);
+				if(type === 'khaiValue' || type === 'pm10Value' || type === 'pm25Value') {
+					return Math.round(sumValue / val.length);
+				} else {
+					return (sumValue / val.length).toFixed(type=== 'coValue' ? 2 : 4);
+				}
 			});
 			const avgValue = Math.round(
-			result.reduce((acc, cur) => acc + cur) / result.length
+				result.reduce((acc, cur) => acc + cur) / result.length
 			);
 			return { result, avgValue };
 		} else {
@@ -701,8 +776,20 @@ export const MapPaths = (props) => {
 	return (
 		<>
 			<MainContainer ref={mapName}>
-				{props.loading && <RegionComponents />}
-				{props.info === 'station' && <StationComponent />}
+				{props.loading &&
+				<>
+					<RegionComponents />
+					{props.info === 'station' && <StationComponent />}
+					<Legend className={legendPopup}>
+						<div>
+							<button onClick={legendPopupHandle}>범례</button>
+						</div>
+						<ul>
+							<li><small>주의보</small></li>
+							<li><small>경보</small></li>
+						</ul>
+					</Legend>
+				</>}
 			</MainContainer>
 		</>
 	)
