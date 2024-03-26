@@ -30,6 +30,7 @@ function App() {
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
+  const [legendPopup, setLegendPopup] = useState('on');
 
   const [tapSelect, setTapSelect] = useState(0);
   const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
@@ -234,7 +235,69 @@ function App() {
     background: url('/map_svg_warp_bg.png') no-repeat 5px -10px;
     position: relative;
     margin-top: 20px;
+    overflow: hidden;
   `;
+  const Legend = styled.div`
+    position: absolute;
+    width: 150px;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    animation: identifier 0.3s ease forwards reverse;
+
+    div {
+      background-color: #f6fdff;
+      border: 1px solid rgba(0,0,0,0.3);
+      border-bottom: none;
+
+      button {
+        background: no-repeat right 14px center;
+        background-image: url(./img_bottom_arr_up.png);
+        border: none;
+        width: 100%;
+        text-align: left;
+        text-indent: 14px;
+        cursor: pointer;
+        padding: 5px 0;
+
+        &:hover {
+          text-decoration: underline;
+        }
+    }}
+    ul {
+      border: 1px solid rgba(0,0,0,0.3);
+
+      li{
+      text-indent: 30px;
+      background: no-repeat 10px center / 12px;
+      padding: 5px 0;
+      small {font-size: 14px;}
+
+      &:first-of-type {
+        background-image: url(./img_cau01.png);
+      }
+      &:last-of-type {
+        background-image: url(./img_cau02.png);
+      }
+    }}
+
+    &.on {
+      animation: identifier 0.3s ease forwards;
+      div {
+        background-color: #0f6ecc;
+
+        button {
+          color: #fff;
+          background-image: url(./img_bottom_arr_down.png);
+        }
+      }
+    }
+
+    @keyframes identifier {
+      from { transform: translateY(${props => props.height -2}px); }
+      to { transform: translateY(0); }
+    }
+  `
 // ------------------------------------------------ component
   const Time = ({ top, left, right, height, refresh, onClick }) => {
     const DivStyle = styled.div`
@@ -325,6 +388,8 @@ function App() {
 
   };
 
+  const legendPopupHandle = () => setLegendPopup(legendPopup === 'on' ? 'off' : 'on');
+
   return (
     <>
       <Headers />
@@ -411,6 +476,15 @@ function App() {
                 mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
               ></MapPaths>
               <Time />
+              <Legend className={legendPopup} height="55">
+              <div>
+                <button onClick={legendPopupHandle}>범례</button>
+              </div>
+              <ul>
+                <li><small>주의보</small></li>
+                <li><small>경보</small></li>
+              </ul>
+            </Legend>
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
