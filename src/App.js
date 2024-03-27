@@ -2,11 +2,12 @@ import styled from '@emotion/styled';
 import './App.css';
 import Headers from './components/Header';
 import {
+  getColorValue,
   MapPaths,
 } from './components/MapPath';
 import stationInfoJSON from './data/stationInfo.json';
 import TodayAirQuality from './components/TodayAirQuality';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 // ------------------------------------------------ fetch
@@ -22,21 +23,26 @@ const fetchData = async () => {
 const {items: stationsInfo} = stationInfoJSON;
 
 function App() {
-  // ------------------------------------------------ component
-  const Main = ({ children }) => <main>{children}</main>;
-
   // ------------------------------------------------ setting
+  const legendRef = useRef(null);
+
   const [count, setCount] = useState(0);
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
-  const [legendPopup, setLegendPopup] = useState('on');
+
+  const [isOn0, setIsOn0] = useState(true);
+  const [isOn1, setIsOn1] = useState(true);
+  const [isOn2, setIsOn2] = useState(false);
+  const [isOn3, setIsOn3] = useState(false);
+  const [selectIndex, setSelectIndex] = useState('none');
 
   const [tapSelect, setTapSelect] = useState(0);
   const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
   const [data, setData] = useState();
   const [openMap, setOpenMap] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [filterData, setFilterData] = useState({도시대기: true, 국가배경: true, 도로변대기: true, 교외대기: false, 항만: false});
 
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
@@ -90,6 +96,9 @@ function App() {
       navigator.geolocation.getCurrentPosition(success, error);
     }
 }, [count]);
+
+
+  const typeRange = getColorValue(0, mMOSelect_return, true);
 
   // ------------------------------------------------ style
   const Select = styled.select`
@@ -235,17 +244,17 @@ function App() {
     background: url('/map_svg_warp_bg.png') no-repeat 5px -10px;
     position: relative;
     margin-top: 20px;
-    overflow: hidden;
+    /* overflow: hidden; */
   `;
-  const Legend = styled.div`
+  const LegendWrapper = styled.div`
     position: absolute;
-    width: 150px;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    animation: identifier 0.3s ease forwards reverse;
-
-    div {
+      width: 150px;
+      right: 1px;
+      bottom: 1px;
+      overflow: hidden;
+  `
+  const Legend = styled.div`
+    div, .radio > legend {
       background-color: #f6fdff;
       border: 1px solid rgba(0,0,0,0.3);
       border-bottom: none;
@@ -264,8 +273,10 @@ function App() {
           text-decoration: underline;
         }
     }}
-    ul {
+    ul, .list {
       border: 1px solid rgba(0,0,0,0.3);
+      /* transition: height 0.3s; */
+      height: 0;
 
       li{
       text-indent: 30px;
@@ -281,9 +292,27 @@ function App() {
       }
     }}
 
-    &.on {
-      animation: identifier 0.3s ease forwards;
-      div {
+    .radio {
+      /* transition: height 0.3s; */
+      height: 0;
+      overflow: hidden;
+
+      label {
+          display: flex;
+          font-size: 12px;
+          align-items: center;
+          padding: 5px;
+
+          input {
+            width: 12px;
+            height: 12px;
+          }
+        }
+    }
+
+    /* Open */
+    &.on{
+      div, .radio > legend {
         background-color: #0f6ecc;
 
         button {
@@ -291,11 +320,43 @@ function App() {
           background-image: url(./img_bottom_arr_down.png);
         }
       }
+
+      ul, .list {
+        height: ${props => props.height};
+      }
+
+      .radio {
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.3);
+        padding-bottom: 5px;
+
+        height: ${props => props.height};
+      }
     }
 
-    @keyframes identifier {
-      from { transform: translateY(${props => props.height -2}px); }
-      to { transform: translateY(0); }
+    /*  */
+    &[data-legend-index="1"]{
+      .radio label {
+        position: relative;
+        text-indent: 13px;
+
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          top: 50%;
+          left: 25px;
+          transform: translateY(-50%);
+          background: no-repeat 0 0;
+        }
+        &:first-of-type::before { background-image: url('./img_ch01.png'); }
+        &:nth-of-type(2)::before { background-image: url('./img_ch02.png'); }
+        &:nth-of-type(3)::before { background-image: url('./img_ch03.png'); }
+        &:nth-of-type(4)::before { background-image: url('./img_ch04.png'); }
+        &:last-of-type::before { background-image: url('./img_ch05.png'); }
+        }
     }
   `
 // ------------------------------------------------ component
@@ -362,7 +423,7 @@ function App() {
     }
   };
 
-  // ------------------------------------------------ event
+  // ------------------------------------------------ event, function
   const tapSelectHandle = (e) => {
     const liElement = e.currentTarget.parentNode;
     const ulElement = liElement.closest('ul');
@@ -375,6 +436,7 @@ function App() {
 
     // 대기/경보 정보, 측정소 정보 클릭 시
     if(information){
+      // information === 'station' ? setLegendPopup(prevState => ({index: 1, state: [true, true, false, false]})) : setLegendPopup(0);
       setMMOSelect_info(information);
     } else {
       if(value.match(/Value/gi)){
@@ -385,15 +447,29 @@ function App() {
         setMMOSelect_region(value);
       }
     }
-
   };
 
-  const legendPopupHandle = () => setLegendPopup(legendPopup === 'on' ? 'off' : 'on');
+  const legendPopupHandle = (e) => {
+    const legendElement = e.currentTarget.closest('[data-legend-index]');
+    const { legendIndex } = legendElement.dataset;
+
+    const stateUpdater = {
+      0: setIsOn0,
+      1: setIsOn1,
+      2: setIsOn2,
+      3: setIsOn3,
+    };
+
+    const updater = stateUpdater[legendIndex];
+    if(updater)
+      updater(prev => !prev);
+  };
+  const radioHandle = (e) => setSelectIndex(e.target.value);
 
   return (
     <>
       <Headers />
-      <Main>
+      <main>
         {/* 첫번째 색션 */}
         <FirstSection>
           {/* 대기/기상 지도 정보 */}
@@ -474,17 +550,68 @@ function App() {
                 type={mMOSelect_return}
                 airData={data}
                 mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
+                filterData={filterData}
               ></MapPaths>
               <Time />
-              <Legend className={legendPopup} height="55">
-              <div>
-                <button onClick={legendPopupHandle}>범례</button>
-              </div>
-              <ul>
-                <li><small>주의보</small></li>
-                <li><small>경보</small></li>
-              </ul>
-            </Legend>
+              <LegendWrapper ref={legendRef}>
+                {mMoSelect_info === 'air' ?
+                <Legend data-legend-index="0" className={isOn0 && 'on'} height="55px">
+                  <div>
+                    <button onClick={legendPopupHandle}>범례</button>
+                  </div>
+                  <ul>
+                    <li><small>주의보</small></li>
+                    <li><small>경보</small></li>
+                  </ul>
+                </Legend> :
+                <>
+                <Legend data-legend-index="1" className={isOn1 && 'on'} height="145px">
+                  <div className="title">
+                    <button onClick={legendPopupHandle}>농도범위</button>
+                  </div>
+                  <div className="radio">
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                        <span>좋음 ({`0~${mMOSelect_return === 'o3Value' ? typeRange[1].toFixed(3) : typeRange[1]}`})</span>
+                      </label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                        <span>보통 ({`${mMOSelect_return === 'o3Value' ? typeRange[2].toFixed(3) : typeRange[2]}~${mMOSelect_return === 'o3Value' ? typeRange[3].toFixed(3) : typeRange[3]}`})</span>
+                      </label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                        <span>나쁨 ({`${mMOSelect_return === 'o3Value' ? typeRange[4].toFixed(3) : typeRange[4]}~${mMOSelect_return === 'o3Value' ? typeRange[5].toFixed(3): typeRange[5]}`})</span>
+                      </label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                        <span>매우나쁨 ({`${typeRange[6]}~`})</span>
+                      </label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                        <span>데이터 없음</span>
+                      </label>
+                  </div>
+                </Legend>
+                <Legend data-legend-index="2"  className={isOn2 && 'on'} height="145px">
+                  <div className="title">
+                    <button onClick={legendPopupHandle}>측정망 구분</button>
+                  </div>
+                  <div className="radio">
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />도시대기</label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />국가배경</label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" checked />도로변대기</label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" />교외대기</label>
+                      <label><input type="checkbox" onChange={radioHandle} value="" />항만</label>
+                  </div>
+                </Legend>
+                <Legend data-legend-index="3"  className={isOn3 && 'on'} height="100px">
+                  <div className="title">
+                    <button onClick={legendPopupHandle}>기상정보</button>
+                  </div>
+                  <div className="radio">
+                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'none'} value="none" name="weatherInformation" />표시안함</label>
+                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'weather'} value="weather" name="weatherInformation" />날씨·기온</label>
+                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'wind'} value="wind" name="weatherInformation" />풍향·풍속</label>
+                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'pre'} value="pre" name="weatherInformation" />강수</label>
+                  </div>
+                </Legend>
+                </>}
+              </LegendWrapper>
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
@@ -498,7 +625,7 @@ function App() {
               counts={{count, setCount}}
               />
         </FirstSection>
-      </Main>
+      </main>
     </>
   );
 }

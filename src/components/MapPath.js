@@ -46,7 +46,7 @@ export const getColorValue = (value, type, rangeValueShow) => {
     o3Value: [0, 0.0309, 0.031, 0.0909, 0.091, 0.01509, 0.151],
     no2Value: [0, 0.03, 0.031, 0.06, 0.061, 0.2, 0.201],
     coValue: [0, 2, 2.1, 9, 8.1, 15, 15.1],
-    so2Value: [0, 0.02, 0.0221, 0.05, 0.051, 0.15, 0.151],
+    so2Value: [0, 0.02, 0.021, 0.05, 0.051, 0.15, 0.151],
   };
 
   const index = Object.keys(typeRangeValue).indexOf(type);
@@ -138,7 +138,7 @@ const MainContainer = styled.div`
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	/* overflow: hidden; */
 `;
 const LoopContainer = styled.div`position: relative;`;
 const MapNameButton = styled.button`
@@ -174,7 +174,7 @@ const Station = styled.div`
 `
 // ------------------------------------------------------- Styled
 /**
- * {childrenComponents, station, setStation, info, type, airData}
+ * {childrenComponents, station, setStation, info, type, airData, filterData}
  */
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
