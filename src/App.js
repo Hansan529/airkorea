@@ -42,7 +42,8 @@ function App() {
   const [data, setData] = useState();
   const [openMap, setOpenMap] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [filterData, setFilterData] = useState({도시대기: true, 국가배경: true, 도로변대기: true, 교외대기: false, 항만: false});
+  const [filterRange, setFilterRange] = useState([true, true, true, true, true]);
+  const [filterData, setFilterData] = useState({도시대기: true, 국가배경농도: true, 도로변대기: true, 교외대기: false, 항만: false});
 
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
@@ -465,6 +466,22 @@ function App() {
       updater(prev => !prev);
   };
   const radioHandle = (e) => setSelectIndex(e.target.value);
+  const filterRangeHandle = (e) => {
+    const { value } = e.currentTarget;
+
+    const data = [...filterRange];
+    data[value - 1] = e.currentTarget.checked;
+
+    setFilterRange(data);
+  }
+  const filterDataHandle = (e) => {
+    const { innerText }= e.currentTarget.parentNode;
+
+    const data = {...filterData};
+    data[innerText] = e.currentTarget.checked;
+
+    setFilterData(data);
+  }
 
   return (
     <>
@@ -550,7 +567,7 @@ function App() {
                 type={mMOSelect_return}
                 airData={data}
                 mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
-                filterData={filterData}
+                filter={{range: filterRange, data: filterData}}
               ></MapPaths>
               <Time />
               <LegendWrapper ref={legendRef}>
@@ -570,19 +587,19 @@ function App() {
                     <button onClick={legendPopupHandle}>농도범위</button>
                   </div>
                   <div className="radio">
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                      <label><input type="checkbox" onChange={filterRangeHandle} value="1" checked={filterRange[0]} />
                         <span>좋음 ({`0~${mMOSelect_return === 'o3Value' ? typeRange[1].toFixed(3) : typeRange[1]}`})</span>
                       </label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                      <label><input type="checkbox" onChange={filterRangeHandle} value="2" checked={filterRange[1]} />
                         <span>보통 ({`${mMOSelect_return === 'o3Value' ? typeRange[2].toFixed(3) : typeRange[2]}~${mMOSelect_return === 'o3Value' ? typeRange[3].toFixed(3) : typeRange[3]}`})</span>
                       </label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                      <label><input type="checkbox" onChange={filterRangeHandle} value="3" checked={filterRange[2]} />
                         <span>나쁨 ({`${mMOSelect_return === 'o3Value' ? typeRange[4].toFixed(3) : typeRange[4]}~${mMOSelect_return === 'o3Value' ? typeRange[5].toFixed(3): typeRange[5]}`})</span>
                       </label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                      <label><input type="checkbox" onChange={filterRangeHandle} value="4" checked={filterRange[3]} />
                         <span>매우나쁨 ({`${typeRange[6]}~`})</span>
                       </label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />
+                      <label><input type="checkbox" onChange={filterRangeHandle} value="5" checked={filterRange[4]} />
                         <span>데이터 없음</span>
                       </label>
                   </div>
@@ -592,11 +609,11 @@ function App() {
                     <button onClick={legendPopupHandle}>측정망 구분</button>
                   </div>
                   <div className="radio">
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />도시대기</label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />국가배경</label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" checked />도로변대기</label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" />교외대기</label>
-                      <label><input type="checkbox" onChange={radioHandle} value="" />항만</label>
+                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[0]} />도시대기</label>
+                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[1]} />국가배경농도</label>
+                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[2]} />도로변대기</label>
+                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[3]} />교외대기</label>
+                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[4]} />항만</label>
                   </div>
                 </Legend>
                 <Legend data-legend-index="3"  className={isOn3 && 'on'} height="100px">

@@ -174,21 +174,19 @@ const Station = styled.div`
 `
 // ------------------------------------------------------- Styled
 /**
- * {childrenComponents, station, setStation, info, type, airData, filterData}
+ * {childrenComponents, station, setStation, info, type, airData, filter}
  */
 export const MapPaths = (props) => {
 	const [hover, setHover] = useState();
 	const [hoverStation, setHoverStation] = useState({top: null, left: null, innerTop: null, innerLeft: null});
 	const [hoverStationData, setHoverStationData] = useState({});
-	const [openMap, setOpenMap] = useState(0);
-	const [airStation, setAirStation] = useState('air');
+	const [airStation, setAirStation] = useState(props.info);
 	const mapName = useRef();
 
 	const hoverHandle = (element) => setHover(element);
-	const innerClickHandle = (element) => setOpenMap(element);
+	const innerClickHandle = (element) => props.mapSetting.setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
 	const airStationHandle = (element) => setAirStation(element);
-
 
 	const stationPopupHandle = (hoverStation, data) => {
 		setHoverStation(hoverStation);
@@ -222,6 +220,10 @@ export const MapPaths = (props) => {
 			props.setLoading(false);
 		}
 	},[props.airData]);
+
+	const filterDataKeys = Object.keys(props.filter.data);
+	const filterDataValues = Object.values(props.filter.data);
+	const filterRange = props.filter.range;
 
 	// *-------------------------------------------------------------- Dynamic Style
 	// *-------------------------------------------------------------- Dynamic Style
@@ -464,7 +466,7 @@ export const MapPaths = (props) => {
 				visibility: hidden;
 
 				/* dynamic */
-				&[data-region_num="${openMap || props.mapSetting.openMap}"]{
+				&[data-region_num="${props.mapSetting.openMap}"]{
 					z-index: 50;
 					opacity: 1;
 					visibility: visible;
@@ -551,7 +553,7 @@ export const MapPaths = (props) => {
 				}
 			`
 			const filterStationData = stationsInfo.filter(item => {
-				return item.city === fullName;
+				return (item.city === fullName) && filterDataValues[filterDataKeys.indexOf(item.mangName)];
 			});
 
 			return (
@@ -560,10 +562,8 @@ export const MapPaths = (props) => {
 						<h2>{fullName}</h2>
 						<button onClick={() => {
 							innerClickHandle(0);
-							airStationHandle('air');
-							props.mapSetting.setOpenMap('none');
+							props.mapSetting.setOpenMap(0);
 							props.mapSetting.setMMOSelect_region('none');
-							setOpenMap("none")
 						}}>창 닫기</button>
 					</Title>
 					<TimeComponent top="50px" left="15px" height="20px" right="initial" />
@@ -572,10 +572,14 @@ export const MapPaths = (props) => {
 						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
 					</SelectDiv>
 					{/* 버튼 */}
-					{airStation === 'air' && <ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>}
-					{airStation === 'station' && <StationCollection>
+					{(airStation === 'air') && <ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>}
+					{(props.info === 'station' || airStation === 'station') && <StationCollection>
 						{filterStationData.map((el, key) => {
 							const filterStationAirData = props.airData.find(item => item.stationName === el.stationName);
+							const icoNum = getColorValue(filterStationAirData?.[props.type], props.type)[4];
+							if(!filterRange[icoNum - 1]){
+								return <Fragment key={key}></Fragment>
+							}
 							return (
 								<Station key={key}
 									onMouseEnter={() => stationPopupHandle(el, filterStationAirData)}
@@ -694,7 +698,15 @@ export const MapPaths = (props) => {
 			<Div>
 				{stationsInfo.map((station, key) => {
 					// 장계면 데이터 없음
-					const filterStationAirData = props.airData.find(item => item.stationName === station.stationName);
+					const filterStationAirData = props.airData.find(item => (item.stationName === station.stationName));
+					const icoNum = getColorValue(filterStationAirData?.[props.type], props.type)[4];
+					if (
+						!filterDataValues[filterDataKeys.indexOf(station.mangName)] ||
+						!filterRange[icoNum - 1]
+					  ) {
+						return <Fragment key={key}></Fragment>;
+					  }
+
 					return (
 						<Station key={key}
 							onMouseEnter={() => stationPopupHandle(station, filterStationAirData)}
@@ -702,11 +714,11 @@ export const MapPaths = (props) => {
 							onClick={() => props.setStation(station)}
 							top={station.top}
 							left={station.left}
-							ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
+							ico={icoNum}
 						/>
 					)
 				})}
-				<StationPopup top={hoverStation.top} left={hoverStation.left} />
+				{props.mapSetting.openMap === 0 && <StationPopup top={hoverStation.top} left={hoverStation.left} />}
 			</Div>
 		)
 	}
