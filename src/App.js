@@ -3,18 +3,20 @@ import './App.css';
 import Headers from './components/Header';
 import {
   getColorValue,
-  MapPaths,
-} from './components/MapPath';
+  RealTimeStandby,
+} from './components/RealtimeStandby';
 import stationInfoJSON from './data/stationInfo.json';
 import TodayAirQuality from './components/TodayAirQuality';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { StandbyForecast } from './components/StandbyForecast';
 
 // ------------------------------------------------ fetch
 const fetchData = async () => {
   try {
     const detailDataJson = await axios.get('http://localhost:3500/api/getCtprvnRltmMesureDnsty');
-    return detailDataJson.data;
+    const todayAirInformationJson = await axios.get('http://localhost:3500/api/getMinuDustFrcstDspth');
+    return [detailDataJson.data, todayAirInformationJson.data];
   } catch (err) {
     console.error("Error: ", err);
     return null;
@@ -30,16 +32,17 @@ function App() {
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   const [mMOSelect_region, setMMOSelect_region] = useState('');
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
+  const [standbyType, setStandbyType] = useState('pm25');
+  const [forecastDate, setForecastDate] = useState(1);
 
   const [isOn0, setIsOn0] = useState(true);
   const [isOn1, setIsOn1] = useState(true);
   const [isOn2, setIsOn2] = useState(false);
-  const [isOn3, setIsOn3] = useState(false);
-  const [selectIndex, setSelectIndex] = useState('none');
 
   const [tapSelect, setTapSelect] = useState(0);
   const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
   const [data, setData] = useState();
+  const [airInformation, setAirInformation] = useState();
   const [openMap, setOpenMap] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filterRange, setFilterRange] = useState([true, true, true, true, true]);
@@ -48,6 +51,7 @@ function App() {
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
     const storedData = JSON.parse(localStorage.getItem('storedData'));
+    const airInformation = JSON.parse(localStorage.getItem('airInofrmation'));
     const expireTime = new Date(localStorage.getItem('expireTime'));
 
     const dataTime = storedData && new Date(storedData[0].dataTime);
@@ -55,16 +59,18 @@ function App() {
     const dot = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0);
 
     // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
-    if (!storedData || !expireTime || (expireTime < now) || (dataTime < dot < expireTime)) {
+    if (!storedData || !expireTime || (expireTime < now) || (dot < dataTime) || !airInformation) {
       fetchData().then((result) => {
         if (result) {
-          localStorage.setItem('storedData', JSON.stringify(result));
+          localStorage.setItem('storedData', JSON.stringify(result[0]));
+          localStorage.setItem('airInformation', JSON.stringify(result[1]));
 
           const expireData = new Date();
           expireData.setHours(expireData.getHours() + 1, 0, 0, 0);
           localStorage.setItem('expireTime', expireData);
 
-          setData(result);
+          setData(result[0]);
+          setAirInformation(result[1]);
         }
       });
     } else {
@@ -189,8 +195,8 @@ function App() {
     border: none;
   `
   const MMOSelectWrapper = styled.div`
-    flex: 1 1 calc(33.333% - 20px);
-    text-align: center;
+    flex: ${props => props.flex && '1 1 calc(33.333% - 20px)'};
+    text-align: ${props => props.align || 'center'};
     font-size: 14px;
     color: #0a0a0a;
   `;
@@ -232,7 +238,9 @@ function App() {
       cursor: pointer;
     }
 
-    button[data-information="${mMoSelect_info}"]{
+    button[data-information="${mMoSelect_info}"],
+    button[data-date="${forecastDate}"]
+    {
       font-weight: bold;
       background-color: #414d5d;
       color: #fff;
@@ -361,7 +369,7 @@ function App() {
     }
   `
 // ------------------------------------------------ component
-  const Time = ({ top, left, right, height, refresh, onClick }) => {
+  const Time = ({ top, left, right, height, refresh, onClick, custom }) => {
     const DivStyle = styled.div`
       display: flex;
       gap: 5px !important;
@@ -409,7 +417,9 @@ function App() {
 
           return (
             <DivStyle>
-              <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>
+              {custom ?
+              <span>{custom[0]} <strong>{custom[1]} 발표자료</strong></span> :
+              <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>}
               {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
             </DivStyle>
           )
@@ -424,14 +434,129 @@ function App() {
     }
   };
 
+  const LoadingScreen = () => {
+    const Loading = styled.div`
+      display: ${props => props.loading === 'true' ? 'none' : 'block'};
+      position: absolute;
+      z-index: 100;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      border: 1px solid #bcd0e8;
+      background: url('/loading_bg.png');
+
+      div {
+        margin-top: 360px;
+        font-size: 20px;
+        color: #0054a6;
+      }
+    `;
+    return (
+      <Loading loading={loading.toString()}>
+        <div>데이터 처리중입니다.</div>
+        <p>잠시만 기다려 주시기 바랍니다.</p>
+        <img src="/loading_1.gif" alt="로딩 중" />
+      </Loading>
+    )
+  }
+
+  const RealTimeStandbyComp = () => {
+    return (
+      <>
+         <RealTimeStandby
+                childrenComponents={{Time}}
+                station={station}
+                setStation={setStation}
+                loading={loading}
+                setLoading={setLoading}
+                info={mMoSelect_info}
+                type={mMOSelect_return}
+                airData={data}
+                mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
+                filter={{range: filterRange, data: filterData}}
+        ></RealTimeStandby>
+        <Time />
+        <LegendWrapper ref={legendRef}>
+          {mMoSelect_info === 'air' ?
+          <Legend data-legend-index="0" className={isOn0 && 'on'} height="55px">
+            <div>
+              <button onClick={legendPopupHandle}>범례</button>
+            </div>
+            <ul>
+              <li><small>주의보</small></li>
+              <li><small>경보</small></li>
+            </ul>
+          </Legend> :
+          <>
+          <Legend data-legend-index="1" className={isOn1 && 'on'} height="145px">
+            <div className="title">
+              <button onClick={legendPopupHandle}>농도범위</button>
+            </div>
+            <div className="radio">
+                <label><input type="checkbox" onChange={filterRangeHandle} value="1" checked={filterRange[0]} />
+                  <span>좋음 ({`0~${mMOSelect_return === 'o3Value' ? typeRange[1].toFixed(3) : typeRange[1]}`})</span>
+                </label>
+                <label><input type="checkbox" onChange={filterRangeHandle} value="2" checked={filterRange[1]} />
+                  <span>보통 ({`${mMOSelect_return === 'o3Value' ? typeRange[2].toFixed(3) : typeRange[2]}~${mMOSelect_return === 'o3Value' ? typeRange[3].toFixed(3) : typeRange[3]}`})</span>
+                </label>
+                <label><input type="checkbox" onChange={filterRangeHandle} value="3" checked={filterRange[2]} />
+                  <span>나쁨 ({`${mMOSelect_return === 'o3Value' ? typeRange[4].toFixed(3) : typeRange[4]}~${mMOSelect_return === 'o3Value' ? typeRange[5].toFixed(3): typeRange[5]}`})</span>
+                </label>
+                <label><input type="checkbox" onChange={filterRangeHandle} value="4" checked={filterRange[3]} />
+                  <span>매우나쁨 ({`${typeRange[6]}~`})</span>
+                </label>
+                <label><input type="checkbox" onChange={filterRangeHandle} value="5" checked={filterRange[4]} />
+                  <span>데이터 없음</span>
+                </label>
+            </div>
+          </Legend>
+          <Legend data-legend-index="2"  className={isOn2 && 'on'} height="145px">
+            <div className="title">
+              <button onClick={legendPopupHandle}>측정망 구분</button>
+            </div>
+            <div className="radio">
+                <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[0]} />도시대기</label>
+                <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[1]} />국가배경농도</label>
+                <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[2]} />도로변대기</label>
+                <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[3]} />교외대기</label>
+                <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[4]} />항만</label>
+            </div>
+          </Legend>
+          </>}
+        </LegendWrapper>
+      </>
+    )
+  }
+
+  const StandByForecastComp = () => {
+    return (
+      <StandbyForecast
+        childrenComponents={{Time}}
+        airInformation={airInformation}
+        forecastDate={forecastDate}
+        standbyType={standbyType}
+      ></StandbyForecast>
+    )
+  }
+
+  const DynamicComponent = () => {
+    const Components = {
+      0: RealTimeStandbyComp,
+      1: StandByForecastComp
+    }
+    const Result = Components[tapSelect];
+    return (
+      <Result />
+    );
+  }
+
   // ------------------------------------------------ event, function
   const tapSelectHandle = (e) => {
     const liElement = e.currentTarget.parentNode;
     const ulElement = liElement.closest('ul');
     const selectIndex = Array.prototype.indexOf.call(ulElement.children, liElement);
     setTapSelect(selectIndex);
-  }
-
+  };
   const mMoSelectHandle = (e) => {
     const { value, dataset: { information } } = e.currentTarget;
 
@@ -449,7 +574,6 @@ function App() {
       }
     }
   };
-
   const legendPopupHandle = (e) => {
     const legendElement = e.currentTarget.closest('[data-legend-index]');
     const { legendIndex } = legendElement.dataset;
@@ -458,14 +582,12 @@ function App() {
       0: setIsOn0,
       1: setIsOn1,
       2: setIsOn2,
-      3: setIsOn3,
     };
 
     const updater = stateUpdater[legendIndex];
     if(updater)
       updater(prev => !prev);
   };
-  const radioHandle = (e) => setSelectIndex(e.target.value);
   const filterRangeHandle = (e) => {
     const { value } = e.currentTarget;
 
@@ -473,7 +595,7 @@ function App() {
     data[value - 1] = e.currentTarget.checked;
 
     setFilterRange(data);
-  }
+  };
   const filterDataHandle = (e) => {
     const { innerText }= e.currentTarget.parentNode;
 
@@ -481,6 +603,13 @@ function App() {
     data[innerText] = e.currentTarget.checked;
 
     setFilterData(data);
+  };
+
+  const standbyTypeHandle = (e) => {
+    setStandbyType(e.target.value);
+  };
+  const forecastDateHandle = (e) => {
+    setForecastDate(e.currentTarget.dataset.date);
   }
 
   return (
@@ -489,146 +618,91 @@ function App() {
       <main>
         {/* 첫번째 색션 */}
         <FirstSection>
+          {/* 로딩창 */}
+          <LoadingScreen />
           {/* 대기/기상 지도 정보 */}
           <MMLayout>
             {/* Main Map 설정 */}
             <MMOptionLayout>
               <MMOList>
                 <li>
-                  <button onClick={tapSelectHandle} className="on">
+                  <button onClick={tapSelectHandle}>
                     실시간 대기정보
                   </button>
                 </li>
                 <li>
-                  <button onClick={tapSelectHandle}>오늘/내일/모레 대기정보</button>
+                  <button onClick={tapSelectHandle}>오늘/내일 대기정보</button>
                 </li>
                 <li>
                   <button onClick={tapSelectHandle}>실시간 기상정보</button>
                 </li>
                 <li>
-                  <button onClick={tapSelectHandle}>오늘/내일/모레 기상정보</button>
+                  <button onClick={tapSelectHandle}>오늘/내일 기상정보</button>
                 </li>
               </MMOList>
               <MMOContainer>
-                <MMOSelectWrapper>
-                  <label htmlFor="area1" style={{ marginRight: '5px' }}>
-                    종류
-                  </label>
-                  <MMOSelect id="area1" bg $width="180px" onChange={mMoSelectHandle} value={mMOSelect_return}>
-                    <option value="khaiValue">통합대기환경지수(CAI)</option>
-                    <option value="pm25Value">초미세먼지 (PM-2.5)</option>
-                    <option value="pm10Value">미세먼지 (PM-10)</option>
-                    <option value="o3Value">오존(O₃)</option>
-                    <option value="no2Value">이산화질소(NO₂)</option>
-                    <option value="coValue">일산화탄소 (CO)</option>
-                    <option value="so2Value">아황산가스 (SO₂)</option>
-                  </MMOSelect>
-                </MMOSelectWrapper>
-                <MMOSelectWrapper>
-                  <label htmlFor="area2" style={{ marginRight: '5px' }}>
-                    시/도
-                  </label>
-                  <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectHandle} value={mMOSelect_region}>
-                    <option value="none">-전체-</option>
-                    <option value="02">서울특별시</option>
-                    <option value="031">경기도</option>
-                    <option value="032">인천광역시</option>
-                    <option value="033">강원특별자치도</option>
-                    <option value="041">충청남도</option>
-                    <option value="042">대전광역시</option>
-                    <option value="043">충청북도</option>
-                    <option value="044">세종특별자치시</option>
-                    <option value="051">부산광역시</option>
-                    <option value="052">울산광역시</option>
-                    <option value="053">대구광역시</option>
-                    <option value="054">경상북도</option>
-                    <option value="055">경상남도</option>
-                    <option value="061">전라남도</option>
-                    <option value="062">광주광역시</option>
-                    <option value="063">전라북도</option>
-                    <option value="064">제주특별자치도</option>
-                  </MMOSelect>
-                </MMOSelectWrapper>
-                <MMOBorderDiv>
-                  <button onClick={mMoSelectHandle} data-information="air">대기/경보 정보</button>
-                  <button onClick={mMoSelectHandle} data-information="station">측정소 정보</button>
+                {tapSelect === 0 &&
+                <>
+                  <MMOSelectWrapper flex align="left">
+                    <MMOSelect id="area1" bg $width="180px" onChange={mMoSelectHandle} value={mMOSelect_return}>
+                      <option value="khaiValue">통합대기환경지수(CAI)</option>
+                      <option value="pm25Value">초미세먼지 (PM-2.5)</option>
+                      <option value="pm10Value">미세먼지 (PM-10)</option>
+                      <option value="o3Value">오존(O₃)</option>
+                      <option value="no2Value">이산화질소(NO₂)</option>
+                      <option value="coValue">일산화탄소 (CO)</option>
+                      <option value="so2Value">아황산가스 (SO₂)</option>
+                    </MMOSelect>
+                  </MMOSelectWrapper>
+                  <MMOSelectWrapper flex>
+                    <label htmlFor="area2" style={{ marginRight: '5px' }}>
+                      시/도
+                    </label>
+                    <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectHandle} value={mMOSelect_region}>
+                      <option value="none">-전체-</option>
+                      <option value="02">서울특별시</option>
+                      <option value="031">경기도</option>
+                      <option value="032">인천광역시</option>
+                      <option value="033">강원특별자치도</option>
+                      <option value="041">충청남도</option>
+                      <option value="042">대전광역시</option>
+                      <option value="043">충청북도</option>
+                      <option value="044">세종특별자치시</option>
+                      <option value="051">부산광역시</option>
+                      <option value="052">울산광역시</option>
+                      <option value="053">대구광역시</option>
+                      <option value="054">경상북도</option>
+                      <option value="055">경상남도</option>
+                      <option value="061">전라남도</option>
+                      <option value="062">광주광역시</option>
+                      <option value="063">전라북도</option>
+                      <option value="064">제주특별자치도</option>
+                    </MMOSelect>
+                  </MMOSelectWrapper>
+                  <MMOBorderDiv flex>
+                    <button onClick={mMoSelectHandle} data-information="air">대기/경보 정보</button>
+                    <button onClick={mMoSelectHandle} data-information="station">측정소 정보</button>
                   </MMOBorderDiv>
+                </>}
+                {tapSelect === 1 && <>
+                  <MMOSelectWrapper flex align="left">
+                    <MMOSelect bg $width="180px" onChange={standbyTypeHandle} value={standbyType}>
+                      <option value="pm25">초미세먼지 (PM-2.5)</option>
+                      <option value="pm10">미세먼지 (PM-10)</option>
+                    </MMOSelect>
+                  </MMOSelectWrapper>
+                  <MMOBorderDiv>
+                    <button onClick={forecastDateHandle} data-date="0">오늘</button>
+                    <button onClick={forecastDateHandle} data-date="1">내일</button>
+                  </MMOBorderDiv>
+                </>}
               </MMOContainer>
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              <MapPaths
-                childrenComponents={{Time}}
-                station={station}
-                setStation={setStation}
-                loading={loading}
-                setLoading={setLoading}
-                info={mMoSelect_info}
-                type={mMOSelect_return}
-                airData={data}
-                mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
-                filter={{range: filterRange, data: filterData}}
-              ></MapPaths>
-              <Time />
-              <LegendWrapper ref={legendRef}>
-                {mMoSelect_info === 'air' ?
-                <Legend data-legend-index="0" className={isOn0 && 'on'} height="55px">
-                  <div>
-                    <button onClick={legendPopupHandle}>범례</button>
-                  </div>
-                  <ul>
-                    <li><small>주의보</small></li>
-                    <li><small>경보</small></li>
-                  </ul>
-                </Legend> :
-                <>
-                <Legend data-legend-index="1" className={isOn1 && 'on'} height="145px">
-                  <div className="title">
-                    <button onClick={legendPopupHandle}>농도범위</button>
-                  </div>
-                  <div className="radio">
-                      <label><input type="checkbox" onChange={filterRangeHandle} value="1" checked={filterRange[0]} />
-                        <span>좋음 ({`0~${mMOSelect_return === 'o3Value' ? typeRange[1].toFixed(3) : typeRange[1]}`})</span>
-                      </label>
-                      <label><input type="checkbox" onChange={filterRangeHandle} value="2" checked={filterRange[1]} />
-                        <span>보통 ({`${mMOSelect_return === 'o3Value' ? typeRange[2].toFixed(3) : typeRange[2]}~${mMOSelect_return === 'o3Value' ? typeRange[3].toFixed(3) : typeRange[3]}`})</span>
-                      </label>
-                      <label><input type="checkbox" onChange={filterRangeHandle} value="3" checked={filterRange[2]} />
-                        <span>나쁨 ({`${mMOSelect_return === 'o3Value' ? typeRange[4].toFixed(3) : typeRange[4]}~${mMOSelect_return === 'o3Value' ? typeRange[5].toFixed(3): typeRange[5]}`})</span>
-                      </label>
-                      <label><input type="checkbox" onChange={filterRangeHandle} value="4" checked={filterRange[3]} />
-                        <span>매우나쁨 ({`${typeRange[6]}~`})</span>
-                      </label>
-                      <label><input type="checkbox" onChange={filterRangeHandle} value="5" checked={filterRange[4]} />
-                        <span>데이터 없음</span>
-                      </label>
-                  </div>
-                </Legend>
-                <Legend data-legend-index="2"  className={isOn2 && 'on'} height="145px">
-                  <div className="title">
-                    <button onClick={legendPopupHandle}>측정망 구분</button>
-                  </div>
-                  <div className="radio">
-                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[0]} />도시대기</label>
-                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[1]} />국가배경농도</label>
-                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[2]} />도로변대기</label>
-                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[3]} />교외대기</label>
-                      <label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[4]} />항만</label>
-                  </div>
-                </Legend>
-                <Legend data-legend-index="3"  className={isOn3 && 'on'} height="100px">
-                  <div className="title">
-                    <button onClick={legendPopupHandle}>기상정보</button>
-                  </div>
-                  <div className="radio">
-                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'none'} value="none" name="weatherInformation" />표시안함</label>
-                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'weather'} value="weather" name="weatherInformation" />날씨·기온</label>
-                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'wind'} value="wind" name="weatherInformation" />풍향·풍속</label>
-                      <label><input type="radio" onChange={radioHandle} checked={selectIndex === 'pre'} value="pre" name="weatherInformation" />강수</label>
-                  </div>
-                </Legend>
-                </>}
-              </LegendWrapper>
+              {/* {tapSelect === 0 && <RealTimeStandbyComp />} */}
+              {/* {tapSelect === 1 && <StandbyForecast />} */}
+              <DynamicComponent />
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}

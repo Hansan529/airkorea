@@ -26,6 +26,30 @@ router.post('/station', async (req, res) => {
     }
 })
 
+router.get('/getMinuDustFrcstDspth', async (req, res) => {
+    try {
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const hour = today.getHours();
+
+        let result;
+
+        if(hour < 5) {
+            result = `${year}.${month}.${day-1}`;
+        } else {
+            result = `${year}.${month}.${day}`;
+        }
+
+        const {response: {body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=${process.env.REACT_APP_AIRKOREA_SERVICEKEY}&returnType=json&numOfRows=700&pageNo=1&searchDate=${result}`)).data;
+        return res.json(items);
+    } catch(err) {
+        console.error("error: ", err);
+        return res.end;
+    }
+});
 router.get('/getCtprvnRltmMesureDnsty', async (req, res) => {
     try {
         const {response: {body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${process.env.REACT_APP_AIRKOREA_SERVICEKEY}&returnType=json&numOfRows=700&pageNo=1&sidoName=전국&ver=1.0`)).data;
