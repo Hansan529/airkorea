@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { getColorValue } from "./MapPath";
+import { getColorValue } from "./RealtimeStandby";
 // import airQualityJson from "../data/todayDaily.json";
 import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
@@ -486,7 +486,7 @@ const Component = (props) => {
                     <InfoButton ico={'bg_search'}>검색</InfoButton>
                     <InfoButton ico={'pos'}>현위치</InfoButton>
                     <p>
-                    <strong>{props.loading && (props.station.stationName)}</strong> 중심으로 측정
+                    <strong>{props.station.stationName || '중구'}</strong> 중심으로 측정
                     <span>({props.station.addr.split(' ')[0]} {props.station.addr.split(' ')[1]} {props.station.stationName} 측정소 기준)</span>
                     </p>
                 </InfoInteraction>
@@ -498,27 +498,27 @@ const Component = (props) => {
                     <ul>
                         <li>
                             <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                            <img src={`./img_na0${props.loading ? pm25Index : 5}.png`} alt="대기질" />
+                            <img src={`./img_na0${pm25Index || 5}.png`} alt="대기질" />
                             <span style={{color: pm25}}>
-                                <strong className="colorValue">{props.loading ? currentLocation?.pm25Value : '-'}</strong>
+                                <strong className="colorValue">{currentLocation?.pm25Value || '-'}</strong>
                                 <small style={{color: 'initial'}}>㎍/㎥</small>
                                 {airState(colorList.indexOf(pm25))[0]}
                             </span>
                         </li>
                         <li>
                             <span><strong>미세먼지</strong>(PM-10)</span>
-                            <img src={`./img_na0${props.loading ? pm10Index : 5}.png`} alt="대기질" />
+                            <img src={`./img_na0${pm10Index || 5}.png`} alt="대기질" />
                             <span style={{color: pm10}}>
-                                <strong className="colorValue">{props.loading ? currentLocation?.pm10Value : '-'}</strong>
+                                <strong className="colorValue">{currentLocation?.pm10Value || '-'}</strong>
                                 <small style={{color: 'initial'}}>㎍/㎥</small>
                                 {airState(colorList.indexOf(pm10))[0]}
                                 </span>
                         </li>
                         <li>
                             <span><strong>오존</strong>(O<sub>3</sub>)</span>
-                            <img src={`./img_na0${props.loading ? o3Index : 5}.png`} alt="대기질" />
+                            <img src={`./img_na0${o3Index || 5}.png`} alt="대기질" />
                             <span style={{color: o3}}>
-                                <strong className="colorValue">{props.loading ? String(currentLocation?.o3Value).padEnd(6, '0') : '-'}</strong>
+                                <strong className="colorValue">{String(currentLocation?.o3Value).padEnd(6, '0') || '-'}</strong>
                                 <small style={{color: 'initial'}}>ppm</small>
                                 {airState(colorList.indexOf(o3))[0]}
                             </span>
@@ -535,13 +535,13 @@ const Component = (props) => {
                         </li>
                         <li>
                             <p>오늘</p>
-                            <span className={`miniText miniTextIco_${props.loading ? pm25TodayIndex : '5'}`} style={{color: airState(pm25Today)[1]}}>{props.loading ? pm25Today : '-'}</span>
-                            <span className={`miniText miniTextIco_${props.loading ? pm10TodayIndex : '5'}`} style={{color: airState(pm10Today)[1]}}>{props.loading ? pm10Today : '-'}</span>
+                            <span className={`miniText miniTextIco_${pm25TodayIndex || '5'}`} style={{color: airState(pm25Today)[1]}}>{pm25Today || '-'}</span>
+                            <span className={`miniText miniTextIco_${pm10TodayIndex || '5'}`} style={{color: airState(pm10Today)[1]}}>{pm10Today || '-'}</span>
                         </li>
                         <li>
                             <p>내일</p>
-                            <span className={`miniText miniTextIco_${props.loading ? pm25TomorrowIndex : '5'}`} style={{color: airState(pm25Tomorrow)[1]}}>{props.loading ? pm25Tomorrow : '-'}</span>
-                            <span className={`miniText miniTextIco_${props.loading ? pm10TomorrowIndex : '5'}`} style={{color: airState(pm10Tomorrow)[1]}}>{props.loading ? pm10Tomorrow : '-'}</span>
+                            <span className={`miniText miniTextIco_${pm25TomorrowIndex || '5'}`} style={{color: airState(pm25Tomorrow)[1]}}>{pm25Tomorrow || '-'}</span>
+                            <span className={`miniText miniTextIco_${pm10TomorrowIndex || '5'}`} style={{color: airState(pm10Tomorrow)[1]}}>{pm10Tomorrow || '-'}</span>
                         </li>
                     </AirForecastUl>
                 </Part>
