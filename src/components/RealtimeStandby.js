@@ -171,6 +171,39 @@ const Station = styled.div`
 	background-color: #000;
 	background-image: url('./img_ch0${props => props.ico}.png');
 	cursor: pointer;
+
+	&[data-checked="ani"]::after {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		background-image: url('./img_ch0${props => props.ico}.png');
+		left: 0;
+		top: 0;
+		z-index: 10;
+	}
+	&[data-checked="ani"]::before {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 10px;
+		height: 10px;
+		border-radius: 50px;
+		animation: emphasis 0.5s 0s ease-in-out infinite;
+		background: ${props => props.icoColor};
+	}
+
+	@keyframes emphasis {
+		from {
+			transform: scale(0.5);
+		}
+		to {
+			transform: scale(1.8);
+		}
+	}
 `
 // ------------------------------------------------------- Styled
 /**
@@ -700,12 +733,22 @@ export const RealTimeStandby = (props) => {
 					// 장계면 데이터 없음
 					const filterStationAirData = props.airData.find(item => (item.stationName === station.stationName));
 					const icoNum = getColorValue(filterStationAirData?.[props.type], props.type)[4];
+					const icoColor = {
+						1: "#48c9ff",
+						2: "#7eff90",
+						3: "#fff200",
+						4: "#ff8888",
+						5: "#afafaf"
+					};
+
 					if (
 						!filterDataValues[filterDataKeys.indexOf(station.mangName)] ||
 						!filterRange[icoNum - 1]
-					  ) {
-						return <Fragment key={key}></Fragment>;
-					  }
+					) {
+					return <Fragment key={key}></Fragment>;
+					}
+
+					const checked = props.station.stationName === station.stationName ? 'ani' : 'not';
 
 					return (
 						<Station key={key}
@@ -715,6 +758,8 @@ export const RealTimeStandby = (props) => {
 							top={station.top}
 							left={station.left}
 							ico={icoNum}
+							icoColor={icoColor[icoNum]}
+							data-checked={checked}
 						/>
 					)
 				})}
