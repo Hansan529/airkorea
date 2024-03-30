@@ -10,6 +10,7 @@ import TodayAirQuality from './components/TodayAirQuality';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { StandbyForecast } from './components/StandbyForecast';
+import { RealTimeWeather } from './components/RealTimeWeather';
 
 // ------------------------------------------------ fetch
 const fetchData = async () => {
@@ -539,10 +540,17 @@ function App() {
     )
   }
 
+  const RealTimeWeatherComp = () => {
+    return (
+      <RealTimeWeather></RealTimeWeather>
+    )
+  }
+
   const DynamicComponent = () => {
     const Components = {
       0: RealTimeStandbyComp,
-      1: StandByForecastComp
+      1: StandByForecastComp,
+      2: RealTimeWeatherComp
     }
     const Result = Components[tapSelect];
     return (
