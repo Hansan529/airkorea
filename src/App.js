@@ -160,7 +160,6 @@ function App() {
         height: 50px;
         line-height: 50px;
         letter-spacing: -0.6px;
-        font-weight: 500;
         background: #fff;
         width: 100%;
         border: none;
@@ -175,6 +174,7 @@ function App() {
         button {
           background: #0f62cc;
           color: #fff;
+          font-weight: 600;
         }
       }
     }
