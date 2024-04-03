@@ -83,11 +83,7 @@ const InfoButton = styled.button`
     border: 1px solid #c6ccd4;
     border-radius: 5px;
     background: #fff ${props => props.ico && `url('/img_${props.ico}.png')`} no-repeat center;
-    /* background-color: #fff;
     background-size: ${props => props.ico === 'bg_search' && '70%'};
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: ${props => props.ico && `url('/img_${props.ico}.png')`}; */
     &:hover {
         cursor: pointer;
         background-color: rgba(0,0,0,0.2);

@@ -328,7 +328,7 @@ export const RealTimeStandby = (props) => {
 		if(props.airData){
 			const filterStationValue = list.map((region) => {
 				return region.station.map((station) => {
-					const findData = props.airData.find((data) => data.stationName === station)[type];
+					const findData = props.airData.find((data) => data.stationName === station)?.[type];
 					if (findData !== '-') {
 						return Number(findData);
 					} else {
