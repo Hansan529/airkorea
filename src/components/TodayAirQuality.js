@@ -479,7 +479,7 @@ const Component = (props) => {
                 </div>
                 <div>
                 <InfoInteraction>
-                    <InfoButton ico={'bg_search'}>검색</InfoButton>
+                    {/* <InfoButton ico={'bg_search'}>검색</InfoButton> */}
                     <InfoButton ico={'pos'}>현위치</InfoButton>
                     <p>
                     <strong>{props.station.stationName || '중구'}</strong> 중심으로 측정
