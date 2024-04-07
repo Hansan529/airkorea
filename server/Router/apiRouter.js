@@ -11,7 +11,7 @@ router.post('/coordinate', async (req, res) => {
         return res.json(response);
     }catch(err){
         console.error("error: ", err);
-        return res.json(false)();
+        return res.json(false);
     }
 })
 
@@ -22,7 +22,7 @@ router.post('/station', async (req, res) => {
         return res.json(items)
     } catch(err) {
         console.error("error: ", err);
-        return res.json(false)();
+        return res.json(false);
     }
 })
 

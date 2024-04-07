@@ -402,6 +402,33 @@ function App() {
       padding: 0 80px 0 0;
       background: #fff url(./img_bg_s_02.png) no-repeat right 24px bottom;
       border-radius: 30px 8px 30px 8px;
+      position: relative;
+
+      .title {
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+        font-size: 22px;
+        
+        &::after {
+          content: "";
+          position: absolute;
+          width: 2px;
+          height: 80%;
+          background-color: rgba(0,0,0,0.1);
+          top: 50%;
+          transform: translate(20px, -50%);
+        }
+        
+        strong { 
+          display: block; 
+        }
+      }
+
+      .info {
+        text-indent: 40px;
+      }
     }
 
     .button {
@@ -685,6 +712,32 @@ function App() {
     setForecastDate(e.currentTarget.dataset.date);
   }
 
+  const array = [23, 17, 11, 5];
+  let target = TimeText.hour; // 찾고자 하는 값
+  
+  for (const element of array){
+    if(target > element){
+      target = element;
+      break;
+    };
+  };
+
+  const filterAirInformation = airInformation.filter(item => {
+    return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표`;
+  });
+  const bannerInfoData = filterAirInformation.map((item, idx) => {
+    const itemDate = item.informData;
+    const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
+    const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
+    const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
+    let txt;
+    if(itemDate === nowDate){txt='금일'}
+    else if(itemDate === two){txt='내일'}
+    else if(itemDate === three){txt='모레'};
+    return <p key={idx}><span>{txt}</span>{item.informCause}</p>
+  })
+
+
   return (
     <>
       <Headers />
@@ -793,7 +846,12 @@ function App() {
           <SecondBanner>
             <div className="updateTime">{TimeText && `${TimeText.year}.${TimeText.month}.${TimeText.day}`} <strong>{TimeText && `${TimeText.hour}:${TimeText.minute}`}</strong></div>
             <div className="text">
-              text
+              <div className="title">
+                <strong>예보</strong>발표
+              </div>
+              <div className="info">
+                {bannerInfoData}
+              </div>
             </div>
             <div className="button">
                   <button></button>
