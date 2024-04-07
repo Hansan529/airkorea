@@ -117,15 +117,17 @@ function App() {
   `;
   const Section = styled.section`
       position: relative;
-  `;
+      `;
   const FirstSection = styled(Section)`
     background: url('/img_main_bg.png') repeat-x 0 0;
     display: flex;
     justify-content: center;
     gap: 30px;
+    flex-wrap: wrap;
     padding-top: 20px;
-  `;
+    `;
   const MMLayout = styled.div`
+      flex-basis: 0.5;
       width: 710px;
   `;
   const MMOptionLayout = styled.div`
@@ -369,7 +371,70 @@ function App() {
         }
     }
   `
+  const SecondSection = styled(Section)`
+    margin: 50px auto 0;
+    background: url('./img_bg_s_01.png') repeat-x 0 0;
+    width: 1400px;
+  `
+  const SecondBanner = styled.div`
+    position: relative;
+    background: linear-gradient(to right, #009ff9, #00c36b);
+    height: 100px;
+    padding: 10px;
+    border-radius: 8px;
+    display:flex;
+    align-items: center;
+    gap: 30px;
+
+    .updateTime {
+      text-align: center;
+      strong {
+        display: block;
+        margin-top: 5px;
+        font-size: 30px;
+        line-height: 17px;
+      }
+    }
+
+    .text {
+      width: 100%;
+      height: 80px;
+      padding: 0 80px 0 0;
+      background: #fff url(./img_bg_s_02.png) no-repeat right 24px bottom;
+      border-radius: 30px 8px 30px 8px;
+    }
+
+    .button {
+      margin-right: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+
+      button {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  `
 // ------------------------------------------------ component
+  const TimeText = (() => {
+    const storedDataString = localStorage.getItem('storedData');
+    if(storedDataString) {
+      const storedData = JSON.parse(storedDataString);
+      if(Array.isArray(storedData) && storedData.length > 0) {
+          const dataTime = storedData[0].dataTime;
+          const updateTime = new Date(dataTime);
+          const year = updateTime.getFullYear();
+          const month = String(updateTime.getMonth() + 1).padStart(2, '0');
+          const day = String(updateTime.getDate()).padStart(2, '0');
+          const hour = String(updateTime.getHours()).padStart(2, '0');
+          const minute = String(updateTime.getMinutes()).padStart(2, '0');
+
+          return { year, month, day, hour, minute }
+      };
+    };
+  })();
   const Time = ({ top, left, right, height, refresh, onClick, custom }) => {
     const DivStyle = styled.div`
       display: flex;
@@ -459,7 +524,7 @@ function App() {
         <img src="/loading_1.gif" alt="로딩 중" />
       </Loading>
     )
-  }
+  };
 
   const RealTimeStandbyComp = () => {
     return (
@@ -527,7 +592,7 @@ function App() {
         </LegendWrapper>
       </>
     )
-  }
+  };
 
   const StandByForecastComp = () => {
     return (
@@ -538,13 +603,13 @@ function App() {
         standbyType={standbyType}
       ></StandbyForecast>
     )
-  }
+  };
 
   const RealTimeWeatherComp = () => {
     return (
       <RealTimeWeather></RealTimeWeather>
     )
-  }
+  };
 
   const DynamicComponent = () => {
     const Components = {
@@ -556,7 +621,7 @@ function App() {
     return (
       <Result />
     );
-  }
+  };
 
   // ------------------------------------------------ event, function
   const tapSelectHandle = (e) => {
@@ -724,6 +789,19 @@ function App() {
               counts={{count, setCount}}
               />
         </FirstSection>
+        <SecondSection>
+          <SecondBanner>
+            <div className="updateTime">{TimeText && `${TimeText.year}.${TimeText.month}.${TimeText.day}`} <strong>{TimeText && `${TimeText.hour}:${TimeText.minute}`}</strong></div>
+            <div className="text">
+              text
+            </div>
+            <div className="button">
+                  <button></button>
+                  <button></button>
+                  <button></button>
+            </div>
+          </SecondBanner>
+        </SecondSection>
       </main>
     </>
   );
