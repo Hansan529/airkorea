@@ -28,27 +28,51 @@ const {items: stationsInfo} = stationInfoJSON;
 function App() {
   // ------------------------------------------------ setting
   const legendRef = useRef(null);
-
   const [count, setCount] = useState(0);
-  const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
-  const [mMOSelect_region, setMMOSelect_region] = useState('');
-  const [mMoSelect_info, setMMOSelect_info] = useState('air');
-  const [standbyType, setStandbyType] = useState('pm25');
-  const [forecastDate, setForecastDate] = useState(1);
 
+  // 탭 목록 인덱스
+  const [tapSelect, setTapSelect] = useState(0);
+
+  // * 실시간 대기정보
+  // 출력 타입 khai, pm25, pm10, o3, no2, co, so2
+  const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
+  // 지역 - 서울, 경기, 인천, 강원, 충남, 대전, 충북, 세종, 부산, 울산, 대구, 경북, 경남, 전남, 광주, 전북, 제주
+  const [mMOSelect_region, setMMOSelect_region] = useState('');
+  // 대기정보 / 측정소 정보
+  const [mMoSelect_info, setMMOSelect_info] = useState('air');
+
+  // 지도 범례 On/Off
   const [isOn0, setIsOn0] = useState(true);
   const [isOn1, setIsOn1] = useState(true);
   const [isOn2, setIsOn2] = useState(false);
-
-  const [tapSelect, setTapSelect] = useState(0);
-  const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
-  const [data, setData] = useState();
-  const [airInformation, setAirInformation] = useState();
-  const [openMap, setOpenMap] = useState(0);
-  const [loading, setLoading] = useState(false);
+  // 농도 범위 필터링
   const [filterRange, setFilterRange] = useState([true, true, true, true, true]);
+  // 측정망 구분 필터링
   const [filterData, setFilterData] = useState({도시대기: true, 국가배경농도: true, 도로변대기: true, 교외대기: false, 항만: false});
+  
+  // * 오늘/내일 대기정보
+  // 오늘/내일 대기정보 타입
+  const [standbyType, setStandbyType] = useState('pm25');
+  // 오늘/내일 대기정보 금일, 내일
+  const [forecastDate, setForecastDate] = useState(1);
 
+  // * 우리동네 대기정보
+  // 우리동네 대기정보 측정소 데이터
+  const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
+  // 모든 측정소 대기정보 데이터
+  const [data, setData] = useState();
+  
+  // * 하단배너
+  // 대기예보 텍스트
+  const [airInformation, setAirInformation] = useState();
+  // 대기예보 텍스트 인덱스
+
+  // * 기타
+  // 상세 지역 Open/Close
+  const [openMap, setOpenMap] = useState(0);
+  // 데이터 로딩
+  const [loading, setLoading] = useState(false);
+  
   useEffect(() => {
     // 로컬 스토리지에서 데이터를 가져옴
     const storedData = JSON.parse(localStorage.getItem('storedData'));
@@ -470,7 +494,10 @@ function App() {
         }
       }
     }
-  `
+  `;
+  const CopyRight = styled.div`
+  
+  `;
 // ------------------------------------------------ component
   const TimeText = (() => {
     const storedDataString = localStorage.getItem('storedData');
@@ -739,34 +766,42 @@ function App() {
     setForecastDate(e.currentTarget.dataset.date);
   }
 
-  const array = [23, 17, 11, 5];
-  let target = TimeText.hour; // 찾고자 하는 값
-  
-  for (const element of array){
-    if(target > element){
-      target = element;
-      break;
+  function BannerData() {
+    const array = [23, 17, 11, 5];
+    let target = TimeText.hour; // 찾고자 하는 값
+    
+    for (const element of array){
+      if(target > element){
+        target = element;
+        break;
+      };
     };
-  };
-
-  const filterAirInformation = airInformation.filter(item => {
-    return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표`;
-  });
-  const bannerInfoData = filterAirInformation.map((item, idx) => {
-    const itemDate = item.informData;
-    const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
-    const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
-    const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
-    let txt;
-    if(itemDate === nowDate){txt='금일'}
-    else if(itemDate === two){txt='내일'}
-    else if(itemDate === three){txt='모레'};
-    if(item.informCode === 'PM10'){
+  
+    let filterAirInformation = airInformation?.filter(item => {
+      return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10';
+    });
+  
+    if(filterAirInformation){
+      const first = filterAirInformation[0];
+      const last = filterAirInformation[2];
+  
+      filterAirInformation.splice(0,0, first);
+      filterAirInformation.splice(3,0, last);
+    };
+    const data = filterAirInformation?.map((item, idx) => {
+      const itemDate = item.informData;
+      const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
+      const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
+      const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
+      let txt;
+      if(itemDate === nowDate){txt='금일'}
+      else if(itemDate === two){txt='내일'}
+      else if(itemDate === three){txt='모레'};
       return <div key={idx}><strong>{txt}</strong><span>{item.informCause.slice(2).replace(/[＊*]/g, ' ')}</span></div>
-    } else {
-      return null;
-    }
-  })
+    })
+
+    return data || <></>;
+  }
 
 
   return (
@@ -881,7 +916,7 @@ function App() {
                 <strong>예보</strong>발표
               </div>
               <div className="info">
-                {bannerInfoData}
+                <BannerData />
               </div>
             </div>
             <div className="buttonWrap">
@@ -891,6 +926,11 @@ function App() {
             </div>
           </SecondBanner>
         </SecondSection>
+        <CopyRight>
+          <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
+          <img src="/img_opentype03.png" alt="한국환경공단 에어코리아 OpenAPI 출처표시 + 변경금지" />
+          <p>한국환경공단 에어코리아 대기오염정보, 측정소정보, 대기오염통계 현황</p>
+        </CopyRight>
       </main>
     </>
   );
