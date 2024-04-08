@@ -734,7 +734,11 @@ function App() {
     if(itemDate === nowDate){txt='금일'}
     else if(itemDate === two){txt='내일'}
     else if(itemDate === three){txt='모레'};
-    return <p key={idx}><span>{txt}</span>{item.informCause}</p>
+    if(item.informCode === 'PM10'){
+      return <p key={idx}><span>{txt}</span>{item.informCause}</p>
+    } else {
+      return null;
+    }
   })
 
 
