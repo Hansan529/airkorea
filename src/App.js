@@ -399,7 +399,7 @@ function App() {
     .text {
       width: 100%;
       height: 80px;
-      padding: 0 80px 0 0;
+      padding: 0 60px 0 100px;
       background: #fff url(./img_bg_s_02.png) no-repeat right 24px bottom;
       border-radius: 30px 8px 30px 8px;
       position: relative;
@@ -427,11 +427,25 @@ function App() {
       }
 
       .info {
-        text-indent: 40px;
+        height: 100%;
+        overflow-y: hidden;
+        div {
+          display: flex;
+          height: 80px;
+          align-items: center;
+          word-break: keep-all;
+          line-height: 1.5;
+          strong {
+            margin-right: 15px;
+            flex: none;
+            color: #0f62cc;
+            text-decoration: underline;
+          }
+        }
       }
     }
 
-    .button {
+    .buttonWrap {
       margin-right: 30px;
       display: flex;
       flex-direction: column;
@@ -441,6 +455,19 @@ function App() {
       button {
         width: 20px;
         height: 20px;
+        border: none;
+        background: no-repeat center center;
+        cursor: pointer;
+
+        &.upBtn {
+          background-image: url('./img_up_down_up.png');
+        }
+        &.playBtn {
+          background-image: url('./icon_bn_stop.png');
+        }
+        &.downBtn {
+          background-image: url('./img_up_down_down.png');
+        }
       }
     }
   `
@@ -735,7 +762,7 @@ function App() {
     else if(itemDate === two){txt='내일'}
     else if(itemDate === three){txt='모레'};
     if(item.informCode === 'PM10'){
-      return <p key={idx}><span>{txt}</span>{item.informCause}</p>
+      return <div key={idx}><strong>{txt}</strong><span>{item.informCause.slice(2).replace(/[＊*]/g, ' ')}</span></div>
     } else {
       return null;
     }
@@ -857,10 +884,10 @@ function App() {
                 {bannerInfoData}
               </div>
             </div>
-            <div className="button">
-                  <button></button>
-                  <button></button>
-                  <button></button>
+            <div className="buttonWrap">
+                  <button className="upBtn"></button>
+                  <button className="playBtn"></button>
+                  <button className="downBtn"></button>
             </div>
           </SecondBanner>
         </SecondSection>
