@@ -566,8 +566,6 @@ const DivStyle = styled.div`
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-              {/* {tapSelect === 0 && <RealTimeStandbyComp />} */}
-              {/* {tapSelect === 1 && <StandbyForecast />} */}
               <DynamicComponent />
             </MMWrapper>
           </MMLayout>
@@ -580,6 +578,7 @@ const DivStyle = styled.div`
               setLoading={setLoading}
               airData={data}
               counts={{count, setCount}}
+              forecast={fetchData[1]}
               />
         </FirstSection>
         <SecondSection>

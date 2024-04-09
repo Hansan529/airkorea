@@ -1,18 +1,8 @@
 import styled from "@emotion/styled";
 import { getColorValue } from "./RealtimeStandby";
-// import airQualityJson from "../data/todayDaily.json";
-import forecastJSON from "../data/getMinuDustFrcstDspth.json";
 import stationJson from "../data/stationInfo.json";
 import { useEffect, useRef, useState } from "react";
-
-// const { response: { body: { items : airQuality }}} = airQualityJson;
-// const filterQuality = airQuality.filter((item, index) => index < 4);
-
-const { response: { body: { items : forecast }}} = forecastJSON;
-const filterForecast = forecast.filter((item, index) => index < 4);
-
-const { items: stationsInfo } = stationJson;
-
+import { InfoContainer, InfoWrapper, InfoButton, InfoInteraction, Container, Part, LegendBase, AirForecastUl } from "../styleComponent";
 
 /**
  * 금일 시간별 미세먼지
@@ -27,308 +17,31 @@ const { items: stationsInfo } = stationJson;
  * 대기정보 예보 / 가장 최근 업데이트인 4개의 정보 (PM25, PM10 금일, 익일 정보)
  * 대기오염정보: 대기질 예보통보 조회(getMinuDustFrcstDspth)
  */
-const InfoContainer = styled.div`
-    width: 660px;
-    /* overflow: hidden; */
-`;
-const InfoWrapper = styled.div`
-border: 5px solid #00aeee;
-border-radius: 20px;
-padding: 15px;
-background-color: #fff;
-
-> div:first-of-type{
-    background: url('/img_bg01.png') no-repeat;
-    height: 55px;
-    line-height: 55px;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    margin-bottom: 15px;
-
-    h2 {
-    font-size: 30px;
-    font-weight: 700;
-    text-align: center;
-
-    > span {
-        color: #0f62cc;
-    }
-    }
-}
-
-> div:nth-of-type(2) {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-
-    > div {
-    display: flex;
-    gap: 10px;
-
-    > p  {
-        font-size: 18px;
-        > strong { color: #0f62cc; }
-        > span { display: block; margin-top: 5px; font-size: 14px; }
-    }
-    }
-
-    button {
-    font-size: 0;
-    }
-}
-`;
-const InfoButton = styled.button`
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 1px solid #c6ccd4;
-    border-radius: 5px;
-    background: #fff ${props => props.ico && `url('/img_${props.ico}.png')`} no-repeat center;
-    background-size: ${props => props.ico === 'bg_search' && '70%'};
-    &:hover {
-        cursor: pointer;
-        background-color: rgba(0,0,0,0.2);
-    }
-`
-const InfoInteraction = styled.div`margin-bottom: 20px;`;
-
-const Container = styled.div`
-    position: relative;
-
-    sub {
-        vertical-align: sub;
-        font-size: smaller;
-    }
-
-    .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-    }
-
-`
-
-const Part = styled.div`
-    display: block;
-    border: 1px solid #d2d2d2;
-    border-radius: 10px;
-    flex-grow: 1;
-    background-color: #eaedee;
-    overflow: hidden;
-    margin-bottom: 20px;
-
-    &:last-of-type {
-        margin-bottom: 0;
-    }
-
-    h3 {
-        padding: 10px 0;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    > ul{
-        padding: 30px 0px 25px;
-        background-color: #fff;
-        display: flex;
-        align-items: flex-end;
-
-        > li {
-            flex: 1;
-            text-align: center;
-            box-sizing: border-box;
-
-            &:not(:last-child){
-                border-right: 0.5px solid rgba(0,0,0,0.3);
-            }
-
-            strong, small, span {
-                display: block;
-            margin-bottom: 5px;
-
-                &:not(strong:first-of-type){
-                    margin: 10px 0;
-                }
-            }
-
-            .colorValue {
-                font-size: 24px;
-                font-weight: bold;
-            }
-            img {
-                margin: 10px 0;
-            }
-        }
-    }
-
-    .miniText{
-        line-height: 2;
-        text-indent: 20%;
-        background-repeat: no-repeat;
-        background-position: 40% center;
-    }
-
-    .miniTextIco_1{ background-image: url('./img_yebo_na01.png'); }
-    .miniTextIco_2{ background-image: url('./img_yebo_na02.png'); }
-    .miniTextIco_3{ background-image: url('./img_yebo_na03.png'); }
-    .miniTextIco_4{ background-image: url('./img_yebo_na04.png'); }
-    .miniTextIco_5{ background-image: url('./img_yebo_na05.png'); }
-`
-
-const LegendBase = styled.div`
-    text-align: center;
-
-    button {
-        border:none;
-        width: 70px;
-        text-align: left;
-        background: url('./img_handong_more.png') no-repeat center right;
-
-        &:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-    }
-
-    .legendPopup {
-        display: none;
-        position: absolute;
-        bottom: -100px;
-        width: 100%;
-        border: 1px solid #0a0a0a;
-        background-color: #fafafa;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .legendTitle {
-        background-color: #414d5d;
-        color: #fafafa;
-        padding: 10px 0;
-        position: relative;
-        height: 15px;
-
-        button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(-5px, 7.5px);
-            font-size: 0;
-            background: url('./img_cau_close.png') no-repeat center;
-            width: 22px;
-            height: 22px;
-        }
-    }
-
-    .legendFlex {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        height: 30px;
-        padding: 15px 10px 0 10px;
-
-        &:last-of-type{ padding: 10px 10px 15px 10px; }
-
-        > div {
-            flex: 1;
-            border: 1px solid #d2d2d2;
-            padding: 5px 0;
-            cursor: pointer;
-        }
-    }
-
-    .legendRange {
-        padding: 0 10px 10px 10px;
-        white-space: nowrap;
-
-        li {
-            display: inline-block;
-            width: 20%;
-            background-color: #f1fbff;
-            box-sizing: border-box;
-            padding: 5px;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #c6eeff;
-            border-left: none;
-            border-right: none;
-            &:first-of-type{
-                border-left: 1px solid #c6eeff;
-                border-radius: 5px 0 0 5px;
-            }
-            &:last-of-type {
-                border-right: 1px solid #c6eeff;
-                border-radius: 0 5px 5px 0;
-            }
-        }
-
-        span {
-            display: block;
-            position: relative;
-            font-size: 11px;
-            padding-left: 25px;
-            text-align: left;
-
-            &::after {
-                display: block;
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 10px;
-                width: 10px;
-                height: 10px;
-                background: no-repeat 0 0;
-            }
-            &.legendRange_1::after { background-image: url('./img_ch01.png'); }
-            &.legendRange_2::after { background-image: url('./img_ch02.png'); }
-            &.legendRange_3::after { background-image: url('./img_ch03.png'); }
-            &.legendRange_4::after { background-image: url('./img_ch04.png'); }
-            &.legendRange_5::after { background-image: url('./img_ch05.png'); }
-        }
-    }
-`;
-
-const AirForecastUl = styled.ul`
-    li {
-        position: relative;
-
-        p {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 33px;
-            line-height: 25px;
-        }
-        &:nth-of-type(2) p {
-            background: url('./img_bg_to01.png') no-repeat 0 0;
-        }
-        &:nth-of-type(3) p {
-            background: url('./img_bg_to02.png') no-repeat 0 0;
-        }
-    }
-`;
 
 /**
- * childrenComponents={Time}
+ * childrenComponents: <Time />
  * station
  * setStation
  * loading
  * setLoading
  * airData
  * counts={count, setCount}
+ * forecast
  */
 const Component = (props) => {
-        const [legendRange, setLegendRange] = useState([]);
-        const [legendPopupState, setLegendPopupState] = useState(false);
-        const legendPopupRef = useRef();
-        const [selectLegend, setSelectLegend] = useState('khai');
+    const stationsInfo = stationJson.items;
+    const legendPopupRef = useRef();
+    
+    // 범례 유형별 범위
+    const [legendRange, setLegendRange] = useState([]);
+    // 범례 보기(true) / 닫기(false)
+    const [legendPopupState, setLegendPopupState] = useState(false);
+    // 범례 종류 선택: khai, pm25, pm10, o3, no2, co, so2
+    const [selectLegend, setSelectLegend] = useState('khai');
+
+    // 예보 텍스트
+    const forecast = props.forecast;
+    const filterForecast = forecast.filter((item, index) => index < 4);
 
         useEffect(() => {
             legendPopupRef.current.focus();
@@ -337,8 +50,6 @@ const Component = (props) => {
         useEffect(() => {
             setLegendRange(getColorValue(0, `${selectLegend}Value`, true));
         }, [selectLegend]);
-
-        // const { items: dnstyItems } = dnsty.response.body;
 
         // 사용자 지역에 대한 대기 정보 수치 값
         const currentLocation = props.airData?.find(el => el.stationName === props.station.stationName);
@@ -360,6 +71,7 @@ const Component = (props) => {
             pm25Tomorrow: {},
         };
 
+        // 대기 예측 정보 데이터 기입
         filterForecast.forEach((forecast, idx) => {
             let objectKey;
             switch(idx) {
@@ -408,15 +120,15 @@ const Component = (props) => {
          */
         const airState = (value) => {
             if(value === 0 || value === '좋음'){
-                return ['좋음', '#1c67d7', 1];
+                return ['좋음', colorList[0], 1];
             } else if(value === 1 || value === '보통'){
-                return ['보통', '#01b56e', 2];
+                return ['보통', colorList[1], 2];
             } else if(value === 2 || value === '나쁨'){
-                return ['나쁨', '#937200', 3];
+                return ['나쁨', colorList[2], 3];
             } else if(value === 3 || value === '매우나쁨'){
-                return ['매우나쁨', '#c00d0d', 4];
+                return ['매우나쁨', colorList[3], 4];
             } else {
-                return ['데이터 없음', '#0a0a0a', 5];
+                return ['데이터 없음', colorList[4], 5];
             }
         };
 
