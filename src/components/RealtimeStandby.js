@@ -25,8 +25,8 @@ import { DaeguPath } from '../paths/Daegu';
 import { GwangjuPath } from '../paths/Gwangju';
 import { ChungbukPath } from '../paths/Chungbuk';
 import stationJson from "../data/stationInfo.json";
+import { InnerMapButton, MapPath, MapSvgStyle, InnerMapPathStyle, MainContainer, LoopContainer, MapNameButton, Station, StationPopupStyle, InnerTitle, InnerButtonWrap, InnerStationCollection, InnerDetailContainer, InnerSelectDiv } from '../styleComponent';
 
-const { items: stationsInfo } = stationJson;
 
 /**
  * 대기 정보 목록
@@ -69,46 +69,52 @@ export const getColorValue = (value, type, rangeValueShow) => {
   }
 };
 
-// ------------------------------------------------------- Styled
-const InnerMapButton = styled.button`
-	position: absolute;
-	width: 42px;
-	height: 42px;
-	border-radius: 50px;
-	border: none;
-	text-align: center;
-	line-height: 17px;
-	font-size: 13px;
-	background-color: ${(props) => props.value || '#abb0b3'};
-	padding: 0;
-	strong {
-	display: block;
-	}
-`;
-const MapPath = styled.path`
-	fill: ${(props) => props.fillColor || '#cbd0d3'};
-	&:hover{
-		fill: ${props => props.hoverColor || null}
-	}
-	cursor: pointer;
+// * 지역 데이터
+// Array
+const regionDetailData = [
+	{ num: '02',  name: '서울', fullName: '서울특별시', left: '241px', top: '120px'},
+	{ num: '031', name: '경기', fullName: '경기도', left: '290px', top: '175px'},
+	{ num: '032', name: '인천', fullName: '인천광역시', left: '180px', top: '160px'},
+	{ num: '033', name: '강원', fullName: '강원특별자치도', left: '401px', top: '105px'},
+	{ num: '041', name: '충남', fullName: '충청남도', left: '206px', top: '325px'},
+	{ num: '042', name: '대전', fullName: '대전광역시', left: '310px', top: '330px'},
+	{ num: '043', name: '충북', fullName: '충청북도', left: '333px', top: '251px'},
+	{ num: '044', name: '세종', fullName: '세종특별자치시', left: '262px', top: '280px'},
+	{ num: '051', name: '부산', fullName: '부산광역시', left: '496px', top: '518px'},
+	{ num: '052', name: '울산', fullName: '울산광역시', left: '516px', top: '441px'},
+	{ num: '053', name: '대구', fullName: '대구광역시', left: '435px', top: '385px'},
+	{ num: '054', name: '경북', fullName: '경상북도', left: '470px', top: '280px'},
+	{ num: '055', name: '경남', fullName: '경상남도', left: '380px', top: '483px'},
+	{ num: '061', name: '전남', fullName: '전라남도', left: '269px', top: '543px'},
+	{ num: '062', name: '광주', fullName: '광주광역시', left: '213px', top: '503px'},
+	{ num: '063', name: '전북', fullName: '전북특별자치도', left: '257px', top: '422px'},
+	{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45px', top: '640px'},
+];
+// Object
+const regionNumList = {
+	'02': '서울',
+	'031': '경기',
+	'032': '인천',
+	'033': '강원',
+	'041': '충남',
+	'042': '대전',
+	'043': '충북',
+	'044': '세종',
+	'051': '부산',
+	'052': '울산',
+	'053': '대구',
+	'054': '경북',
+	'055': '경남',
+	'061': '전남',
+	'062': '광주',
+	'063': '전북',
+	'064': '제주',
+};
 
-	filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
-`;
+// * Components
 const MapSvg = ({ className, children }) => {
-	const Style = styled.svg`
-		position: absolute;
-		left: 0;
-		top: 0;
-		pointer-events: none;
-		margin-top: -35px;
-		margin-left: 5px;
-
-		path {
-			pointer-events: auto;
-		}
-	`
 	return (
-		<Style
+		<MapSvgStyle
 			className={className}
 			version="1.1"
 			xmlns="http://www.w3.org/2000/svg"
@@ -120,132 +126,60 @@ const MapSvg = ({ className, children }) => {
 			viewBox="0 0 700 730"
 			enableBackground="new 0 0 700 730"
 			xmlSpace="preserve"
-		>{children}</Style>
+		>{children}</MapSvgStyle>
 	)
 
-}
-const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) => {
-	const InnerMapPathStyle = styled.path`
-		fill: ${fillColor || '#cbd0d3'};
-		&:hover {
-		fill: ${fillHoverColor || '#c1c5c7'};
-		}
-	`;
-	return (
-	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick}></InnerMapPathStyle>
-)};
-const MainContainer = styled.div`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	/* overflow: hidden; */
-`;
-const LoopContainer = styled.div`position: relative;`;
-const MapNameButton = styled.button`
-	position: absolute;
-	left: ${(props) => props.left};
-	top: ${(props) => props.top};
-	border: none;
-	background-color: ${(props) => props.bgColor};
-	width: 60px;
-	height: 60px;
-	border-radius: 30px;
-	text-align: center;
-	line-height: 17px;
-	opacity: 1;
-	cursor: pointer;
-	font-weight: bold;
-	z-index: 10;
+};
+const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) =>
+	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor}></InnerMapPathStyle>;
 
-	&:hover { text-decoration: underline; }
-
-	> span { display: block; }
-`;
-const Station = styled.div`
-	position: absolute;
-	top: ${props => `${props.top}px`};
-	left: ${props => `${props.left}px`};
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background-color: #000;
-	background-image: url('./img_ch0${props => props.ico}.png');
-	cursor: pointer;
-
-	&[data-checked="ani"]::after {
-		content: "";
-		display: block;
-		position: absolute;
-		width: 10px;
-		height: 10px;
-		background-image: url('./img_ch0${props => props.ico}.png');
-		left: 0;
-		top: 0;
-		z-index: 10;
-	}
-	&[data-checked="ani"]::before {
-		content: "";
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 10px;
-		height: 10px;
-		border-radius: 50px;
-		animation: emphasis 0.5s 0s ease-in-out infinite;
-		background: ${props => props.icoColor};
-	}
-
-	@keyframes emphasis {
-		from {
-			transform: scale(0.5);
-		}
-		to {
-			transform: scale(1.8);
-		}
-	}
-`
-// ------------------------------------------------------- Styled
 /**
- * {childrenComponents, station, setStation, info, type, airData, filter}
+ * 
+ * childrenComponents: <Time />
+ * station: 우리동네 대기정보 측정소 데이터
+ * setStation: 우리동네 대기정보 측정소 데이터 설정
+ * loading: 로딩창
+ * setLoading: 로딩창 설정
+ * info: 대기정보(air) / 측정소(station) 정보
+ * type: 출력 타입 khai, pm25, pm10, o3, no2, co, so2
+ * airData: 모든 측정소 대기정보 데이터,
+ * mapSetting:
+ * 		openMap: 상세 지역 Open/Close
+ * 		setOpenMap, 상세 지역 Open/Close 설정
+ * 		setMMOSelect_region: 지역 - 서울, 경기, 인천, 강원, 충남, 대전, 충북, 세종, 부산, 울산, 대구, 경북, 경남, 전남, 광주, 전북, 제주
+ * filter:
+ * 		range: 농도 범위 필터링, 
+ * 		data: 측정망 구분 필터링
  */
 export const RealTimeStandby = (props) => {
-	const [hover, setHover] = useState();
-	const [hoverStation, setHoverStation] = useState({top: null, left: null, innerTop: null, innerLeft: null});
-	const [hoverStationData, setHoverStationData] = useState({});
-	const [airStation, setAirStation] = useState(props.info);
+	// 측정소 위치 데이터
+	const stationsInfo = stationJson.items;
+
 	const mapName = useRef();
 
+	// * prop
+	// 대기정보(air) / 측정소(station) 정보
+	const [airStation, setAirStation] = useState(props.info);
+
+	// * 호버
+	// 해당 지역 번호
+	const [hover, setHover] = useState();
+	// 해당 측정소 명
+	const [hoverStation, setHoverStation] = useState({top: null, left: null, innerTop: null, innerLeft: null});
+	// 해당 측정소에 대한 데이터
+	const [hoverStationData, setHoverStationData] = useState({});
+
+// ---------------------------------- event
 	const hoverHandle = (element) => setHover(element);
 	const innerClickHandle = (element) => props.mapSetting.setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
 	const airStationHandle = (element) => setAirStation(element);
-
 	const stationPopupHandle = (hoverStation, data) => {
 		setHoverStation(hoverStation);
 		setHoverStationData(data);
 	};
 
-	const namePositionVal = [
-		{ num: '02',  name: '서울', fullName: '서울특별시', left: '241px', top: '120px'},
-		{ num: '031', name: '경기', fullName: '경기도', left: '290px', top: '175px'},
-		{ num: '032', name: '인천', fullName: '인천광역시', left: '180px', top: '160px'},
-		{ num: '033', name: '강원', fullName: '강원특별자치도', left: '401px', top: '105px'},
-		{ num: '041', name: '충남', fullName: '충청남도', left: '206px', top: '325px'},
-		{ num: '042', name: '대전', fullName: '대전광역시', left: '310px', top: '330px'},
-		{ num: '043', name: '충북', fullName: '충청북도', left: '333px', top: '251px'},
-		{ num: '044', name: '세종', fullName: '세종특별자치시', left: '262px', top: '280px'},
-		{ num: '051', name: '부산', fullName: '부산광역시', left: '496px', top: '518px'},
-		{ num: '052', name: '울산', fullName: '울산광역시', left: '516px', top: '441px'},
-		{ num: '053', name: '대구', fullName: '대구광역시', left: '435px', top: '385px'},
-		{ num: '054', name: '경북', fullName: '경상북도', left: '470px', top: '280px'},
-		{ num: '055', name: '경남', fullName: '경상남도', left: '380px', top: '483px'},
-		{ num: '061', name: '전남', fullName: '전라남도', left: '269px', top: '543px'},
-		{ num: '062', name: '광주', fullName: '광주광역시', left: '213px', top: '503px'},
-		{ num: '063', name: '전북', fullName: '전북특별자치도', left: '257px', top: '422px'},
-		{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45px', top: '640px'},
-	];
-
+	// 측정소 데이터가 로드되면 로딩 완료
 	useEffect(() => {
 		if(props.airData) {
 			props.setLoading(true);
@@ -270,30 +204,11 @@ export const RealTimeStandby = (props) => {
 	 * @returns 지역 측정소별 측정 총합의 평균값
 	 */
 	const regionAvgValue = (order, returnValue) => {
-		const regionList = {
-		'02': '서울',
-		'031': '경기',
-		'032': '인천',
-		'033': '강원',
-		'041': '충남',
-		'042': '대전',
-		'043': '충북',
-		'044': '세종',
-		'051': '부산',
-		'052': '울산',
-		'053': '대구',
-		'054': '경북',
-		'055': '경남',
-		'061': '전남',
-		'062': '광주',
-		'063': '전북',
-		'064': '제주',
-		};
 		if(props.airData){
-			const filterValue = Object.values(regionList).map((list) => {
-					return props.airData.filter((data) => {
-						return data.sidoName === list;
-					});
+			const filterValue = Object.values(regionNumList).map((list) => {
+				return props.airData.filter((data) => {
+					return data.sidoName === list;
+				});
 			});
 
 			const filterTotalValue = filterValue.map((arr) => {
@@ -353,48 +268,28 @@ export const RealTimeStandby = (props) => {
 		}
 	};
 	// ^-------------------------------------------------------------- JSON
-	/** */
+
+	// * Component
+	const InnerMapSvg = ({ children }) => {
+		return (
+			<svg
+				version="1.1"
+				xmlns="http://www.w3.org/2000/svg"
+				xmlnsXlink="http://www.w3.org/1999/xlink"
+				x="0px"
+				y="0px"
+				width='492px'
+				height='548px'
+				viewBox='0 0 492 548'
+				enableBackground='new 0 0 492 548'
+				xmlSpace="preserve"
+				style={{visibility: airStation === 'station' && 'hidden'}}
+			>
+			{children}
+			</svg>
+		);
+	};
 	const StationPopup = ({top, left}) => {
-		const Style = styled.div`
-		position: absolute;
-		visibility: hidden;
-		transform: translateX(-50%);
-		background-color: #414d52;
-		white-space: nowrap;
-		padding: 10px;
-		color: #fff;
-		border-radius: 10px;
-		top: ${top}px;
-		left: ${left}px;
-		transform : translate(-50%, -90px);
-
-		&::after {
-			content: "";
-			display: block;
-			position: absolute;
-			width: 0;
-			height: 0;
-			left: 50%;
-			transform: translateX(calc(-50% + 5px));
-			border-top: calc(10px * 1.732) solid #414d52;
-			border-left: 10px solid transparent;
-			border-right: 10px solid transparent;
-		}
-
-		div{
-			margin-bottom: 5px;
-			&:last-of-type{margin-bottom: 0;}
-		}
-
-		strong {
-			color: #ffea5c;
-		}
-
-		&[data-name="${hoverStation?.stationName}"]{
-			z-index: 10;
-			visibility: visible;
-		}
-		`;
 		const legend = (() => {
 			switch(props.type) {
 				case "khaiValue":
@@ -415,21 +310,27 @@ export const RealTimeStandby = (props) => {
 					return;
 			}
 		})();
+		const DynamicStyle = styled(StationPopupStyle)`
+			&[data-name="${hoverStation?.stationName}"]{
+				z-index: 10;
+				visibility: visible;
+			}
+		`;
 		return (
-			<Style data-name={hoverStation?.stationName}>
+			<DynamicStyle top={top} left={left} data-name={hoverStation?.stationName}>
 				<div><strong>측정소 명:</strong> <span>{hoverStation?.stationName}</span></div>
 				<div><strong>위치:</strong> <span>{hoverStation?.addr}</span></div>
 				<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
-			</Style>
+			</DynamicStyle>
 		)
 	}
-	/** 지역별 컴포넌트 */
+	// * 지역별 컴포넌트
 	const RegionComponents = () => {
 
 		/** 상세 지역 컴포넌트 (버튼)  */
 		const InnerComponent = ({ regionNum, regionName, fullName }) => {
 			const { result } = filterStationReturnValue(props.type, regionList[regionName]);
-
+			const value = (key) => props.loading ? result[key] : 0;
 			const renderButton = (el, key) => {
 				const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
 				return (
@@ -440,7 +341,7 @@ export const RealTimeStandby = (props) => {
 					left: regionList[regionName][key].left,
 					top: regionList[regionName][key].top,
 					}}
-					value={getColorValue(props.loading ? result[key] : 0, props.type)[2]}
+					value={getColorValue(value(key), props.type)[2]}
 					onClick={() => airStationHandle('station')}
 				>
 					{el.name}
@@ -455,8 +356,8 @@ export const RealTimeStandby = (props) => {
 					id={`m_${regionNum}_${String(key + 1).padStart(3, '0')}`}
 					title={`${regionName}_${el.name}${el.district}`}
 					d={pathData[`m_${regionNum}_${String(key + 1).padStart(3, '0')}`]}
-					fillColor={airStation === 'air' ? getColorValue(props.loading ? result[key] : 0, props.type)[0] : '#fff'}
-					fillHoverColor={airStation === 'air' ? getColorValue(props.loading ? result[key] : 0, props.type)[1] : '#fff'}
+					fillColor={airStation === 'air' ? getColorValue(value(key), props.type)[0] : '#fff'}
+					fillHoverColor={airStation === 'air' ? getColorValue(value(key), props.type)[1] : '#fff'}
 					onClick={() => airStationHandle('station')}
 				></InnerMapPath>
 				);
@@ -486,127 +387,44 @@ export const RealTimeStandby = (props) => {
 			const TimeComponent = props.childrenComponents.Time;
 
 			// Styled
-			const DetailContainer = styled.div`
-				background-image: ${props => props.noImage ? '' : `url('/${props.regionNum}.png'), url('/map_bg_${props.regionNum}.jpg')`};
-				background-color: #dff6ff;
-				background-repeat: no-repeat;
-				background-position: center 35px;
-				position: absolute;
-				border-radius: 10px;
-				border: 1px solid #000;
-				/* overflow: hidden; */
-				opacity: 0;
-				visibility: hidden;
-
-				/* dynamic */
+			/* dynamic */
+			const DetailContainer = styled(InnerDetailContainer)`
 				&[data-region_num="${props.mapSetting.openMap}"]{
 					z-index: 50;
 					opacity: 1;
 					visibility: visible;
 				}
 			`;
-			const Title = styled.div`
-				position: relative;
-				height: 35px;
-				background-color: #414d5d;
-				text-align: center;
-				line-height: 35px;
-				border-radius: 10px 10px 0 0;
-
-				h2 {
-					color: #fff;
-					font-weight: 600;
-				}
-
-				button {
-					position: absolute;
-					top: 50%;
-					right: 10px;
-					transform: translateY(-50%);
-					font-size: 0;
-					width: 22px;
-					height: 22px;
-					background: url('./img_cau_close.png') no-repeat center;
-					border-radius: 50%;
-					border: none;
-					cursor: pointer;
-				}
-			`
-			const ButtonWrap = styled.div`
-				width: 100%;
-				height: 100%;
-				position: relative;
-			`
-			const StationCollection = styled.div`
-				top:10px;
-				left:-5px;
-				position: relative;
-			`
-			const InnerMapSvg = ({ children }) => {
-				return (
-					<svg
-						version="1.1"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlnsXlink="http://www.w3.org/1999/xlink"
-						x="0px"
-						y="0px"
-						width='492px'
-						height='548px'
-						viewBox='0 0 492 548'
-						enableBackground='new 0 0 492 548'
-						xmlSpace="preserve"
-						style={{visibility: airStation === 'station' && 'hidden'}}
-					>
-					{children}
-					</svg>
-				);
-			};
-			const SelectDiv = styled.div`
-				height: 20px;
-				position: absolute;
-				top: 50px;
-				right: 15px;
-				background-color: #fff;
-				border-radius: 25px;
-				border: 5px solid #fff;
-
-				button {
-					border: none;
-					background: #fff;
-					border-radius: 25px;
-
-					&:hover {
-						text-decoration: underline;
-					}
-
-					&[data-type="${airStation}"] {
+			const SelectDiv = styled(InnerSelectDiv)`
+				button[data-type="${airStation}"] {
 						background-color: #0f62cc;
 						color: #fff;
-					}
 				}
-			`
+			`;
+
+			// 입력된 지역의 전체 측정소 위치 데이터
 			const filterStationData = stationsInfo.filter(item => {
 				return (item.city === fullName) && filterDataValues[filterDataKeys.indexOf(item.mangName)];
 			});
 
 			return (
 				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
-					<Title>
+					<InnerTitle>
 						<h2>{fullName}</h2>
 						<button onClick={() => {
 							innerClickHandle(0);
 							props.mapSetting.setOpenMap(0);
 							props.mapSetting.setMMOSelect_region('none');
 						}}>창 닫기</button>
-					</Title>
+					</InnerTitle>
 					<TimeComponent top="50px" left="15px" height="20px" right="initial" />
 					<SelectDiv>
 						<button data-type="air" onClick={() => airStationHandle('air')}>대기/경보 정보</button>
 						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
 					</SelectDiv>
 					{/* 버튼 */}
-					{(airStation === 'air') && <ButtonWrap>{regionList[regionName].map(renderButton)}</ButtonWrap>}
-					{(props.info === 'station' || airStation === 'station') && <StationCollection>
+					{(airStation === 'air') && <InnerButtonWrap>{regionList[regionName].map(renderButton)}</InnerButtonWrap>}
+					{(props.info === 'station' || airStation === 'station') && <InnerStationCollection>
 						{filterStationData.map((el, key) => {
 							const filterStationAirData = props.airData.find(item => item.stationName === el.stationName);
 							const icoNum = getColorValue(filterStationAirData?.[props.type], props.type)[4];
@@ -625,7 +443,7 @@ export const RealTimeStandby = (props) => {
 							)
 						})}
 						<StationPopup top={hoverStation.innerTop} left={hoverStation.innerLeft} />
-					</StationCollection>}
+					</InnerStationCollection>}
 					{/* SVG */}
 					<InnerMapSvg>
 						{InnerComponent && <InnerComponent />}
@@ -667,7 +485,7 @@ export const RealTimeStandby = (props) => {
 		}
 
 		/** 전체 맵 버튼, 상세 지역, 전체 맵 SVG */
-		return namePositionVal.map((el, key) => {
+		return regionDetailData.map((el, key) => {
 			let color;
 			let hoverColor;
 			let hoverChk = false;
@@ -723,7 +541,7 @@ export const RealTimeStandby = (props) => {
 		})
 	}
 
-	/** 측정소 컴포넌트 */
+	// * 측정소 컴포넌트
 	const StationComponent = () => {
 		const Div = styled.div`position: relative;`
 		// const stationData = stationsInfo.find(item => item.stationName === hoverStation);

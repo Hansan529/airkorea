@@ -25,7 +25,7 @@ function App() {
   const [mMOSelect_return, setMMOSelect_return] = useState('khaiValue');
   // 지역 - 서울, 경기, 인천, 강원, 충남, 대전, 충북, 세종, 부산, 울산, 대구, 경북, 경남, 전남, 광주, 전북, 제주
   const [mMOSelect_region, setMMOSelect_region] = useState('');
-  // 대기정보 / 측정소 정보
+  // 대기정보(air) / 측정소(station) 정보
   const [mMoSelect_info, setMMOSelect_info] = useState('air');
 
   // 지도 범례 On/Off

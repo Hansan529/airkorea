@@ -497,7 +497,7 @@ export const Station = styled.div`
 			transform: scale(1.8);
 		}
 	}
-`
+`;
 export const StationPopupStyle = styled.div`
 	position: absolute;
 	visibility: hidden;
@@ -538,3 +538,71 @@ export const StationPopupStyle = styled.div`
 		color: #ffea5c;
 	}
 `;
+export const InnerTitle = styled.div`
+    position: relative;
+    height: 35px;
+    background-color: #414d5d;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 10px 10px 0 0;
+
+    h2 {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 0;
+        width: 22px;
+        height: 22px;
+        background: url('./img_cau_close.png') no-repeat center;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+`;
+export const InnerButtonWrap = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+`;
+export const InnerStationCollection = styled.div`
+    top:10px;
+    left:-5px;
+    position: relative;
+`;
+export const InnerDetailContainer = styled.div`
+    background-image: ${props => props.noImage ? '' : `url('/${props.regionNum}.png'), url('/map_bg_${props.regionNum}.jpg')`};
+    background-color: #dff6ff;
+    background-repeat: no-repeat;
+    background-position: center 35px;
+    position: absolute;
+    border-radius: 10px;
+    border: 1px solid #000;
+    /* overflow: hidden; */
+    opacity: 0;
+    visibility: hidden;
+`;
+export const InnerSelectDiv = styled.div`
+    height: 20px;
+    position: absolute;
+    top: 50px;
+    right: 15px;
+    background-color: #fff;
+    border-radius: 25px;
+    border: 5px solid #fff;
+
+    button {
+        border: none;
+        background: #fff;
+        border-radius: 25px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+`
