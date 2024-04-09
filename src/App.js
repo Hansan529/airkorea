@@ -7,31 +7,18 @@ import {
 } from './components/RealtimeStandby';
 import stationInfoJSON from './data/stationInfo.json';
 import TodayAirQuality from './components/TodayAirQuality';
-import { Fragment, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { StandbyForecast } from './components/StandbyForecast';
 import { RealTimeWeather } from './components/RealTimeWeather';
-
-// ------------------------------------------------ fetch
-const fetchData = async () => {
-  try {
-    const detailDataJson = await axios.get('http://localhost:3500/api/getCtprvnRltmMesureDnsty');
-    const todayAirInformationJson = await axios.get('http://localhost:3500/api/getMinuDustFrcstDspth');
-    return [detailDataJson.data, todayAirInformationJson.data];
-  } catch (err) {
-    console.error("Error: ", err);
-    return null;
-  }
-}
-const {items: stationsInfo} = stationInfoJSON;
+import { CopyRight, FirstSection, Legend, LegendWrapper, Loading, MMLayout, MMOBorderDiv, MMOContainer, MMOList, MMOptionLayout, MMOSelect, MMOSelectWrapper, MMWrapper, SecondBanner, SecondBannerInfo, SecondSection } from './styleComponent';
 
 function App() {
   // ------------------------------------------------ setting
-  const legendRef = useRef(null);
-  const [count, setCount] = useState(0);
+  // 측정소 위치 데이터
+  const stationsInfo = stationInfoJSON.items;
 
-  // 탭 목록 인덱스
-  const [tapSelect, setTapSelect] = useState(0);
+  const legendRef = useRef(null);
 
   // * 실시간 대기정보
   // 출력 타입 khai, pm25, pm10, o3, no2, co, so2
@@ -66,45 +53,67 @@ function App() {
   // 대기예보 텍스트
   const [airInformation, setAirInformation] = useState();
   // 대기예보 텍스트 인덱스
+  const [airInfoIndex, setAirInfoIndex] = useState(1);
 
   // * 기타
+  // 데이터 불러오기 [전체 측정소 대기 값, 대기정보 예보 텍스트]
+  const [fetchData, setFetchData] = useState();
   // 상세 지역 Open/Close
   const [openMap, setOpenMap] = useState(0);
   // 데이터 로딩
   const [loading, setLoading] = useState(false);
+  // 새로고침
+  const [count, setCount] = useState(0);
+  // 탭 목록 인덱스
+  const [tapSelect, setTapSelect] = useState(0);
   
-  useEffect(() => {
-    // 로컬 스토리지에서 데이터를 가져옴
-    const storedData = JSON.parse(localStorage.getItem('storedData'));
-    const airInformation = JSON.parse(localStorage.getItem('airInofrmation'));
-    const expireTime = new Date(localStorage.getItem('expireTime'));
+// ------------------------------------------------ fetch
+useEffect(() => {
+  (async () => {
+    try {
+      const detailDataJson = await axios.get('http://localhost:3500/api/getCtprvnRltmMesureDnsty');
+      const todayAirInformationJson = await axios.get('http://localhost:3500/api/getMinuDustFrcstDspth');
+      setFetchData([detailDataJson.data, todayAirInformationJson.data]);
+    } catch (err) {
+      console.error("Error: ", err);
+      setFetchData(null);
+    };
+  })();
+}, [])
 
-    const dataTime = storedData && new Date(storedData[0].dataTime);
-    const now = new Date();
-    const dot = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0);
+  // 측정소 데이터
+useEffect(() => {
+  // 로컬 스토리지에서 데이터를 가져옴
+  const storedData = JSON.parse(localStorage.getItem('storedData'));
+  const airInformation = JSON.parse(localStorage.getItem('airInofrmation'));
+  const expireTime = new Date(localStorage.getItem('expireTime'));
 
-    // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
-    if (!storedData || !expireTime || (expireTime < now) || (dot < dataTime) || !airInformation) {
-      fetchData().then((result) => {
-        if (result) {
-          localStorage.setItem('storedData', JSON.stringify(result[0]));
-          localStorage.setItem('airInformation', JSON.stringify(result[1]));
+  const dataTime = storedData && new Date(storedData[0].dataTime);
+  const now = new Date();
+  const dot = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0);
 
-          const expireData = new Date();
-          expireData.setHours(expireData.getHours() + 1, 0, 0, 0);
-          localStorage.setItem('expireTime', expireData);
+  // 데이터가 없거나 만료 시간이 없거나 또는 만료 시간이 지났으면 데이터를 다시 가져와 업데이트
+  if (!storedData || !expireTime || (expireTime < now) || (dot < dataTime) || !airInformation) {
+      if (fetchData) {
+        localStorage.setItem('storedData', JSON.stringify(fetchData[0]));
+        localStorage.setItem('airInformation', JSON.stringify(fetchData[1]));
 
-          setData(result[0]);
-          setAirInformation(result[1]);
-        }
-      });
-    } else {
-      setData(storedData);
-    }
-    // setLoading(true);
-  }, []);
+        const expireData = new Date();
+        expireData.setHours(expireData.getHours() + 1, 0, 0, 0);
+        localStorage.setItem('expireTime', expireData);
 
-  useEffect(() => {
+        setData(fetchData[0]);
+        setAirInformation(fetchData[1]);
+      }
+  } else {
+    setData(storedData);
+  }
+  // setLoading(true);
+}, [fetchData]);
+
+// 가까운 위치의 측정소 데이터
+useEffect(() => {
+  if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
     if('geolocation' in navigator) {
       const success = async (pos) => {
         let { latitude, longitude } = pos.coords;
@@ -122,382 +131,56 @@ function App() {
         const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
         setStation(stationInfo);
       }
-      // TODO: 위치 정보 비허용으로 중구 위치를 기준으로 한다는 모달창 출력
-      const error = (err) => console.error('에러', err);
+      const error = (err) => {
+        console.log("위치 권한 오류: ", err);
+        const stationInfo = {
+          "dmX": "37.564639",
+          "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+          "mangName": "도시대기",
+          "year": "1995",
+          "city": "서울특별시",
+          "addr": "서울 중구 덕수궁길 15",
+          "building": "시청서소문별관 3동",
+          "stationName": "중구",
+          "dmY": "126.975961",
+          "top": "136",
+          "left": "264",
+          "innerTop": "248.594",
+          "innerLeft": "235.531"
+      }
+        setStation(stationInfo);
+        alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
+      };
 
       navigator.geolocation.getCurrentPosition(success, error);
     }
-}, [count]);
-
-
-  const typeRange = getColorValue(0, mMOSelect_return, true);
-
-  // ------------------------------------------------ style
-  const Select = styled.select`
-  -o-appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  `;
-  const Section = styled.section`
-      position: relative;
-      `;
-  const FirstSection = styled(Section)`
-    background: url('/img_main_bg.png') repeat-x 0 0;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    padding-top: 20px;
-    `;
-  const MMLayout = styled.div`
-      flex-basis: 0.5;
-      width: 710px;
-  `;
-  const MMOptionLayout = styled.div`
-    width: 710px;
-    position: relative;
-    z-index: 10;
-    background-color: #fff;
-    border-radius: 10px;
-  `;
-  const MMOList = styled.ul`
-    display: flex;
-    margin: 0;
-    margin-bottom: 5px;
-
-    li {
-      flex: 1;
-      text-align: center;
-      border: 1px solid #d2d2d2;
-      border-bottom: none;
-      overflow: hidden;
-
-      &:first-of-type {
-        border-top-left-radius: 10px;
+  } else {
+    (async () => {
+      // const latitude = '197806.5250901809';
+      // const longitude = '451373.25740676327';
+      const stationInfo = {
+          "dmX": "37.564639",
+          "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+          "mangName": "도시대기",
+          "year": "1995",
+          "city": "서울특별시",
+          "addr": "서울 중구 덕수궁길 15",
+          "building": "시청서소문별관 3동",
+          "stationName": "중구",
+          "dmY": "126.975961",
+          "top": "136",
+          "left": "264",
+          "innerTop": "248.594",
+          "innerLeft": "235.531"
       }
+      setStation(stationInfo);
+    })();
+  }
+}, [stationsInfo]);
 
-      &:last-of-type {
-        border-top-right-radius: 10px;
-      }
-
-      button {
-        display: block;
-        height: 50px;
-        line-height: 50px;
-        letter-spacing: -0.6px;
-        background: #fff;
-        width: 100%;
-        border: none;
-
-        &:hover {
-          text-decoration: underline;
-          cursor: pointer;
-        }
-      }
-
-      &:nth-of-type(${tapSelect + 1}){
-        button {
-          background: #0f62cc;
-          color: #fff;
-          font-weight: 600;
-        }
-      }
-    }
-  `;
-  const MMOContainer = styled.div`
-    height: 50px;
-    background: linear-gradient(to right, #009ffa, #00c36a);
-    border-radius: 6px;
-    display: flex;
-    padding: 10px;
-    box-sizing: border-box;
-  `;
-  const MMOBorder = `
-    border-radius: 30px;
-    background: #fff no-repeat right 10px center;
-    justify-content: center;
-    align-items: center;
-    height: 30px;
-    border: none;
-  `
-  const MMOSelectWrapper = styled.div`
-    flex: ${props => props.flex && '1 1 calc(33.333% - 20px)'};
-    text-align: ${props => props.align || 'center'};
-    font-size: 14px;
-    color: #0a0a0a;
-  `;
-  const MMOSelect = styled(Select)`
-    ${MMOBorder}
-    background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
-    width: ${props => props.$width};
-    padding: ${(props) => (props.flex ? '0 3px' : '0 15px')};
-    display: ${(props) => props.flex && 'flex'};
-
-    button {
-      flex: 1;
-      color: #0a0a0a;
-      border: none;
-      background: none;
-      border-radius: 30px;
-      height: 24px;
-
-      &.on {
-        color: #fff;
-        background-color: #414d5d;
-      }
-    }
-  `;
-  const MMOBorderDiv = styled(MMOSelectWrapper)`
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    ${MMOBorder}
-    padding: 0 5px;
-    box-sizing: border-box;
-
-    button {
-      flex: 1;
-      border: none;
-      background: none;
-      border-radius: 30px;
-      height: calc(100% - 5px);
-      cursor: pointer;
-    }
-
-    button[data-information="${mMoSelect_info}"],
-    button[data-date="${forecastDate}"]
-    {
-      font-weight: bold;
-      background-color: #414d5d;
-      color: #fff;
-    }
-  `
-  const MMWrapper = styled.div`
-    width: 700px;
-    height: 705px;
-    box-sizing: border-box;
-    background: url('/map_svg_warp_bg.png') no-repeat 5px -10px;
-    position: relative;
-    margin-top: 20px;
-    /* overflow: hidden; */
-  `;
-  const LegendWrapper = styled.div`
-    position: absolute;
-      width: 150px;
-      right: 1px;
-      bottom: 1px;
-      overflow: hidden;
-  `
-  const Legend = styled.div`
-    div, .radio > legend {
-      background-color: #f6fdff;
-      border: 1px solid rgba(0,0,0,0.3);
-      border-bottom: none;
-
-      button {
-        background: no-repeat right 14px center;
-        background-image: url(./img_bottom_arr_up.png);
-        border: none;
-        width: 100%;
-        text-align: left;
-        text-indent: 14px;
-        cursor: pointer;
-        padding: 5px 0;
-
-        &:hover {
-          text-decoration: underline;
-        }
-    }}
-    ul, .list {
-      border: 1px solid rgba(0,0,0,0.3);
-      /* transition: height 0.3s; */
-      height: 0;
-
-      li{
-      text-indent: 30px;
-      background: no-repeat 10px center / 12px;
-      padding: 5px 0;
-      small {font-size: 14px;}
-
-      &:first-of-type {
-        background-image: url(./img_cau01.png);
-      }
-      &:last-of-type {
-        background-image: url(./img_cau02.png);
-      }
-    }}
-
-    .radio {
-      /* transition: height 0.3s; */
-      height: 0;
-      overflow: hidden;
-
-      label {
-          display: flex;
-          font-size: 12px;
-          align-items: center;
-          padding: 5px;
-
-          input {
-            width: 12px;
-            height: 12px;
-          }
-        }
-    }
-
-    /* Open */
-    &.on{
-      div, .radio > legend {
-        background-color: #0f6ecc;
-
-        button {
-          color: #fff;
-          background-image: url(./img_bottom_arr_down.png);
-        }
-      }
-
-      ul, .list {
-        height: ${props => props.height};
-      }
-
-      .radio {
-        background: #fff;
-        border: 1px solid rgba(0,0,0,0.3);
-        padding-bottom: 5px;
-
-        height: ${props => props.height};
-      }
-    }
-
-    /*  */
-    &[data-legend-index="1"]{
-      .radio label {
-        position: relative;
-        text-indent: 13px;
-
-        &::before {
-          content: "";
-          display: block;
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          top: 50%;
-          left: 25px;
-          transform: translateY(-50%);
-          background: no-repeat 0 0;
-        }
-        &:first-of-type::before { background-image: url('./img_ch01.png'); }
-        &:nth-of-type(2)::before { background-image: url('./img_ch02.png'); }
-        &:nth-of-type(3)::before { background-image: url('./img_ch03.png'); }
-        &:nth-of-type(4)::before { background-image: url('./img_ch04.png'); }
-        &:last-of-type::before { background-image: url('./img_ch05.png'); }
-        }
-    }
-  `
-  const SecondSection = styled(Section)`
-    margin: 50px auto 0;
-    background: url('./img_bg_s_01.png') repeat-x 0 0;
-    width: 1400px;
-  `
-  const SecondBanner = styled.div`
-    position: relative;
-    background: linear-gradient(to right, #009ff9, #00c36b);
-    height: 100px;
-    padding: 10px;
-    border-radius: 8px;
-    display:flex;
-    align-items: center;
-    gap: 30px;
-
-    .updateTime {
-      text-align: center;
-      strong {
-        display: block;
-        margin-top: 5px;
-        font-size: 30px;
-        line-height: 17px;
-      }
-    }
-
-    .text {
-      width: 100%;
-      height: 80px;
-      padding: 0 60px 0 100px;
-      background: #fff url(./img_bg_s_02.png) no-repeat right 24px bottom;
-      border-radius: 30px 8px 30px 8px;
-      position: relative;
-
-      .title {
-        position: absolute;
-        top: 50%;
-        left: 20px;
-        transform: translateY(-50%);
-        font-size: 22px;
-        
-        &::after {
-          content: "";
-          position: absolute;
-          width: 2px;
-          height: 80%;
-          background-color: rgba(0,0,0,0.1);
-          top: 50%;
-          transform: translate(20px, -50%);
-        }
-        
-        strong { 
-          display: block; 
-        }
-      }
-
-      .info {
-        height: 100%;
-        overflow-y: hidden;
-        div {
-          display: flex;
-          height: 80px;
-          align-items: center;
-          word-break: keep-all;
-          line-height: 1.5;
-          strong {
-            margin-right: 15px;
-            flex: none;
-            color: #0f62cc;
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-
-    .buttonWrap {
-      margin-right: 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
-
-      button {
-        width: 20px;
-        height: 20px;
-        border: none;
-        background: no-repeat center center;
-        cursor: pointer;
-
-        &.upBtn {
-          background-image: url('./img_up_down_up.png');
-        }
-        &.playBtn {
-          background-image: url('./icon_bn_stop.png');
-        }
-        &.downBtn {
-          background-image: url('./img_up_down_down.png');
-        }
-      }
-    }
-  `;
-  const CopyRight = styled.div`
   
-  `;
+const typeRange = getColorValue(0, mMOSelect_return, true);
+
 // ------------------------------------------------ component
   const TimeText = (() => {
     const storedDataString = localStorage.getItem('storedData');
@@ -517,7 +200,7 @@ function App() {
     };
   })();
   const Time = ({ top, left, right, height, refresh, onClick, custom }) => {
-    const DivStyle = styled.div`
+const DivStyle = styled.div`
       display: flex;
       gap: 5px !important;
       background-color: ${refresh ? '#e4f7ff' : '#fff'};
@@ -551,26 +234,15 @@ function App() {
         }
     `;
 
-    const storedDataString = localStorage.getItem('storedData');
-    if(storedDataString) {
-      const storedData = JSON.parse(storedDataString);
-      if(Array.isArray(storedData) && storedData.length > 0) {
-          const dataTime = storedData[0].dataTime;
-          const updateTime = new Date(dataTime);
-          const year = updateTime.getFullYear();
-          const month = String(updateTime.getMonth() + 1).padStart(2, '0');
-          const day = String(updateTime.getDate()).padStart(2, '0');
-          const hour = String(updateTime.getHours()).padStart(2, '0');
-
-          return (
-            <DivStyle>
-              {custom ?
-              <span>{custom[0]} <strong>{custom[1]} 발표자료</strong></span> :
-              <span>{year}년 {month}월 {day}일 <strong>{hour}시</strong></span>}
-              {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
-            </DivStyle>
-          )
-      }
+    if(TimeText) {
+        return (
+          <DivStyle>
+            {custom ?
+            <span>{custom[0]} <strong>{custom[1]} 발표자료</strong></span> :
+            <span>{TimeText.year}년 {TimeText.month}월 {TimeText.day}일 <strong>{TimeText.hour}시</strong></span>}
+            {refresh && <ButtonStyle onClick={onClick}>새로고침</ButtonStyle>}
+          </DivStyle>
+        )
     } else {
       return (
             <DivStyle>
@@ -582,22 +254,6 @@ function App() {
   };
 
   const LoadingScreen = () => {
-    const Loading = styled.div`
-      display: ${props => props.loading === 'true' ? 'none' : 'block'};
-      position: absolute;
-      z-index: 100;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      border: 1px solid #bcd0e8;
-      background: url('/loading_bg.png');
-
-      div {
-        margin-top: 360px;
-        font-size: 20px;
-        color: #0054a6;
-      }
-    `;
     return (
       <Loading loading={loading.toString()}>
         <div>데이터 처리중입니다.</div>
@@ -611,16 +267,16 @@ function App() {
     return (
       <>
          <RealTimeStandby
-                childrenComponents={{Time}}
-                station={station}
-                setStation={setStation}
-                loading={loading}
-                setLoading={setLoading}
-                info={mMoSelect_info}
-                type={mMOSelect_return}
-                airData={data}
-                mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
-                filter={{range: filterRange, data: filterData}}
+            childrenComponents={{Time}}
+            station={station}
+            setStation={setStation}
+            loading={loading}
+            setLoading={setLoading}
+            info={mMoSelect_info}
+            type={mMOSelect_return}
+            airData={data}
+            mapSetting={{openMap, setOpenMap, setMMOSelect_region}}
+            filter={{range: filterRange, data: filterData}}
         ></RealTimeStandby>
         <Time />
         <LegendWrapper ref={legendRef}>
@@ -758,50 +414,68 @@ function App() {
 
     setFilterData(data);
   };
-
   const standbyTypeHandle = (e) => {
     setStandbyType(e.target.value);
   };
   const forecastDateHandle = (e) => {
     setForecastDate(e.currentTarget.dataset.date);
+  };
+  const airInfoIndexHandle = (e) => {
+    const { value } = e.target.classList;
+    if(value === 'upBtn'){
+      if(airInfoIndex >= 4) setAirInfoIndex(2);
+      else setAirInfoIndex(airInfoIndex + 1);
+    };
+    // setAirInfoIndex()
   }
 
-  function BannerData() {
-    const array = [23, 17, 11, 5];
-    let target = TimeText.hour; // 찾고자 하는 값
+  // function BannerData() {
+  //   const array = [23, 17, 11, 5];
+  //   let target = TimeText.hour; // 찾고자 하는 값
     
-    for (const element of array){
-      if(target > element){
-        target = element;
-        break;
-      };
-    };
+  //   for (const element of array){
+  //     if(target > element){
+  //       target = element;
+  //       break;
+  //     };
+  //   };
   
-    let filterAirInformation = airInformation?.filter(item => {
-      return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10';
-    });
+  //   let filterAirInformation = airInformation?.filter(item => {
+  //     return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10';
+  //   });
   
-    if(filterAirInformation){
-      const first = filterAirInformation[0];
-      const last = filterAirInformation[2];
+  //   if(filterAirInformation){
+  //     const { length } = filterAirInformation;
+  //     const first = filterAirInformation[0];
+  //     const last = filterAirInformation[length - 1];
   
-      filterAirInformation.splice(0,0, first);
-      filterAirInformation.splice(3,0, last);
-    };
-    const data = filterAirInformation?.map((item, idx) => {
-      const itemDate = item.informData;
-      const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
-      const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
-      const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
-      let txt;
-      if(itemDate === nowDate){txt='금일'}
-      else if(itemDate === two){txt='내일'}
-      else if(itemDate === three){txt='모레'};
-      return <div key={idx}><strong>{txt}</strong><span>{item.informCause.slice(2).replace(/[＊*]/g, ' ')}</span></div>
-    })
+  //     if(length === 3){
+  //       filterAirInformation.splice(0,0, last);
+  //       filterAirInformation.splice(length,0, first);
+  //     } else {
+  //       filterAirInformation.splice(length, 0, {
+  //         ...last,
+  //         informData: `${last.informData.slice(0, -2)}${String(Number(last.informData.slice(-2)) + 1).padStart(2, '0')}`,
+  //         informCause: '○ [미세먼지] 모레 4등급(좋음, 보통, 나쁨, 매우나쁨) 예보는 17시에 발표되며, 모레 2등급(낮음, 높음) 예보는 주간예보를 참고하시기 바랍니다.'
+  //       });
+  //       filterAirInformation.splice(0, 0, filterAirInformation[length]);
+  //       filterAirInformation.splice(length+2, 0, first);
+  //     }
+  //   };
+  //   const data = filterAirInformation?.map((item, idx) => {
+  //     const itemDate = item?.informData;
+  //     const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
+  //     const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
+  //     const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
+  //     let txt;
+  //     if(itemDate === nowDate){txt='금일'}
+  //     else if(itemDate === two){txt='내일'}
+  //     else if(itemDate === three){txt='모레'};
+  //     return <div key={idx}><strong>{txt}</strong><span>{item?.informCause.slice(2).replace(/[＊*]/g, ' ')}</span></div>
+  //   })
 
-    return data || <></>;
-  }
+  //   return data || <></>;
+  // }
 
 
   return (
@@ -817,18 +491,18 @@ function App() {
             {/* Main Map 설정 */}
             <MMOptionLayout>
               <MMOList>
-                <li>
+                <li select={tapSelect === 0 ? 'on' : 'off'}>
                   <button onClick={tapSelectHandle}>
                     실시간 대기정보
                   </button>
                 </li>
-                <li>
+                <li select={tapSelect === 1 ? 'on' : 'off'}>
                   <button onClick={tapSelectHandle}>오늘/내일 대기정보</button>
                 </li>
-                <li>
+                <li select={tapSelect === 2 ? 'on' : 'off'}>
                   <button onClick={tapSelectHandle}>실시간 기상정보</button>
                 </li>
-                <li>
+                <li select={tapSelect === 3 ? 'on' : 'off'}>
                   <button onClick={tapSelectHandle}>오늘/내일 기상정보</button>
                 </li>
               </MMOList>
@@ -872,8 +546,8 @@ function App() {
                     </MMOSelect>
                   </MMOSelectWrapper>
                   <MMOBorderDiv flex>
-                    <button onClick={mMoSelectHandle} data-information="air">대기/경보 정보</button>
-                    <button onClick={mMoSelectHandle} data-information="station">측정소 정보</button>
+                    <button onClick={mMoSelectHandle} active={mMoSelect_info === 'air' ? 'on' : 'off'} data-information="air">대기/경보 정보</button>
+                    <button onClick={mMoSelectHandle} active={mMoSelect_info === 'station' ? 'on' : 'off'} data-information="station">측정소 정보</button>
                   </MMOBorderDiv>
                 </>}
                 {tapSelect === 1 && <>
@@ -884,8 +558,8 @@ function App() {
                     </MMOSelect>
                   </MMOSelectWrapper>
                   <MMOBorderDiv>
-                    <button onClick={forecastDateHandle} data-date="0">오늘</button>
-                    <button onClick={forecastDateHandle} data-date="1">내일</button>
+                    <button onClick={forecastDateHandle} active={forecastDate === "0" ? 'on' : 'off'} data-date="0">오늘</button>
+                    <button onClick={forecastDateHandle} active={forecastDate === "1" ? 'on' : 'off'} data-date="1">내일</button>
                   </MMOBorderDiv>
                 </>}
               </MMOContainer>
@@ -915,14 +589,14 @@ function App() {
               <div className="title">
                 <strong>예보</strong>발표
               </div>
-              <div className="info">
-                <BannerData />
-              </div>
+              <SecondBannerInfo index={airInfoIndex}>
+                {/* <BannerData /> */}
+              </SecondBannerInfo>
             </div>
             <div className="buttonWrap">
-                  <button className="upBtn"></button>
-                  <button className="playBtn"></button>
-                  <button className="downBtn"></button>
+                  <button onClick={airInfoIndexHandle} className="upBtn"></button>
+                  <button onClick={airInfoIndexHandle} className="playBtn"></button>
+                  <button onClick={airInfoIndexHandle} className="downBtn"></button>
             </div>
           </SecondBanner>
         </SecondSection>
