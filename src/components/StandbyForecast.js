@@ -1,68 +1,5 @@
 import styled from '@emotion/styled';
-
-export const StandbyForecast = (props) => {
-    const Main = styled.div`
-        > svg {
-            margin: -9px 0 0 6.5px;
-        }
-    `;
-    const Names = styled.div`
-        span {
-            position: absolute;
-            height: 26px;
-            padding: 0 10px;
-            background: #fff;
-            font-size: 14px;
-            font-weight: 400;
-            color: #646464;
-            border: 1px solid #c8c8c8;
-            border-radius: 13px;
-            text-align: center;
-            line-height: 26px;
-        }
-        .mp03{top: 159px; left: 270px;}
-        .mp19{top: 660px; left: 42px;}
-        .mp17{top: 580px; left: 240px;}
-        .mp12{top: 445px; left: 249px;}
-        .mp15{top: 520px; left: 215px;}
-        .mp16{top: 505px; left: 388px;}
-        .mp11{top: 310px; left: 445px;}
-        .mp14{top: 464px; left: 518px;}
-        .mp13{top: 395px; left: 435px;}
-        .mp18{top: 534px; left: 494px;}
-        .mp08{top: 322px; left: 189px;}
-        .mp07{top: 257px; left: 345px;}
-        .mp09{top: 315px; left: 300px;}
-        .mp10{top: 352px; left: 315px;}
-        .mp05{top: 177px; left: 464px;}
-        .mp02{top: 115px; left: 353px;}
-        .mp06{top: 218px; left: 267px;}
-        .mp01{top: 106px; left: 209px;}
-        .mp04{top: 150px; left: 164px;}
-    `
-/**
- * #d0ecff
- * #caf2de
- * #f8f7c6
- * #ffd6da
- * #cbd0d3
- */
-const today = new Date();
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate() + Number(props.forecastDate)).padStart(2, '0');
-
-let date = `${year}-${month}-${day}`;
-
-const findData = props.airInformation?.find(item => {
-    return (item.informData === date) && (item.informCode === props.standbyType.toUpperCase());
-});
-
-const obj = new Object();
-findData.informGrade.split(',').forEach(item => {
-    const b = item.split(' : ');
-    obj[b[0]] = b[1];
-});
+import { StandbyMain, StandbyNames } from '../styleComponent';
 
 const hexCode = {
     '좋음': '#d0ecff',
@@ -72,11 +9,30 @@ const hexCode = {
     '데이터 없음': '#cbd0d3',
 }
 
-const TimeComponent = props.childrenComponents.Time;
+export const StandbyForecast = (props) => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate() + Number(props.forecastDate)).padStart(2, '0');
+    let date = `${year}-${month}-${day}`;
+
+    // 전국 대기 예보 텍스트
+    const findData = props.airInformation?.find(item => {
+        return (item.informData === date) && (item.informCode === props.standbyType.toUpperCase());
+    });
+
+    // 전국 대기 예보 텍스트 오브젝트로 분리
+    const obj = new Object();
+    findData?.informGrade.split(',').forEach(item => {
+        const b = item.split(' : ');
+        obj[b[0]] = b[1];
+    });
+
+    const TimeComponent = props.childrenComponents.Time;
 
     return (
-        <Main>
-            <Names>
+        <StandbyMain>
+            <StandbyNames>
                 <span className="mp03">서울 <strong>{obj['서울']}</strong></span>
                 <span className="mp19">제주 <strong>{obj['제주']}</strong></span>
                 <span className="mp17">전남 <strong>{obj['전남']}</strong></span>
@@ -96,7 +52,7 @@ const TimeComponent = props.childrenComponents.Time;
                 <span className="mp06">경기남부 <strong>{obj['경기남부']}</strong></span>
                 <span className="mp01">경기북부 <strong>{obj['경기북부']}</strong></span>
                 <span className="mp04">인천 <strong>{obj['인천']}</strong></span>
-            </Names>
+            </StandbyNames>
             <svg
                 version="1.1"
                 title="오늘/내일/모레 대기정보"
@@ -2046,6 +2002,6 @@ const TimeComponent = props.childrenComponents.Time;
                     c0.727,0.568,1.635,1.025,2.322,1.691C40.559,693.773,40.884,694.881,41.982,695.338z"></path>
             </svg>
             <TimeComponent custom={findData?.dataTime?.split(' ')} />
-        </Main>
+        </StandbyMain>
     )
 }
