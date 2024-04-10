@@ -158,10 +158,9 @@ const Component = (props) => {
                 }
             }
         }
-    `
-
+    `;
     // ---------------------------------------------------- Event
-    const refreshHandleClick = () => props.counts.setCount(props.counts.count + 1);
+    const timeRefreshHandleClick = () => props.counts.setCount(props.counts.count + 1);
     const legendClickHandle = (e) => {
         const node = e.currentTarget;
         const value = node.dataset.value;
@@ -178,7 +177,9 @@ const Component = (props) => {
             const multiplier = Math.pow(10, decimalPlaces);
             return Math.floor(num * multiplier) / multiplier;
         }
-    }
+    };
+
+    const posHandle = () => props.counts.setCount(props.counts.count + 1);
 
     // ---------------------------------------------------- Components
     const TimeComponent = props.childrenComponents.Time;
@@ -192,13 +193,13 @@ const Component = (props) => {
                 <div>
                 <InfoInteraction>
                     {/* <InfoButton ico={'bg_search'}>검색</InfoButton> */}
-                    <InfoButton ico={'pos'}>현위치</InfoButton>
+                    <InfoButton ico={'pos'} onClick={posHandle}>현위치</InfoButton>
                     <p>
                     <strong>{props.station.stationName || '중구'}</strong> 중심으로 측정
                     <span>({props.station.addr.split(' ')[0]} {props.station.addr.split(' ')[1]} {props.station.stationName} 측정소 기준)</span>
                     </p>
                 </InfoInteraction>
-                <TimeComponent refresh onClick={refreshHandleClick} />
+                <TimeComponent refresh onClick={timeRefreshHandleClick} />
                 </div>
             <Container>
                 <Part>

@@ -176,7 +176,7 @@ useEffect(() => {
       setStation(stationInfo);
     })();
   }
-}, [stationsInfo]);
+}, [stationsInfo, count]);
 
   
 const typeRange = getColorValue(0, mMOSelect_return, true);
