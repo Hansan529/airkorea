@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { StandbyMain, StandbyNames } from '../styleComponent';
+import useStore from '../hooks/useStore';
 
 const hexCode = {
     '좋음': '#d0ecff',
@@ -9,26 +9,52 @@ const hexCode = {
     '데이터 없음': '#cbd0d3',
 }
 
-export const StandbyForecast = (props) => {
+const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
+    const { text } = useStore(state => state);
+
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate() + Number(props.forecastDate)).padStart(2, '0');
+    const day = String(today.getDate() + Number(forecastDate)).padStart(2, '0');
     let date = `${year}-${month}-${day}`;
 
+    const obj = {
+        '서울': '데이터 없음',
+        '제주': '데이터 없음',
+        '전남': '데이터 없음',
+        '전북': '데이터 없음',
+        '광주': '데이터 없음',
+        '경남': '데이터 없음',
+        '경북': '데이터 없음',
+        '울산': '데이터 없음',
+        '대구': '데이터 없음',
+        '부산': '데이터 없음',
+        '충남': '데이터 없음',
+        '충북': '데이터 없음',
+        '세종': '데이터 없음',
+        '대전': '데이터 없음',
+        '영동': '데이터 없음',
+        '영서': '데이터 없음',
+        '경기남부': '데이터 없음',
+        '경기북부': '데이터 없음',
+        '인천': '데이터 없음',
+    }
+
+    let timeData;
     // 전국 대기 예보 텍스트
-    const findData = props.airInformation?.find(item => {
-        return (item.informData === date) && (item.informCode === props.standbyType.toUpperCase());
-    });
+    if(text){
+        const findData = text.find(item => {
+            return (item.informData === date) && (item.informCode === standbyType.toUpperCase());
+        });
+        timeData = findData?.dataTime?.split(' ');
+    
+        // 전국 대기 예보 텍스트 오브젝트로 분리
+        findData.informGrade.split(',').forEach(item => {
+            const b = item.split(' : ');
+            obj[b[0]] = b[1];
+        });
+    }
 
-    // 전국 대기 예보 텍스트 오브젝트로 분리
-    const obj = new Object();
-    findData?.informGrade.split(',').forEach(item => {
-        const b = item.split(' : ');
-        obj[b[0]] = b[1];
-    });
-
-    const TimeComponent = props.childrenComponents.Time;
 
     return (
         <StandbyMain>
@@ -2001,7 +2027,9 @@ export const StandbyForecast = (props) => {
                     c-0.188,2.9,1.312,4.691,3.247,6.516c0.778,0.732,1.334,1.654,2.023,2.461c0.743,0.867,1.267,2.045,2.15,2.734
                     c0.727,0.568,1.635,1.025,2.322,1.691C40.559,693.773,40.884,694.881,41.982,695.338z"></path>
             </svg>
-            <TimeComponent custom={findData?.dataTime?.split(' ')} />
+            <Time custom={timeData} />
         </StandbyMain>
     )
 }
+
+export default StandbyForecast;

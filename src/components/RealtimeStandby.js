@@ -1,11 +1,7 @@
 import styled from '@emotion/styled';
-import {
-  backgroundPathData,
-  innerBackgroundPathData,
-  pathData,
-} from '../paths/paths';
+import { backgroundPathData, innerBackgroundPathData, pathData} from '../paths/paths';
 import regionList from "../data/regionList.json";
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 
 import { SeoulInner } from '../paths/Seoul';
 import { IncheonInner, IncheonPath } from '../paths/Incheon';
@@ -24,8 +20,9 @@ import { UlsanPath } from '../paths/Ulsan';
 import { DaeguPath } from '../paths/Daegu';
 import { GwangjuPath } from '../paths/Gwangju';
 import { ChungbukPath } from '../paths/Chungbuk';
-import stationJson from "../data/stationInfo.json";
 import { InnerMapButton, MapPath, MapSvgStyle, InnerMapPathStyle, MainContainer, LoopContainer, MapNameButton, Station, StationPopupStyle, InnerTitle, InnerButtonWrap, InnerStationCollection, InnerDetailContainer, InnerSelectDiv } from '../styleComponent';
+import stationJson from "../data/stationInfo.json";
+import useStore from '../hooks/useStore';
 
 
 /**
@@ -133,33 +130,15 @@ const MapSvg = ({ className, children }) => {
 const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) =>
 	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor}></InnerMapPathStyle>;
 
-/**
- * 
- * childrenComponents: <Time />
- * station: 우리동네 대기정보 측정소 데이터
- * setStation: 우리동네 대기정보 측정소 데이터 설정
- * loading: 로딩창
- * setLoading: 로딩창 설정
- * info: 대기정보(air) / 측정소(station) 정보
- * type: 출력 타입 khai, pm25, pm10, o3, no2, co, so2
- * airData: 모든 측정소 대기정보 데이터,
- * mapSetting:
- * 		openMap: 상세 지역 Open/Close
- * 		setOpenMap, 상세 지역 Open/Close 설정
- * 		setMMOSelect_region: 지역 - 서울, 경기, 인천, 강원, 충남, 대전, 충북, 세종, 부산, 울산, 대구, 경북, 경남, 전남, 광주, 전북, 제주
- * filter:
- * 		range: 농도 범위 필터링, 
- * 		data: 측정망 구분 필터링
- */
-export const RealTimeStandby = (props) => {
+
+
+
+export const RealTimeStandby = ({Time}) => {
+	const { type, data, changer, loading, station, openMap, filterData, filterRange, selectInfo } = useStore(state => state);
 	// 측정소 위치 데이터
 	const stationsInfo = stationJson.items;
 
 	const mapName = useRef();
-
-	// * prop
-	// 대기정보(air) / 측정소(station) 정보
-	const [airStation, setAirStation] = useState(props.info);
 
 	// * 호버
 	// 해당 지역 번호
@@ -171,26 +150,16 @@ export const RealTimeStandby = (props) => {
 
 // ---------------------------------- event
 	const hoverHandle = (element) => setHover(element);
-	const innerClickHandle = (element) => props.mapSetting.setOpenMap(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
-	const airStationHandle = (element) => setAirStation(element);
+	const innerClickHandle = (element) => changer('openMap', element);
+	const airStationHandle = (element) => changer('selectInfo', element);
 	const stationPopupHandle = (hoverStation, data) => {
 		setHoverStation(hoverStation);
 		setHoverStationData(data);
 	};
 
-	// 측정소 데이터가 로드되면 로딩 완료
-	useEffect(() => {
-		if(props.airData) {
-			props.setLoading(true);
-		} else {
-			props.setLoading(false);
-		}
-	},[props, props.airData]);
-
-	const filterDataKeys = Object.keys(props.filter.data);
-	const filterDataValues = Object.values(props.filter.data);
-	const filterRange = props.filter.range;
+	const filterDataKeys = Object.keys(filterData);
+	const filterDataValues = Object.values(filterData);
 
 	// *-------------------------------------------------------------- Dynamic Style
 	// *-------------------------------------------------------------- Dynamic Style
@@ -204,9 +173,9 @@ export const RealTimeStandby = (props) => {
 	 * @returns 지역 측정소별 측정 총합의 평균값
 	 */
 	const regionAvgValue = (order, returnValue) => {
-		if(props.airData){
+		if(data){
 			const filterValue = Object.values(regionNumList).map((list) => {
-				return props.airData.filter((data) => {
+				return data.filter((data) => { 
 					return data.sidoName === list;
 				});
 			});
@@ -240,10 +209,10 @@ export const RealTimeStandby = (props) => {
 	 * @returns 상세 지역 측정소 총합 평균값
 	 */
 	const filterStationReturnValue = (type, list) => {
-		if(props.airData){
+		if(data){
 			const filterStationValue = list.map((region) => {
 				return region.station.map((station) => {
-					const findData = props.airData.find((data) => data.stationName === station)?.[type];
+					const findData = data.find((data) => data.stationName === station)?.[type];
 					if (findData !== '-') {
 						return Number(findData);
 					} else {
@@ -283,7 +252,7 @@ export const RealTimeStandby = (props) => {
 				viewBox='0 0 492 548'
 				enableBackground='new 0 0 492 548'
 				xmlSpace="preserve"
-				style={{visibility: airStation === 'station' && 'hidden'}}
+				style={{visibility: selectInfo === 'station' && 'hidden'}}
 			>
 			{children}
 			</svg>
@@ -291,7 +260,7 @@ export const RealTimeStandby = (props) => {
 	};
 	const StationPopup = ({top, left}) => {
 		const legend = (() => {
-			switch(props.type) {
+			switch(type) {
 				case "khaiValue":
 					return "CAI";
 				case "pm25Value":
@@ -320,7 +289,7 @@ export const RealTimeStandby = (props) => {
 			<DynamicStyle top={top} left={left} data-name={hoverStation?.stationName}>
 				<div><strong>측정소 명:</strong> <span>{hoverStation?.stationName}</span></div>
 				<div><strong>위치:</strong> <span>{hoverStation?.addr}</span></div>
-				<div><strong>농도:</strong> <span>{hoverStationData?.[props.type]} {legend}</span></div>
+				<div><strong>농도:</strong> <span>{hoverStationData?.[type]} {legend}</span></div>
 			</DynamicStyle>
 		)
 	}
@@ -328,24 +297,24 @@ export const RealTimeStandby = (props) => {
 	const RegionComponents = () => {
 
 		/** 상세 지역 컴포넌트 (버튼)  */
-		const InnerComponent = ({ regionNum, regionName, fullName }) => {
-			const { result } = filterStationReturnValue(props.type, regionList[regionName]);
-			const value = (key) => props.loading ? result[key] : 0;
+		const InnerComponent = ({ regNum, regName, fullName }) => {
+			const { result } = filterStationReturnValue(type, regionList[regName]);
+			const value = (key) => result ? result[key] : 0;
 			const renderButton = (el, key) => {
-				const id = `p_${regionNum}_${String(key + 1).padStart(3, '0')}`;
+				const id = `p_${regNum}_${String(key + 1).padStart(3, '0')}`;
 				return (
 				<InnerMapButton
 					key={key}
 					id={id}
 					style={{
-					left: regionList[regionName][key].left,
-					top: regionList[regionName][key].top,
+					left: regionList[regName][key].left,
+					top: regionList[regName][key].top,
 					}}
-					value={getColorValue(value(key), props.type)[2]}
+					value={getColorValue(value(key), type)[2]}
 					onClick={() => airStationHandle('station')}
 				>
 					{el.name}
-					<strong>{props.loading && (result[key] === 0 ? '-' : result[key])}</strong>
+					<strong>{loading && ((!result || result[key] === 0) ? '-' : result[key])}</strong>
 				</InnerMapButton>
 				);
 			};
@@ -353,11 +322,11 @@ export const RealTimeStandby = (props) => {
 				return (
 				<InnerMapPath
 					key={key}
-					id={`m_${regionNum}_${String(key + 1).padStart(3, '0')}`}
-					title={`${regionName}_${el.name}${el.district}`}
-					d={pathData[`m_${regionNum}_${String(key + 1).padStart(3, '0')}`]}
-					fillColor={airStation === 'air' ? getColorValue(value(key), props.type)[0] : '#fff'}
-					fillHoverColor={airStation === 'air' ? getColorValue(value(key), props.type)[1] : '#fff'}
+					id={`m_${regNum}_${String(key + 1).padStart(3, '0')}`}
+					title={`${regName}_${el.name}${el.district}`}
+					d={pathData[`m_${regNum}_${String(key + 1).padStart(3, '0')}`]}
+					fillColor={selectInfo === 'air' ? getColorValue(value(key), type)[0] : '#fff'}
+					fillHoverColor={selectInfo === 'air' ? getColorValue(value(key), type)[1] : '#fff'}
 					onClick={() => airStationHandle('station')}
 				></InnerMapPath>
 				);
@@ -382,21 +351,18 @@ export const RealTimeStandby = (props) => {
 				전북: JeonbukInner,
 				제주: JejuInner,
 			}
-			const InnerComponent = Components[regionName];
+			const DynamicComponent = Components[regName];
 
-			const TimeComponent = props.childrenComponents.Time;
-
-			// Styled
 			/* dynamic */
 			const DetailContainer = styled(InnerDetailContainer)`
-				&[data-region_num="${props.mapSetting.openMap}"]{
+				&[data-region_num="${openMap}"]{
 					z-index: 50;
 					opacity: 1;
 					visibility: visible;
 				}
 			`;
 			const SelectDiv = styled(InnerSelectDiv)`
-				button[data-type="${airStation}"] {
+				button[data-type="${selectInfo}"] {
 						background-color: #0f62cc;
 						color: #fff;
 				}
@@ -408,26 +374,26 @@ export const RealTimeStandby = (props) => {
 			});
 
 			return (
-				<DetailContainer data-region_num={regionNum} regionNum={regionNum}>
+				<DetailContainer data-region_num={regNum} regionNum={regNum}>
 					<InnerTitle>
 						<h2>{fullName}</h2>
 						<button onClick={() => {
 							innerClickHandle(0);
-							props.mapSetting.setOpenMap(0);
-							props.mapSetting.setMMOSelect_region('none');
+							changer('openMap', 0);
+							changer('regionNum', 'none');
 						}}>창 닫기</button>
 					</InnerTitle>
-					<TimeComponent top="50px" left="15px" height="20px" right="initial" />
+					<Time top="50px" left="15px" height="20px" right="initial" />
 					<SelectDiv>
 						<button data-type="air" onClick={() => airStationHandle('air')}>대기/경보 정보</button>
 						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
 					</SelectDiv>
 					{/* 버튼 */}
-					{(airStation === 'air') && <InnerButtonWrap>{regionList[regionName].map(renderButton)}</InnerButtonWrap>}
-					{(props.info === 'station' || airStation === 'station') && <InnerStationCollection>
+					{(selectInfo === 'air') && <InnerButtonWrap>{regionList[regName].map(renderButton)}</InnerButtonWrap>}
+					{(selectInfo === 'station' || selectInfo === 'station') && <InnerStationCollection>
 						{filterStationData.map((el, key) => {
-							const filterStationAirData = props.airData.find(item => item.stationName === el.stationName);
-							const icoNum = getColorValue(filterStationAirData?.[props.type], props.type)[4];
+							const filterStationAirData = data.find(item => item.stationName === el.stationName);
+							const icoNum = getColorValue(filterStationAirData?.[type], type)[4];
 							if(!filterRange[icoNum - 1]){
 								return <Fragment key={key}></Fragment>
 							}
@@ -435,10 +401,10 @@ export const RealTimeStandby = (props) => {
 								<Station key={key}
 									onMouseEnter={() => stationPopupHandle(el, filterStationAirData)}
 									onMouseOut={() => hoverStationHandle('')}
-									onClick={() => props.setStation(el)}
+									onClick={() => changer('station', el)}
 									top={el.innerTop}
 									left={el.innerLeft}
-									ico={getColorValue(filterStationAirData?.[props.type], props.type)[4]}
+									ico={getColorValue(filterStationAirData?.[type], type)[4]}
 								/>
 							)
 						})}
@@ -446,18 +412,18 @@ export const RealTimeStandby = (props) => {
 					</InnerStationCollection>}
 					{/* SVG */}
 					<InnerMapSvg>
-						{InnerComponent && <InnerComponent />}
+						{DynamicComponent && <DynamicComponent />}
 
 						{/* 지역 배경 Path */}
 						<path
-						title={`${regionName}_BG`}
+						title={`${regName}_BG`}
 						fill="#BFD3E1"
 						stroke="#9EAEC2"
-						d={innerBackgroundPathData[regionNum]}
+						d={innerBackgroundPathData[regNum]}
 						></path>
 
 						{/* 지역 SVG */}
-						{regionList[regionName].map(renderPath)}
+						{regionList[regName].map(renderPath)}
 					</InnerMapSvg>
 				</DetailContainer>
 			);
@@ -489,7 +455,7 @@ export const RealTimeStandby = (props) => {
 			let color;
 			let hoverColor;
 			let hoverChk = false;
-			const ifResult = getColorValue(regionAvgValue(key, props.type), props.type);
+			const ifResult = getColorValue(regionAvgValue(key, type), type);
 
 			color = ifResult[0];
 			hoverChk = false;
@@ -498,7 +464,7 @@ export const RealTimeStandby = (props) => {
 				hoverChk = true;
 			}
 
-			if(props.info === 'station'){
+			if(selectInfo === 'station'){
 				color = '#fff';
 				hoverColor = "#f5fcff";
 			}
@@ -511,18 +477,18 @@ export const RealTimeStandby = (props) => {
 					onMouseOver={() => hoverHandle(el.num)}
 					onMouseOut={() => hoverHandle('')}
 				>
-					{props.info === 'air' &&
+					{selectInfo === 'air' &&
 					<MapNameButton
 						left={el.left}
 						top={el.top}
-						bgColor={getColorValue(regionAvgValue(key, props.type), props.type)[2]}
+						bgColor={getColorValue(regionAvgValue(key, type), type)[2]}
 						onClick={() => innerClickHandle(el.num)}
 					>
 						{el.name}
-						{props.loading && <span>{regionAvgValue(key, props.type)}</span>}
+						{loading && <span>{regionAvgValue(key, type)}</span>}
 					</MapNameButton>
 					}
-					{props.loading && <InnerComponent regionNum={el.num} regionName={el.name} fullName={el.fullName} />}
+					{loading && <InnerComponent regNum={el.num} regName={el.name} fullName={el.fullName} />}
 					<MapSvg className={`region_${el.num}`}  key={key}>
 						{(el.name === '인천' && PathComponent) && <PathComponent />}
 						<MapPath
@@ -533,7 +499,7 @@ export const RealTimeStandby = (props) => {
 							hoverConnection={hoverChk}
 							onClick={() => innerClickHandle(el.num)}
 							d={backgroundPathData[el.num]}
-							></MapPath>
+						></MapPath>
 						{(el.name !== '인천' && PathComponent) && <PathComponent />}
 					</MapSvg>
 				</LoopContainer>
@@ -547,10 +513,10 @@ export const RealTimeStandby = (props) => {
 		// const stationData = stationsInfo.find(item => item.stationName === hoverStation);
 		return (
 			<Div>
-				{stationsInfo.map((station, key) => {
+				{stationsInfo.map((list, key) => {
 					// 장계면 데이터 없음
-					const filterStationAirData = props.airData.find(item => (item.stationName === station.stationName));
-					const icoNum = getColorValue(filterStationAirData?.[props.type], props.type)[4];
+					const filterStationAirData = data.find(item => (item.stationName === list.stationName));
+					const icoNum = getColorValue(filterStationAirData?.[type], type)[4];
 					const icoColor = {
 						1: "#48c9ff",
 						2: "#7eff90",
@@ -560,28 +526,28 @@ export const RealTimeStandby = (props) => {
 					};
 
 					if (
-						!filterDataValues[filterDataKeys.indexOf(station.mangName)] ||
+						!filterDataValues[filterDataKeys.indexOf(list.mangName)] ||
 						!filterRange[icoNum - 1]
 					) {
 					return <Fragment key={key}></Fragment>;
 					}
 
-					const checked = props.station.stationName === station.stationName ? 'ani' : 'not';
+					const checked = station.stationName === list.stationName ? 'ani' : 'not';
 
 					return (
 						<Station key={key}
-							onMouseEnter={() => stationPopupHandle(station, filterStationAirData)}
+							onMouseEnter={() => stationPopupHandle(list, filterStationAirData)}
 							onMouseOut={() => hoverStationHandle('')}
-							onClick={() => props.setStation(station)}
-							top={station.top}
-							left={station.left}
+							onClick={() => changer('station', list)}
+							top={list.top}
+							left={list.left}
 							ico={icoNum}
 							icoColor={icoColor[icoNum]}
 							data-checked={checked}
 						/>
 					)
 				})}
-				{props.mapSetting.openMap === 0 && <StationPopup top={hoverStation.top} left={hoverStation.left} />}
+				{openMap === 0 && <StationPopup top={hoverStation.top} left={hoverStation.left} />}
 			</Div>
 		)
 	}
@@ -590,7 +556,7 @@ export const RealTimeStandby = (props) => {
 		<>
 			<MainContainer ref={mapName}>
 				<RegionComponents />
-				{props.info === 'station' && <StationComponent />}
+				{selectInfo === 'station' && <StationComponent />}
 			</MainContainer>
 		</>
 	)

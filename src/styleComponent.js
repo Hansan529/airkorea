@@ -936,3 +936,41 @@ export const AirForecastUl = styled.ul`
         }
     }
 `;
+
+/*  */
+export const TimeDiv = styled.div`
+      display: flex;
+      gap: 5px !important;
+      background-color: ${props => props.refresh ? '#e4f7ff' : '#fff'};
+      height: ${props => props.height || "15px"};
+      padding: 5px 15px;
+      border-radius: 25px;
+      align-items: center;
+      position: absolute;
+      top: ${props => props.top || 0};
+      right: ${props => props.right || 0};
+      font-size: 14px;
+
+      ${({left}) => left && css`
+        left: {left};
+      `}
+
+      strong {
+        font-weight: 900;
+      }
+`;
+export const TimeButtonStyle = styled.button`
+      background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
+      display: inline-block;
+      background: url('/img_refresh.png') no-repeat center;
+      width: 16px;
+      height: 20px;
+      border: none;
+      transition: transform 0.5s;
+      position: relative;
+      transform-origin: center;
+
+      &:hover {
+          cursor: pointer;
+        }
+    `;
