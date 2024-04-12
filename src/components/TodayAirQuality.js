@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 import { getColorValue } from "./RealtimeStandby";
 import stationJson from "../data/stationInfo.json";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { InfoContainer, InfoWrapper, InfoButton, InfoInteraction, Container, Part, LegendBase, AirForecastUl } from "../styleComponent";
+import useStore from "../hooks/useStore";
+import useAirQualityStore from "../hooks/useAirQualityStore";
 
 /**
  * 금일 시간별 미세먼지
@@ -27,7 +29,15 @@ import { InfoContainer, InfoWrapper, InfoButton, InfoInteraction, Container, Par
  * counts={count, setCount}
  * forecast
  */
-const TodayAirQuaility = (props) => {
+const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
+    const { data, text, station, loading } = useStore(state => state);
+    const { pm10, pm10AddBoolean, 
+            pm25, pm25AddBoolean,
+            o3, o3AddBoolean,
+            currentLocation: location, currentLocationInsert, 
+            changer,
+            } = useAirQualityStore(state => state);
+
     const stationsInfo = stationJson.items;
     const legendPopupRef = useRef();
     
@@ -38,7 +48,6 @@ const TodayAirQuaility = (props) => {
     // 범례 유형별 범위
     const [legendRange, setLegendRange] = useState(getColorValue(0, `khaiValue`, true));
     // pm25
-    const [pm25, setPm25] = useState({state: '#0a0a0a', stateIndex: 5, tomorrowState: 5});
 
     
     // 사용자 지역에 대한 대기 예측 정보
@@ -48,105 +57,128 @@ const TodayAirQuaility = (props) => {
         pm25Today: {},
         pm25Tomorrow: {},
     };
-    
-    // 예보 텍스트
-    const forecast = props.forecast;
-    if(forecast){
-        const filterForecast = forecast.filter((item, index) => index < 4);
-    
-        // 대기 예측 정보 데이터 기입
-        filterForecast.forEach((forecast, idx) => {
-            let objectKey;
-            switch(idx) {
-                case 0: objectKey = 'pm10Today';
-                    break;
-                case 1: objectKey = 'pm10Tomorrow';
-                    break;
-                case 2: objectKey = 'pm25Today';
-                    break;
-                case 3: objectKey = 'pm25Tomorrow';
-                    break;
-                default: break;
-            }
-            const area = forecast.informGrade.split(',');
-    
-            area.forEach(region => {
-                const [location, condition] = region.split(" : ");
-                objectCurrentStationInfo[objectKey][location] = condition;
-            });
-        });
-    }
 
-    const data = props.airData;
-    if(data){
-        // 사용자 지역에 대한 대기 정보 수치 값
-        const currentLocation = data.find(el => el.stationName === props.station.stationName);
-        // 사용자 지역에 가까운 측정소에 대한 정보
-        const currentStationInfo = stationsInfo.find(item => item.stationName === currentLocation.stationName);
+    const colorList = ['#1c67d7','#01b56e','#937200','#c00d0d','#0a0a0a'];
 
-        // 경기북부, 경기남부 / 영동, 영서
-        const gyeonggiBukList = ['고양시', '의정부시', '파주시', '양주시', '구리시', '남양주시', '동두천시', '포천시', '가평군', '연천군'];
-        const gyeonggiBukCheck = gyeonggiBukList.some(list => currentStationInfo.addr.includes(list));
-
-        const yeongdongList = ['강릉시', '삼척시', '동해시', '태백시', '속초시', '양양군', '고성군'];
-        const yeongdongCheck = yeongdongList.some(list => currentStationInfo.addr.includes(list));
-
-
-        const [state] = currentStationInfo.addr.split(' ') || [];
-        let stateNickname = state.substring(0, 2);
-
-        if((gyeonggiBukCheck || yeongdongCheck) && stateNickname === '경기') {
-            stateNickname = "경기북부";
-        } else if ((gyeonggiBukCheck || yeongdongCheck) && stateNickname === '강원') {
-            stateNickname = "영동";
-        } else if (!gyeonggiBukCheck && !yeongdongCheck && stateNickname === "경기") {
-            stateNickname = "경기남부";
-        } else if (!gyeonggiBukCheck && !yeongdongCheck && stateNickname === '강원') {
-            stateNickname = '영서';
-        }
-
-        const colorList = ['#1c67d7','#01b56e','#937200','#c00d0d','#0a0a0a'];
-
-        // 오늘의 대기질
-        const pm25Color = getColorValue(currentLocation?.pm25Value, 'pm25Value')[3];
-        const pm10Color = getColorValue(currentLocation?.pm10Value, 'pm10Value')[3];
-        const o3Color = getColorValue(currentLocation?.o3Value, 'o3Value')[3];
-
-        /**
+    // function
+    /**
          *
          * @param {number|string} 값
          * @returns {Array} [상태, 색상코드, 인덱스]
          */
-        const airState = (value) => {
-            if(value === 0 || value === '좋음'){
-                return ['좋음', colorList[0], 1];
-            } else if(value === 1 || value === '보통'){
-                return ['보통', colorList[1], 2];
-            } else if(value === 2 || value === '나쁨'){
-                return ['나쁨', colorList[2], 3];
-            } else if(value === 3 || value === '매우나쁨'){
-                return ['매우나쁨', colorList[3], 4];
-            } else {
-                return ['데이터 없음', colorList[4], 5];
-            }
-        };
-
-    // const pm25Index = (colorList.indexOf(pm25Color) + 1) !== 0 ? colorList.indexOf(pm25Color) + 1 : 5;
-    // const pm10Index = (colorList.indexOf(pm10Color) + 1) !== 0 ? colorList.indexOf(pm10Color) + 1 : 5;
-    // const o3Index = (colorList.indexOf(o3Color) + 1) !== 0 ? colorList.indexOf(o3Color) + 1 : 5;
-
-    // 대기정보 예보
-    const pm25Today = objectCurrentStationInfo.pm25Today[stateNickname];
-    const pm25TodayIndex = airState(pm25Today)[2];
-    const pm10Today = objectCurrentStationInfo.pm10Today[stateNickname];
-    const pm10TodayIndex = airState(pm10Today)[2];
-    const pm25Tomorrow = objectCurrentStationInfo.pm25Tomorrow[stateNickname];
-    const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
-    const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
-    const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
-
-    setPm25({state: pm25Color, stateIndex: pm25TodayIndex, tomorrowState: pm25TomorrowIndex});
+    const airState = (value) => {
+        if(value === 0 || value === '좋음'){
+            return ['좋음', colorList[0], 1];
+        } else if(value === 1 || value === '보통'){
+            return ['보통', colorList[1], 2];
+        } else if(value === 2 || value === '나쁨'){
+            return ['나쁨', colorList[2], 3];
+        } else if(value === 3 || value === '매우나쁨'){
+            return ['매우나쁨', colorList[3], 4];
+        } else {
+            return ['데이터 없음', colorList[4], 5];
+        }
     };
+    
+    useEffect(() => {
+        // 예보 텍스트
+        if(text){
+            const filterForecast = text.filter((item, index) => index < 4);
+        
+            // 대기 예측 정보 데이터 기입
+            filterForecast.forEach((forecast, idx) => {
+                let objectKey;
+                switch(idx) {
+                    case 0: objectKey = 'pm10Today';
+                        break;
+                    case 1: objectKey = 'pm10Tomorrow';
+                        break;
+                    case 2: objectKey = 'pm25Today';
+                        break;
+                    case 3: objectKey = 'pm25Tomorrow';
+                        break;
+                    default: break;
+                }
+                const area = forecast.informGrade.split(',');
+        
+                area.forEach(region => {
+                    const [location, condition] = region.split(" : ");
+                    objectCurrentStationInfo[objectKey][location] = condition;
+                });
+            });
+        }
+        if(data){
+            // 사용자 지역에 대한 대기 정보 수치 값
+            const currentLocation = data.find(el => el.stationName === station.stationName);
+            // 사용자 지역에 가까운 측정소에 대한 정보
+            const currentStationInfo = stationsInfo.find(item => item.stationName === currentLocation.stationName);
+    
+            // 경기북부, 경기남부 / 영동, 영서
+            const gyeonggiBukList = ['고양시', '의정부시', '파주시', '양주시', '구리시', '남양주시', '동두천시', '포천시', '가평군', '연천군'];
+            const gyeonggiBukCheck = gyeonggiBukList.some(list => currentStationInfo.addr.includes(list));
+    
+            const yeongdongList = ['강릉시', '삼척시', '동해시', '태백시', '속초시', '양양군', '고성군'];
+            const yeongdongCheck = yeongdongList.some(list => currentStationInfo.addr.includes(list));
+    
+    
+            const [state] = currentStationInfo.addr.split(' ') || [];
+            let stateNickname = state.substring(0, 2);
+    
+            if((gyeonggiBukCheck || yeongdongCheck) && stateNickname === '경기') {
+                stateNickname = "경기북부";
+            } else if ((gyeonggiBukCheck || yeongdongCheck) && stateNickname === '강원') {
+                stateNickname = "영동";
+            } else if (!gyeonggiBukCheck && !yeongdongCheck && stateNickname === "경기") {
+                stateNickname = "경기남부";
+            } else if (!gyeonggiBukCheck && !yeongdongCheck && stateNickname === '강원') {
+                stateNickname = '영서';
+            }
+    
+            // 오늘의 대기질
+            const pm25Color = getColorValue(currentLocation?.pm25Value, 'pm25Value')[3];
+            const pm10Color = getColorValue(currentLocation?.pm10Value, 'pm10Value')[3];
+            const o3Color = getColorValue(currentLocation?.o3Value, 'o3Value')[3];
+    
+            const pm25Text = airState(colorList.indexOf(pm25Color))[0];
+            const pm10Text = airState(colorList.indexOf(pm10Color))[0];
+            const o3Text = airState(colorList.indexOf(o3Color))[0];
+    
+        // const pm25Index = (colorList.indexOf(pm25Color) + 1) !== 0 ? colorList.indexOf(pm25Color) + 1 : 5;
+        // const pm10Index = (colorList.indexOf(pm10Color) + 1) !== 0 ? colorList.indexOf(pm10Color) + 1 : 5;
+        const o3Index = (colorList.indexOf(o3Color) + 1) !== 0 ? colorList.indexOf(o3Color) + 1 : 5;
+    
+        // 대기정보 예보
+        const pm25Today = objectCurrentStationInfo.pm25Today[stateNickname];
+        const pm10Today = objectCurrentStationInfo.pm10Today[stateNickname];
+    
+        const pm25TodayIndex = airState(pm25Today)[2];
+        const pm10TodayIndex = airState(pm10Today)[2];
+    
+        const pm25Tomorrow = objectCurrentStationInfo.pm25Tomorrow[stateNickname];
+        const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
+    
+        const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
+        const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
+    
+        if(!pm25AddBoolean){
+            changer('pm25AddBoolean', !pm25AddBoolean);
+            changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25TodayIndex, tomorrowState: pm25TomorrowIndex});
+        };
+        if(!pm10AddBoolean){
+            changer('pm10AddBoolean', !pm10AddBoolean);
+            changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10TodayIndex, tomorrowState: pm10TomorrowIndex});
+        };
+        if(!o3AddBoolean){
+            changer('o3AddBoolean', !o3AddBoolean);
+            changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, tomorrowState: 5});
+        }
+        if(!currentLocationInsert){
+            changer('currentLocationInsert', !currentLocationInsert);
+            changer('currentLocation', currentLocation);
+        };
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
     // ---------------------------------------------------- Dyanmic Styled
     const Legend = styled(LegendBase)`
         .legendPopup {
@@ -162,7 +194,7 @@ const TodayAirQuaility = (props) => {
         }
     `;
     // ---------------------------------------------------- Event
-    const timeRefreshHandleClick = () => props.counts.setCount(props.counts.count + 1);
+    const refreshBtn = () => setCount(count + 1);
     const legendClickHandle = (e) => {
         const node = e.currentTarget;
         const value = node.dataset.value;
@@ -182,8 +214,6 @@ const TodayAirQuaility = (props) => {
         }
     };
 
-    const posHandle = () => props.counts.setCount(props.counts.count + 1);
-
     // ---------------------------------------------------- Components
     // const TimeComponent = props.childrenComponents.Time;
 
@@ -196,13 +226,13 @@ const TodayAirQuaility = (props) => {
                 <div>
                 <InfoInteraction>
                     {/* <InfoButton ico={'bg_search'}>검색</InfoButton> */}
-                    <InfoButton ico={'pos'} onClick={posHandle}>현위치</InfoButton>
+                    <InfoButton ico={'pos'} onClick={refreshBtn}>현위치</InfoButton>
                     <p>
-                    <strong>{props.loading && props.station.stationName}</strong> 중심으로 측정
-                    <span>({props.loading && `${props.station.addr.split(' ')[0]} ${props.station.addr.split(' ')[1]} ${props.station.stationName}`} 측정소 기준)</span>
+                    <strong>{loading && station.stationName}</strong> 중심으로 측정
+                    <span>({loading && `${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
                     </p>
                 </InfoInteraction>
-                {/* <TimeComponent refresh onClick={timeRefreshHandleClick} /> */}
+                <Time refresh onClick={refreshBtn} />
                 </div>
             <Container>
                 <Part>
@@ -211,29 +241,29 @@ const TodayAirQuaility = (props) => {
                         <li>
                             <span><strong>초미세먼지</strong>(PM-2.5)</span>
                             <img src={`./img_na0${pm25.stateIndex}.png`} alt="대기질" />
-                            {/* <span style={{color: pm25}}>
-                                <strong className="colorValue">{currentLocation?.pm25Value || '-'}</strong>
+                            <span style={{color: pm25.stateHex}}>
+                                <strong className="colorValue">{location.pm25Value || '-'}</strong>
                                 <small style={{color: 'initial'}}>㎍/㎥</small>
-                                {airState(colorList.indexOf(pm25))[0]}
-                            </span> */}
+                                {pm25.stateText}
+                            </span>
                         </li>
                         <li>
                             <span><strong>미세먼지</strong>(PM-10)</span>
-                            {/* <img src={`./img_na0${pm10Index || 5}.png`} alt="대기질" />
-                            <span style={{color: pm10}}>
-                                <strong className="colorValue">{currentLocation?.pm10Value || '-'}</strong>
+                            <img src={`./img_na0${pm10.stateIndex}.png`} alt="대기질" />
+                            <span style={{color: pm10.stateHex}}>
+                                <strong className="colorValue">{location.pm10Value || '-'}</strong>
                                 <small style={{color: 'initial'}}>㎍/㎥</small>
-                                {airState(colorList.indexOf(pm10))[0]}
-                                </span> */}
+                                {pm10.stateText}
+                                </span>
                         </li>
                         <li>
                             <span><strong>오존</strong>(O<sub>3</sub>)</span>
-                            {/* <img src={`./img_na0${o3Index || 5}.png`} alt="대기질" />
-                            <span style={{color: o3}}>
-                                <strong className="colorValue">{String(currentLocation?.o3Value).padEnd(6, '0') || '-'}</strong>
+                            <img src={`./img_na0${o3.stateIndex}.png`} alt="대기질" />
+                            <span style={{color: o3.stateHex}}>
+                                <strong className="colorValue">{location.o3Value === null ? '-' : String(location.o3Value).padEnd(6, '0')}</strong>
                                 <small style={{color: 'initial'}}>ppm</small>
-                                {airState(colorList.indexOf(o3))[0]}
-                            </span> */}
+                                {o3.stateText}
+                            </span>
                         </li>
                     </ul>
                 </Part>

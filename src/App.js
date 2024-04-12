@@ -6,7 +6,6 @@ import {
 } from './components/RealtimeStandby';
 import stationInfoJSON from './data/stationInfo.json';
 import TodayAirQuality from './components/TodayAirQuality';
-import axios from 'axios';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import StandbyForecast from './components/StandbyForecast';
 import { RealTimeWeather } from './components/RealTimeWeather';
@@ -480,13 +479,7 @@ const typeRange = getColorValue(0, type, true);
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
-            {/* <TodayAirQuality
-              childrenComponents={Time}
-              station={station}
-              setStation={setStation}
-              counts={{count, setCount}}
-              forecast={airInformation}
-              /> */}
+            <TodayAirQuality Time={Time} counts={{count, setCount}} />
         </FirstSection>
         <SecondSection>
           <SecondBanner>
