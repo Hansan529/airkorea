@@ -162,15 +162,15 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     
         if(!pm25AddBoolean){
             changer('pm25AddBoolean', !pm25AddBoolean);
-            changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25TodayIndex, tomorrowState: pm25TomorrowIndex});
+            changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25TodayIndex, todayState: pm25Today, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
         };
         if(!pm10AddBoolean){
             changer('pm10AddBoolean', !pm10AddBoolean);
-            changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10TodayIndex, tomorrowState: pm10TomorrowIndex});
+            changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10TodayIndex, todayState: pm10Today, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
         };
         if(!o3AddBoolean){
             changer('o3AddBoolean', !o3AddBoolean);
-            changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, tomorrowState: 5});
+            changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, tomorrowIndex: '-', tomorrowState: 5});
         }
         if(!currentLocationInsert){
             changer('currentLocationInsert', !currentLocationInsert);
@@ -277,13 +277,13 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
                         </li>
                         <li>
                             <p>오늘</p>
-                            {/* <span className={`miniText miniTextIco_${pm25TodayIndex || '5'}`} style={{color: airState(pm25Today)[1]}}>{pm25Today || '-'}</span>
-                            <span className={`miniText miniTextIco_${pm10TodayIndex || '5'}`} style={{color: airState(pm10Today)[1]}}>{pm10Today || '-'}</span> */}
+                            <span className={`miniText miniTextIco_${pm25.stateIndex}`} style={{color: airState(pm25.todayState)[1]}}>{pm25.todayState}</span>
+                            <span className={`miniText miniTextIco_${pm10.stateIndex}`} style={{color: airState(pm10.todayState)[1]}}>{pm10.todayState}</span>
                         </li>
                         <li>
                             <p>내일</p>
-                            {/* <span className={`miniText miniTextIco_${pm25TomorrowIndex || '5'}`} style={{color: airState(pm25Tomorrow)[1]}}>{pm25Tomorrow || '-'}</span>
-                            <span className={`miniText miniTextIco_${pm10TomorrowIndex || '5'}`} style={{color: airState(pm10Tomorrow)[1]}}>{pm10Tomorrow || '-'}</span> */}
+                            <span className={`miniText miniTextIco_${pm25.tomorrowIndex}`} style={{color: airState(pm25.tomorrowState)[1]}}>{pm25.tomorrowState}</span>
+                            <span className={`miniText miniTextIco_${pm10.tomorrowIndex}`} style={{color: airState(pm10.tomorrowState)[1]}}>{pm10.tomorrowState}</span>
                         </li>
                     </AirForecastUl>
                 </Part>

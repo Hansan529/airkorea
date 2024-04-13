@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-const preset = {stateHex: '#0a0a0a', stateText: '-', stateIndex: 5, tomorrowState: 5};
+const preset = {stateHex: '#0a0a0a', stateText: '-', stateIndex: 5, todayState: '-', tomorrowIndex: 5, tomorrowState: '-'};
 
 const useAirQualityStore = create((set) => ({
     currentLocation: {
