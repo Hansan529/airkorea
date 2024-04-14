@@ -465,7 +465,7 @@ const typeRange = getColorValue(0, type, true);
                   <button onClick={() => tapSelectHandle(0)}>실시간 대기정보</button>
                 </li>
                 <li select={tapSelect === 1 ? 'on' : 'off'}>
-                  <button onClick={() => tapSelectHandle(1)}>오늘/내일 대기정보</button>
+                  <button onClick={() => tapSelectHandle(1)}>오늘/내일/모레 대기정보</button>
                 </li>
                 <li select={tapSelect === 2 ? 'on' : 'off'}>
                   <button onClick={() => tapSelectHandle(2)}>실시간 기상정보</button>
@@ -523,11 +523,13 @@ const typeRange = getColorValue(0, type, true);
                     <MMOSelect bg $width="180px" onChange={standbyTypeHandle} value={standbyType}>
                       <option value="pm25">초미세먼지 (PM-2.5)</option>
                       <option value="pm10">미세먼지 (PM-10)</option>
+                      <option value="o3">오존 (O3)</option>
                     </MMOSelect>
                   </MMOSelectWrapper>
                   <MMOBorderDiv>
                     <button onClick={forecastDateHandle} active={forecastDate === "0" ? 'on' : 'off'} data-date="0">오늘</button>
                     <button onClick={forecastDateHandle} active={forecastDate === "1" ? 'on' : 'off'} data-date="1">내일</button>
+                    <button onClick={forecastDateHandle} active={forecastDate === "2" ? 'on' : 'off'} data-date="2">모레</button>
                   </MMOBorderDiv>
                 </>}
               </MMOContainer>

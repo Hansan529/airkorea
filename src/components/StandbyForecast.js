@@ -1,5 +1,6 @@
 import { StandbyMain, StandbyNames } from '../styleComponent';
 import useStore from '../hooks/useStore';
+import { useState } from 'react';
 
 const hexCode = {
     '좋음': '#d0ecff',
@@ -11,6 +12,7 @@ const hexCode = {
 
 const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
     const { text } = useStore(state => state);
+    const [notData, setNotData] = useState(false);
 
     const today = new Date();
     const year = today.getFullYear();
@@ -44,21 +46,27 @@ const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
     // 전국 대기 예보 텍스트
     if(text){
         const findData = text.find(item => {
-            return (item.informData === date) && (item.informCode === standbyType.toUpperCase());
+            return (item?.informData === date) && (item?.informCode === standbyType.toUpperCase());
         });
-        timeData = findData?.dataTime?.split(' ');
+        timeData = text[0]?.dataTime?.split(' ');
     
         // 전국 대기 예보 텍스트 오브젝트로 분리
-        findData.informGrade.split(',').forEach(item => {
+        findData?.informGrade.split(',').forEach(item => {
             const b = item.split(' : ');
             obj[b[0]] = b[1];
         });
+
+        if(!findData && !notData){
+            setNotData(true);
+        }
     }
 
 
     return (
         <StandbyMain>
             <StandbyNames>
+                {notData ? 
+                <span className="mp07"><strong>17시 이후 발표</strong></span> : <>
                 <span className="mp03">서울 <strong>{obj['서울']}</strong></span>
                 <span className="mp19">제주 <strong>{obj['제주']}</strong></span>
                 <span className="mp17">전남 <strong>{obj['전남']}</strong></span>
@@ -77,7 +85,7 @@ const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
                 <span className="mp02">강원영서 <strong>{obj['영서']}</strong></span>
                 <span className="mp06">경기남부 <strong>{obj['경기남부']}</strong></span>
                 <span className="mp01">경기북부 <strong>{obj['경기북부']}</strong></span>
-                <span className="mp04">인천 <strong>{obj['인천']}</strong></span>
+                <span className="mp04">인천 <strong>{obj['인천']}</strong></span></>}
             </StandbyNames>
             <svg
                 version="1.1"
