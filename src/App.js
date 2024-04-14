@@ -58,9 +58,6 @@ function App() {
   const [disableDuration, setDisableDuration] = useState(false);
 
   
-  // const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
-  // 모든 측정소 대기정보 데이터
-  
   // * 하단배너
   // 대기예보 텍스트 인덱스
   const [airInfoIndex, setAirInfoIndex] = useState(1);
@@ -72,81 +69,85 @@ function App() {
   const [count, setCount] = useState(0);
   // 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
+  const [coordinateBoolean, setCoordinateBoolean] = useState(false);
   
 // 가까운 위치의 측정소 데이터
 useEffect(() => {
-  if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
-    if('geolocation' in navigator) {
-      const success = async (pos) => {
-        let { latitude, longitude } = pos.coords;
-        if(latitude === undefined) latitude = '197806.5250901809';
-        if(longitude === undefined) longitude = '451373.25740676327';
-
-        const response = await fetch('http://localhost:3500/api/coordinate', {
-          method: "POST",
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ latitude, longitude })
-        });
-        const {documents: [{x, y}]} = await response.json();
-
-        const responseStation = await fetch('http://localhost:3500/api/station', {
-          method: "POST",
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ x, y })
-        });
-        const stations = await responseStation.json();
-        // 가까운 거리의 측정소 3개
-        // setStation(stations);
-
-        // 가까운 측정소
-        const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
-        changer('station', stationInfo);
+  if(!coordinateBoolean){
+    setCoordinateBoolean(true);
+    if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+      if('geolocation' in navigator) {
+        const success = async (pos) => {
+          let { latitude, longitude } = pos.coords;
+          if(latitude === undefined) latitude = '197806.5250901809';
+          if(longitude === undefined) longitude = '451373.25740676327';
+  
+          const response = await fetch('http://localhost:3500/api/coordinate', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ latitude, longitude })
+          });
+          const {documents: [{x, y}]} = await response.json();
+  
+          const responseStation = await fetch('http://localhost:3500/api/station', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ x, y })
+          });
+          const stations = await responseStation.json();
+          // 가까운 거리의 측정소 3개
+          // setStation(stations);
+  
+          // 가까운 측정소
+          const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
+          changer('station', stationInfo);
+        }
+        const error = (err) => {
+          console.info("위치 권한 차단됨: ", err);
+          const stationInfo = {
+            "dmX": "37.564639",
+            "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+            "mangName": "도시대기",
+            "year": "1995",
+            "city": "서울특별시",
+            "addr": "서울 중구 덕수궁길 15",
+            "building": "시청서소문별관 3동",
+            "stationName": "중구",
+            "dmY": "126.975961",
+            "top": "136",
+            "left": "264",
+            "innerTop": "248.594",
+            "innerLeft": "235.531"
+        }
+          changer('station', stationInfo);
+          alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
+        };
+  
+        navigator.geolocation.getCurrentPosition(success, error);
       }
-      const error = (err) => {
-        console.log("위치 권한 차단됨: ", err);
+    } else {
+      (async () => {
         const stationInfo = {
-          "dmX": "37.564639",
-          "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-          "mangName": "도시대기",
-          "year": "1995",
-          "city": "서울특별시",
-          "addr": "서울 중구 덕수궁길 15",
-          "building": "시청서소문별관 3동",
-          "stationName": "중구",
-          "dmY": "126.975961",
-          "top": "136",
-          "left": "264",
-          "innerTop": "248.594",
-          "innerLeft": "235.531"
-      }
+            "dmX": "37.564639",
+            "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+            "mangName": "도시대기",
+            "year": "1995",
+            "city": "서울특별시",
+            "addr": "서울 중구 덕수궁길 15",
+            "building": "시청서소문별관 3동",
+            "stationName": "중구",
+            "dmY": "126.975961",
+            "top": "136",
+            "left": "264",
+            "innerTop": "248.594",
+            "innerLeft": "235.531"
+        }
         changer('station', stationInfo);
-        alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
-      };
-
-      navigator.geolocation.getCurrentPosition(success, error);
+      })();
     }
-  } else {
-    (async () => {
-      const stationInfo = {
-          "dmX": "37.564639",
-          "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-          "mangName": "도시대기",
-          "year": "1995",
-          "city": "서울특별시",
-          "addr": "서울 중구 덕수궁길 15",
-          "building": "시청서소문별관 3동",
-          "stationName": "중구",
-          "dmY": "126.975961",
-          "top": "136",
-          "left": "264",
-          "innerTop": "248.594",
-          "innerLeft": "235.531"
-      }
-      changer('station', stationInfo);
-    })();
   }
-  changer('loading', true);
-}, []);
+  // changer('loading', true);
+}, [stationsInfo, coordinateBoolean]);
   
 const typeRange = getColorValue(0, type, true);
 
@@ -267,8 +268,8 @@ const typeRange = getColorValue(0, type, true);
   const DynamicComponent = () => {
     const Components = {
       0: RealTimeStandbyComp,
-      // 1: StandByForecastComp,
-      // 2: RealTimeWeatherComp
+      1: StandByForecastComp,
+      2: RealTimeWeatherComp
     }
     const Result = Components[tapSelect];
     return (
@@ -284,7 +285,6 @@ const typeRange = getColorValue(0, type, true);
   };
   const mMoSelectHandle = (e) => {
     const { value, dataset: { information } } = e.currentTarget;
-    console.log('value: ', value);
 
     // 대기/경보 정보, 측정소 정보 클릭 시
     if(information){
@@ -386,6 +386,7 @@ const typeRange = getColorValue(0, type, true);
         break;
       };
     };
+    target = String(target).padStart(2, '0');
   
     let filterAirInformation;
     let result = <></>;
@@ -402,10 +403,23 @@ const typeRange = getColorValue(0, type, true);
       if(length === 3){
         filterAirInformation.splice(0,0, last);
         filterAirInformation.splice(length+1,0, first);
+      } else if(length === 0){
+        // 4회(5,11,17,23시), 각 시별 10분내외 값이 안나온 경우
+        const dataTime = `${TimeText.year}-${TimeText.month}-${TimeText.day} ${TimeText.hour}시 발표`;
+        const informCause = "○ [정보] 현재 공공데이터 업데이트 중입니다. 10분 내외에 출력될 예정입니다.";
+        const informGrade = "서울 : -,제주 : -,전남 : -,전북 : -,광주 : -,경남 : -,경북 : -,울산 : -,대구 : -,부산 : -,충남 : -,충북 : -,세종 : -,대전 : -,영동 : -,영서 : -,경기남부 : -,경기북부 : -,인천 : -";
+
+        const preset = { dataTime, informCause, informCode: "PM10", informGrade };
+
+        const first = { ...preset, informData: `${TimeText.year}-${TimeText.month}-${TimeText.day}` };
+        const mid = { ...preset, informData: `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}` };
+        const last = {  ...preset, informData: `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}` };
+
+        filterAirInformation = [last, first, mid, last, first];
       } else {
         filterAirInformation.splice(length, 0, {
           ...last,
-          informData: `${last.informData.slice(0, -2)}${String(Number(last.informData.slice(-2)) + 1).padStart(2, '0')}`,
+          informData: `${last?.informData.slice(0, -2)}${String(Number(last?.informData.slice(-2)) + 1).padStart(2, '0')}`,
           informCause: '○ [미세먼지] 모레 4등급(좋음, 보통, 나쁨, 매우나쁨) 예보는 17시에 발표되며, 모레 2등급(낮음, 높음) 예보는 주간예보를 참고하시기 바랍니다.'
         });
         filterAirInformation.splice(0, 0, filterAirInformation[length]);
@@ -428,7 +442,8 @@ const typeRange = getColorValue(0, type, true);
         return <div key={idx}><strong>{txt}</strong><span>{sliceText}</span></div>
       })
     };
-
+    
+    if(!loading) changer('loading', true);
     return result;
   };
 
@@ -527,9 +542,8 @@ const typeRange = getColorValue(0, type, true);
         </FirstSection>
         <SecondSection>
           <SecondBanner>
-            <div className="updateTime">{TimeText && 
-              `${TimeText.year}.${TimeText.month}.${Number(TimeText.hour) < 5 ? String(Number(TimeText.day) - 1).padStart(2, '0') : TimeText.day}`} 
-              <strong>{TimeText && `${Number(TimeText.hour) < 5 ? '23' : TimeText.month}:${TimeText.minute}`}</strong>
+            <div className="updateTime">{(TimeText && `${TimeText.year}.${TimeText.month}.${Number(TimeText.hour) < 5 ? String(Number(TimeText.day) - 1).padStart(2, '0') : TimeText.day}`) || '0000.00.00'}
+              <strong>{(TimeText && `${Number(TimeText.hour) < 5 ? '23' : TimeText.hour}:${TimeText.minute}`) || '00:00'}</strong>
             </div>
             <div className="text">
               <div className="title">

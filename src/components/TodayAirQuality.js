@@ -178,7 +178,7 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
         };
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
+    }, [text, data])
     // ---------------------------------------------------- Dyanmic Styled
     const Legend = styled(LegendBase)`
         .legendPopup {
@@ -228,8 +228,8 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
                     {/* <InfoButton ico={'bg_search'}>검색</InfoButton> */}
                     <InfoButton ico={'pos'} onClick={refreshBtn}>현위치</InfoButton>
                     <p>
-                    <strong>{loading && station.stationName}</strong> 중심으로 측정
-                    <span>({loading && `${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
+                    <strong>{station.stationName}</strong> 중심으로 측정
+                    <span>({`${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
                     </p>
                 </InfoInteraction>
                 <Time refresh onClick={refreshBtn} />
