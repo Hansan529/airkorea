@@ -55,8 +55,6 @@ function App() {
   // 모든 측정소 대기정보 데이터
   
   // * 하단배너
-  // 대기예보 텍스트
-  const [airInformation, setAirInformation] = useState(null);
   // 대기예보 텍스트 인덱스
   const [airInfoIndex, setAirInfoIndex] = useState(1);
 
@@ -337,53 +335,56 @@ const typeRange = getColorValue(0, type, true);
     // setAirInfoIndex()
   }
 
-  // function BannerData() {
-  //   const array = [23, 17, 11, 5];
-  //   let target = TimeText.hour; // 찾고자 하는 값
+  function BannerData() {
+    const array = [23, 17, 11, 5];
+    let target = TimeText.hour; // 찾고자 하는 값
     
-  //   for (const element of array){
-  //     if(target > element){
-  //       target = element;
-  //       break;
-  //     };
-  //   };
+    for (const element of array){
+      if(target > element){
+        target = element;
+        break;
+      };
+    };
   
-  //   let filterAirInformation = airInformation?.filter(item => {
-  //     return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10';
-  //   });
+    let filterAirInformation = text.filter(item => {
+      return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10';
+    });
   
-  //   if(filterAirInformation){
-  //     const { length } = filterAirInformation;
-  //     const first = filterAirInformation[0];
-  //     const last = filterAirInformation[length - 1];
+    if(filterAirInformation){
+      const { length } = filterAirInformation;
+      const first = filterAirInformation[0];
+      const last = filterAirInformation[length - 1];
   
-  //     if(length === 3){
-  //       filterAirInformation.splice(0,0, last);
-  //       filterAirInformation.splice(length,0, first);
-  //     } else {
-  //       filterAirInformation.splice(length, 0, {
-  //         ...last,
-  //         informData: `${last.informData.slice(0, -2)}${String(Number(last.informData.slice(-2)) + 1).padStart(2, '0')}`,
-  //         informCause: '○ [미세먼지] 모레 4등급(좋음, 보통, 나쁨, 매우나쁨) 예보는 17시에 발표되며, 모레 2등급(낮음, 높음) 예보는 주간예보를 참고하시기 바랍니다.'
-  //       });
-  //       filterAirInformation.splice(0, 0, filterAirInformation[length]);
-  //       filterAirInformation.splice(length+2, 0, first);
-  //     }
-  //   };
-  //   const data = filterAirInformation?.map((item, idx) => {
-  //     const itemDate = item?.informData;
-  //     const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
-  //     const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
-  //     const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
-  //     let txt;
-  //     if(itemDate === nowDate){txt='금일'}
-  //     else if(itemDate === two){txt='내일'}
-  //     else if(itemDate === three){txt='모레'};
-  //     return <div key={idx}><strong>{txt}</strong><span>{item?.informCause.slice(2).replace(/[＊*]/g, ' ')}</span></div>
-  //   })
+      if(length === 3){
+        filterAirInformation.splice(0,0, last);
+        filterAirInformation.splice(length,0, first);
+      } else {
+        filterAirInformation.splice(length, 0, {
+          ...last,
+          informData: `${last.informData.slice(0, -2)}${String(Number(last.informData.slice(-2)) + 1).padStart(2, '0')}`,
+          informCause: '○ [미세먼지] 모레 4등급(좋음, 보통, 나쁨, 매우나쁨) 예보는 17시에 발표되며, 모레 2등급(낮음, 높음) 예보는 주간예보를 참고하시기 바랍니다.'
+        });
+        filterAirInformation.splice(0, 0, filterAirInformation[length]);
+        filterAirInformation.splice(length+2, 0, first);
+      }
+    };
+    const data = filterAirInformation?.map((item, idx) => {
+      const itemDate = item?.informData;
+      const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
+      const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
+      const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
+      let txt;
+      if(itemDate === nowDate){txt='금일'}
+      else if(itemDate === two){txt='내일'}
+      else if(itemDate === three){txt='모레'};
+      const response = item?.informCause.slice(2).replace(/[＊*]/g, ' ');
+      const index = response.indexOf('※');
+      const sliceText = index !== -1 ? response.slice(0, index) : response;
+      return <div key={idx}><strong>{txt}</strong><span>{sliceText}</span></div>
+    })
 
-  //   return data || <></>;
-  // }
+    return data || <></>;
+  }
 
 
   return (
@@ -400,9 +401,7 @@ const typeRange = getColorValue(0, type, true);
             <MMOptionLayout>
               <MMOList>
                 <li select={tapSelect === 0 ? 'on' : 'off'}>
-                  <button onClick={() => tapSelectHandle(0)}>
-                    실시간 대기정보
-                  </button>
+                  <button onClick={() => tapSelectHandle(0)}>실시간 대기정보</button>
                 </li>
                 <li select={tapSelect === 1 ? 'on' : 'off'}>
                   <button onClick={() => tapSelectHandle(1)}>오늘/내일 대기정보</button>
@@ -474,7 +473,6 @@ const typeRange = getColorValue(0, type, true);
             </MMOptionLayout>
             {/* Main Map 전국 지도 */}
             <MMWrapper>
-            {/* <RealTimeStandbyComp /> */}
               <DynamicComponent />
             </MMWrapper>
           </MMLayout>
@@ -483,13 +481,13 @@ const typeRange = getColorValue(0, type, true);
         </FirstSection>
         <SecondSection>
           <SecondBanner>
-            {/* <div className="updateTime">{TimeText && `${TimeText.year}.${TimeText.month}.${TimeText.day}`} <strong>{TimeText && `${TimeText.hour}:${TimeText.minute}`}</strong></div> */}
+            <div className="updateTime">{TimeText && `${TimeText.year}.${TimeText.month}.${TimeText.day}`} <strong>{TimeText && `${TimeText.hour}:${TimeText.minute}`}</strong></div>
             <div className="text">
               <div className="title">
                 <strong>예보</strong>발표
               </div>
               <SecondBannerInfo index={airInfoIndex}>
-                {/* <BannerData /> */}
+                <BannerData />
               </SecondBannerInfo>
             </div>
             <div className="buttonWrap">

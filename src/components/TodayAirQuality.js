@@ -143,8 +143,8 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
             const pm10Text = airState(colorList.indexOf(pm10Color))[0];
             const o3Text = airState(colorList.indexOf(o3Color))[0];
     
-        // const pm25Index = (colorList.indexOf(pm25Color) + 1) !== 0 ? colorList.indexOf(pm25Color) + 1 : 5;
-        // const pm10Index = (colorList.indexOf(pm10Color) + 1) !== 0 ? colorList.indexOf(pm10Color) + 1 : 5;
+        const pm25Index = (colorList.indexOf(pm25Color) + 1) !== 0 ? colorList.indexOf(pm25Color) + 1 : 5;
+        const pm10Index = (colorList.indexOf(pm10Color) + 1) !== 0 ? colorList.indexOf(pm10Color) + 1 : 5;
         const o3Index = (colorList.indexOf(o3Color) + 1) !== 0 ? colorList.indexOf(o3Color) + 1 : 5;
     
         // 대기정보 예보
@@ -162,15 +162,15 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     
         if(!pm25AddBoolean){
             changer('pm25AddBoolean', !pm25AddBoolean);
-            changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25TodayIndex, todayState: pm25Today, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
+            changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25Index, todayState: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
         };
         if(!pm10AddBoolean){
             changer('pm10AddBoolean', !pm10AddBoolean);
-            changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10TodayIndex, todayState: pm10Today, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
+            changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10Index, todayState: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
         };
         if(!o3AddBoolean){
             changer('o3AddBoolean', !o3AddBoolean);
-            changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, tomorrowIndex: '-', tomorrowState: 5});
+            changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrowState: 5});
         }
         if(!currentLocationInsert){
             changer('currentLocationInsert', !currentLocationInsert);
@@ -277,8 +277,8 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
                         </li>
                         <li>
                             <p>오늘</p>
-                            <span className={`miniText miniTextIco_${pm25.stateIndex}`} style={{color: airState(pm25.todayState)[1]}}>{pm25.todayState}</span>
-                            <span className={`miniText miniTextIco_${pm10.stateIndex}`} style={{color: airState(pm10.todayState)[1]}}>{pm10.todayState}</span>
+                            <span className={`miniText miniTextIco_${pm25.todayIndex}`} style={{color: airState(pm25.todayState)[1]}}>{pm25.todayState}</span>
+                            <span className={`miniText miniTextIco_${pm10.todayIndex}`} style={{color: airState(pm10.todayState)[1]}}>{pm10.todayState}</span>
                         </li>
                         <li>
                             <p>내일</p>
