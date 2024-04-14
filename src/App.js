@@ -12,6 +12,10 @@ import { RealTimeWeather } from './components/RealTimeWeather';
 import { CopyRight, FirstSection, Legend, LegendWrapper, Loading, MMLayout, MMOBorderDiv, MMOContainer, MMOList, MMOptionLayout, MMOSelect, MMOSelectWrapper, MMWrapper, SecondBanner, SecondBannerInfo, SecondSection, TimeButtonStyle, TimeDiv } from './styleComponent';
 import useStore from './hooks/useStore';
 
+function sleep(sec) {
+  return new Promise(resolve => setTimeout(resolve, sec * 1000));
+};
+
 function App() {
   // ------------------------------------------------ setting
   const { data, dataFetchBoolean, text, textFetchBoolean, changer, getFetch } = useStore(state => state);
@@ -50,6 +54,9 @@ function App() {
   // 오늘/내일 대기정보 금일, 내일
   const [forecastDate, setForecastDate] = useState("1");
 
+  const [running, setRunning] = useState(false);
+  const [disableDuration, setDisableDuration] = useState(false);
+
   
   // const [station, setStation] = useState(stationsInfo.find(item => item.stationName === '중구'));
   // 모든 측정소 대기정보 데이터
@@ -57,6 +64,7 @@ function App() {
   // * 하단배너
   // 대기예보 텍스트 인덱스
   const [airInfoIndex, setAirInfoIndex] = useState(1);
+  const [intervalId, setIntervalId] = useState(null);
 
   // * 기타
   // 데이터 불러오기 [전체 측정소 대기 값, 대기정보 예보 텍스트]
@@ -139,7 +147,6 @@ useEffect(() => {
   }
   changer('loading', true);
 }, []);
-
   
 const typeRange = getColorValue(0, type, true);
 
@@ -260,8 +267,8 @@ const typeRange = getColorValue(0, type, true);
   const DynamicComponent = () => {
     const Components = {
       0: RealTimeStandbyComp,
-      1: StandByForecastComp,
-      2: RealTimeWeatherComp
+      // 1: StandByForecastComp,
+      // 2: RealTimeWeatherComp
     }
     const Result = Components[tapSelect];
     return (
@@ -326,18 +333,52 @@ const typeRange = getColorValue(0, type, true);
   const standbyTypeHandle = (e) => setStandbyType(e.target.value);
   const forecastDateHandle = (e) => setForecastDate(e.currentTarget.dataset.date);
 
-  const airInfoIndexHandle = (e) => {
-    const { value } = e.target.classList;
-    if(value === 'upBtn'){
-      if(airInfoIndex >= 4) setAirInfoIndex(2);
-      else setAirInfoIndex(airInfoIndex + 1);
+  // 예보 발표 이벤트 함수
+  const airInfoIndexUpHandle = async () => {
+    if(!running){
+      setRunning(true);
+      setAirInfoIndex(airInfoIndex + 1);
+      // 무한 롤링
+      if(airInfoIndex >= 3){
+        await sleep(0.3);
+        setDisableDuration(true);
+        setAirInfoIndex(1);
+        await sleep(0);
+        setDisableDuration(false);
+      } else await sleep(0.3);
+      setRunning(false);
     };
-    // setAirInfoIndex()
+  };
+  const airInfoIndexPlayHandle = () => {
+    if(intervalId){
+      clearInterval(intervalId);
+    } else {
+      const id = setInterval(() => {
+        airInfoIndexUpHandle();
+      }, 1000);
+      setIntervalId(id);
+    }
   }
+  const airInfoIndexDownHandle = async () => {
+    if(!running) {
+      setRunning(true);
+      setAirInfoIndex(airInfoIndex - 1);
+      if(airInfoIndex <= 1){
+          await sleep(0.3);
+          setDisableDuration(true);
+          setAirInfoIndex(3);
+          await sleep(0);
+          setDisableDuration(false);
+        } else await sleep(0.3);
+        setRunning(false);
+    };
+  };
 
+  // 예보 텍스트
   function BannerData() {
     const array = [23, 17, 11, 5];
-    let target = TimeText.hour; // 찾고자 하는 값
+    let target;
+    if(TimeText) target = Number(TimeText.hour);
     
     for (const element of array){
       if(target > element){
@@ -346,18 +387,21 @@ const typeRange = getColorValue(0, type, true);
       };
     };
   
-    let filterAirInformation = text.filter(item => {
-      return item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10';
-    });
-  
-    if(filterAirInformation){
+    let filterAirInformation;
+    let result = <></>;
+
+    if((text !== null) && (TimeText !== undefined)){
+      const notData = Number(TimeText.hour) < 5;
+      filterAirInformation = text?.filter(item => {
+        return (item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day} ${target}시 발표` && item.informCode === 'PM10') || (item.dataTime === `${TimeText.year}-${TimeText.month}-${TimeText.day-1} 23시 발표` && item.informCode === 'PM10');
+      });
       const { length } = filterAirInformation;
       const first = filterAirInformation[0];
       const last = filterAirInformation[length - 1];
   
       if(length === 3){
         filterAirInformation.splice(0,0, last);
-        filterAirInformation.splice(length,0, first);
+        filterAirInformation.splice(length+1,0, first);
       } else {
         filterAirInformation.splice(length, 0, {
           ...last,
@@ -367,24 +411,26 @@ const typeRange = getColorValue(0, type, true);
         filterAirInformation.splice(0, 0, filterAirInformation[length]);
         filterAirInformation.splice(length+2, 0, first);
       }
-    };
-    const data = filterAirInformation?.map((item, idx) => {
-      const itemDate = item?.informData;
-      const nowDate = `${TimeText.year}-${TimeText.month}-${TimeText.day}`;
-      const two = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 1).padStart(2, '0')}`;
-      const three = `${TimeText.year}-${TimeText.month}-${String(Number(TimeText.day) + 2).padStart(2, '0')}`;
-      let txt;
-      if(itemDate === nowDate){txt='금일'}
-      else if(itemDate === two){txt='내일'}
-      else if(itemDate === three){txt='모레'};
-      const response = item?.informCause.slice(2).replace(/[＊*]/g, ' ');
-      const index = response.indexOf('※');
-      const sliceText = index !== -1 ? response.slice(0, index) : response;
-      return <div key={idx}><strong>{txt}</strong><span>{sliceText}</span></div>
-    })
+      result = filterAirInformation?.map((item, idx) => {
+        const itemDate = item?.informData;
+        // 05시 전일 경우 어제 데이터 사용
+        const nowDate = `${TimeText.year}-${TimeText.month}-${notData ? String(Number(TimeText.day) - 1).padStart(2, '0') : TimeText.day}`;
+        const two = `${TimeText.year}-${TimeText.month}-${notData ? TimeText.day : String(Number(TimeText.day) + 1).padStart(2, '0')}`;
+        const three = `${TimeText.year}-${TimeText.month}-${notData ? String(Number(TimeText.day) + 1).padStart(2, '0') : String(Number(TimeText.day) + 2).padStart(2, '0')}`;
+        let txt;
+        if(itemDate === nowDate){notData ? txt='어제' : txt='금일'}
+        else if(itemDate === two){notData ? txt='금일' :txt='내일'}
+        else if(itemDate === three){notData ? txt='내일' : txt='모레'};
+        const response = item?.informCause.slice(2).replace(/[＊*]/g, ' ');
+        const index = response.indexOf('※');
+        const sliceText = index !== -1 ? response.slice(0, index) : response;
 
-    return data || <></>;
-  }
+        return <div key={idx}><strong>{txt}</strong><span>{sliceText}</span></div>
+      })
+    };
+
+    return result;
+  };
 
 
   return (
@@ -481,19 +527,22 @@ const typeRange = getColorValue(0, type, true);
         </FirstSection>
         <SecondSection>
           <SecondBanner>
-            <div className="updateTime">{TimeText && `${TimeText.year}.${TimeText.month}.${TimeText.day}`} <strong>{TimeText && `${TimeText.hour}:${TimeText.minute}`}</strong></div>
+            <div className="updateTime">{TimeText && 
+              `${TimeText.year}.${TimeText.month}.${Number(TimeText.hour) < 5 ? String(Number(TimeText.day) - 1).padStart(2, '0') : TimeText.day}`} 
+              <strong>{TimeText && `${Number(TimeText.hour) < 5 ? '23' : TimeText.month}:${TimeText.minute}`}</strong>
+            </div>
             <div className="text">
               <div className="title">
                 <strong>예보</strong>발표
               </div>
-              <SecondBannerInfo index={airInfoIndex}>
+              <SecondBannerInfo index={airInfoIndex} disableDuration={disableDuration}>
                 <BannerData />
               </SecondBannerInfo>
             </div>
             <div className="buttonWrap">
-                  <button onClick={airInfoIndexHandle} className="upBtn"></button>
-                  <button onClick={airInfoIndexHandle} className="playBtn"></button>
-                  <button onClick={airInfoIndexHandle} className="downBtn"></button>
+                  <button onClick={airInfoIndexUpHandle} className="upBtn"></button>
+                  <button onClick={airInfoIndexPlayHandle} className="playBtn"></button>
+                  <button onClick={airInfoIndexDownHandle} className="downBtn"></button>
             </div>
           </SecondBanner>
         </SecondSection>

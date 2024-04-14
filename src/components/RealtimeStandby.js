@@ -46,7 +46,7 @@ export const getColorValue = (value, type, rangeValueShow) => {
     so2Value: [0, 0.02, 0.021, 0.05, 0.051, 0.15, 0.151],
   };
 
-  const index = Object.keys(typeRangeValue).indexOf(type);
+  const index = Object.keys(typeRangeValue)?.indexOf(type);
   const values = Object.values(typeRangeValue)[index];
 
   if(rangeValueShow){
@@ -174,13 +174,13 @@ export const RealTimeStandby = ({Time}) => {
 	 */
 	const regionAvgValue = (order, returnValue) => {
 		if(data){
-			const filterValue = Object.values(regionNumList).map((list) => {
-				return data.filter((data) => { 
+			const filterValue = Object.values(regionNumList)?.map((list) => {
+				return data?.filter((data) => { 
 					return data.sidoName === list;
 				});
 			});
 
-			const filterTotalValue = filterValue.map((arr) => {
+			const filterTotalValue = filterValue?.map((arr) => {
 			return arr.reduce((accumulator, currentValue) => {
 				const valueToAdd = parseFloat(currentValue[returnValue]);
 				if (!isNaN(valueToAdd)) {
@@ -190,7 +190,7 @@ export const RealTimeStandby = ({Time}) => {
 				}
 			}, 0);
 			});
-			const result = filterTotalValue[order] / filterValue[order].length;
+			const result = filterTotalValue[order] / filterValue[order]?.length;
 			const fixedValue = ['o3Value', 'no2Value', 'so2Value'];
 			if (fixedValue.includes(returnValue)) {
 				return result.toFixed(4);
@@ -210,17 +210,14 @@ export const RealTimeStandby = ({Time}) => {
 	 */
 	const filterStationReturnValue = (type, list) => {
 		if(data){
-			const filterStationValue = list.map((region) => {
-				return region.station.map((station) => {
-					const findData = data.find((data) => data.stationName === station)?.[type];
-					if (findData !== '-') {
-						return Number(findData);
-					} else {
-						return 0;
-					}
+			const filterStationValue = list?.map((region) => {
+				return region.station?.map((station) => {
+					const findData = data?.find((data) => data.stationName === station)?.[type];
+					const formatter = Number(findData);
+					return isNaN(formatter) ? 0 : formatter;
 				});
 			});
-			const result = filterStationValue.map((val) => {
+			const result = filterStationValue?.map((val) => {
 				const sumValue = val.reduce((acc, cur) => acc + cur);
 				if(type === 'khaiValue' || type === 'pm10Value' || type === 'pm25Value') {
 					return Math.round(sumValue / val.length);
@@ -369,8 +366,8 @@ export const RealTimeStandby = ({Time}) => {
 			`;
 
 			// 입력된 지역의 전체 측정소 위치 데이터
-			const filterStationData = stationsInfo.filter(item => {
-				return (item.city === fullName) && filterDataValues[filterDataKeys.indexOf(item.mangName)];
+			const filterStationData = stationsInfo?.filter(item => {
+				return (item.city === fullName) && filterDataValues[filterDataKeys?.indexOf(item.mangName)];
 			});
 
 			return (
@@ -389,10 +386,10 @@ export const RealTimeStandby = ({Time}) => {
 						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
 					</SelectDiv>
 					{/* 버튼 */}
-					{(selectInfo === 'air') && <InnerButtonWrap>{regionList[regName].map(renderButton)}</InnerButtonWrap>}
+					{(selectInfo === 'air') && <InnerButtonWrap>{regionList[regName]?.map(renderButton)}</InnerButtonWrap>}
 					{(selectInfo === 'station' || selectInfo === 'station') && <InnerStationCollection>
-						{filterStationData.map((el, key) => {
-							const filterStationAirData = data.find(item => item.stationName === el.stationName);
+						{filterStationData?.map((el, key) => {
+							const filterStationAirData = data?.find(item => item.stationName === el.stationName);
 							const icoNum = getColorValue(filterStationAirData?.[type], type)[4];
 							if(!filterRange[icoNum - 1]){
 								return <Fragment key={key}></Fragment>
@@ -423,7 +420,7 @@ export const RealTimeStandby = ({Time}) => {
 						></path>
 
 						{/* 지역 SVG */}
-						{regionList[regName].map(renderPath)}
+						{regionList[regName]?.map(renderPath)}
 					</InnerMapSvg>
 				</DetailContainer>
 			);
@@ -451,7 +448,7 @@ export const RealTimeStandby = ({Time}) => {
 		}
 
 		/** 전체 맵 버튼, 상세 지역, 전체 맵 SVG */
-		return regionDetailData.map((el, key) => {
+		return regionDetailData?.map((el, key) => {
 			let color;
 			let hoverColor;
 			let hoverChk = false;
@@ -513,9 +510,9 @@ export const RealTimeStandby = ({Time}) => {
 		// const stationData = stationsInfo.find(item => item.stationName === hoverStation);
 		return (
 			<Div>
-				{stationsInfo.map((list, key) => {
+				{stationsInfo?.map((list, key) => {
 					// 장계면 데이터 없음
-					const filterStationAirData = data.find(item => (item.stationName === list.stationName));
+					const filterStationAirData = data?.find(item => (item.stationName === list.stationName));
 					const icoNum = getColorValue(filterStationAirData?.[type], type)[4];
 					const icoColor = {
 						1: "#48c9ff",
@@ -526,7 +523,7 @@ export const RealTimeStandby = ({Time}) => {
 					};
 
 					if (
-						!filterDataValues[filterDataKeys.indexOf(list.mangName)] ||
+						!filterDataValues[filterDataKeys?.indexOf(list.mangName)] ||
 						!filterRange[icoNum - 1]
 					) {
 					return <Fragment key={key}></Fragment>;

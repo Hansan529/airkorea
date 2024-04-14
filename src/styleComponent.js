@@ -346,10 +346,8 @@ export const SecondBanner = styled.div`
   }
 `;
 export const SecondBannerInfo = styled.div`
-      transition-duration: 300ms;
-      ${({index}) => index && css`
-      transform: translateY(-${index * 80}px);
-      `}
+      transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'};
+      transform: translateY(-${props => props.index * 80}px);
 
       div {
         display: flex;
