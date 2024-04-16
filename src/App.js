@@ -1,15 +1,17 @@
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import Headers from './components/Header';
-import {
-  getColorValue,
-  RealTimeStandby,
-} from './components/RealtimeStandby';
+
 import stationInfoJSON from './data/stationInfo.json';
+import getColorValue from './functions/getColorValue.ts';
+
+import { RealTimeStandby } from './components/RealTimeStandby.js';
 import TodayAirQuality from './components/TodayAirQuality';
-import { Fragment, useEffect, useRef, useState } from 'react';
 import StandbyForecast from './components/StandbyForecast';
 import { RealTimeWeather } from './components/RealTimeWeather';
+
 import { CopyRight, FirstSection, Legend, LegendWrapper, Loading, MMLayout, MMOBorderDiv, MMOContainer, MMOList, MMOptionLayout, MMOSelect, MMOSelectWrapper, MMWrapper, SecondBanner, SecondBannerInfo, SecondSection, TimeButtonStyle, TimeDiv } from './styleComponent';
+import HeaderComponent from './components/Header';
+import FooterComponent from './components/Footer';
 import useStore from './hooks/useStore';
 
 function sleep(sec) {
@@ -277,29 +279,10 @@ const typeRange = getColorValue(0, type, true);
     );
   };
 
-
-
   // ------------------------------------------------ event, function
-  const tapSelectHandle = (index) => {
-    setTapSelect(index);
-  };
-  const mMoSelectHandle = (e) => {
-    const { value, dataset: { information } } = e.currentTarget;
+  const eventHandler = (target, value) => changer(target, value);
 
-    // 대기/경보 정보, 측정소 정보 클릭 시
-    if(information){
-      // information === 'station' ? setLegendPopup(prevState => ({index: 1, state: [true, true, false, false]})) : setLegendPopup(0);
-      changer('selectInfo', information);
-    } else {
-      if(value.match(/Value/gi)){
-        changer('type', value);
-      }
-      else {
-        changer('openMap',value);
-        changer('regionNum', value);
-      }
-    }
-  };
+  const tapSelectHandle = (index) => setTapSelect(index);
   const legendPopupHandle = (e) => {
     const legendElement = e.currentTarget.closest('[data-legend-index]');
     const { legendIndex } = legendElement.dataset;
@@ -358,7 +341,7 @@ const typeRange = getColorValue(0, type, true);
       }, 1000);
       setIntervalId(id);
     }
-  }
+  };
   const airInfoIndexDownHandle = async () => {
     if(!running) {
       setRunning(true);
@@ -450,7 +433,7 @@ const typeRange = getColorValue(0, type, true);
 
   return (
     <>
-      <Headers />
+      <HeaderComponent />
       <main>
         {/* 첫번째 색션 */}
         <FirstSection>
@@ -478,7 +461,7 @@ const typeRange = getColorValue(0, type, true);
                 {tapSelect === 0 &&
                 <>
                   <MMOSelectWrapper flex align="left">
-                    <MMOSelect id="area1" bg $width="180px" onChange={mMoSelectHandle} value={type}>
+                    <MMOSelect id="area1" bg $width="180px" onChange={(e) => eventHandler('type', e.currentTarget.value)} value={type}>
                       <option value="khaiValue">통합대기환경지수(CAI)</option>
                       <option value="pm25Value">초미세먼지 (PM-2.5)</option>
                       <option value="pm10Value">미세먼지 (PM-10)</option>
@@ -492,7 +475,12 @@ const typeRange = getColorValue(0, type, true);
                     <label htmlFor="area2" style={{ marginRight: '5px' }}>
                       시/도
                     </label>
-                    <MMOSelect id="area2" bg $width="130px" onChange={mMoSelectHandle} value={regionNum}>
+                    <MMOSelect id="area2" bg $width="130px" 
+                    onChange={(e) => {
+                      eventHandler('openMap', e.currentTarget.value);
+                      eventHandler('regionNum', e.currentTarget.value);
+                    }}
+                    value={regionNum}>
                       <option value="none">-전체-</option>
                       <option value="02">서울특별시</option>
                       <option value="031">경기도</option>
@@ -514,8 +502,8 @@ const typeRange = getColorValue(0, type, true);
                     </MMOSelect>
                   </MMOSelectWrapper>
                   <MMOBorderDiv flex>
-                    <button onClick={mMoSelectHandle} active={selectInfo === 'air' ? 'on' : 'off'} data-information="air">대기/경보 정보</button>
-                    <button onClick={mMoSelectHandle} active={selectInfo === 'station' ? 'on' : 'off'} data-information="station">측정소 정보</button>
+                    <button onClick={(e) => eventHandler('selectInfo', 'air')}     active={selectInfo === 'air' ? 'on' : 'off'}   >대기/경보 정보</button>
+                    <button onClick={(e) => eventHandler('selectInfo', 'station')} active={selectInfo === 'station' ? 'on' : 'off'}>측정소 정보</button>
                   </MMOBorderDiv>
                 </>}
                 {tapSelect === 1 && <>
@@ -568,6 +556,7 @@ const typeRange = getColorValue(0, type, true);
           <p>한국환경공단 에어코리아 대기오염정보, 측정소정보, 대기오염통계 현황</p>
         </CopyRight>
       </main>
+      <FooterComponent />
     </>
   );
 }
