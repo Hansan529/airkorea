@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import styled from '@emotion/styled';
 import './App.css';
 
 import stationInfoJSON from './data/stationInfo.json';
@@ -9,11 +10,425 @@ import TodayAirQuality from './components/TodayAirQuality';
 import StandbyForecast from './components/StandbyForecast';
 import { RealTimeWeather } from './components/RealTimeWeather';
 
-import { CopyRight, FirstSection, Legend, LegendWrapper, Loading, MMLayout, MMOBorderDiv, MMOContainer, MMOList, MMOptionLayout, MMOSelect, MMOSelectWrapper, MMWrapper, SecondBanner, SecondBannerInfo, SecondSection, TimeButtonStyle, TimeDiv } from './styleComponent';
 import HeaderComponent from './components/Header';
 import FooterComponent from './components/Footer';
 import useStore from './hooks/useStore';
 
+// Style
+const Select = styled.select`
+  -o-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+`;
+const Section = styled.section`
+    position: relative;
+`;
+const FirstSection = styled(Section)`
+  background: url('/img_main_bg.png') repeat-x 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+`;
+const MMLayout = styled.div`
+    flex-basis: 0.5;
+    width: 710px;
+`;
+const MMOptionLayout = styled.div`
+  width: 710px;
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+  border-radius: 10px;
+`;
+const MMOList = styled.ul`
+  display: flex;
+  margin: 0;
+  margin-bottom: 5px;
+
+  li {
+    flex: 1;
+    text-align: center;
+    border: 1px solid #d2d2d2;
+    border-bottom: none;
+    overflow: hidden;
+
+    &:first-of-type {
+      border-top-left-radius: 10px;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: 10px;
+    }
+
+    button {
+      display: block;
+      height: 50px;
+      line-height: 50px;
+      letter-spacing: -0.6px;
+      background: #fff;
+      width: 100%;
+      border: none;
+
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+
+    &[select="on"]{
+      button {
+        background: #0f62cc;
+        color: #fff;
+        font-weight: 600;
+      }
+    }
+  }
+`;
+const MMOContainer = styled.div`
+  height: 50px;
+  background: linear-gradient(to right, #009ffa, #00c36a);
+  border-radius: 6px;
+  display: flex;
+  padding: 10px;
+  box-sizing: border-box;
+`;
+const MMOBorder = `
+  border-radius: 30px;
+  background: #fff no-repeat right 10px center;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  border: none;
+`;
+const MMOSelectWrapper = styled.div`
+  flex: ${props => props.flex && '1 1 calc(33.333% - 20px)'};
+  text-align: ${props => props.align || 'center'};
+  font-size: 14px;
+  color: #0a0a0a;
+`;
+const MMOSelect = styled(Select)`
+  ${MMOBorder}
+  background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
+  width: ${props => props.$width};
+  padding: ${(props) => (props.flex ? '0 3px' : '0 15px')};
+  display: ${(props) => props.flex && 'flex'};
+
+  button {
+    flex: 1;
+    color: #0a0a0a;
+    border: none;
+    background: none;
+    border-radius: 30px;
+    height: 24px;
+
+    &.on {
+      color: #fff;
+      background-color: #414d5d;
+    }
+  }
+`;
+const MMOBorderDiv = styled(MMOSelectWrapper)`
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  ${MMOBorder}
+  padding: 0 5px;
+  box-sizing: border-box;
+
+  button {
+    flex: 1;
+    border: none;
+    background: none;
+    border-radius: 30px;
+    height: calc(100% - 5px);
+    cursor: pointer;
+  }
+
+  button[active="on"]{
+    font-weight: bold;
+    background-color: #414d5d;
+    color: #fff;
+  }
+`;
+const MMWrapper = styled.div`
+  width: 700px;
+  height: 705px;
+  box-sizing: border-box;
+  background: url('/map_svg_warp_bg.png') no-repeat 5px -10px;
+  position: relative;
+  margin-top: 20px;
+  /* overflow: hidden; */
+`;
+const LegendWrapper = styled.div`
+  position: absolute;
+    width: 150px;
+    right: 1px;
+    bottom: 1px;
+    overflow: hidden;
+`;
+const Legend = styled.div`
+  div, .radio > legend {
+    background-color: #f6fdff;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-bottom: none;
+
+    button {
+      background: no-repeat right 14px center;
+      background-image: url(./img_bottom_arr_up.png);
+      border: none;
+      width: 100%;
+      text-align: left;
+      text-indent: 14px;
+      cursor: pointer;
+      padding: 5px 0;
+
+      &:hover {
+        text-decoration: underline;
+      }
+  }}
+  ul, .list {
+    border: 1px solid rgba(0,0,0,0.3);
+    /* transition: height 0.3s; */
+    height: 0;
+
+    li{
+    text-indent: 30px;
+    background: no-repeat 10px center / 12px;
+    padding: 5px 0;
+    small {font-size: 14px;}
+
+    &:first-of-type {
+      background-image: url(./img_cau01.png);
+    }
+    &:last-of-type {
+      background-image: url(./img_cau02.png);
+    }
+  }}
+
+  .radio {
+    /* transition: height 0.3s; */
+    height: 0;
+    overflow: hidden;
+
+    label {
+        display: flex;
+        font-size: 12px;
+        align-items: center;
+        padding: 5px;
+
+        input {
+          width: 12px;
+          height: 12px;
+        }
+      }
+  }
+
+  /* Open */
+  &.on{
+    div, .radio > legend {
+      background-color: #0f6ecc;
+
+      button {
+        color: #fff;
+        background-image: url(./img_bottom_arr_down.png);
+      }
+    }
+
+    ul, .list {
+      height: ${props => props.height};
+    }
+
+    .radio {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.3);
+      padding-bottom: 5px;
+
+      height: ${props => props.height};
+    }
+  }
+
+  /*  */
+  &[data-legend-index="1"]{
+    .radio label {
+      position: relative;
+      text-indent: 13px;
+
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        top: 50%;
+        left: 25px;
+        transform: translateY(-50%);
+        background: no-repeat 0 0;
+      }
+      &:first-of-type::before { background-image: url('./img_ch01.png'); }
+      &:nth-of-type(2)::before { background-image: url('./img_ch02.png'); }
+      &:nth-of-type(3)::before { background-image: url('./img_ch03.png'); }
+      &:nth-of-type(4)::before { background-image: url('./img_ch04.png'); }
+      &:last-of-type::before { background-image: url('./img_ch05.png'); }
+      }
+  }
+`;
+const SecondSection = styled(Section)`
+    margin: 50px auto 0;
+    background: url('./img_bg_s_01.png') repeat-x 0 0;
+    width: 1400px;
+`;
+const SecondBanner = styled.div`
+  position: relative;
+  background: linear-gradient(to right, #009ff9, #00c36b);
+  height: 100px;
+  padding: 10px;
+  border-radius: 8px;
+  display:flex;
+  align-items: center;
+  gap: 30px;
+
+  .updateTime {
+    text-align: center;
+    strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 30px;
+      line-height: 17px;
+    }
+  }
+
+  .text {
+    width: 100%;
+    height: 80px;
+    padding: 0 60px 0 100px;
+    background: #fff url(./img_bg_s_02.png) no-repeat right 24px bottom;
+    border-radius: 30px 8px 30px 8px;
+    position: relative;
+    overflow-y: hidden;
+
+    .title {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      font-size: 22px;
+      
+      &::after {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 80%;
+        background-color: rgba(0,0,0,0.1);
+        top: 50%;
+        transform: translate(20px, -50%);
+      }
+      
+      strong { 
+        display: block; 
+      }
+    }
+  }
+
+  .buttonWrap {
+    margin-right: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+
+    button {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: no-repeat center center;
+      cursor: pointer;
+
+      &.upBtn {
+        background-image: url('./img_up_down_up.png');
+      }
+      &.playBtn {
+        background-image: url('./icon_bn_stop.png');
+      }
+      &.downBtn {
+        background-image: url('./img_up_down_down.png');
+      }
+    }
+  }
+`;
+const SecondBannerInfo = styled.div`
+      transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'};
+      transform: translateY(-${props => props.index * 80}px);
+
+      div {
+        display: flex;
+        height: 80px;
+        align-items: center;
+        word-break: keep-all;
+        line-height: 1.5;
+        strong {
+          margin-right: 15px;
+          flex: none;
+          color: #0f62cc;
+          text-decoration: underline;
+        }
+      }
+`;
+const CopyRight = styled.div`
+`;
+const Loading = styled.div`
+      display: ${props => props.loading === 'true' ? 'none' : 'block'};
+      position: absolute;
+      z-index: 100;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      border: 1px solid #bcd0e8;
+      background: url('/loading_bg.png');
+
+      div {
+        margin-top: 360px;
+        font-size: 20px;
+        color: #0054a6;
+      }
+`;
+const TimeDiv = styled.div`
+      display: flex;
+      gap: 5px !important;
+      background-color: ${props => props.refresh ? '#e4f7ff' : '#fff'};
+      height: ${props => props.height || "15px"};
+      padding: 5px 15px;
+      border-radius: 25px;
+      align-items: center;
+      position: absolute;
+      top: ${props => props.top || 0};
+      right: ${props => props.right || 0};
+      font-size: 14px;
+      left: ${props => props.left || 0};
+
+      strong {
+        font-weight: 900;
+      }
+`;
+const TimeButtonStyle = styled.button`
+      background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
+      display: inline-block;
+      background: url('/img_refresh.png') no-repeat center;
+      width: 16px;
+      height: 20px;
+      border: none;
+      transition: transform 0.5s;
+      position: relative;
+      transform-origin: center;
+
+      &:hover {
+          cursor: pointer;
+        }
+`;
+
+// Function
 function sleep(sec) {
   return new Promise(resolve => setTimeout(resolve, sec * 1000));
 };

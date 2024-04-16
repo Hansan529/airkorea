@@ -1,6 +1,6 @@
-import { StandbyMain, StandbyNames } from '../styleComponent';
 import useStore from '../hooks/useStore';
 import { useState } from 'react';
+import styled from '@emotion/styled';
 
 const hexCode = {
     '좋음': '#d0ecff',
@@ -9,6 +9,46 @@ const hexCode = {
     '매우나쁨': '#ffd6da',
     '데이터 없음': '#cbd0d3',
 }
+
+const StandbyMain = styled.div`
+    > svg {
+        margin: -9px 0 0 6.5px;
+    }
+`;
+const StandbyNames = styled.div`
+    span {
+        position: absolute;
+        height: 26px;
+        padding: 0 10px;
+        background: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        color: #646464;
+        border: 1px solid #c8c8c8;
+        border-radius: 13px;
+        text-align: center;
+        line-height: 26px;
+    }
+    .mp03{top: 159px; left: 270px;}
+    .mp19{top: 660px; left: 42px;}
+    .mp17{top: 580px; left: 240px;}
+    .mp12{top: 445px; left: 249px;}
+    .mp15{top: 520px; left: 215px;}
+    .mp16{top: 505px; left: 388px;}
+    .mp11{top: 310px; left: 445px;}
+    .mp14{top: 464px; left: 518px;}
+    .mp13{top: 395px; left: 435px;}
+    .mp18{top: 534px; left: 494px;}
+    .mp08{top: 322px; left: 189px;}
+    .mp07{top: 257px; left: 345px;}
+    .mp09{top: 315px; left: 300px;}
+    .mp10{top: 352px; left: 315px;}
+    .mp05{top: 177px; left: 464px;}
+    .mp02{top: 115px; left: 353px;}
+    .mp06{top: 218px; left: 267px;}
+    .mp01{top: 106px; left: 209px;}
+    .mp04{top: 150px; left: 164px;}
+`;
 
 const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
     const { text } = useStore(state => state);
