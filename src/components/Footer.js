@@ -60,8 +60,8 @@ export default function FooterComponent() {
                     <ListLi><a href="https://heis.busan.go.kr" title="부산 보건환경정보 공개시스템" target="_blank" rel="noreferrer"><img alt="부산 보건환경정보 공개시스템" src="./img_ban09.jpg" /></a></ListLi>
                     <ListLi><a href="https://air.daegu.go.kr" title="대구 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="대구 대기정보 시스템" src="./img_ban10.jpg" /></a></ListLi>
                     <ListLi><a href="https://gwangju.go.kr" title="광주 시청" target="_blank" rel="noreferrer"><img alt="광주 대기정보 시스템" src="./img_ban11.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.daejeon.go.kr/hea/airDynamicData.do?menuseq=6858"><img alt="대전 보건환경연구원" src="./img_ban12.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.ulsan.go.kr/s/uihe/main.ulsan"><img alt="울산 보건환경연구원" src="./img_ban13.jpg" /></a></ListLi>
+                    <ListLi><a href="https://www.daejeon.go.kr/hea/airDynamicData.do?menuseq=6858" title="대전 보건환경연구원" target="_blank" rel="noreferrer"><img alt="대전 보건환경연구원" src="./img_ban12.jpg" /></a></ListLi>
+                    <ListLi><a href="https://www.ulsan.go.kr/s/uihe/main.ulsan" title="울산 보건환경연구원" target="_blank" rel="noreferrer"><img alt="울산 보건환경연구원" src="./img_ban13.jpg" /></a></ListLi>
                     <ListLi><a href="https://www.sejong.go.kr/air/index.do" title="세종 미세먼지 정보센터" target="_blank" rel="noreferrer"><img alt="세종 미세먼지 정보센터" src="./img_ban14.jpg" /></a></ListLi>
                     <ListLi><a href="http://www.airgangwon.go.kr" title="강원 대기환경정보" target="_blank" rel="noreferrer"><img alt="강원 대기환경정보" src="./img_ban15.jpg" /></a></ListLi>
 			        <ListLi><a href="https://www.chungbuk.go.kr/here/index.do" title="충북 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="충북 보건환경 연구원" src="./img_ban16.jpg" /></a></ListLi>
