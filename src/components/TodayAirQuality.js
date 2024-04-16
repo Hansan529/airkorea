@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
-import { getColorValue } from "./RealtimeStandby";
 import stationJson from "../data/stationInfo.json";
 import { useEffect, useRef, useState } from "react";
 import { InfoContainer, InfoWrapper, InfoButton, InfoInteraction, Container, Part, LegendBase, AirForecastUl } from "../styleComponent";
 import useStore from "../hooks/useStore";
 import useAirQualityStore from "../hooks/useAirQualityStore";
+import getColorValue from "../functions/getColorValue.ts";
 
 /**
  * 금일 시간별 미세먼지
