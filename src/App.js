@@ -4,6 +4,7 @@ import './App.css';
 
 import stationInfoJSON from './data/stationInfo.json';
 import getColorValue from './functions/getColorValue.ts';
+import sleep from './functions/sleep.ts';
 
 import { RealTimeStandby } from './components/RealTimeStandby.js';
 import TodayAirQuality from './components/TodayAirQuality';
@@ -398,15 +399,15 @@ const TimeDiv = styled.div`
       display: flex;
       gap: 5px !important;
       background-color: ${props => props.refresh ? '#e4f7ff' : '#fff'};
-      height: ${props => props.height || "15px"};
       padding: 5px 15px;
       border-radius: 25px;
       align-items: center;
       position: absolute;
-      top: ${props => props.top || 0};
-      right: ${props => props.right || 0};
       font-size: 14px;
-      left: ${props => props.left || 0};
+      height: ${props => props.height || "15px"};
+      top: ${props => props.top || 'initial'};
+      right: ${props => props.right || 'initial'};
+      left: ${props => props.left || 'initial'};
 
       strong {
         font-weight: 900;
@@ -422,16 +423,12 @@ const TimeButtonStyle = styled.button`
       transition: transform 0.5s;
       position: relative;
       transform-origin: center;
+      font-size: 0;
 
       &:hover {
           cursor: pointer;
         }
 `;
-
-// Function
-function sleep(sec) {
-  return new Promise(resolve => setTimeout(resolve, sec * 1000));
-};
 
 function App() {
   // ------------------------------------------------ setting
@@ -488,85 +485,85 @@ function App() {
   const [tapSelect, setTapSelect] = useState(0);
   const [coordinateBoolean, setCoordinateBoolean] = useState(false);
   
-// 가까운 위치의 측정소 데이터
-useEffect(() => {
-  if(!coordinateBoolean){
-    setCoordinateBoolean(true);
-    if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
-      if('geolocation' in navigator) {
-        const success = async (pos) => {
-          let { latitude, longitude } = pos.coords;
-          if(latitude === undefined) latitude = '197806.5250901809';
-          if(longitude === undefined) longitude = '451373.25740676327';
-  
-          const response = await fetch('http://localhost:3500/api/coordinate', {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ latitude, longitude })
-          });
-          const {documents: [{x, y}]} = await response.json();
-  
-          const responseStation = await fetch('http://localhost:3500/api/station', {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ x, y })
-          });
-          const stations = await responseStation.json();
-          // 가까운 거리의 측정소 3개
-          // setStation(stations);
-  
-          // 가까운 측정소
-          const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
-          changer('station', stationInfo);
+  // 가까운 위치의 측정소 데이터
+  useEffect(() => {
+    if(!coordinateBoolean){
+      setCoordinateBoolean(true);
+      if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+        if('geolocation' in navigator) {
+          const success = async (pos) => {
+            let { latitude, longitude } = pos.coords;
+            if(latitude === undefined) latitude = '197806.5250901809';
+            if(longitude === undefined) longitude = '451373.25740676327';
+    
+            const response = await fetch('http://localhost:3500/api/coordinate', {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ latitude, longitude })
+            });
+            const {documents: [{x, y}]} = await response.json();
+    
+            const responseStation = await fetch('http://localhost:3500/api/station', {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ x, y })
+            });
+            const stations = await responseStation.json();
+            // 가까운 거리의 측정소 3개
+            // setStation(stations);
+    
+            // 가까운 측정소
+            const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
+            changer('station', stationInfo);
+          }
+          const error = (err) => {
+            console.info("위치 권한 차단됨: ", err);
+            const stationInfo = {
+              "dmX": "37.564639",
+              "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+              "mangName": "도시대기",
+              "year": "1995",
+              "city": "서울특별시",
+              "addr": "서울 중구 덕수궁길 15",
+              "building": "시청서소문별관 3동",
+              "stationName": "중구",
+              "dmY": "126.975961",
+              "top": "136",
+              "left": "264",
+              "innerTop": "248.594",
+              "innerLeft": "235.531"
+          }
+            changer('station', stationInfo);
+            alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
+          };
+    
+          navigator.geolocation.getCurrentPosition(success, error);
         }
-        const error = (err) => {
-          console.info("위치 권한 차단됨: ", err);
+      } else {
+        (async () => {
           const stationInfo = {
-            "dmX": "37.564639",
-            "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-            "mangName": "도시대기",
-            "year": "1995",
-            "city": "서울특별시",
-            "addr": "서울 중구 덕수궁길 15",
-            "building": "시청서소문별관 3동",
-            "stationName": "중구",
-            "dmY": "126.975961",
-            "top": "136",
-            "left": "264",
-            "innerTop": "248.594",
-            "innerLeft": "235.531"
-        }
+              "dmX": "37.564639",
+              "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+              "mangName": "도시대기",
+              "year": "1995",
+              "city": "서울특별시",
+              "addr": "서울 중구 덕수궁길 15",
+              "building": "시청서소문별관 3동",
+              "stationName": "중구",
+              "dmY": "126.975961",
+              "top": "136",
+              "left": "264",
+              "innerTop": "248.594",
+              "innerLeft": "235.531"
+          }
           changer('station', stationInfo);
-          alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
-        };
-  
-        navigator.geolocation.getCurrentPosition(success, error);
+        })();
       }
-    } else {
-      (async () => {
-        const stationInfo = {
-            "dmX": "37.564639",
-            "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-            "mangName": "도시대기",
-            "year": "1995",
-            "city": "서울특별시",
-            "addr": "서울 중구 덕수궁길 15",
-            "building": "시청서소문별관 3동",
-            "stationName": "중구",
-            "dmY": "126.975961",
-            "top": "136",
-            "left": "264",
-            "innerTop": "248.594",
-            "innerLeft": "235.531"
-        }
-        changer('station', stationInfo);
-      })();
     }
-  }
-  // changer('loading', true);
-}, [stationsInfo, coordinateBoolean]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stationsInfo, coordinateBoolean]);
   
-const typeRange = getColorValue(0, type, true);
+  const typeRange = getColorValue(0, type, true);
 
 // ------------------------------------------------ component
   const LoadingScreen = () => {
@@ -596,7 +593,7 @@ const typeRange = getColorValue(0, type, true);
   const Time = ({ top, left, right, height, refresh, onClick, custom }) => {
     if(TimeText) {
         return (
-          <TimeDiv top={top} left={left} right={right} height={height}>
+          <TimeDiv top={top} left={left} right={right} height={height} refresh={refresh}>
             {custom ? <span>{custom[0]} <strong>{custom[1]} 발표자료</strong></span> :
             <span>{TimeText.year}년 {TimeText.month}월 {TimeText.day}일 <strong>{TimeText.hour}시</strong></span>}
             {refresh && <TimeButtonStyle onClick={onClick}>새로고침</TimeButtonStyle>}
@@ -617,7 +614,7 @@ const typeRange = getColorValue(0, type, true);
     return (
       <>
         <RealTimeStandby Time={Time} />
-        <Time />
+        <Time right="0" />
         <LegendWrapper ref={legendRef}>
           {selectInfo === 'air' ?
           <Legend data-legend-index="0" className={isOn0 && 'on'} height="55px">
