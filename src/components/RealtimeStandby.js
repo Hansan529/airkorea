@@ -339,9 +339,6 @@ export const RealTimeStandby = ({Time}) => {
 	const filterDataKeys = Object.keys(filterData);
 	const filterDataValues = Object.values(filterData);
 
-	// *-------------------------------------------------------------- Dynamic Style
-	// *-------------------------------------------------------------- Dynamic Style
-
 	// ^-------------------------------------------------------------- JSON
 	/** JSON 사용 */
 	/**

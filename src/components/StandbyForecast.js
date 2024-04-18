@@ -2075,7 +2075,7 @@ const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
                     c-0.188,2.9,1.312,4.691,3.247,6.516c0.778,0.732,1.334,1.654,2.023,2.461c0.743,0.867,1.267,2.045,2.15,2.734
                     c0.727,0.568,1.635,1.025,2.322,1.691C40.559,693.773,40.884,694.881,41.982,695.338z"></path>
             </svg>
-            <Time custom={timeData} />
+            <Time custom={timeData} right="0" top="0" />
         </StandbyMain>
     )
 }
