@@ -542,12 +542,13 @@ function App() {
               return;
           }
         } 
+        alert('현재위치를 사용 또는 지원하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
       }
+
       // 브라우저에서 현재 위치 기능을 지원하지 않는 경우 또는 현재 위치 정보를 사용하지 않는 경우
-      alert('현재위치를 사용 또는 지원하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
-      changer('stationFetchBoolean', true);
       changer('station', defaultStation);
-  }, [changer, stationFetchBoolean, stationsInfo]);
+      changer('stationFetchBoolean', true);
+  }, [changer, count]);
 
   // 모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
   useEffect(() => {

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import useStore from "../hooks/useStore";
 import useAirQualityStore from "../hooks/useAirQualityStore";
 import getColorValue from "../functions/getColorValue.ts";
+import sleep from "../functions/sleep.ts";
 
 const InfoContainer = styled.div`width: 660px;`;
 const InfoWrapper = styled.div`
@@ -298,8 +299,8 @@ const AirForecastLi = styled(PartLi)`
  */
 
 const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
-    const { data, text, station } = useStore(state => state);
-    const { pm10, pm25, o3, currentLocation: location, changer } = useAirQualityStore(state => state);
+    const { data, text, station, changer: storeChanger } = useStore(state => state);
+    const { pm10, pm25, o3, currentLocation: location, changer: airQualityChanger } = useAirQualityStore(state => state);
 
     const stationsInfo = stationJson.items;
     const legendPopupRef = useRef();
@@ -417,13 +418,12 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
         const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
         const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
     
-        changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25Index, todayState: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
-        changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10Index, todayState: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
-        changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrowState: 5});
-        changer('currentLocation', currentLocation);
+        airQualityChanger('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25Index, todayState: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
+        airQualityChanger('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10Index, todayState: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
+        airQualityChanger('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrowState: 5});
+        airQualityChanger('currentLocation', currentLocation);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [station])
+    }, [text, data, airQualityChanger, station])
     // ---------------------------------------------------- Dyanmic Styled
     const Legend = styled(LegendBase)`
         .legendPopup {
@@ -439,7 +439,12 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
         }
     `;
     // ---------------------------------------------------- Event
-    const refreshBtn = () => setCount(count + 1);
+    const refreshBtn = async () => {
+        storeChanger('stationFetchBoolean', false);
+        storeChanger('loading', false);
+        await sleep(0.3);
+        setCount(count + 1);
+    };
     const legendClickHandle = (e) => {
         const type = e.currentTarget.getAttribute('type');
 
