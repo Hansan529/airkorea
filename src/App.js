@@ -432,7 +432,7 @@ const TimeButtonStyle = styled.button`
 
 function App() {
   // ------------------------------------------------ setting
-  const { data, dataFetchBoolean, text, textFetchBoolean, changer, getFetch } = useStore(state => state);
+  const { data, dataFetchBoolean, text, textFetchBoolean, stationFetchBoolean, changer, getFetch } = useStore(state => state);
 
   const type = useStore(state => state.type);
   const regionNum = useStore(state => state.regionNum);
@@ -483,85 +483,77 @@ function App() {
   const [count, setCount] = useState(0);
   // 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
-  const [coordinateBoolean, setCoordinateBoolean] = useState(false);
   
   // 가까운 위치의 측정소 데이터
   useEffect(() => {
-    if(!coordinateBoolean){
-      setCoordinateBoolean(true);
-      if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+      // 중구
+      const defaultStation = {
+        "dmX": "37.564639",
+        "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+        "mangName": "도시대기",
+        "year": "1995",
+        "city": "서울특별시",
+        "addr": "서울 중구 덕수궁길 15",
+        "building": "시청서소문별관 3동",
+        "stationName": "중구",
+        "dmY": "126.975961",
+        "top": "136",
+        "left": "264",
+        "innerTop": "248.594",
+        "innerLeft": "235.531"
+      };
+      // station 정보를 store에 없는 경우에만 Fetch
+      if(!stationFetchBoolean) {
+        // 브라우저에서 현재 위치 기능을 지원하는 경우
         if('geolocation' in navigator) {
-          const success = async (pos) => {
-            let { latitude, longitude } = pos.coords;
-            if(latitude === undefined) latitude = '197806.5250901809';
-            if(longitude === undefined) longitude = '451373.25740676327';
-    
-            const response = await fetch('http://localhost:3500/api/coordinate', {
-              method: "POST",
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({ latitude, longitude })
-            });
-            const {documents: [{x, y}]} = await response.json();
-    
-            const responseStation = await fetch('http://localhost:3500/api/station', {
-              method: "POST",
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({ x, y })
-            });
-            const stations = await responseStation.json();
-            // 가까운 거리의 측정소 3개
-            // setStation(stations);
-    
-            // 가까운 측정소
-            const stationInfo = stationsInfo.find(item => item.stationName === stations[0].stationName);
-            changer('station', stationInfo);
+          if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+              const success = async (pos) => {
+                let { latitude, longitude } = pos.coords;
+                if(latitude === undefined) latitude = '197806.5250901809';
+                if(longitude === undefined) longitude = '451373.25740676327';
+        
+                const response = await fetch('http://localhost:3500/api/coordinate', {
+                  method: "POST",
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({ latitude, longitude })
+                });
+                const {documents: [{x, y}]} = await response.json();
+        
+                const responseStation = await fetch('http://localhost:3500/api/station', {
+                  method: "POST",
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({ x, y })
+                });
+                const stations = await responseStation.json();
+                // 가까운 거리의 측정소 3개
+                // setStation(stations);
+        
+                // 가까운 측정소
+                const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
+                changer('stationFetchBoolean', true);
+                changer('station', stationData);
+              }
+              const error = (err) => {
+                console.info("위치 권한 차단됨: ", err);
+                changer('station', defaultStation);
+                alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
+              };
+              navigator.geolocation.getCurrentPosition(success, error);
+              return;
           }
-          const error = (err) => {
-            console.info("위치 권한 차단됨: ", err);
-            const stationInfo = {
-              "dmX": "37.564639",
-              "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-              "mangName": "도시대기",
-              "year": "1995",
-              "city": "서울특별시",
-              "addr": "서울 중구 덕수궁길 15",
-              "building": "시청서소문별관 3동",
-              "stationName": "중구",
-              "dmY": "126.975961",
-              "top": "136",
-              "left": "264",
-              "innerTop": "248.594",
-              "innerLeft": "235.531"
-          }
-            changer('station', stationInfo);
-            alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
-          };
-    
-          navigator.geolocation.getCurrentPosition(success, error);
-        }
-      } else {
-        (async () => {
-          const stationInfo = {
-              "dmX": "37.564639",
-              "item": "SO2, CO, O3, NO2, PM10, PM2.5",
-              "mangName": "도시대기",
-              "year": "1995",
-              "city": "서울특별시",
-              "addr": "서울 중구 덕수궁길 15",
-              "building": "시청서소문별관 3동",
-              "stationName": "중구",
-              "dmY": "126.975961",
-              "top": "136",
-              "left": "264",
-              "innerTop": "248.594",
-              "innerLeft": "235.531"
-          }
-          changer('station', stationInfo);
-        })();
+        } 
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stationsInfo, coordinateBoolean]);
+      // 브라우저에서 현재 위치 기능을 지원하지 않는 경우 또는 현재 위치 정보를 사용하지 않는 경우
+      alert('현재위치를 사용 또는 지원하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
+      changer('stationFetchBoolean', true);
+      changer('station', defaultStation);
+  }, [changer, stationFetchBoolean, stationsInfo]);
+
+  // 모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
+  useEffect(() => {
+    if(dataFetchBoolean && textFetchBoolean && stationFetchBoolean && !loading)
+        changer('loading', true);
+  }, [dataFetchBoolean, textFetchBoolean, stationFetchBoolean, changer, loading]);
   
   const typeRange = getColorValue(0, type, true);
 
@@ -838,7 +830,6 @@ function App() {
       })
     };
     
-    if(!loading) changer('loading', true);
     return result;
   };
 

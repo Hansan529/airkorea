@@ -30,6 +30,7 @@ const useStore = create((set) => ({
     // fetch 상태
     dataFetchBoolean: false,
     textFetchBoolean: false,
+    stationFetchBoolean: false,
 
     // 상태 변경자
     changer: (target, value) => set((state) => ({[target]: value})),
