@@ -7,49 +7,10 @@ import getColorValue from "../functions/getColorValue.ts";
 
 const InfoContainer = styled.div`width: 660px;`;
 const InfoWrapper = styled.div`
-border: 5px solid #00aeee;
-border-radius: 20px;
-padding: 15px;
-background-color: #fff;
-
-> div:first-of-type{
-    background: url('/img_bg01.png') no-repeat;
-    height: 55px;
-    line-height: 55px;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    margin-bottom: 15px;
-
-    h2 {
-    font-size: 30px;
-    font-weight: 700;
-    text-align: center;
-
-    > span {
-        color: #0f62cc;
-    }
-    }
-}
-
-> div:nth-of-type(2) {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-
-    > div {
-    display: flex;
-    gap: 10px;
-
-    > p  {
-        font-size: 18px;
-        > strong { color: #0f62cc; }
-        > span { display: block; margin-top: 5px; font-size: 14px; }
-    }
-    }
-
-    button {
-    font-size: 0;
-    }
-}
+    border: 5px solid #00aeee;
+    border-radius: 20px;
+    padding: 15px;
+    background-color: #fff;
 `;
 const InfoButton = styled.button`
     display: inline-block;
@@ -64,7 +25,38 @@ const InfoButton = styled.button`
         background-color: rgba(0,0,0,0.2);
     }
 `;
-const InfoInteraction = styled.div`margin-bottom: 20px;`;
+const InfoWrap = styled.div`
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+`;
+const InfoInteraction = styled.div`
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    > p  {
+        font-size: 18px;
+        > strong { color: #0f62cc; }
+        > span { display: block; margin-top: 5px; font-size: 14px; }
+    }
+    button {
+        font-size: 0;
+    }
+`;
+const TitleWrap = styled.div`
+    background: url('/img_bg01.png') no-repeat;
+    height: 55px;
+    line-height: 55px;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    margin-bottom: 15px;
+`;
+const Title = styled.h2`
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+
+    span {color: #0f62cc;}
+`;
 const Container = styled.div`
     position: relative;
 
@@ -84,7 +76,7 @@ const Container = styled.div`
         border: 0;
     }
 
-`
+`;
 const Part = styled.div`
     display: block;
     border: 1px solid #d2d2d2;
@@ -98,60 +90,68 @@ const Part = styled.div`
         margin-bottom: 0;
     }
 
-    h3 {
-        padding: 10px 0;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    > ul{
-        padding: 30px 0px 25px;
-        background-color: #fff;
-        display: flex;
-        align-items: flex-end;
-
-        > li {
-            flex: 1;
-            text-align: center;
-            box-sizing: border-box;
-
-            &:not(:last-child){
-                border-right: 0.5px solid rgba(0,0,0,0.3);
-            }
-
-            strong, small, span {
-                display: block;
-            margin-bottom: 5px;
-
-                &:not(strong:first-of-type){
-                    margin: 10px 0;
-                }
-            }
-
-            .colorValue {
-                font-size: 24px;
-                font-weight: bold;
-            }
-            img {
-                margin: 10px 0;
-            }
-        }
-    }
-
     .miniText{
         line-height: 2;
-        text-indent: 20%;
         background-repeat: no-repeat;
-        background-position: 40% center;
+        background-position: 30px center;
     }
+    .miniTextIco_1{ 
+        background-image: url('./img_yebo_na01.png');
+        background-color: #1c67d74D;
+    }
+    .miniTextIco_2{ 
+        background-image: url('./img_yebo_na02.png'); 
+        background-color: #01b56e4D;
+    }
+    .miniTextIco_3{ 
+        background-image: url('./img_yebo_na03.png'); 
+        background-color: #9372004D;
+    }
+    .miniTextIco_4{ 
+        background-image: url('./img_yebo_na04.png'); 
+        background-color: #c00d0d4D;
+    }
+    .miniTextIco_5{ 
+        background-image: url('./img_yebo_na05.png'); 
+        background-color: #0a0a0a4D;
+    }
+`;
+const PartTitle = styled.h3`
+    padding: 10px 0;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+`;
+const PartUl = styled.ul`
+    padding: 30px 0px 25px;
+    background-color: #fff;
+    display: flex;
+    align-items: flex-end;
+`;
+const PartLi = styled.li`
+    flex: 1;
+    text-align: center;
+    box-sizing: border-box;
 
-    .miniTextIco_1{ background-image: url('./img_yebo_na01.png'); }
-    .miniTextIco_2{ background-image: url('./img_yebo_na02.png'); }
-    .miniTextIco_3{ background-image: url('./img_yebo_na03.png'); }
-    .miniTextIco_4{ background-image: url('./img_yebo_na04.png'); }
-    .miniTextIco_5{ background-image: url('./img_yebo_na05.png'); }
-`
+    &:not(:last-child){
+        border-right: 0.5px solid rgba(0,0,0,0.3);
+    }
+    strong, small, span {
+        display: block;
+        margin-bottom: 5px;
+
+        &:not(strong:first-of-type){
+            margin-top: 10px;
+        }
+    }
+    .colorValue {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    img {
+        margin: 10px 0;
+    }
+`;
 const LegendBase = styled.div`
     text-align: center;
 
@@ -264,25 +264,22 @@ const LegendBase = styled.div`
         }
     }
 `;
-const AirForecastUl = styled.ul`
-    li {
-        position: relative;
-
-        p {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 33px;
-            line-height: 25px;
-        }
-        &:nth-of-type(2) p {
-            background: url('./img_bg_to01.png') no-repeat 0 0;
-        }
-        &:nth-of-type(3) p {
-            background: url('./img_bg_to02.png') no-repeat 0 0;
-        }
+const AirForecastLi = styled(PartLi)`
+    position: relative;
+    p {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90px;
+        height: 33px;
+        line-height: 25px;
+    }
+    &:nth-of-type(2) p {
+        background: url('./img_bg_to01.png') no-repeat 0 0;
+    }
+    &:nth-of-type(3) p {
+        background: url('./img_bg_to02.png') no-repeat 0 0;
     }
 `;
 
@@ -300,23 +297,9 @@ const AirForecastUl = styled.ul`
  * 대기오염정보: 대기질 예보통보 조회(getMinuDustFrcstDspth)
  */
 
-/**
- * childrenComponents: <Time />
- * station
- * setStation
- * loading
- * airData
- * counts={count, setCount}
- * forecast
- */
 const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     const { data, text, station } = useStore(state => state);
-    const { pm10, pm10AddBoolean, 
-            pm25, pm25AddBoolean,
-            o3, o3AddBoolean,
-            currentLocation: location, currentLocationInsert, 
-            changer,
-            } = useAirQualityStore(state => state);
+    const { pm10, pm25, o3, currentLocation: location, changer } = useAirQualityStore(state => state);
 
     const stationsInfo = stationJson.items;
     const legendPopupRef = useRef();
@@ -324,7 +307,7 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     // 범례 보기(true) / 닫기(false)
     const [legendPopupState, setLegendPopupState] = useState(false);
     // 범례 종류 선택: khai, pm25, pm10, o3, no2, co, so2
-    const [selectLegend, setSelectLegend] = useState('khai');
+    const [selectLegend, setSelectLegend] = useState('khaiValue');
     // 범례 유형별 범위
     const [legendRange, setLegendRange] = useState(getColorValue(0, `khaiValue`, true));
     // pm25
@@ -347,17 +330,11 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
          * @returns {Array} [상태, 색상코드, 인덱스]
          */
     const airState = (value) => {
-        if(value === 0 || value === '좋음'){
-            return ['좋음', colorList[0], 1];
-        } else if(value === 1 || value === '보통'){
-            return ['보통', colorList[1], 2];
-        } else if(value === 2 || value === '나쁨'){
-            return ['나쁨', colorList[2], 3];
-        } else if(value === 3 || value === '매우나쁨'){
-            return ['매우나쁨', colorList[3], 4];
-        } else {
-            return ['데이터 없음', colorList[4], 5];
-        }
+        if(value === 0 || value === '좋음'){ return ['좋음', colorList[0], 1];} 
+        else if(value === 1 || value === '보통'){ return ['보통', colorList[1], 2];} 
+        else if(value === 2 || value === '나쁨'){ return ['나쁨', colorList[2], 3];} 
+        else if(value === 3 || value === '매우나쁨'){ return ['매우나쁨', colorList[3], 4];} 
+        else { return ['데이터 없음', colorList[4], 5];};
     };
     
     useEffect(() => {
@@ -440,25 +417,13 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
         const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
         const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
     
-        if(!pm25AddBoolean){
-            changer('pm25AddBoolean', !pm25AddBoolean);
-            changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25Index, todayState: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
-        };
-        if(!pm10AddBoolean){
-            changer('pm10AddBoolean', !pm10AddBoolean);
-            changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10Index, todayState: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
-        };
-        if(!o3AddBoolean){
-            changer('o3AddBoolean', !o3AddBoolean);
-            changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrowState: 5});
-        }
-        if(!currentLocationInsert){
-            changer('currentLocationInsert', !currentLocationInsert);
-            changer('currentLocation', currentLocation);
-        };
+        changer('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25Index, todayState: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
+        changer('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10Index, todayState: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
+        changer('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrowState: 5});
+        changer('currentLocation', currentLocation);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [text, data])
+    }, [station])
     // ---------------------------------------------------- Dyanmic Styled
     const Legend = styled(LegendBase)`
         .legendPopup {
@@ -466,7 +431,7 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
         }
         .legendFlex {
             > div {
-                &[data-value="${selectLegend}"] {
+                &[type="${selectLegend}"] {
                     border: 1px solid #0f62cc;
                     color: #0f62cc;
                 }
@@ -476,11 +441,11 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     // ---------------------------------------------------- Event
     const refreshBtn = () => setCount(count + 1);
     const legendClickHandle = (e) => {
-        const node = e.currentTarget;
-        const value = node.dataset.value;
+        const type = e.currentTarget.getAttribute('type');
 
-        setSelectLegend(value);
-        setLegendRange(getColorValue(0, value, true));
+        const range = getColorValue(0, type, true);
+        setSelectLegend(type);
+        setLegendRange(range);
     }
 
     const legendPopupHandle = () => setLegendPopupState(!legendPopupState);
@@ -495,108 +460,105 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     };
 
     // ---------------------------------------------------- Components
-    // const TimeComponent = props.childrenComponents.Time;
-
     return (
         <InfoContainer>
             <InfoWrapper>
-                <div>
-                    <h2>우리동네 <span>대기정보</span></h2>
-                </div>
-                <div>
-                <InfoInteraction>
-                    {/* <InfoButton ico={'bg_search'}>검색</InfoButton> */}
-                    <InfoButton ico={'pos'} onClick={refreshBtn}>현위치</InfoButton>
-                    <p>
-                    <strong>{station.stationName}</strong> 중심으로 측정
-                    <span>({`${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
-                    </p>
-                </InfoInteraction>
-                <Time refresh onClick={refreshBtn} />
-                </div>
-            <Container>
-                <Part>
-                    <h3>오늘의 대기질</h3>
-                    <ul>
-                        <li>
-                            <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                            <img src={`./img_na0${pm25.stateIndex}.png`} alt="대기질" />
-                            <span style={{color: pm25.stateHex}}>
-                                <strong className="colorValue">{location.pm25Value || '-'}</strong>
-                                <small style={{color: 'initial'}}>㎍/㎥</small>
-                                {pm25.stateText}
-                            </span>
-                        </li>
-                        <li>
-                            <span><strong>미세먼지</strong>(PM-10)</span>
-                            <img src={`./img_na0${pm10.stateIndex}.png`} alt="대기질" />
-                            <span style={{color: pm10.stateHex}}>
-                                <strong className="colorValue">{location.pm10Value || '-'}</strong>
-                                <small style={{color: 'initial'}}>㎍/㎥</small>
-                                {pm10.stateText}
+                <TitleWrap>
+                    <Title>우리동네 <span>대기정보</span></Title>
+                </TitleWrap>
+                <InfoWrap>
+                    <InfoInteraction>
+                        <InfoButton ico={'pos'} onClick={refreshBtn}>현위치</InfoButton>
+                        <p>
+                            <strong>{station.stationName}</strong> 중심으로 측정
+                            <span>({`${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
+                        </p>
+                    </InfoInteraction>
+                    <Time refresh onClick={refreshBtn} right="0" />
+                </InfoWrap>
+                <Container>
+                    <Part>
+                        <PartTitle>오늘의 대기질</PartTitle>
+                        <PartUl>
+                            <PartLi>
+                                <span><strong>초미세먼지</strong>(PM-2.5)</span>
+                                <img src={`./img_na0${pm25.stateIndex}.png`} alt="대기질" />
+                                <span style={{color: pm25.stateHex}}>
+                                    <strong className="colorValue">{location.pm25Value || '-'}</strong>
+                                    <small style={{color: 'initial'}}>㎍/㎥</small>
+                                    {pm25.stateText}
                                 </span>
-                        </li>
-                        <li>
-                            <span><strong>오존</strong>(O<sub>3</sub>)</span>
-                            <img src={`./img_na0${o3.stateIndex}.png`} alt="대기질" />
-                            <span style={{color: o3.stateHex}}>
-                                <strong className="colorValue">{location.o3Value === null ? '-' : String(location.o3Value).padEnd(6, '0')}</strong>
-                                <small style={{color: 'initial'}}>ppm</small>
-                                {o3.stateText}
-                            </span>
-                        </li>
-                    </ul>
-                </Part>
-                <Part>
-                    <h3>대기정보 예보</h3>
-                    <AirForecastUl>
-                        <li>
-                            <p></p>
-                            <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                            <span><strong>미세먼지</strong>(PM-10)</span>
-                        </li>
-                        <li>
-                            <p>오늘</p>
-                            <span className={`miniText miniTextIco_${pm25.todayIndex}`} style={{color: airState(pm25.todayState)[1]}}>{pm25.todayState}</span>
-                            <span className={`miniText miniTextIco_${pm10.todayIndex}`} style={{color: airState(pm10.todayState)[1]}}>{pm10.todayState}</span>
-                        </li>
-                        <li>
-                            <p>내일</p>
-                            <span className={`miniText miniTextIco_${pm25.tomorrowIndex}`} style={{color: airState(pm25.tomorrowState)[1]}}>{pm25.tomorrowState}</span>
-                            <span className={`miniText miniTextIco_${pm10.tomorrowIndex}`} style={{color: airState(pm10.tomorrowState)[1]}}>{pm10.tomorrowState}</span>
-                        </li>
-                    </AirForecastUl>
-                </Part>
-                <Legend>
-                    <button onClick={legendPopupHandle}>범례보기</button>
-                    <div ref={legendPopupRef} className="legendPopup">
-                        <div className="legendTitle">
-                            <h2>범례보기</h2>
-                            <button onClick={legendPopupHandle}>나가기</button>
-                        </div>
-                        <div>
-                            <div className="legendFlex">
-                                <div onClick={legendClickHandle} data-value="khai">통합대기환경지수 (CAI)</div>
-                                <div onClick={legendClickHandle} data-value="pm25">초미세먼지 (PM-2.5)</div>
-                                <div onClick={legendClickHandle} data-value="pm10">미세먼지 (PM-10)</div>
+                            </PartLi>
+                            <PartLi>
+                                <span><strong>미세먼지</strong>(PM-10)</span>
+                                <img src={`./img_na0${pm10.stateIndex}.png`} alt="대기질" />
+                                <span style={{color: pm10.stateHex}}>
+                                    <strong className="colorValue">{location.pm10Value || '-'}</strong>
+                                    <small style={{color: 'initial'}}>㎍/㎥</small>
+                                    {pm10.stateText}
+                                    </span>
+                            </PartLi>
+                            <PartLi>
+                                <span><strong>오존</strong>(O<sub>3</sub>)</span>
+                                <img src={`./img_na0${o3.stateIndex}.png`} alt="대기질" />
+                                <span style={{color: o3.stateHex}}>
+                                    <strong className="colorValue">{location.o3Value === null ? '-' : String(location.o3Value).padEnd(6, '0')}</strong>
+                                    <small style={{color: 'initial'}}>ppm</small>
+                                    {o3.stateText}
+                                </span>
+                            </PartLi>
+                        </PartUl>
+                    </Part>
+                    <Part>
+                        <PartTitle>대기정보 예보</PartTitle>
+                        <PartUl>
+                            <AirForecastLi>
+                                <p></p>
+                                <span><strong>초미세먼지</strong>(PM-2.5)</span>
+                                <span><strong>미세먼지</strong>(PM-10)</span>
+                            </AirForecastLi>
+                            <AirForecastLi>
+                                <p>오늘</p>
+                                <span className={`miniText miniTextIco_${pm25.todayIndex}`} style={{color: airState(pm25.todayState)[1]}}>{pm25.todayState}</span>
+                                <span className={`miniText miniTextIco_${pm10.todayIndex}`} style={{color: airState(pm10.todayState)[1]}}>{pm10.todayState}</span>
+                            </AirForecastLi>
+                            <AirForecastLi>
+                                <p>내일</p>
+                                <span className={`miniText miniTextIco_${pm25.tomorrowIndex}`} style={{color: airState(pm25.tomorrowState)[1]}}>{pm25.tomorrowState}</span>
+                                <span className={`miniText miniTextIco_${pm10.tomorrowIndex}`} style={{color: airState(pm10.tomorrowState)[1]}}>{pm10.tomorrowState}</span>
+                            </AirForecastLi>
+                        </PartUl>
+                    </Part>
+                    <Legend>
+                        <button onClick={legendPopupHandle}>범례보기</button>
+                        <div ref={legendPopupRef} className="legendPopup">
+                            <div className="legendTitle">
+                                <h2>범례보기</h2>
+                                <button onClick={legendPopupHandle}>나가기</button>
                             </div>
-                            <div className="legendFlex">
-                                <div onClick={legendClickHandle} data-value="o3">오존 (O<sub>3</sub>)</div>
-                                <div onClick={legendClickHandle} data-value="no2">이산화질소 (NO<sub>2</sub>)</div>
-                                <div onClick={legendClickHandle} data-value="co">일산화탄소 (CO)</div>
-                                <div onClick={legendClickHandle} data-value="so2">아황산가스 (SO<sub>2</sub>)</div>
+                            <div>
+                                <div className="legendFlex">
+                                    <div onClick={legendClickHandle} type="khaiValue">통합대기환경지수 (CAI)</div>
+                                    <div onClick={legendClickHandle} type="pm25Value">초미세먼지 (PM-2.5)</div>
+                                    <div onClick={legendClickHandle} type="pm10Value">미세먼지 (PM-10)</div>
+                                </div>
+                                <div className="legendFlex">
+                                    <div onClick={legendClickHandle} type="o3Value">오존 (O<sub>3</sub>)</div>
+                                    <div onClick={legendClickHandle} type="no2Value">이산화질소 (NO<sub>2</sub>)</div>
+                                    <div onClick={legendClickHandle} type="coValue">일산화탄소 (CO)</div>
+                                    <div onClick={legendClickHandle} type="so2Value">아황산가스 (SO<sub>2</sub>)</div>
+                                </div>
+                                <ul className="legendRange">
+                                    <li><span className="legendRange_1">{`좋음(0 ~ ${legendFormatNumber(legendRange[1], 3)})`}</span></li>
+                                    <li><span className="legendRange_2">{`보통(${legendFormatNumber(legendRange[2], 3)} ~ ${legendFormatNumber(legendRange[3], 3)})`}</span></li>
+                                    <li><span className="legendRange_3">{`나쁨(${legendFormatNumber(legendRange[4], 3)} ~ ${legendFormatNumber(legendRange[5], 3)})`}</span></li>
+                                    <li><span className="legendRange_4">{`매우나쁨(${legendFormatNumber(legendRange[6], 3)} ~ )`}</span></li>
+                                    <li><span className="legendRange_5">데이터 없음</span></li>
+                                </ul>
                             </div>
-                            <ul className="legendRange">
-                                <li><span className="legendRange_1">{`좋음(0 ~ ${legendFormatNumber(legendRange[1], 3)})`}</span></li>
-                                <li><span className="legendRange_2">{`보통(${legendFormatNumber(legendRange[2], 3)} ~ ${legendFormatNumber(legendRange[3], 3)})`}</span></li>
-                                <li><span className="legendRange_3">{`나쁨(${legendFormatNumber(legendRange[4], 3)} ~ ${legendFormatNumber(legendRange[5], 3)})`}</span></li>
-                                <li><span className="legendRange_4">{`매우나쁨(${legendFormatNumber(legendRange[6], 3)} ~ )`}</span></li>
-                                <li><span className="legendRange_5">데이터 없음</span></li>
-                            </ul>
                         </div>
-                    </div>
-                </Legend>
-            </Container>
+                    </Legend>
+                </Container>
             </InfoWrapper>
         </InfoContainer>
     )

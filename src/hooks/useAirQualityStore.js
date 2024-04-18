@@ -19,11 +19,6 @@ const useAirQualityStore = create((set) => ({
     pm25: preset,
     o3: preset,
 
-    pm10AddBoolean: false,
-    pm25AddBoolean: false,
-    o3AddBoolean: false,
-    currentLocationInsert: false,
-
     changer: (target, value) => set((state) => ({[target]: value})),
 }));
 
