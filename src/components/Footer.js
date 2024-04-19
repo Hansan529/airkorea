@@ -24,7 +24,8 @@ const Btn = styled.button`
     height: 20px;
     border: none;
     background: no-repeat 0 0;
-    ${({img}) => img && css`background-image: url(./${img}.png);`};
+    cursor: pointer;
+    ${(props) => props['data-btn'] && css`background-image: url(./img_ban_${props['data-btn']}.png);`};
 `;
 const ListUl = styled.ul`
     display: flex;
@@ -39,14 +40,19 @@ const ListLi = styled.li`
 `;
 
 export default function FooterComponent() {
+    const handle = (e) => {
+        const btn = e.currentTarget.dataset.btn;
+        // 220px 씩 이동
+    };
+
     return (
         <Footer>
             <BannerWrap>
                 <ButtonBox>
                     <h3>유관기관</h3>
-                    <Btn img="img_ban_left"></Btn>
-                    <Btn img="img_ban_atop"></Btn>
-                    <Btn img="img_ban_right"></Btn>
+                    <Btn data-btn="left" onClick={handle}></Btn>
+                    <Btn data-btn="atop" onClick={handle}></Btn>
+                    <Btn data-btn="right" onClick={handle}></Btn>
                 </ButtonBox>
                 <ListUl>
                     <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.jpg" /></a></ListLi>
