@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 const Footer = styled.footer`
     width: 100%;
@@ -31,6 +32,9 @@ const ListUl = styled.ul`
     display: flex;
     flex-wrap: nowrap;
     gap: 20px;
+    transition-duration: 300ms;
+    transform: translateX(${props => props.index * 220}px);
+    /* transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'}; */
 `;
 const ListLi = styled.li`
     flex: 0 200px;
@@ -40,8 +44,22 @@ const ListLi = styled.li`
 `;
 
 export default function FooterComponent() {
+    const [ulIndex, setUlIndex] = useState(0);
+
     const handle = (e) => {
         const btn = e.currentTarget.dataset.btn;
+        switch(btn) {
+            case 'left':
+                setUlIndex(ulIndex + 1);
+                break;
+            case 'atop':
+                break;
+            case 'right':
+                setUlIndex(ulIndex - 1);
+                break;
+            default:
+                break;
+        }
         // 220px 씩 이동
     };
 
@@ -54,7 +72,7 @@ export default function FooterComponent() {
                     <Btn data-btn="atop" onClick={handle}></Btn>
                     <Btn data-btn="right" onClick={handle}></Btn>
                 </ButtonBox>
-                <ListUl>
+                <ListUl index={ulIndex}>
                     <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.jpg" /></a></ListLi>
                     <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.jpg" /></a></ListLi>
                     <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
