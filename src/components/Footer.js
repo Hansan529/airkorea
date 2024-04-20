@@ -50,6 +50,7 @@ export default function FooterComponent() {
         const btn = e.currentTarget.dataset.btn;
         switch(btn) {
             case 'left':
+                // if(ulIndex > 0)
                 setUlIndex(ulIndex + 1);
                 break;
             case 'atop':
@@ -60,7 +61,6 @@ export default function FooterComponent() {
             default:
                 break;
         }
-        // 220px 씩 이동
     };
 
     return (
@@ -73,6 +73,13 @@ export default function FooterComponent() {
                     <Btn data-btn="right" onClick={handle}></Btn>
                 </ButtonBox>
                 <ListUl index={ulIndex}>
+                    <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="./img_ban17.jpg" /></a></ListLi>
+			        <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="./img_ban18.jpg" /></a></ListLi>
+			        <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="./img_ban19.jpg" /></a></ListLi>
+			        <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="./img_ban20.jpg" /></a></ListLi>
+			        <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="./img_ban21.jpg" /></a></ListLi>
+			        <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="./img_ban22.jpg" /></a></ListLi>
+                    {/* 복제 */}
                     <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.jpg" /></a></ListLi>
                     <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.jpg" /></a></ListLi>
                     <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
@@ -95,6 +102,13 @@ export default function FooterComponent() {
 			        <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="./img_ban20.jpg" /></a></ListLi>
 			        <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="./img_ban21.jpg" /></a></ListLi>
 			        <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="./img_ban22.jpg" /></a></ListLi>
+                    {/* 복제 */}
+                    <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.jpg" /></a></ListLi>
+                    <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.jpg" /></a></ListLi>
+                    <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
+                    <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.jpg" /></a></ListLi>
+                    <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.jpg" /></a></ListLi>
+                    <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기정보" src="./img_ban06.jpg" /></a></ListLi>
                 </ListUl>
             </BannerWrap>
         </Footer>
