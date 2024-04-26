@@ -7,18 +7,27 @@ const Footer = styled.footer`
     height: 100px;
     overflow: hidden;
 `;
-const BannerWrap = styled.div`display: flex;`;
+const BannerWrap = styled.div`
+    display: flex;
+    width: 1400px;
+    margin: 0 auto;
+    overflow: hidden;
+`;
 const ButtonBox = styled.div`
-    width: 140px;
-    flex-basis: 140px;
-    min-width: 140px;
+    width: 200px;
+    flex-basis: 200px;
+    min-width: 200px;
     height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
     background-color: #fff;
-    h3 {margin-right: 10px;}
+    h3 {
+        font-size:  20px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
 `;
 const Btn = styled.button`
     width: 20px;
@@ -31,9 +40,8 @@ const Btn = styled.button`
 const ListUl = styled.ul`
     display: flex;
     flex-wrap: nowrap;
-    gap: 20px;
     transition-duration: 300ms;
-    transform: translateX(${props => props.index * 220}px);
+    transform: translateX(${props => props.index * 200}px);
     /* transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'}; */
 `;
 const ListLi = styled.li`
@@ -41,10 +49,18 @@ const ListLi = styled.li`
     min-width: 200px;
     text-align: center;
     height: 35px;
+    line-height: 35px;
+
+    img {
+        vertical-align: middle;
+    }
+`;
+
+const CopyRight = styled.div`
 `;
 
 export default function FooterComponent() {
-    const [ulIndex, setUlIndex] = useState(0);
+    const [ulIndex, setUlIndex] = useState(-7);
 
     const handle = (e) => {
         const btn = e.currentTarget.dataset.btn;
@@ -85,7 +101,8 @@ export default function FooterComponent() {
                     <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
                     <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.jpg" /></a></ListLi>
                     <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기정보" src="./img_ban06.jpg" /></a></ListLi>
+                    <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="./img_ban06.jpg" /></a></ListLi>
+                    <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기 정보" src="./img_ban06_1.jpg" /></a></ListLi>
                     <ListLi><a href="https://air.cnemc.cn:18014/" title="중국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="중국실시간 대기 정보" src="./img_ban07.jpg" /></a></ListLi>
                     <ListLi><a href="https://soramame.env.go.jp/" title="일본실시간 대기정보" target="_blank" rel="noreferrer"><img alt="일본실시간 대기정보" src="./img_ban08.jpg" /></a></ListLi>
                     <ListLi><a href="https://heis.busan.go.kr" title="부산 보건환경정보 공개시스템" target="_blank" rel="noreferrer"><img alt="부산 보건환경정보 공개시스템" src="./img_ban09.jpg" /></a></ListLi>
@@ -108,9 +125,14 @@ export default function FooterComponent() {
                     <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
                     <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.jpg" /></a></ListLi>
                     <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기정보" src="./img_ban06.jpg" /></a></ListLi>
+                    <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="./img_ban06.jpg" /></a></ListLi>
                 </ListUl>
             </BannerWrap>
+            <CopyRight>
+                <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
+                <img src="/img_opentype03.png" alt="한국환경공단 에어코리아 OpenAPI 출처표시 + 변경금지" />
+                <p>한국환경공단 에어코리아 대기오염정보, 측정소정보, 대기오염통계 현황</p>
+            </CopyRight>
         </Footer>
     )
 };

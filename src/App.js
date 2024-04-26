@@ -290,6 +290,7 @@ const SecondBanner = styled.div`
   display:flex;
   align-items: center;
   gap: 30px;
+  margin-bottom: 30px;
 
   .updateTime {
     text-align: center;
@@ -375,9 +376,11 @@ const SecondBannerInfo = styled.div`
           color: #0f62cc;
           text-decoration: underline;
         }
+        span{
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
-`;
-const CopyRight = styled.div`
 `;
 const Loading = styled.div`
       display: ${props => props.loading === 'true' ? 'none' : 'block'};
@@ -954,11 +957,6 @@ function App() {
             </div>
           </SecondBanner>
         </SecondSection>
-        <CopyRight>
-          <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
-          <img src="/img_opentype03.png" alt="한국환경공단 에어코리아 OpenAPI 출처표시 + 변경금지" />
-          <p>한국환경공단 에어코리아 대기오염정보, 측정소정보, 대기오염통계 현황</p>
-        </CopyRight>
       </main>
       <FooterComponent />
     </>
