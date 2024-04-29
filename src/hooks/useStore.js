@@ -1,63 +1,67 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware';
 import stationInfoJSON from '../data/stationInfo.json';
-
 const stationsInfo = stationInfoJSON.items;
 
-const useStore = create((set) => ({
-    // bears: 0,
-    // increasePopulation: () => set((state) => ({ bears: state.bears + 1})),
-    // removeAllBears: () => set({ bears: 0}),
-    getFetch: async (target, url) => {
-        const response = await fetch(url)
-        set({[target]: await response.json()})
-    },
-    postFetch: async (target, url, value) => {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(value)
-        });
-        if(!response.ok) throw new Error('네트워크 응답에 문제가 발생했습니다.');
-        set({[target]: await response.json()});
-    },
+const useStore = create(
+    persist(
+        (set, get) => ({
+        getFetch: async (target, url) => {
+            const response = await fetch(url)
+            set({[target]: await response.json()})
+        },
+        postFetch: async (target, url, value) => {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(value)
+            });
+            if(!response.ok) throw new Error('네트워크 응답에 문제가 발생했습니다.');
+            set({[target]: await response.json()});
+        },
 
-    // 측정소 값 데이터, 텍스트
-    data: null,
-    text: null,
+        // 측정소 값 데이터, 텍스트
+        data: null,
+        text: null,
 
-    // fetch 상태
-    dataFetchBoolean: false,
-    textFetchBoolean: false,
-    stationFetchBoolean: false,
+        // fetch 상태
+        dataFetchBoolean: false,
+        textFetchBoolean: false,
+        stationFetchBoolean: false,
 
-    // 상태 변경자
-    changer: (target, value) => set((state) => ({[target]: value})),
+        // 상태 변경자
+        changer: (target, value) => set(() => ({[target]: value})),
 
-    // 출력 타입 khai, pm25, pm10, o3, no2, co, so2
-    type: 'khaiValue',
+        // 출력 타입 khai, pm25, pm10, o3, no2, co, so2
+        type: 'khaiValue',
 
-    // regionNum: 서울02, 경기031, 인천032, 강원, 충남, 대전, 충북, 세종, 부산, 울산, 대구, 경북, 경남, 전남, 광주, 전북, 제주
-    regionNum: '0',
+        // regionNum: 서울02, 경기031, 인천032, 강원, 충남, 대전, 충북, 세종, 부산, 울산, 대구, 경북, 경남, 전남, 광주, 전북, 제주
+        regionNum: '0',
 
-    // 대기정보(air) / 측정소(station) 정보
-    selectInfo: 'air',
+        // 대기정보(air) / 측정소(station) 정보
+        selectInfo: 'air',
 
-    // 우리동네 대기정보 측정소 데이터
-    station: stationsInfo.find(item => item.stationName === '중구'),
+        // 우리동네 대기정보 측정소 데이터
+        station: stationsInfo.find(item => item.stationName === '중구'),
 
-    // 결과 필터
-    // 농도 범위 필터링
-    filterRange: [true, true, true, true, true],
-    // 측정망 구분 필터링
-    filterData: {도시대기: true, 국가배경농도: true, 도로변대기: true, 교외대기: false, 항만: false},
+        // 결과 필터
+        // 농도 범위 필터링
+        filterRange: [true, true, true, true, true],
+        // 측정망 구분 필터링
+        filterData: {도시대기: true, 국가배경농도: true, 도로변대기: true, 교외대기: false, 항만: false},
 
-    // 상세 지역 Open/Close
-    openMap: '0',
+        // 상세 지역 Open/Close
+        openMap: '0',
 
-    // 데이터 로딩
-    loading: false,
-}))
+        // 데이터 로딩
+        loading: false,
+        }),
+        {
+            name: 'fetchStorage',
+        },
+    ),
+)
 
 export default useStore;
