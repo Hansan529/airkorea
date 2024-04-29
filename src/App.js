@@ -26,7 +26,7 @@ const Section = styled.section`
     position: relative;
 `;
 const FirstSection = styled(Section)`
-  background: url('/img_main_bg.png') repeat-x 0 0;
+  background: url('/img_main_bg.webp') repeat-x 0 0;
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -112,7 +112,7 @@ const MMOSelectWrapper = styled.div`
 `;
 const MMOSelect = styled(Select)`
   ${MMOBorder}
-  background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.png')"};
+  background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.webp')"};
   width: ${props => props.$width};
   padding: ${(props) => (props.flex ? '0 3px' : '0 15px')};
   display: ${(props) => props.flex && 'flex'};
@@ -158,7 +158,7 @@ const MMWrapper = styled.div`
   width: 700px;
   height: 705px;
   box-sizing: border-box;
-  background: url('/map_svg_warp_bg.png') no-repeat 5px -10px;
+  background: url('/map_svg_warp_bg.webp') no-repeat 5px -10px;
   position: relative;
   margin-top: 20px;
   /* overflow: hidden; */
@@ -178,7 +178,7 @@ const Legend = styled.div`
 
     button {
       background: no-repeat right 14px center;
-      background-image: url(./img_bottom_arr_up.png);
+      background-image: url(./img_bottom_arr_up.webp);
       border: none;
       width: 100%;
       text-align: left;
@@ -202,10 +202,10 @@ const Legend = styled.div`
     small {font-size: 14px;}
 
     &:first-of-type {
-      background-image: url(./img_cau01.png);
+      background-image: url(./img_cau01.webp);
     }
     &:last-of-type {
-      background-image: url(./img_cau02.png);
+      background-image: url(./img_cau02.webp);
     }
   }}
 
@@ -234,7 +234,7 @@ const Legend = styled.div`
 
       button {
         color: #fff;
-        background-image: url(./img_bottom_arr_down.png);
+        background-image: url(./img_bottom_arr_down.webp);
       }
     }
 
@@ -268,17 +268,17 @@ const Legend = styled.div`
         transform: translateY(-50%);
         background: no-repeat 0 0;
       }
-      &:first-of-type::before { background-image: url('./img_ch01.png'); }
-      &:nth-of-type(2)::before { background-image: url('./img_ch02.png'); }
-      &:nth-of-type(3)::before { background-image: url('./img_ch03.png'); }
-      &:nth-of-type(4)::before { background-image: url('./img_ch04.png'); }
-      &:last-of-type::before { background-image: url('./img_ch05.png'); }
+      &:first-of-type::before { background-image: url('./img_ch01.webp'); }
+      &:nth-of-type(2)::before { background-image: url('./img_ch02.webp'); }
+      &:nth-of-type(3)::before { background-image: url('./img_ch03.webp'); }
+      &:nth-of-type(4)::before { background-image: url('./img_ch04.webp'); }
+      &:last-of-type::before { background-image: url('./img_ch05.webp'); }
       }
   }
 `;
 const SecondSection = styled(Section)`
     margin: 50px auto 0;
-    background: url('./img_bg_s_01.png') repeat-x 0 0;
+    background: url('./img_bg_s_01.webp') repeat-x 0 0;
     width: 1400px;
 `;
 const SecondBanner = styled.div`
@@ -306,7 +306,7 @@ const SecondBanner = styled.div`
     width: 100%;
     height: 80px;
     padding: 0 60px 0 100px;
-    background: #fff url(./img_bg_s_02.png) no-repeat right 24px bottom;
+    background: #fff url(./img_bg_s_02.webp) no-repeat right 24px bottom;
     border-radius: 30px 8px 30px 8px;
     position: relative;
     overflow-y: hidden;
@@ -349,13 +349,13 @@ const SecondBanner = styled.div`
       cursor: pointer;
 
       &.upBtn {
-        background-image: url('./img_up_down_up.png');
+        background-image: url('./img_up_down_up.webp');
       }
       &.playBtn {
-        background-image: url('./icon_bn_stop.png');
+        background-image: url('./icon_bn_stop.webp');
       }
       &.downBtn {
-        background-image: url('./img_up_down_down.png');
+        background-image: url('./img_up_down_down.webp');
       }
     }
   }
@@ -390,7 +390,7 @@ const Loading = styled.div`
       height: 100%;
       text-align: center;
       border: 1px solid #bcd0e8;
-      background: url('/loading_bg.png');
+      background: url('/loading_bg.webp');
 
       div {
         margin-top: 360px;
@@ -417,9 +417,9 @@ const TimeDiv = styled.div`
       }
 `;
 const TimeButtonStyle = styled.button`
-      background-image: ${props => props.ico && `url('/img_${props.ico}.png')`};
+      background-image: ${props => props.ico && `url('/img_${props.ico}.webp')`};
       display: inline-block;
-      background: url('/img_refresh.png') no-repeat center;
+      background: url('/img_refresh.webp') no-repeat center;
       width: 16px;
       height: 20px;
       border: none;
@@ -510,41 +510,54 @@ function App() {
         // 브라우저에서 현재 위치 기능을 지원하는 경우
         if('geolocation' in navigator) {
           if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+              // 위치 호출에 성공할 경우 실행하는 함수
               const success = async (pos) => {
                 let { latitude, longitude } = pos.coords;
                 if(latitude === undefined) latitude = '197806.5250901809';
                 if(longitude === undefined) longitude = '451373.25740676327';
         
-                const response = await fetch('http://localhost:3500/api/coordinate', {
-                  method: "POST",
-                  headers: {'Content-Type': 'application/json'},
-                  body: JSON.stringify({ latitude, longitude })
-                });
-                const {documents: [{x, y}]} = await response.json();
-        
-                const responseStation = await fetch('http://localhost:3500/api/station', {
-                  method: "POST",
-                  headers: {'Content-Type': 'application/json'},
-                  body: JSON.stringify({ x, y })
-                });
-                const stations = await responseStation.json();
-                // 가까운 거리의 측정소 3개
-                // setStation(stations);
-        
-                // 가까운 측정소
-                const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
-                changer('stationFetchBoolean', true);
-                changer('station', stationData);
-              }
+                try {
+                  // 현재 위치 좌표 API 호출
+                  const response = await fetch('http://localhost:3500/api/coordinate', {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ latitude, longitude })
+                  });
+                  const {documents: [{x, y}]} = await response.json();
+                  // 측정소 데이터 API 호출
+                  const responseStation = await fetch('http://localhost:3500/api/station', {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ x, y })
+                  });
+                    if(!responseStation.ok) {
+                      throw new Error('Network response was not ok');
+                    }
+                    const stations = await responseStation.json();
+                    // 가까운 거리의 측정소 3개
+                    // setStation(responseStation);
+            
+                    // 가까운 측정소
+                    const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
+                    changer('station', stationData);
+                } catch (error) {
+                  console.error("Error fetching data: ", error);
+                  changer('station', defaultStation);
+                } finally {
+                  console.info("station API Fetch operation completed");
+                  changer('stationFetchBoolean', true);
+                };
+              };
+              // 위치 호출에 실패할 경우 실행하는 함수
               const error = (err) => {
-                console.info("위치 권한 차단됨: ", err);
+                console.error("위치 권한 차단됨: ", err);
                 changer('station', defaultStation);
                 alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
               };
               navigator.geolocation.getCurrentPosition(success, error);
               return;
           }
-        } 
+        };
         alert('현재위치를 사용 또는 지원하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
       }
 
@@ -567,7 +580,7 @@ function App() {
       <Loading loading={String(loading)}>
         <div>데이터 처리중입니다.</div>
         <p>잠시만 기다려 주시기 바랍니다.</p>
-        <img src="/loading_1.gif" alt="로딩 중" />
+        <img src="/loading_1.webp" alt="로딩 중" />
       </Loading>
     )
   };

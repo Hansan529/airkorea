@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const Footer = styled.footer`
     width: 100%;
-    height: 100px;
+    /* height: 100px; */
     overflow: hidden;
 `;
 const BannerWrap = styled.div`
@@ -35,7 +35,7 @@ const Btn = styled.button`
     border: none;
     background: no-repeat 0 0;
     cursor: pointer;
-    ${(props) => props['data-btn'] && css`background-image: url(./img_ban_${props['data-btn']}.png);`};
+    ${(props) => props['data-btn'] && css`background-image: url(./img_ban_${props['data-btn']}.webp);`};
 `;
 const ListUl = styled.ul`
     display: flex;
@@ -57,7 +57,49 @@ const ListLi = styled.li`
 `;
 
 const CopyRight = styled.div`
+    a{
+        color: darkblue;
+        text-decoration: underline;
+        &:visited { color: darkblue; }
+    }
 `;
+
+const InfoArea = styled.div`
+    display: flex;
+`;
+
+const InfoAreaCallDust = styled.div`
+    display: flex;
+    width: 860px;
+    flex-wrap: wrap;
+    gap: 10px 0;
+
+    p {
+        position: relative;
+    }
+    > p:first-of-type{
+        margin-right: 40px;
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: rgba(0,0,0,0.2);
+            top: 0;
+            right: -20px;
+        }
+    }
+
+    a {
+        font-size: 0;
+    }
+`;
+
+const InfoAreaIconWrap = styled.div`
+
+`;
+
 
 export default function FooterComponent() {
     const [ulIndex, setUlIndex] = useState(-7);
@@ -89,50 +131,64 @@ export default function FooterComponent() {
                     <Btn data-btn="right" onClick={handle}></Btn>
                 </ButtonBox>
                 <ListUl index={ulIndex}>
-                    <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="./img_ban17.jpg" /></a></ListLi>
-			        <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="./img_ban18.jpg" /></a></ListLi>
-			        <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="./img_ban19.jpg" /></a></ListLi>
-			        <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="./img_ban20.jpg" /></a></ListLi>
-			        <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="./img_ban21.jpg" /></a></ListLi>
-			        <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="./img_ban22.jpg" /></a></ListLi>
+                    <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="./img_ban17.webp" /></a></ListLi>
+			        <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="./img_ban18.webp" /></a></ListLi>
+			        <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="./img_ban19.webp" /></a></ListLi>
+			        <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="./img_ban20.webp" /></a></ListLi>
+			        <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="./img_ban21.webp" /></a></ListLi>
+			        <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="./img_ban22.webp" /></a></ListLi>
                     {/* 복제 */}
-                    <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.jpg" /></a></ListLi>
-                    <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.jpg" /></a></ListLi>
-                    <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
-                    <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.jpg" /></a></ListLi>
-                    <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.jpg" /></a></ListLi>
-                    <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="./img_ban06.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기 정보" src="./img_ban06_1.jpg" /></a></ListLi>
-                    <ListLi><a href="https://air.cnemc.cn:18014/" title="중국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="중국실시간 대기 정보" src="./img_ban07.jpg" /></a></ListLi>
-                    <ListLi><a href="https://soramame.env.go.jp/" title="일본실시간 대기정보" target="_blank" rel="noreferrer"><img alt="일본실시간 대기정보" src="./img_ban08.jpg" /></a></ListLi>
-                    <ListLi><a href="https://heis.busan.go.kr" title="부산 보건환경정보 공개시스템" target="_blank" rel="noreferrer"><img alt="부산 보건환경정보 공개시스템" src="./img_ban09.jpg" /></a></ListLi>
-                    <ListLi><a href="https://air.daegu.go.kr" title="대구 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="대구 대기정보 시스템" src="./img_ban10.jpg" /></a></ListLi>
-                    <ListLi><a href="https://gwangju.go.kr" title="광주 시청" target="_blank" rel="noreferrer"><img alt="광주 대기정보 시스템" src="./img_ban11.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.daejeon.go.kr/hea/airDynamicData.do?menuseq=6858" title="대전 보건환경연구원" target="_blank" rel="noreferrer"><img alt="대전 보건환경연구원" src="./img_ban12.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.ulsan.go.kr/s/uihe/main.ulsan" title="울산 보건환경연구원" target="_blank" rel="noreferrer"><img alt="울산 보건환경연구원" src="./img_ban13.jpg" /></a></ListLi>
-                    <ListLi><a href="https://www.sejong.go.kr/air/index.do" title="세종 미세먼지 정보센터" target="_blank" rel="noreferrer"><img alt="세종 미세먼지 정보센터" src="./img_ban14.jpg" /></a></ListLi>
-                    <ListLi><a href="http://www.airgangwon.go.kr" title="강원 대기환경정보" target="_blank" rel="noreferrer"><img alt="강원 대기환경정보" src="./img_ban15.jpg" /></a></ListLi>
-			        <ListLi><a href="https://www.chungbuk.go.kr/here/index.do" title="충북 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="충북 보건환경 연구원" src="./img_ban16.jpg" /></a></ListLi>
-			        <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="./img_ban17.jpg" /></a></ListLi>
-			        <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="./img_ban18.jpg" /></a></ListLi>
-			        <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="./img_ban19.jpg" /></a></ListLi>
-			        <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="./img_ban20.jpg" /></a></ListLi>
-			        <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="./img_ban21.jpg" /></a></ListLi>
-			        <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="./img_ban22.jpg" /></a></ListLi>
+                    <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.webp" /></a></ListLi>
+                    <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.webp" /></a></ListLi>
+                    <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.webp" /></a></ListLi>
+                    <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.webp" /></a></ListLi>
+                    <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.webp" /></a></ListLi>
+                    <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="./img_ban06.webp" /></a></ListLi>
+                    <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기 정보" src="./img_ban06_1.webp" /></a></ListLi>
+                    <ListLi><a href="https://air.cnemc.cn:18014/" title="중국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="중국실시간 대기 정보" src="./img_ban07.webp" /></a></ListLi>
+                    <ListLi><a href="https://soramame.env.go.jp/" title="일본실시간 대기정보" target="_blank" rel="noreferrer"><img alt="일본실시간 대기정보" src="./img_ban08.webp" /></a></ListLi>
+                    <ListLi><a href="https://heis.busan.go.kr" title="부산 보건환경정보 공개시스템" target="_blank" rel="noreferrer"><img alt="부산 보건환경정보 공개시스템" src="./img_ban09.webp" /></a></ListLi>
+                    <ListLi><a href="https://air.daegu.go.kr" title="대구 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="대구 대기정보 시스템" src="./img_ban10.webp" /></a></ListLi>
+                    <ListLi><a href="https://gwangju.go.kr" title="광주 시청" target="_blank" rel="noreferrer"><img alt="광주 대기정보 시스템" src="./img_ban11.webp" /></a></ListLi>
+                    <ListLi><a href="https://www.daejeon.go.kr/hea/airDynamicData.do?menuseq=6858" title="대전 보건환경연구원" target="_blank" rel="noreferrer"><img alt="대전 보건환경연구원" src="./img_ban12.webp" /></a></ListLi>
+                    <ListLi><a href="https://www.ulsan.go.kr/s/uihe/main.ulsan" title="울산 보건환경연구원" target="_blank" rel="noreferrer"><img alt="울산 보건환경연구원" src="./img_ban13.webp" /></a></ListLi>
+                    <ListLi><a href="https://www.sejong.go.kr/air/index.do" title="세종 미세먼지 정보센터" target="_blank" rel="noreferrer"><img alt="세종 미세먼지 정보센터" src="./img_ban14.webp" /></a></ListLi>
+                    <ListLi><a href="http://www.airgangwon.go.kr" title="강원 대기환경정보" target="_blank" rel="noreferrer"><img alt="강원 대기환경정보" src="./img_ban15.webp" /></a></ListLi>
+			        <ListLi><a href="https://www.chungbuk.go.kr/here/index.do" title="충북 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="충북 보건환경 연구원" src="./img_ban16.webp" /></a></ListLi>
+			        <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="./img_ban17.webp" /></a></ListLi>
+			        <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="./img_ban18.webp" /></a></ListLi>
+			        <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="./img_ban19.webp" /></a></ListLi>
+			        <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="./img_ban20.webp" /></a></ListLi>
+			        <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="./img_ban21.webp" /></a></ListLi>
+			        <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="./img_ban22.webp" /></a></ListLi>
                     {/* 복제 */}
-                    <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.jpg" /></a></ListLi>
-                    <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.jpg" /></a></ListLi>
-                    <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.jpg" /></a></ListLi>
-                    <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.jpg" /></a></ListLi>
-                    <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.jpg" /></a></ListLi>
-                    <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="./img_ban06.jpg" /></a></ListLi>
+                    <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="./img_ban01.webp" /></a></ListLi>
+                    <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="./img_ban02.webp" /></a></ListLi>
+                    <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="./img_ban03.webp" /></a></ListLi>
+                    <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="./img_ban04.webp" /></a></ListLi>
+                    <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="./img_ban05.webp" /></a></ListLi>
+                    <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="./img_ban06.webp" /></a></ListLi>
                 </ListUl>
             </BannerWrap>
-            <CopyRight>
-                <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
-                <img src="/img_opentype03.png" alt="한국환경공단 에어코리아 OpenAPI 출처표시 + 변경금지" />
-                <p>한국환경공단 에어코리아 대기오염정보, 측정소정보, 대기오염통계 현황</p>
-            </CopyRight>
+            <InfoArea>
+                <h2>
+                    <img src="./logo.webp" alt="에어코리아 로고" />
+                </h2>
+                <InfoAreaCallDust>
+                    <p>실시간 미세먼지 농도 및 예보 관련 문의: <span style={{color: 'blue'}}>131</span><a href="tel:131">131</a> &#40;기상콜센터 유료&#41;</p>
+                    <p>대기측정망 및 홈페이지관련 문의 : <span style={{color: 'blue'}}>032&#41;590-4000</span><a href="tel:032-590-4000">032&#41;590-4000</a> &#40;내선번호 8번&#41;</p>
+                    <p>&#91;22689&#93; 인천광역시 서구 환경로 42&#40;오류동 종합환경연구단지&#41;<br /><span style={{color: 'rgba(0,0,0,0.5)'}}>Copyright © 2023 한국환경공단, All rights reserved.</span></p>
+                </InfoAreaCallDust>
+                <InfoAreaIconWrap>
+                    <CopyRight>
+                        <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
+                        <p><strong>공공데이터</strong> <a href="https://www.data.go.kr/data/15073861/openapi.do" target="_blank" rel="noreferrer">한국환경공단 에어코리아 대기오염정보</a> <a href="https://www.data.go.kr/data/15073877/openapi.do" target="_blank" rel="noreferrer">측정소정보</a>, <a href="https://www.data.go.kr/data/15073855/openapi.do" target="_blank" rel="noreferrer">대기오염통계 현황</a></p>
+                    </CopyRight>
+                    <img src="./img_f_logo.webp" alt="환경부" />
+                    <img src="./img_under_logo.webp" alt="한국환경공단" />
+                    <img src="./img_openapi.webp" alt="OPEN API 이미지" />
+                </InfoAreaIconWrap>
+            </InfoArea>
         </Footer>
     )
 };
