@@ -42,8 +42,6 @@ const useStore = create(
         // 대기정보(air) / 측정소(station) 정보
         selectInfo: 'air',
 
-        // 가까운 측정소 캐시
-        cacheStation : {},
         // 우리동네 대기정보 측정소 데이터
         station: {
             "dmX": "37.564639",

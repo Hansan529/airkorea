@@ -439,13 +439,16 @@ const TodayAirQuaility = ({Time}) => {
         }
     `;
     // ---------------------------------------------------- Event
-    const refreshBtn = async () => {
+    const remeasureHandle = () => {
         // 캐시 제거 후, 새롭게 데이터 요청
         useStore.persist.clearStorage();
 
+        // useEffect 재실행하기 위한 change
         storeChanger('stationFetchBoolean', false);
+    };
+    const refreshHandle = async () => {
+        storeChanger('data', null);
         storeChanger('loading', false);
-        await sleep(0.3);
     };
     const legendClickHandle = (e) => {
         const type = e.currentTarget.getAttribute('type');
@@ -475,13 +478,13 @@ const TodayAirQuaility = ({Time}) => {
                 </TitleWrap>
                 <InfoWrap>
                     <InfoInteraction>
-                        <InfoButton ico={'pos'} onClick={refreshBtn}>현위치</InfoButton>
+                        <InfoButton ico={'pos'} onClick={remeasureHandle}>현위치</InfoButton>
                         <p>
                             <strong>{station.stationName}</strong> 중심으로 측정
                             <span>({`${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
                         </p>
                     </InfoInteraction>
-                    <Time refresh onClick={refreshBtn} right="0" />
+                    <Time refresh onClick={refreshHandle} right="0" />
                 </InfoWrap>
                 <Container>
                     <Part>
