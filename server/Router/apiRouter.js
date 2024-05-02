@@ -28,8 +28,8 @@ router.post('/station', async (req, res) => {
     }
 })
 
-router.get('/getMinuDustFrcstDspth', async (req, res) => {
-    console.log('getMinuDustFrcstDspth: ');
+router.get('/text', async (req, res) => {
+    console.log('text: ');
     try {
         const today = new Date();
 
@@ -53,8 +53,8 @@ router.get('/getMinuDustFrcstDspth', async (req, res) => {
         return res.json(false);
     }
 });
-router.get('/getCtprvnRltmMesureDnsty', async (req, res) => {
-    console.log('getCtprvnRltmMesureDnsty: ');
+router.get('/data', async (req, res) => {
+    console.log('data: ');
     try {
         const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=700&pageNo=1&sidoName=전국&ver=1.0`)).data;
         return res.json(items);
@@ -64,15 +64,15 @@ router.get('/getCtprvnRltmMesureDnsty', async (req, res) => {
     }
 });
 
-router.get('/getWthrSituation', async (req, res) => {
-    console.log('getWthrSituation: ');
-    try {
-        const {response: {body: { items }}} = await (await axios.get(`http://apis.data.go.kr/1360000/VilageFcstMsgService/getWthrSituation?ServiceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&pageNo=1&numOfRows=1&dataType=JSON&stnId=108`)).data
-        return res.json(items);
-    }catch(err) {
-        console.error('error: ', err);;
-        return res.json(false);
-    }
-})
+// router.get('/getWthrSituation', async (req, res) => {
+//     console.log('getWthrSituation: ');
+//     try {
+//         const {response: {body: { items }}} = await (await axios.get(`http://apis.data.go.kr/1360000/VilageFcstMsgService/getWthrSituation?ServiceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&pageNo=1&numOfRows=1&dataType=JSON&stnId=108`)).data
+//         return res.json(items);
+//     }catch(err) {
+//         console.error('error: ', err);;
+//         return res.json(false);
+//     }
+// })
 
 module.exports = router;

@@ -6,7 +6,7 @@ export const RealTimeWeather = () => {
     // useEffect(() => {
     //     if(!weatherData){
     //         (async () => {
-    //             const {item} = await (await axios.get('http://localhost:3500/api/getWthrSituation')).data;
+    //             const {item} = await (await axios.get('http://localhost:3500/api/weather')).data;
     //             const [data] = item;
     //             setWeatherData(data);
     //             localStorage.setItem('weather', JSON.stringify(data));
