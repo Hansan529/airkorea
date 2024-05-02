@@ -298,7 +298,7 @@ const AirForecastLi = styled(PartLi)`
  * 대기오염정보: 대기질 예보통보 조회(getMinuDustFrcstDspth)
  */
 
-const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
+const TodayAirQuaility = ({Time}) => {
     const { data, text, station, changer: storeChanger } = useStore(state => state);
     const { pm10, pm25, o3, currentLocation: location, changer: airQualityChanger } = useAirQualityStore(state => state);
 
@@ -440,10 +440,12 @@ const TodayAirQuaility = ({Time, counts: {count, setCount}}) => {
     `;
     // ---------------------------------------------------- Event
     const refreshBtn = async () => {
+        // 캐시 제거 후, 새롭게 데이터 요청
+        useStore.persist.clearStorage();
+
         storeChanger('stationFetchBoolean', false);
         storeChanger('loading', false);
         await sleep(0.3);
-        setCount(count + 1);
     };
     const legendClickHandle = (e) => {
         const type = e.currentTarget.getAttribute('type');

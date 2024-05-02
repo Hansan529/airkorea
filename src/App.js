@@ -433,32 +433,17 @@ const TimeButtonStyle = styled.button`
         }
 `;
 
+
 function App() {
-  // ------------------------------------------------ setting
-  const { data, dataFetchBoolean, text, textFetchBoolean, stationFetchBoolean, changer, getFetch } = useStore(state => state);
-
-  const type = useStore(state => state.type);
-  const regionNum = useStore(state => state.regionNum);
-  const selectInfo = useStore(state => state.selectInfo);
-  const loading = useStore(state => state.loading);
-  const filterRange = useStore(state => state.filterRange);
-  const filterData = useStore(state => state.filterData);
-
-  if(!data) if(!dataFetchBoolean){
-      getFetch('data', 'http://localhost:3500/api/getCtprvnRltmMesureDnsty')
-      changer('dataFetchBoolean', true);
-    }
-  if(!text) if(!textFetchBoolean){
-    getFetch('text', 'http://localhost:3500/api/getMinuDustFrcstDspth')
-    changer('textFetchBoolean', true);
-  };
-
   // 측정소 위치 데이터
   const stationsInfo = stationInfoJSON.items;
+  // ------------------------------------------------ setting
+  const { data, dataFetchBoolean, text, textFetchBoolean, stationFetchBoolean, changer, getFetch, type, regionNum, selectInfo, loading, filterRange, filterData } = useStore(state => state);
+
 
   const legendRef = useRef(null);
 
-  // * 실시간 대기정보
+  // * 실시간 대기정보 토글
 
   // 지도 범례 On/Off
   const [isOn0, setIsOn0] = useState(true);
@@ -468,26 +453,51 @@ function App() {
   // * 오늘/내일 대기정보
   // 오늘/내일 대기정보 타입
   const [standbyType, setStandbyType] = useState('pm25');
-  // 오늘/내일 대기정보 금일, 내일
+  // * 오늘/내일 대기정보 금일, 내일
   const [forecastDate, setForecastDate] = useState("1");
 
+  // ^ 횡,종 스크롤 애니메이션 활성화, 비활성화
   const [running, setRunning] = useState(false);
   const [disableDuration, setDisableDuration] = useState(false);
-
   
-  // * 하단배너
-  // 대기예보 텍스트 인덱스
+  // * 대기예보 텍스트 인덱스
   const [airInfoIndex, setAirInfoIndex] = useState(1);
   const [intervalId, setIntervalId] = useState(null);
 
   // * 기타
   // 데이터 불러오기 [전체 측정소 대기 값, 대기정보 예보 텍스트]
   // 새로고침
-  const [count, setCount] = useState(0);
   // 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
+
+  //! 측정소 데이터, 예보 텍스트 fetch 후 store에 저장 하여 캐싱처리
+  useEffect(() => {
+    const fetchHandle = (async (type) => {
+      try {
+          debugger
+          const cacheData = JSON.parse(sessionStorage.getItem('fetchStorage'));
+          if(cacheData && cacheData.state[type]) {
+              return;
+          }
+          getFetch(type, `http://localhost:3500/api/airkorea/${type}`);
+      } catch (err) {
+          console.error('err: ', err);
+      }
+  })
+  // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
+  if(!data && !dataFetchBoolean) {
+      fetchHandle('data');
+      changer('dataFetchBoolean', true);
+  };
   
-  // 가까운 위치의 측정소 데이터
+  // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
+  if(!text &&!textFetchBoolean) {
+      fetchHandle('text');
+      changer('textFetchBoolean', true);
+  };
+  }, [data, text, dataFetchBoolean, textFetchBoolean, changer, getFetch]);
+
+  //! 가장 가까운 위치의 측정소 찾기
   useEffect(() => {
       // 중구
       const defaultStation = {
@@ -510,42 +520,44 @@ function App() {
         // 브라우저에서 현재 위치 기능을 지원하는 경우
         if('geolocation' in navigator) {
           if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+            // 위치 찾는 중, 로딩 화면 출력
+            changer('loading', false);
               // 위치 호출에 성공할 경우 실행하는 함수
               const success = async (pos) => {
-                let { latitude, longitude } = pos.coords;
-                if(latitude === undefined) latitude = '197806.5250901809';
-                if(longitude === undefined) longitude = '451373.25740676327';
-        
                 try {
-                  // 현재 위치 좌표 API 호출
-                  const response = await fetch('http://localhost:3500/api/coordinate', {
-                    method: "POST",
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ latitude, longitude })
-                  });
-                  const {documents: [{x, y}]} = await response.json();
-                  // 측정소 데이터 API 호출
-                  const responseStation = await fetch('http://localhost:3500/api/station', {
-                    method: "POST",
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ x, y })
-                  });
+                  let { latitude, longitude } = pos.coords;
+
+                  const cacheStation = JSON.parse(sessionStorage.getItem('fetchStorage')).state.cacheStation;
+                  // 측정소 캐시 값을 갖고 있다면 API 요청을 하지 않음
+                  if(Object.keys(cacheStation).length !== 0) {
+                    changer('station', cacheStation);
+                  } else {
+                    const response = await fetch('http://localhost:3500/api/coordinate', {
+                      method: "POST",
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({ latitude, longitude })
+                    });
+                    const {documents: [{x, y}]} = await response.json();
+                    // 측정소 데이터 API 호출
+                    const responseStation = await fetch('http://localhost:3500/api/station', {
+                      method: "POST",
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({ x, y })
+                    });
                     if(!responseStation.ok) {
                       throw new Error('Network response was not ok');
                     }
                     const stations = await responseStation.json();
-                    // 가까운 거리의 측정소 3개
-                    // setStation(responseStation);
-            
                     // 가까운 측정소
                     const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
                     changer('station', stationData);
+                  }
                 } catch (error) {
                   console.error("Error fetching data: ", error);
                   changer('station', defaultStation);
                 } finally {
-                  console.info("station API Fetch operation completed");
                   changer('stationFetchBoolean', true);
+                  console.info("station API Fetch operation completed");
                 };
               };
               // 위치 호출에 실패할 경우 실행하는 함수
@@ -564,16 +576,15 @@ function App() {
       // 브라우저에서 현재 위치 기능을 지원하지 않는 경우 또는 현재 위치 정보를 사용하지 않는 경우
       changer('station', defaultStation);
       changer('stationFetchBoolean', true);
-  }, [changer, count]);
+  }, [changer, stationFetchBoolean, stationsInfo]);
 
-  // 모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
+  // !모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
   useEffect(() => {
     if(dataFetchBoolean && textFetchBoolean && stationFetchBoolean && !loading)
         changer('loading', true);
   }, [dataFetchBoolean, textFetchBoolean, stationFetchBoolean, changer, loading]);
   
   const typeRange = getColorValue(0, type, true);
-
 // ------------------------------------------------ component
   const LoadingScreen = () => {
     return (
@@ -948,7 +959,7 @@ function App() {
             </MMWrapper>
           </MMLayout>
           {/* 대기/기상 데이터 정보 */}
-            <TodayAirQuality Time={Time} counts={{count, setCount}} />
+            <TodayAirQuality Time={Time}  />
         </FirstSection>
         <SecondSection>
           <SecondBanner>
