@@ -1,7 +1,6 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import stationInfoJSON from '../data/stationInfo.json';
-const stationsInfo = stationInfoJSON.items;
 
 const useStore = create(
     persist(
@@ -43,8 +42,24 @@ const useStore = create(
         // 대기정보(air) / 측정소(station) 정보
         selectInfo: 'air',
 
+        // 가까운 측정소 캐시
+        cacheStation : {},
         // 우리동네 대기정보 측정소 데이터
-        station: stationsInfo.find(item => item.stationName === '중구'),
+        station: {
+            "dmX": "37.564639",
+            "item": "SO2, CO, O3, NO2, PM10, PM2.5",
+            "mangName": "도시대기",
+            "year": "1995",
+            "city": "서울특별시",
+            "addr": "서울 중구 덕수궁길 15",
+            "building": "시청서소문별관 3동",
+            "stationName": "중구",
+            "dmY": "126.975961",
+            "top": "136",
+            "left": "264",
+            "innerTop": "248.594",
+            "innerLeft": "235.531"
+        },
 
         // 결과 필터
         // 농도 범위 필터링
@@ -60,6 +75,7 @@ const useStore = create(
         }),
         {
             name: 'fetchStorage',
+            storage: createJSONStorage(() => sessionStorage),
         },
     ),
 )
