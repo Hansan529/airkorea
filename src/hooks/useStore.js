@@ -21,6 +21,9 @@ const useStore = create(
             set({[target]: await response.json()});
         },
 
+        // update
+        update: '0000-00-00',
+
         // 측정소 값 데이터, 텍스트
         data: null,
         text: null,
