@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import sleep from '../functions/sleep.ts';
 
 const Footer = styled.footer`
     width: 100%;
@@ -40,9 +41,8 @@ const Btn = styled.button`
 const ListUl = styled.ul`
     display: flex;
     flex-wrap: nowrap;
-    transition-duration: 300ms;
+    transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'};
     transform: translateX(${props => props.index * 200}px);
-    /* transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'}; */
 `;
 const ListLi = styled.li`
     flex: 0 200px;
@@ -102,19 +102,51 @@ const InfoAreaIconWrap = styled.div`
 
 
 export default function FooterComponent() {
-    const [ulIndex, setUlIndex] = useState(-7);
+    const [ulIndex, setUlIndex] = useState(-6);
+    console.log('ulIndex: ', ulIndex);
+    const [running, setRunning] = useState(false);
+    const [disableDuration, setDisableDuration] = useState(false);
 
-    const handle = (e) => {
+    const handle = async (e) => {
         const btn = e.currentTarget.dataset.btn;
         switch(btn) {
             case 'left':
-                // if(ulIndex > 0)
-                setUlIndex(ulIndex + 1);
+                if(!running){
+                    setRunning(true);
+                    setUlIndex(ulIndex + 1);
+                    // 무한 롤링
+                    if(ulIndex >= -1){
+                        await sleep(0.3);
+                        setDisableDuration(true);
+                        setUlIndex(-23);
+                        await sleep(0.1);
+                        setDisableDuration(false);
+                        setRunning(false);
+                    } else {
+                        await sleep(0.3);
+                        setRunning(false);
+                    };
+                };
                 break;
             case 'atop':
                 break;
             case 'right':
-                setUlIndex(ulIndex - 1);
+                if(!running){
+                    setRunning(true);
+                    setUlIndex(ulIndex - 1);
+                    // 무한 롤링
+                    if(ulIndex <= -28){
+                        await sleep(0.3);
+                        setDisableDuration(true);
+                        setUlIndex(-6);
+                        await sleep(0.1);
+                        setDisableDuration(false);
+                        setRunning(false);
+                    } else {
+                        await sleep(0.3);
+                        setRunning(false);
+                    };
+                };
                 break;
             default:
                 break;
@@ -130,7 +162,7 @@ export default function FooterComponent() {
                     <Btn data-btn="atop" onClick={handle}></Btn>
                     <Btn data-btn="right" onClick={handle}></Btn>
                 </ButtonBox>
-                <ListUl index={ulIndex}>
+                <ListUl index={ulIndex} disableDuration={disableDuration}>
                     <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="./img_ban17.webp" /></a></ListLi>
 			        <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="./img_ban18.webp" /></a></ListLi>
 			        <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="./img_ban19.webp" /></a></ListLi>
