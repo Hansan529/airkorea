@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import sleep from '../functions/sleep.ts';
 
 const Footer = styled.footer`
@@ -100,53 +100,93 @@ const InfoAreaIconWrap = styled.div`
 
 `;
 
+function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        function tick() {
+            savedCallback.current();
+        }
+        if(delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+}
+
 
 export default function FooterComponent() {
+    // 인덱스
     const [ulIndex, setUlIndex] = useState(-6);
-    console.log('ulIndex: ', ulIndex);
-    const [running, setRunning] = useState(false);
+
+    // 애니메이션 진행 중
+    const [transitionRunning, setTransitionRunning] = useState(false);
+
+    // 애니메이션 시간 ON/OFF
     const [disableDuration, setDisableDuration] = useState(false);
+
+    // 인터벌
+    const [intervalDelay, setIntervalDelay] = useState(2000);
+    const [intervalRunning, setIntervalRunning] = useState(true);
+
+    const leftFunction = async () => {
+        if(!transitionRunning){
+            setTransitionRunning(true);
+            setUlIndex(ulIndex + 1);
+            // 무한 롤링
+            if(ulIndex >= -1){
+                await sleep(0.3);
+                setDisableDuration(true);
+                setUlIndex(-23);
+                await sleep(0.1);
+                setDisableDuration(false);
+                setTransitionRunning(false);
+            } else {
+                await sleep(0.3);
+                setTransitionRunning(false);
+            };
+        };
+    };
+    const rightFunction = async () => {
+        if(!transitionRunning){
+            setTransitionRunning(true);
+            setUlIndex(ulIndex - 1);
+            // 무한 롤링
+            if(ulIndex <= -28){
+                await sleep(0.3);
+                setDisableDuration(true);
+                setUlIndex(-6);
+                await sleep(0.1);
+                setDisableDuration(false);
+                setTransitionRunning(false);
+            } else {
+                await sleep(0.3);
+                setTransitionRunning(false);
+            };
+        };
+    };
+
+    useInterval(() => {
+        rightFunction();
+    }, intervalRunning ? intervalDelay : null);
 
     const handle = async (e) => {
         const btn = e.currentTarget.dataset.btn;
+
+        intervalRunning && setIntervalRunning(false);
         switch(btn) {
             case 'left':
-                if(!running){
-                    setRunning(true);
-                    setUlIndex(ulIndex + 1);
-                    // 무한 롤링
-                    if(ulIndex >= -1){
-                        await sleep(0.3);
-                        setDisableDuration(true);
-                        setUlIndex(-23);
-                        await sleep(0.1);
-                        setDisableDuration(false);
-                        setRunning(false);
-                    } else {
-                        await sleep(0.3);
-                        setRunning(false);
-                    };
-                };
+                leftFunction();
                 break;
             case 'atop':
-                break;
+                !intervalRunning && setIntervalRunning(true);
+            break;
             case 'right':
-                if(!running){
-                    setRunning(true);
-                    setUlIndex(ulIndex - 1);
-                    // 무한 롤링
-                    if(ulIndex <= -28){
-                        await sleep(0.3);
-                        setDisableDuration(true);
-                        setUlIndex(-6);
-                        await sleep(0.1);
-                        setDisableDuration(false);
-                        setRunning(false);
-                    } else {
-                        await sleep(0.3);
-                        setRunning(false);
-                    };
-                };
+                rightFunction();
                 break;
             default:
                 break;
