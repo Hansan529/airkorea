@@ -6,7 +6,8 @@ import stationInfoJSON from './data/stationInfo.json';
 import getColorValue from './functions/getColorValue.ts';
 import sleep from './functions/sleep.ts';
 
-import { RealTimeStandby } from './components/RealTimeStandby.js';
+import LoadingComp from './components/Loading.js';
+import { RealTimeStandby } from './components/RealTimeStandby';
 import TodayAirQuality from './components/TodayAirQuality';
 import StandbyForecast from './components/StandbyForecast';
 import { RealTimeWeather } from './components/RealTimeWeather';
@@ -317,7 +318,7 @@ const SecondBanner = styled.div`
       left: 20px;
       transform: translateY(-50%);
       font-size: 22px;
-      
+
       &::after {
         content: "";
         position: absolute;
@@ -327,9 +328,9 @@ const SecondBanner = styled.div`
         top: 50%;
         transform: translate(20px, -50%);
       }
-      
-      strong { 
-        display: block; 
+
+      strong {
+        display: block;
       }
     }
   }
@@ -382,22 +383,6 @@ const SecondBannerInfo = styled.div`
         }
       }
 `;
-const Loading = styled.div`
-      display: ${props => props.loading === 'true' ? 'none' : 'block'};
-      position: absolute;
-      z-index: 100;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      border: 1px solid #bcd0e8;
-      background: url('/loading_bg.webp');
-
-      div {
-        margin-top: 360px;
-        font-size: 20px;
-        color: #0054a6;
-      }
-`;
 const TimeDiv = styled.div`
       display: flex;
       gap: 5px !important;
@@ -441,6 +426,7 @@ function App() {
   const { data, dataFetchBoolean, text, textFetchBoolean, stationFetchBoolean, changer, getFetch, type, regionNum, selectInfo, loading, filterRange, filterData } = useStore(state => state);
 
   const legendRef = useRef(null);
+  const Loading = () => <LoadingComp />;
 
   // * 실시간 대기정보 토글
 
@@ -458,16 +444,18 @@ function App() {
   // ^ 횡,종 스크롤 애니메이션 활성화, 비활성화
   const [running, setRunning] = useState(false);
   const [disableDuration, setDisableDuration] = useState(false);
-  
+
   // * 대기예보 텍스트 인덱스
   const [airInfoIndex, setAirInfoIndex] = useState(1);
   const [intervalId, setIntervalId] = useState(null);
 
   // * 기타
-  // 데이터 불러오기 [전체 측정소 대기 값, 대기정보 예보 텍스트]
-  // 새로고침
   // 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
+  // * 인터벌
+  const [intervalDelay, setIntervalDelay] = useState(2000);
+  const [intervalRunning, setIntervalRunning] = useState(true);
+
 
   //! 측정소 데이터, 예보 텍스트 fetch 후 store에 저장 하여 캐싱처리
   useEffect(() => {
@@ -490,7 +478,7 @@ function App() {
       // 시간 새로고침 또는 오류 인해 fetchBoolean은 true면서, data가 null인 경우 data fetch
       fetchHandle('data');
   };
-  
+
   // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
   if(!text &&!textFetchBoolean) {
       fetchHandle('text');
@@ -585,19 +573,9 @@ function App() {
     if(data && text && dataFetchBoolean && textFetchBoolean && stationFetchBoolean && !loading)
         changer('loading', true);
   }, [data, text, dataFetchBoolean, textFetchBoolean, stationFetchBoolean, changer, loading]);
-  
+
   const typeRange = getColorValue(0, type, true);
 // ------------------------------------------------ component
-  const LoadingScreen = () => {
-    return (
-      <Loading loading={String(loading)}>
-        <div>데이터 처리중입니다.</div>
-        <p>잠시만 기다려 주시기 바랍니다.</p>
-        <img src="/loading_1.webp" alt="로딩 중" />
-      </Loading>
-    )
-  };
-
   const TimeText = (() => {
     if(data) {
         const dataTime = data[0].dataTime;
@@ -796,7 +774,7 @@ function App() {
     const array = [23, 17, 11, 5];
     let target;
     if(TimeText) target = Number(TimeText.hour);
-    
+
     for (const element of array){
       if(target > element){
         target = element;
@@ -804,7 +782,7 @@ function App() {
       };
     };
     target = String(target).padStart(2, '0');
-  
+
     let filterAirInformation;
     let result = <></>;
 
@@ -816,7 +794,7 @@ function App() {
       const { length } = filterAirInformation;
       const first = filterAirInformation[0];
       const last = filterAirInformation[length - 1];
-  
+
       if(length === 3){
         filterAirInformation.splice(0,0, last);
         filterAirInformation.splice(length+1,0, first);
@@ -859,7 +837,7 @@ function App() {
         return <div key={idx}><strong>{txt}</strong><span>{sliceText}</span></div>
       })
     };
-    
+
     return result;
   };
 
@@ -871,7 +849,7 @@ function App() {
         {/* 첫번째 색션 */}
         <FirstSection>
           {/* 로딩창 */}
-          <LoadingScreen />
+          <Loading />
           {/* 대기/기상 지도 정보 */}
           <MMLayout>
             {/* Main Map 설정 */}
@@ -908,7 +886,7 @@ function App() {
                     <label htmlFor="area2" style={{ marginRight: '5px' }}>
                       시/도
                     </label>
-                    <MMOSelect id="area2" bg $width="130px" 
+                    <MMOSelect id="area2" bg $width="130px"
                     onChange={(e) => {
                       eventHandler('openMap', e.currentTarget.value);
                       eventHandler('regionNum', e.currentTarget.value);
