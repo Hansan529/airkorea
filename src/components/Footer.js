@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import sleep from '../functions/sleep.ts';
+import useInterval from './../hooks/useInterval.ts';
 
 const Footer = styled.footer`
     width: 100%;
@@ -97,26 +98,8 @@ const InfoAreaCallDust = styled.div`
 `;
 
 const InfoAreaIconWrap = styled.div`
-
 `;
 
-function useInterval(callback, delay) {
-    const savedCallback = useRef();
-
-    useEffect(() => {
-        savedCallback.current = callback;
-    }, [callback]);
-
-    useEffect(() => {
-        function tick() {
-            savedCallback.current();
-        }
-        if(delay !== null) {
-            let id = setInterval(tick, delay);
-            return () => clearInterval(id);
-        }
-    }, [delay]);
-}
 
 
 export default function FooterComponent() {
