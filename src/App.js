@@ -15,6 +15,7 @@ import { RealTimeWeather } from './components/RealTimeWeather';
 import HeaderComponent from './components/Header';
 import FooterComponent from './components/Footer';
 import useStore from './hooks/useStore';
+import useInterval from './hooks/useInterval.ts';
 
 // Style
 const Select = styled.select`
@@ -349,15 +350,10 @@ const SecondBanner = styled.div`
       background: no-repeat center center;
       cursor: pointer;
 
-      &.upBtn {
-        background-image: url('./img_up_down_up.webp');
-      }
-      &.playBtn {
-        background-image: url('./icon_bn_stop.webp');
-      }
-      &.downBtn {
-        background-image: url('./img_up_down_down.webp');
-      }
+      &[data-type="up"] {background-image: url('./img_up_down_up.webp');}
+      &[data-type="play"] {background-image: url('./icon_bn_stop.webp');}
+      &[data-type="stop"] {background-image: url('./icon_bn_play.webp');}
+      &[data-type="down"] {background-image: url('./img_up_down_down.webp');}
     }
   }
 `;
@@ -447,13 +443,12 @@ function App() {
 
   // * 대기예보 텍스트 인덱스
   const [airInfoIndex, setAirInfoIndex] = useState(1);
-  const [intervalId, setIntervalId] = useState(null);
 
   // * 기타
   // 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
   // * 인터벌
-  const [intervalDelay, setIntervalDelay] = useState(2000);
+  const [intervalDelay, setIntervalDelay] = useState(5000);
   const [intervalRunning, setIntervalRunning] = useState(true);
 
 
@@ -729,45 +724,51 @@ function App() {
   const forecastDateHandle = (e) => setForecastDate(e.currentTarget.dataset.date);
 
   // 예보 발표 이벤트 함수
-  const airInfoIndexUpHandle = async () => {
+  const airInfoIndexHandle = async (e) => {
+    let { type } = e.currentTarget.dataset;
     if(!running){
       setRunning(true);
-      setAirInfoIndex(airInfoIndex + 1);
-      // 무한 롤링
-      if(airInfoIndex >= 3){
-        await sleep(0.3);
-        setDisableDuration(true);
-        setAirInfoIndex(1);
-        await sleep(0);
-        setDisableDuration(false);
-      } else await sleep(0.3);
+
+      intervalRunning && setIntervalRunning(false);
+      switch(type) {
+        case 'up':
+          setAirInfoIndex(airInfoIndex + 1);
+          // 무한 롤링
+          if(airInfoIndex >= 3){
+            await sleep(0.3);
+            setDisableDuration(true);
+            setAirInfoIndex(1);
+            await sleep(0);
+            setDisableDuration(false);
+          };
+          break;
+        case 'play':
+          e.currentTarget.dataset.type = 'stop';
+          break;
+        case 'stop':
+          !intervalRunning && setIntervalRunning(true);
+          e.currentTarget.dataset.type = 'play';
+          break;
+        case 'down':
+          setAirInfoIndex(airInfoIndex - 1);
+          if(airInfoIndex <= 1){
+              await sleep(0.3);
+              setDisableDuration(true);
+              setAirInfoIndex(3);
+              await sleep(0);
+              setDisableDuration(false);
+          };
+          break;
+        default:
+          break;
+      };
+      await sleep(0.3);
       setRunning(false);
     };
   };
-  const airInfoIndexPlayHandle = () => {
-    if(intervalId){
-      clearInterval(intervalId);
-    } else {
-      const id = setInterval(() => {
-        airInfoIndexUpHandle();
-      }, 1000);
-      setIntervalId(id);
-    }
-  };
-  const airInfoIndexDownHandle = async () => {
-    if(!running) {
-      setRunning(true);
-      setAirInfoIndex(airInfoIndex - 1);
-      if(airInfoIndex <= 1){
-          await sleep(0.3);
-          setDisableDuration(true);
-          setAirInfoIndex(3);
-          await sleep(0);
-          setDisableDuration(false);
-        } else await sleep(0.3);
-        setRunning(false);
-    };
-  };
+  useInterval(() => {
+    airInfoIndexHandle({ currentTarget: { dataset: { type: 'up'}}});
+  }, intervalRunning ? intervalDelay : null);
 
   // 예보 텍스트
   function BannerData() {
@@ -955,9 +956,9 @@ function App() {
               </SecondBannerInfo>
             </div>
             <div className="buttonWrap">
-                  <button onClick={airInfoIndexUpHandle} className="upBtn"></button>
-                  <button onClick={airInfoIndexPlayHandle} className="playBtn"></button>
-                  <button onClick={airInfoIndexDownHandle} className="downBtn"></button>
+                  <button data-type="up" onClick={airInfoIndexHandle}></button>
+                  <button data-type="play" onClick={airInfoIndexHandle}></button>
+                  <button data-type="down" onClick={airInfoIndexHandle}></button>
             </div>
           </SecondBanner>
         </SecondSection>
