@@ -37,7 +37,10 @@ const Btn = styled.button`
     border: none;
     background: no-repeat 0 0;
     cursor: pointer;
-    ${(props) => props['data-btn'] && css`background-image: url(./img_ban_${props['data-btn']}.webp);`};
+    &[data-btn="left"]  { background-image: url('./img_ban_left.webp'); }
+    &[data-btn="atop"]  { background-image: url('./img_ban_atop.webp'); }
+    &[data-btn="auto"]  { background-image: url('./img_ban_auto.webp'); }
+    &[data-btn="right"] { background-image: url('./img_ban_right.webp'); }
 `;
 const ListUl = styled.ul`
     display: flex;
@@ -166,8 +169,12 @@ export default function FooterComponent() {
                 leftFunction();
                 break;
             case 'atop':
-                !intervalRunning && setIntervalRunning(true);
-            break;
+                e.currentTarget.dataset.btn = 'auto';
+                break;
+                case 'auto':
+                    !intervalRunning && setIntervalRunning(true);
+                    e.currentTarget.dataset.btn = 'atop';
+                break;
             case 'right':
                 rightFunction();
                 break;
