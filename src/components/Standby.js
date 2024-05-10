@@ -46,15 +46,10 @@ const InnerMapButton = styled.button`
 	display: block;
 	}
 `;
-const FillColor = styled.path`
-	fill: ${(props) => props.fillColor || '#cbd0d3'};
-`
+const FillColor = styled.path` fill: ${(props) => props.fillColor || '#cbd0d3'}; `
 const MapPath = styled(FillColor)`
-	&:hover{
-		fill: ${props => props.hoverColor || null}
-	}
+	&:hover{ fill: ${props => props.hoverColor || null} }
 	cursor: pointer;
-
 	filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
 `;
 const MapSvgStyle = styled.svg`
@@ -69,18 +64,14 @@ const MapSvgStyle = styled.svg`
 		pointer-events: auto;
 	}
 `
-const InnerMapPathStyle = styled(FillColor)`
-	&:hover {
-	fill: ${props => props.fillHoverColor || '#c1c5c7'};
-	}
-`;
+const InnerMapPathStyle = styled(FillColor)`&:hover { fill: ${props => props.fillHoverColor || '#c1c5c7'};}`;
 const MainContainer = styled.div`
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	/* overflow: hidden; */
 `;
-const LoopContainer = styled.div`position: relative;`;
+const LoopContainer = styled.div` position: relative; `;
 const MapNameButton = styled.button`
 	position: absolute;
 	top: ${({top}) => `${top}px`};
@@ -146,12 +137,8 @@ const StationPopupStyle = styled.div`
 	border-radius: 10px;
 	transform : translate(-50%, -90px);
 
-	${({top}) => top && css`
-	top: ${top}px;
-	`}
-	${({left}) => left && css`
-	left: ${left}px;
-	`}
+	top: ${props => props.top || 'initial'}px;
+	left: ${props => props.left || 'initial'}px;
 
 	&::after {
 		content: "";
@@ -171,9 +158,7 @@ const StationPopupStyle = styled.div`
 		&:last-of-type{margin-bottom: 0;}
 	}
 
-	strong {
-		color: #ffea5c;
-	}
+	strong { color: #ffea5c; }
 `;
 const InnerTitle = styled.div`
     position: relative;
@@ -237,9 +222,7 @@ const InnerSelectDiv = styled.div`
         background: #fff;
         border-radius: 25px;
 
-        &:hover {
-            text-decoration: underline;
-        }
+        &:hover { text-decoration: underline; }
     }
 `;
 
@@ -309,9 +292,7 @@ const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) =>
 	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor}></InnerMapPathStyle>;
 
 
-
-
-export const RealTimeStandby = ({Time}) => {
+const Standby = ({Time}) => {
 	const { type, data, changer, loading, station, openMap, filterData, filterRange, selectInfo } = useStore(state => state);
 	// 측정소 위치 데이터
 	const stationsInfo = stationJson.items;
@@ -350,7 +331,7 @@ export const RealTimeStandby = ({Time}) => {
 	const regionAvgValue = (order, returnValue) => {
 		if(data){
 			const filterValue = Object.values(regionNumList)?.map((list) => {
-				return data?.filter((data) => { 
+				return data?.filter((data) => {
 					return data.sidoName === list;
 				});
 			});
@@ -732,4 +713,6 @@ export const RealTimeStandby = ({Time}) => {
 			</MainContainer>
 		</>
 	)
-}
+};
+
+export default Standby;

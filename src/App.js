@@ -7,13 +7,17 @@ import getColorValue from './functions/getColorValue.ts';
 import sleep from './functions/sleep.ts';
 
 import LoadingComp from './components/Loading.js';
-import { RealTimeStandby } from './components/RealTimeStandby';
-import TodayAirQuality from './components/TodayAirQuality';
-import StandbyForecast from './components/StandbyForecast';
-import { RealTimeWeather } from './components/RealTimeWeather';
-
 import HeaderComponent from './components/Header';
 import FooterComponent from './components/Footer';
+
+// 실시간 대기정보 / 오늘내일모래 대기정보 / 실시간 기상정보
+import Standby from './components/Standby.js';
+import StandbyForecast from './components/StandbyForecast';
+import Weather from './components/Weather.js';
+
+// 우리동네 대기 정보
+import TodayAirQuality from './components/TodayAirQuality';
+
 import useStore from './hooks/useStore';
 import useInterval from './hooks/useInterval.ts';
 
@@ -24,9 +28,7 @@ const Select = styled.select`
   -moz-appearance: none;
   appearance: none;
 `;
-const Section = styled.section`
-    position: relative;
-`;
+const Section = styled.section` position: relative; `;
 const FirstSection = styled(Section)`
   background: url('/img_main_bg.webp') repeat-x 0 0;
   display: flex;
@@ -58,13 +60,8 @@ const MMOList = styled.ul`
     border-bottom: none;
     overflow: hidden;
 
-    &:first-of-type {
-      border-top-left-radius: 10px;
-    }
-
-    &:last-of-type {
-      border-top-right-radius: 10px;
-    }
+    &:first-of-type { border-top-left-radius: 10px; }
+    &:last-of-type { border-top-right-radius: 10px; }
 
     button {
       display: block;
@@ -188,9 +185,7 @@ const Legend = styled.div`
       cursor: pointer;
       padding: 5px 0;
 
-      &:hover {
-        text-decoration: underline;
-      }
+      &:hover { text-decoration: underline; }
   }}
   ul, .list {
     border: 1px solid rgba(0,0,0,0.3);
@@ -203,12 +198,8 @@ const Legend = styled.div`
     padding: 5px 0;
     small {font-size: 14px;}
 
-    &:first-of-type {
-      background-image: url(./img_cau01.webp);
-    }
-    &:last-of-type {
-      background-image: url(./img_cau02.webp);
-    }
+    &:first-of-type { background-image: url(./img_cau01.webp); }
+    &:last-of-type { background-image: url(./img_cau02.webp);}
   }}
 
   .radio {
@@ -393,9 +384,7 @@ const TimeDiv = styled.div`
       right: ${props => props.right || 'initial'};
       left: ${props => props.left || 'initial'};
 
-      strong {
-        font-weight: 900;
-      }
+      strong { font-weight: 900; }
 `;
 const TimeButtonStyle = styled.button`
       background-image: ${props => props.ico && `url('/img_${props.ico}.webp')`};
@@ -409,9 +398,7 @@ const TimeButtonStyle = styled.button`
       transform-origin: center;
       font-size: 0;
 
-      &:hover {
-          cursor: pointer;
-        }
+      &:hover { cursor: pointer; }
 `;
 
 
@@ -464,23 +451,18 @@ function App() {
       } catch (err) {
           console.error('err: ', err);
       }
-  })
-  // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
-  if(!data && !dataFetchBoolean) {
-      fetchHandle('data');
-      changer('dataFetchBoolean', true);
-    } else if(!data && dataFetchBoolean) {
-      // 시간 새로고침 또는 오류 인해 fetchBoolean은 true면서, data가 null인 경우 data fetch
-      fetchHandle('data');
-  };
+    })
+    // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
+    if(!data && !dataFetchBoolean) {
+        fetchHandle('data');
+        changer('dataFetchBoolean', true);
+    };
 
-  // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
-  if(!text &&!textFetchBoolean) {
-      fetchHandle('text');
-      changer('textFetchBoolean', true);
-    } else if(!text && textFetchBoolean) {
-      fetchHandle('text');
-  };
+    // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
+    if(!text &&!textFetchBoolean) {
+        fetchHandle('text');
+        changer('textFetchBoolean', true);
+    };
   }, [data, text, dataFetchBoolean, textFetchBoolean, changer, getFetch]);
 
   //! 가장 가까운 위치의 측정소 찾기
@@ -605,10 +587,10 @@ function App() {
   };
 
 
-  const RealTimeStandbyComp = () => {
+  const StandbyComp = () => {
     return (
       <>
-        <RealTimeStandby Time={Time} />
+        <Standby Time={Time} />
         <Time right="0" />
         <LegendWrapper ref={legendRef}>
           {selectInfo === 'air' ?
@@ -662,28 +644,18 @@ function App() {
     )
   };
 
-  const StandByForecastComp = () => {
-    return (
-      <StandbyForecast Time={Time} standbyType={standbyType} forecastDate={forecastDate} />
-    )
-  };
+  const ForecastComp = () => <StandbyForecast Time={Time} standbyType={standbyType} forecastDate={forecastDate} />;
 
-  const RealTimeWeatherComp = () => {
-    return (
-      <RealTimeWeather></RealTimeWeather>
-    )
-  };
+  const WeatherComp = () => <Weather></Weather>
 
   const DynamicComponent = () => {
     const Components = {
-      0: RealTimeStandbyComp,
-      1: StandByForecastComp,
-      2: RealTimeWeatherComp
+      0: StandbyComp,
+      1: ForecastComp,
+      2: WeatherComp
     }
     const Result = Components[tapSelect];
-    return (
-      <Result />
-    );
+    return ( <Result /> );
   };
 
   // ------------------------------------------------ event, function
