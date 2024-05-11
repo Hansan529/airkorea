@@ -9,10 +9,14 @@ const Footer = styled.footer`
     /* height: 100px; */
     overflow: hidden;
 `;
-const BannerWrap = styled.div`
+const WidthSetting = `
     display: flex;
     width: 1400px;
-    margin: 0 auto;
+`;
+//? 유관기관 목록 스타일
+const BannerWrap = styled.div`
+    ${WidthSetting}
+    margin: 0 auto 50px;
     overflow: hidden;
 `;
 const ButtonBox = styled.div`
@@ -60,6 +64,50 @@ const ListLi = styled.li`
     }
 `;
 
+//? 푸터 정보
+const InfoArea = styled.div`
+    ${WidthSetting}
+    margin: 0 auto;
+    height: 100px;
+`;
+
+const InfoAreaLogo = styled.h2`
+    flex-basis: 180px;
+    text-align: center;
+    line-height: 100px;
+    margin-right: 20px;
+    img {
+        vertical-align: middle;
+    }
+`;
+
+const InfoAreaCallDust = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 860px;
+    font-size: 14px;
+    flex-grow: 1;
+    position: relative;
+
+    > div {
+        /* position: relative; */
+        display: flex;
+    }
+    a[href^="tel:"] { font-size: 0; }
+`;
+const InfoAreaPseudo = styled.div`
+    margin: 0 20px;
+    width: 2px;
+    height: 20px;
+    background-color: rgba(0,0,0,0.2);
+`;
+
+const InfoAreaIconWrap = styled.div`
+    margin-top: 10px;
+    >*:first-child { margin-right: 40px; }
+`;
+
 const CopyRight = styled.div`
     a{
         color: darkblue;
@@ -67,42 +115,16 @@ const CopyRight = styled.div`
         &:visited { color: darkblue; }
     }
 `;
-
-const InfoArea = styled.div`
-    display: flex;
-`;
-
-const InfoAreaCallDust = styled.div`
-    display: flex;
-    width: 860px;
-    flex-wrap: wrap;
-    gap: 10px 0;
-
-    p {
-        position: relative;
-    }
-    > p:first-of-type{
-        margin-right: 40px;
-        &::after {
-            content: "";
-            display: block;
-            position: absolute;
-            width: 2px;
-            height: 100%;
-            background-color: rgba(0,0,0,0.2);
-            top: 0;
-            right: -20px;
-        }
-    }
-
-    a {
-        font-size: 0;
+const CopyRightImg = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    img {
+        display: block;
+        height: 30px;
+        margin-bottom: 5px;
     }
 `;
-
-const InfoAreaIconWrap = styled.div`
-`;
-
 
 
 export default function FooterComponent() {
@@ -233,23 +255,30 @@ export default function FooterComponent() {
                 </ListUl>
             </BannerWrap>
             <InfoArea>
-                <h2>
+                <InfoAreaLogo>
                     <img src="./logo.webp" alt="에어코리아 로고" />
-                </h2>
+                </InfoAreaLogo>
                 <InfoAreaCallDust>
-                    <p>실시간 미세먼지 농도 및 예보 관련 문의: <span style={{color: 'blue'}}>131</span><a href="tel:131">131</a> &#40;기상콜센터 유료&#41;</p>
-                    <p>대기측정망 및 홈페이지관련 문의 : <span style={{color: 'blue'}}>032&#41;590-4000</span><a href="tel:032-590-4000">032&#41;590-4000</a> &#40;내선번호 8번&#41;</p>
-                    <p>&#91;22689&#93; 인천광역시 서구 환경로 42&#40;오류동 종합환경연구단지&#41;<br /><span style={{color: 'rgba(0,0,0,0.5)'}}>Copyright © 2023 한국환경공단, All rights reserved.</span></p>
+                    <div>
+                        <p>실시간 미세먼지 농도 및 예보 관련 문의: <span style={{color: 'blue'}}>131</span><a href="tel:131">131</a> &#40;기상콜센터 유료&#41;</p>
+                        <InfoAreaPseudo />
+                        <p>대기측정망 및 홈페이지관련 문의 : <span style={{color: 'blue'}}>032&#41;590-4000</span><a href="tel:032-590-4000">032&#41;590-4000</a> &#40;내선번호 8번&#41;</p>
+                    </div>
+                    <InfoAreaIconWrap>
+                        <p>&#91;22689&#93; 인천광역시 서구 환경로 42&#40;오류동 종합환경연구단지&#41;<br /><span style={{color: 'rgba(0,0,0,0.5)'}}>Copyright © 2023 한국환경공단, All rights reserved.</span></p>
+                        <CopyRight>
+                            <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
+                            <p>
+                                <strong>공공데이터</strong>(<a href="https://www.data.go.kr/data/15073861/openapi.do" target="_blank" rel="noreferrer">한국환경공단 에어코리아 대기오염정보</a>, <a href="https://www.data.go.kr/data/15073877/openapi.do" target="_blank" rel="noreferrer">측정소정보</a>, <a href="https://www.data.go.kr/data/15073855/openapi.do" target="_blank" rel="noreferrer">대기오염통계 현황</a>)
+                            </p>
+                        </CopyRight>
+                        <CopyRightImg>
+                            <a href="https://www.me.go.kr/" title="새창으로 열기" target="_blank" rel="noreferrer"><img src="./img_f_logo.webp" alt="환경부" /></a>
+                            <a href="https://www.keco.or.kr/" title="새창으로 열기" target="_blank" rel="noreferrer"><img src="./img_under_logo.webp" alt="한국환경공단" /></a>
+                            <a href="http://www.kogl.or.kr/open/index.do" title="새창으로 열기" target="_blank" rel="noreferrer"><img src="./img_openapi.webp" alt="OPEN API 이미지" /></a>
+                        </CopyRightImg>
+                    </InfoAreaIconWrap>
                 </InfoAreaCallDust>
-                <InfoAreaIconWrap>
-                    <CopyRight>
-                        <p>인증을 받지 않은 실시간자료이므로 자료 오류 및 표출방식에 따라 값이 다를 수 있음에 유의해주세요.</p>
-                        <p><strong>공공데이터</strong> <a href="https://www.data.go.kr/data/15073861/openapi.do" target="_blank" rel="noreferrer">한국환경공단 에어코리아 대기오염정보</a> <a href="https://www.data.go.kr/data/15073877/openapi.do" target="_blank" rel="noreferrer">측정소정보</a>, <a href="https://www.data.go.kr/data/15073855/openapi.do" target="_blank" rel="noreferrer">대기오염통계 현황</a></p>
-                    </CopyRight>
-                    <img src="./img_f_logo.webp" alt="환경부" />
-                    <img src="./img_under_logo.webp" alt="한국환경공단" />
-                    <img src="./img_openapi.webp" alt="OPEN API 이미지" />
-                </InfoAreaIconWrap>
             </InfoArea>
         </Footer>
     )
