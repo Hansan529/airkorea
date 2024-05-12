@@ -1,8 +1,7 @@
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useRef, useState } from 'react';
 import sleep from '../functions/sleep.ts';
-import useInterval from './../hooks/useInterval.ts';
+import useInterval from '../hooks/useInterval.ts';
 
 const Footer = styled.footer`
     width: 100%;
@@ -70,7 +69,6 @@ const InfoArea = styled.div`
     margin: 0 auto;
     height: 100px;
 `;
-
 const InfoAreaLogo = styled.h2`
     flex-basis: 180px;
     text-align: center;
@@ -80,7 +78,6 @@ const InfoAreaLogo = styled.h2`
         vertical-align: middle;
     }
 `;
-
 const InfoAreaCallDust = styled.div`
     display: flex;
     flex-direction: column;
@@ -102,12 +99,10 @@ const InfoAreaPseudo = styled.div`
     height: 20px;
     background-color: rgba(0,0,0,0.2);
 `;
-
 const InfoAreaIconWrap = styled.div`
     margin-top: 10px;
     >*:first-child { margin-right: 40px; }
 `;
-
 const CopyRight = styled.div`
     a{
         color: darkblue;

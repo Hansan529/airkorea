@@ -1,30 +1,30 @@
 import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import { Fragment, useRef, useState } from 'react';
-import useStore from '../hooks/useStore.js';
+import useStore from '../hooks/useStore';
 
-import { backgroundPathData, innerBackgroundPathData, pathData} from '../paths/paths.js';
+import { backgroundPathData, innerBackgroundPathData, pathData} from '../paths/paths';
 import regionList from "../data/regionList.json";
 import stationJson from "../data/stationInfo.json";
 import getColorValue from '../functions/getColorValue.ts';
 
-import { SeoulInner } from '../paths/Seoul.js';
-import { IncheonInner, IncheonPath } from '../paths/Incheon.js';
-import { ChungnamInner, ChungnamPath } from '../paths/Chungnam.js';
-import { GyeongbukInner, GyeongbukPath } from '../paths/Gyeongbuk.js';
-import { GyeongnamInner, GyeongnamPath } from '../paths/Gyeongnam.js';
-import { JeonnamInner, JeonnamPath } from '../paths/Jeonnam.js';
-import { JeonbukInner, JeonbukPath } from '../paths/Jeonbuk.js';
-import { JejuInner, JejuPath } from '../paths/Jeju.js';
-import { GyeonggiPath } from '../paths/Gyeonggi.js';
-import { GangwonPath } from '../paths/Gangwon.js';
-import { DaejeonPath } from '../paths/Daejeon.js';
-import { SejongPath } from '../paths/Sejong.js';
-import { BusanPath } from '../paths/Busan.js';
-import { UlsanPath } from '../paths/Ulsan.js';
-import { DaeguPath } from '../paths/Daegu.js';
-import { GwangjuPath } from '../paths/Gwangju.js';
-import { ChungbukPath } from '../paths/Chungbuk.js';
+import { SeoulInner } from '../paths/Seoul';
+import { IncheonInner, IncheonPath } from '../paths/Incheon';
+import { ChungnamInner, ChungnamPath } from '../paths/Chungnam';
+import { GyeongbukInner, GyeongbukPath } from '../paths/Gyeongbuk';
+import { GyeongnamInner, GyeongnamPath } from '../paths/Gyeongnam';
+import { JeonnamInner, JeonnamPath } from '../paths/Jeonnam';
+import { JeonbukInner, JeonbukPath } from '../paths/Jeonbuk';
+import { JejuInner, JejuPath } from '../paths/Jeju';
+import { GyeonggiPath } from '../paths/Gyeonggi';
+import { GangwonPath } from '../paths/Gangwon';
+import { DaejeonPath } from '../paths/Daejeon';
+import { SejongPath } from '../paths/Sejong';
+import { BusanPath } from '../paths/Busan';
+import { UlsanPath } from '../paths/Ulsan';
+import { DaeguPath } from '../paths/Daegu';
+import { GwangjuPath } from '../paths/Gwangju';
+import { ChungbukPath } from '../paths/Chungbuk';
 
 const Pseudo = `
 	content: "";
