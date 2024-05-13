@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import './App.css';
 
+// Hooks
+import useStore from './hooks/useStore';
+import useInterval from './hooks/useInterval.ts';
+
 import stationInfoJSON from './data/stationInfo.json';
 import getColorValue from './functions/getColorValue.ts';
 import sleep from './functions/sleep.ts';
@@ -11,15 +15,12 @@ import HeaderComponent from './components/Header';
 import FooterComponent from './components/Footer';
 
 // 실시간 대기정보 / 오늘내일모래 대기정보 / 실시간 기상정보
-import Standby from './components/Standby';
-import StandbyForecast from './components/StandbyForecast';
-import Weather from './components/Weather';
+import Standby from './app/Standby.jsx';
+import StandbyForecast from './app/StandbyForecast.jsx';
+import Weather from './app/Weather.jsx';
 
 // 우리동네 대기 정보
-import TodayAirQuality from './components/TodayAirQuality';
-
-import useStore from './hooks/useStore';
-import useInterval from './hooks/useInterval.ts';
+import TodayAirQuality from './app/TodayAirQuality.jsx';
 
 // Style
 const Select = styled.select`
