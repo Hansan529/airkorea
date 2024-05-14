@@ -1,23 +1,20 @@
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 const headerHeight = '90px';
 
-const Header = styled.header`
+const HeaderElement = styled.header`
   display: flex;
   position: relative;
   width: 100%;
-  min-width: 1400px;
   height: ${headerHeight};
   z-index: 100;
   background-color: #fff;
   border-bottom: 1px solid #dcdcdc;
 `;
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.section`
   position: relative;
-  min-width: 1400px;
-  width: 1400px;
-  margin: 0 auto;
 `;
 
 const MainLogo = styled.h1`
@@ -58,6 +55,7 @@ const NavLi = styled.li`
     font-weight: 600;
     font-size: 18px;
     display: block;
+    color: #000;
     &:visited {
       color: #000;
     }
@@ -96,34 +94,34 @@ const UtilBtn = styled.button`
   }
 `;
 
-export default function Headers() {
+export default function Header() {
   return (
-    <Header>
+    <HeaderElement>
       <HeaderContainer>
         <MainLogo>
-          <a href="/" title="메인페이지">
+          <Link to={`/`} title="메인페이지">
             <img src={'/logo.webp'} alt="logo" />
-          </a>
+          </Link>
         </MainLogo>
         <GlobalNav>
           <NavUl>
             <NavLi>
-              <a href="/">에어코리아란</a>
+              <Link to={`/info`}>에어코리아란</Link>
             </NavLi>
             <NavLi>
-              <a href="/">실시간 자료조회</a>
+              <Link to={``}>실시간 자료조회</Link>
             </NavLi>
             <NavLi>
-              <a href="/">대기정보 예보 / 경보</a>
+              <Link to={``}>대기정보 예보 / 경보</Link>
             </NavLi>
             <NavLi>
-              <a href="/">통계정보</a>
+              <Link to={``}>통계정보</Link>
             </NavLi>
             <NavLi>
-              <a href="/">배움터</a>
+              <Link to={``}>배움터</Link>
             </NavLi>
             <NavLi>
-              <a href="/">고객지원</a>
+              <Link to={``}>고객지원</Link>
             </NavLi>
           </NavUl>
         </GlobalNav>
@@ -136,6 +134,6 @@ export default function Headers() {
           </UtilBtn>
         </Util>
       </HeaderContainer>
-    </Header>
+    </HeaderElement>
   );
 }
