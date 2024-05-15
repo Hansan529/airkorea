@@ -26,9 +26,10 @@ const Home = styled(Link)`
 
 const List = styled.li`
     display: flex;
-    width: 200px;
+    width: 250px;
     align-items: center;
-    `;
+    border-right: 1px solid #dcdcdc;
+`;
 
 const AElement = styled(Link)`
     display: block;
@@ -37,7 +38,7 @@ const AElement = styled(Link)`
     line-height: 50px;
     color: #000;
     padding: 0 20px;
-    background: ${props => props.up ? `url('./img_loc_up.webp')` : `url('./img_loc_under.webp')`} no-repeat right center;
+    background: ${props => props.up ? `url('./img_loc_up.webp')` : `url('./img_loc_under.webp')`} no-repeat 220px center;
 `;
 
 export default function Page() {
