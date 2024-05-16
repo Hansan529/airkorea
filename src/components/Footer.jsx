@@ -99,7 +99,7 @@ const InfoAreaPseudo = styled.div`
 `;
 const InfoAreaIconWrap = styled.div`
     margin-top: 10px;
-    >*:first-child { margin-right: 40px; }
+    >*:first-of-type { margin-right: 40px; }
 `;
 const CopyRight = styled.div`
     a{
