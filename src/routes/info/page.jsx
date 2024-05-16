@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Headers from "../../components/Header";
 import styled from '@emotion/styled';
-import { useRef, useState } from "react";
+import { useState } from "react";
 
+//정보 네비게이션
 const DivStyle = styled.div`
     background-color: #f5f5f5;
     border-bottom: 1px solid #dcdcdc;
@@ -63,9 +64,50 @@ const ListDetail = styled.ul`
     }
 `;
 
-// 메인
+//정보 사이드
+const Aside = styled.aside`
+    width: 280px;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    overflow: hidden;
+    margin-top: -20px;
+
+    h2 {
+        display: block;
+        height: 140px;
+        font-size: 26px;
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        padding: 44px 0 0 0;
+        background: linear-gradient(to right, #0f62cc, #00c28a);
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+    ul {
+        margin-top: -30px;
+        padding: 37px 20px 54px;
+        background-color: #fff;
+        border: 1px solid #dadcdf;
+        border-radius: 10px;
+
+        li { border-bottom: 1px solid #dcdcdc; }
+        a{
+            display: block;
+            height: 50px;
+            padding: 0 13px;
+            line-height: 50px;
+            letter-spacing: -1px;
+            color: #000;
+        }
+    }
+`;
+
+//정보 메인
 const Section = styled.section`
+    width: 1400px;
     height: 1000px;
+    padding: 40px 0 0 0;
 `;
 
 export default function Page() {
@@ -114,6 +156,14 @@ export default function Page() {
                     </TopBar>
                 </DivStyle>
                 <Section>
+                    <Aside>
+                        <h2>에어코리아란</h2>
+                        <ul>
+                            <li><Link>에어코리아 소개</Link></li>
+                            <li><Link>측정망 정보</Link></li>
+                            <li><Link>측정소 정보</Link></li>
+                        </ul>
+                    </Aside>
                 </Section>
             </main>
             <Footer />
