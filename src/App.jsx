@@ -484,67 +484,77 @@ function App() {
         "innerTop": "248.594",
         "innerLeft": "235.531"
       };
-      // 브라우저에서 현재 위치 기능을 지원하는 경우
-      if('geolocation' in navigator) {
-        // station 정보를 store에 없는 경우에만 Fetch
-        if(!stationFetchBoolean) {
-            if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
-              // 위치 찾는 중, 로딩 화면 출력
-              changer('loading', false);
-                // 위치 호출에 성공할 경우 실행하는 함수
-                const success = async (pos) => {
-                  try {
-                    let { latitude, longitude } = pos.coords;
-                      const response = await fetch('http://localhost:3500/api/airkorea/coordinate', {
-                        method: "POST",
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ latitude, longitude })
-                      });
-                      const {documents: [{x, y}]} = await response.json();
-                      // 측정소 데이터 API 호출
-                      const responseStation = await fetch('http://localhost:3500/api/airkorea/station', {
-                        method: "POST",
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ x, y })
-                      });
-                      if(!responseStation.ok) {
-                        throw new Error('Network response was not ok');
-                      }
-                      const stations = await responseStation.json();
-                      // 가까운 측정소
-                      const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
-                      changer('station', stationData);
-                      console.info("station API Fetch operation completed");
-                  } catch (error) {
-                    console.error("Error fetching data: ", error);
-                    changer('station', defaultStation);
-                  } finally {
-                    changer('stationFetchBoolean', true);
-                  };
-                };
-                // 위치 호출에 실패할 경우 실행하는 함수
-                const error = (err) => {
-                  console.error("위치 권한 차단됨: ", err);
-                  alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
-                  changer('station', defaultStation);
-                  changer('stationFetchBoolean', true);
-                };
-                navigator.geolocation.getCurrentPosition(success, error);
-                return;
-            } else {
-              alert('현재위치를 사용하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
-              changer('station', defaultStation);
-              changer('stationFetchBoolean', true);
-              return;
-            };
-        };
-      } else {
-        // 브라우저에서 현재 위치 기능을 지원하지 않는 경우
-          alert('현재위치를 지원하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
+
+      const controller = new AbortController();
+
+      const fetchStationData = async (latitude, longitude, controller) => {
+        try {
+          const response = await fetch('http://localhost:3500/api/airkorea/coordinate', {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ latitude, longitude }),
+            signal: controller.signal
+          });
+
+          if(!response.ok) throw new Error('Network response was not ok');
+
+          const {documents: [{x, y}]} = await response.json();
+
+          // 측정소 데이터 API 호출
+          const responseStation = await fetch('http://localhost:3500/api/airkorea/station', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ x, y }),
+            signal: controller.signal
+          });
+
+          if(!responseStation.ok) throw new Error('Network response was not ok');
+
+          const stations = await responseStation.json();
+          // 가까운 측정소
+          const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
+          changer('station', stationData);
+          console.info("station API Fetch operation completed");
+        } catch {
           changer('station', defaultStation);
-          changer('stationFetchBoolean', true);
+        }
       };
-  }, [changer, stationFetchBoolean, stationsInfo]);
+
+      if ('geolocation' in navigator) {
+        if (!stationFetchBoolean) {
+          console.log("실행", stationFetchBoolean);
+          changer('stationFetchBoolean', true);
+
+          if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
+            changer('loading', false);
+
+            const success = (pos) => {
+              const { latitude, longitude } = pos.coords;
+              fetchStationData(latitude, longitude, controller);
+            };
+
+            const error = (err) => {
+              console.error("위치 권한 차단됨: ", err);
+              alert('현재위치 사용권한이 거부되어 \'중구\' 지역을 기준으로 데이터를 출력합니다.\n\n활성화: \n설정 > 개인 정보 보호 및 보안 > 사이트 설정');
+              changer('station', defaultStation);
+            };
+
+            navigator.geolocation.getCurrentPosition(success, error);
+          } else {
+            alert('현재위치를 사용하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
+            changer('station', defaultStation);
+          }
+        }
+      } else {
+        alert('현재위치를 지원하지 않아 \'중구\' 지역을 기준으로 데이터를 출력합니다.');
+        changer('station', defaultStation);
+        changer('stationFetchBoolean', true);
+      };
+
+      return () => {
+        controller.abort();
+      }
+  }, []);
 
   // !모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
   useEffect(() => {
