@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
+import { keyframes } from '@emotion/react';
 import { Fragment, useRef, useState } from 'react';
 import useStore from '../hooks/useStore.jsx';
 

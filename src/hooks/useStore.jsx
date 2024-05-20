@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware';
-import stationInfoJSON from '../data/stationInfo.json';
 
 const useStore = create(
     persist(

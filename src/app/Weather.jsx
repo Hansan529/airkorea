@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react"
-
 const Weather = () => {
     // const [weatherData, setWeatherData] = useState(null);
 
