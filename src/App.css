@@ -80,3 +80,7 @@ footer > section {
 	min-width: 1400px;
 	margin: 0 auto;
 }
+sub {
+	font-size: smaller;
+	vertical-align: sub;
+}
