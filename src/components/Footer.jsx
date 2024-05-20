@@ -2,13 +2,16 @@ import styled from '@emotion/styled';
 
 const FooterComp = styled.footer`
     overflow: hidden;
+    border-top: 1px solid #dcdcdc;
 `;
 //? 푸터 정보
 const InfoArea = styled.div`
     display: flex;
     width: 1400px;
+    height: 120px;
+    justify-content: center;
+    align-items: center;
     margin: 0 auto;
-    height: 100px;
 `;
 const InfoAreaLogo = styled.h2`
     flex-basis: 180px;
@@ -53,8 +56,9 @@ const CopyRight = styled.div`
 `;
 const CopyRightImg = styled.div`
     position: absolute;
-    top: 0;
+    top: 50%;
     right: 0;
+    transform: translateY(-50%);
     img {
         display: block;
         height: 30px;
