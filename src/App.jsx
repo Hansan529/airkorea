@@ -434,10 +434,10 @@ const Btn = styled.button`
     border: none;
     background: no-repeat 0 0;
     cursor: pointer;
-    &[data-btn="left"]  { background-image: url(/images/main/images/main/img_ban_left.webp); }
-    &[data-btn="atop"]  { background-image: url(/images/main/images/main/img_ban_atop.webp); }
-    &[data-btn="auto"]  { background-image: url(/images/main/images/main/img_ban_auto.webp); }
-    &[data-btn="right"] { background-image: url(/images/main/images/main/img_ban_right.webp); }
+    &[data-btn="left"]  { background-image: url(/images/main/img_ban_left.webp); }
+    &[data-btn="atop"]  { background-image: url(/images/main/img_ban_atop.webp); }
+    &[data-btn="auto"]  { background-image: url(/images/main/img_ban_auto.webp); }
+    &[data-btn="right"] { background-image: url(/images/main/img_ban_right.webp); }
 `;
 const ListUl = styled.ul`
     display: flex;
@@ -490,7 +490,7 @@ function App() {
   // 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
   // * 인터벌
-  const [intervalDelay, setIntervalDelay] = useState(5000);
+  const [intervalDelay] = useState(5000);
   const [intervalRunning, setIntervalRunning] = useState(true);
 
 
@@ -608,7 +608,7 @@ function App() {
       return () => {
         controller.abort();
       }
-  }, []);
+  }, [changer, stationFetchBoolean, stationsInfo]);
 
   // !모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
   useEffect(() => {
@@ -890,7 +890,7 @@ function App() {
   const [bannerDisableDuration, setBannerDisableDuration] = useState(false);
 
   // 인터벌
-  const [bannerIntervalDelay, setBannerIntervalDelay] = useState(2000);
+  const [bannerIntervalDelay] = useState(2000);
   const [bannerIntervalRunning, setBannerIntervalRunning] = useState(true);
 
   const leftFunction = async () => {
