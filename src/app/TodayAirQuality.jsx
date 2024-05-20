@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import useStore from "../hooks/useStore.jsx";
 import useAirQualityStore from "../hooks/useAirQualityStore.jsx";
 import getColorValue from "../functions/getColorValue.ts";
-import sleep from "../functions/sleep.ts";
 
 const InfoContainer = styled.div`width: 660px;`;
 const InfoWrapper = styled.div`
@@ -309,31 +308,48 @@ const TodayAirQuaility = ({Time}) => {
     // pm25
 
 
-    // 사용자 지역에 대한 대기 예측 정보
-    const objectCurrentStationInfo = {
-        pm10Today: {},
-        pm10Tomorrow: {},
-        pm25Today: {},
-        pm25Tomorrow: {},
-    };
-
-    const colorList = ['#1c67d7','#01b56e','#937200','#c00d0d','#0a0a0a'];
-
+    
     // function
     /**
-         *
-         * @param {number|string} 값
-         * @returns {Array} [상태, 색상코드, 인덱스]
-         */
+     *
+     * @param {number|string} 값
+     * @returns {Array} [상태, 색상코드, 인덱스]
+    */
     const airState = (value) => {
-        if(value === 0 || value === '좋음'){ return ['좋음', colorList[0], 1];}
-        else if(value === 1 || value === '보통'){ return ['보통', colorList[1], 2];}
-        else if(value === 2 || value === '나쁨'){ return ['나쁨', colorList[2], 3];}
-        else if(value === 3 || value === '매우나쁨'){ return ['매우나쁨', colorList[3], 4];}
-        else { return ['데이터 없음', colorList[4], 5];};
+        const results = ['좋음', '보통', '나쁨', '매우나쁨', '데이터 없음'];
+        const colorList = ['#1c67d7','#01b56e','#937200','#c00d0d','#0a0a0a'];
+
+        switch(value) {
+            case 0:
+            case '좋음':
+            case '#1c67d7':
+                return [results[0], 1, colorList[0]];
+            case 1:
+            case '보통':
+            case'#01b56e':
+                return [results[1], 2, colorList[1]];
+            case 2:
+            case '나쁨':
+            case '#937200':
+                return [results[2], 3, colorList[2]];
+            case 3:
+            case '매우나쁨':
+            case '#c00d0d': 
+                return [results[3], 4, colorList[3]];
+            default:
+                return [results[4], 5, colorList[4]];
+        }
     };
 
     useEffect(() => {
+        // 사용자 지역에 대한 대기 예측 정보
+        const objectCurrentStationInfo = {
+            pm10Today: {},
+            pm10Tomorrow: {},
+            pm25Today: {},
+            pm25Tomorrow: {},
+        };
+
         // 예보 텍스트
         if(text){
             const filterForecast = text.filter((item, index) => index < 4);
@@ -388,37 +404,49 @@ const TodayAirQuaility = ({Time}) => {
             }
 
             // 오늘의 대기질
-            const pm25Color = getColorValue(currentLocation?.pm25Value, 'pm25Value')[3];
-            const pm10Color = getColorValue(currentLocation?.pm10Value, 'pm10Value')[3];
-            const o3Color = getColorValue(currentLocation?.o3Value, 'o3Value')[3];
+            const [,,,pm25Color] = getColorValue(currentLocation?.pm25Value, 'pm25Value');
+            const [,,,pm10Color] = getColorValue(currentLocation?.pm10Value, 'pm10Value');
+            const [,,,o3Color] = getColorValue(currentLocation?.o3Value, 'o3Value');
 
-            const pm25Text = airState(colorList.indexOf(pm25Color))[0];
-            const pm10Text = airState(colorList.indexOf(pm10Color))[0];
-            const o3Text = airState(colorList.indexOf(o3Color))[0];
+            const pm25Data = airState(pm25Color);
+            const pm10Data = airState(pm10Color);
+            const o3Data = airState(o3Color);
 
-        const pm25Index = (colorList.indexOf(pm25Color) + 1) !== 0 ? colorList.indexOf(pm25Color) + 1 : 5;
-        const pm10Index = (colorList.indexOf(pm10Color) + 1) !== 0 ? colorList.indexOf(pm10Color) + 1 : 5;
-        const o3Index = (colorList.indexOf(o3Color) + 1) !== 0 ? colorList.indexOf(o3Color) + 1 : 5;
+            const [pm25Text, pm25Index] = pm25Data;
+            const [pm10Text, pm10Index] = pm10Data;
+            const [o3Text, o3Index] = o3Data;
 
-        // 대기정보 예보
-        const pm25Today = objectCurrentStationInfo.pm25Today[stateNickname];
-        const pm10Today = objectCurrentStationInfo.pm10Today[stateNickname];
+            // 대기정보 예보
+            const pm25Today = objectCurrentStationInfo.pm25Today[stateNickname];
+            const pm10Today = objectCurrentStationInfo.pm10Today[stateNickname];
 
-        const pm25TodayIndex = airState(pm25Today)[2];
-        const pm10TodayIndex = airState(pm10Today)[2];
+            const [ , pm25TodayIndex] = airState(pm25Today);
+            const [ , pm10TodayIndex] = airState(pm10Today);
 
-        const pm25Tomorrow = objectCurrentStationInfo.pm25Tomorrow[stateNickname];
-        const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
+            const pm25Tomorrow = objectCurrentStationInfo.pm25Tomorrow[stateNickname];
+            const pm10Tomorrow = objectCurrentStationInfo.pm10Tomorrow[stateNickname];
 
-        const pm25TomorrowIndex = airState(pm25Tomorrow)[2];
-        const pm10TomorrowIndex = airState(pm10Tomorrow)[2];
+            const [, pm25TomorrowIndex] = airState(pm25Tomorrow);
+            const [, pm10TomorrowIndex] = airState(pm10Tomorrow);
 
-        airQualityChanger('pm25', {stateHex: pm25Color, stateText: pm25Text, stateIndex: pm25Index, todayState: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrowState: pm25Tomorrow});
-        airQualityChanger('pm10', {stateHex: pm10Color, stateText: pm10Text, stateIndex: pm10Index, todayState: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrowState: pm10Tomorrow});
-        airQualityChanger('o3', {stateHex: o3Color, stateText: o3Text, stateIndex: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrowState: 5});
-        airQualityChanger('currentLocation', currentLocation);
+            const parameters = [
+                { key: 'pm25', color: pm25Color, text: pm25Text, index: pm25Index, today: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrow: pm25Tomorrow },
+                { key: 'pm10', color: pm10Color, text: pm10Text, index: pm10Index, today: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrow: pm10Tomorrow },
+                { key: 'o3', color: o3Color, text: o3Text, index: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrow: 5 }
+            ];
+
+            parameters.forEach(param => airQualityChanger(param.key, {
+                stateHex: param.color,
+                stateText: param.text,
+                stateIndex: param.index,
+                todayState: param.today,
+                todayIndex: param.todayIndex,
+                tomorrowIndex: param.tomorrowIndex,
+                tomorrowState: param.tomorrow
+            }));
+            airQualityChanger('currentLocation', currentLocation);
         };
-    }, [text, data, airQualityChanger, station])
+    }, [text, data, airQualityChanger, station, stationsInfo])
     // ---------------------------------------------------- Dyanmic Styled
     const Legend = styled(LegendBase)`
         .legendPopup {
