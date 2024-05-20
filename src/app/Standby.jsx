@@ -104,7 +104,7 @@ const Station = styled.div`
 	height: 10px;
 	border-radius: 50%;
 	background-color: #000;
-	background-image: url('./img_ch0${props => props.ico}.webp');
+	background-image: url('/images/main/img_ch0${props => props.ico}.webp');
 	cursor: pointer;
 
 	&[data-checked="ani"]::after,
@@ -116,7 +116,7 @@ const Station = styled.div`
 		height: 10px;
 	}
 	&[data-checked="ani"]::after {
-		background-image: url('./img_ch0${props => props.ico}.webp');
+		background-image: url('/images/main/img_ch0${props => props.ico}.webp');
 		z-index: 11;
 	}
 	&[data-checked="ani"]::before {
@@ -181,7 +181,7 @@ const InnerTitle = styled.div`
         font-size: 0;
         width: 22px;
         height: 22px;
-        background: url('./img_cau_close.webp') no-repeat center;
+        background: url(/images/main/img_cau_close.webp) no-repeat center;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -198,7 +198,7 @@ const InnerStationCollection = styled.div`
     position: relative;
 `;
 const InnerDetailContainer = styled.div`
-    background-image: ${props => props.noImage ? '' : `url('/${props.regionNum}.webp'), url('/map_bg_${props.regionNum}.webp')`};
+    background-image: ${props => props.noImage ? '' : `url('/images/main/${props.regionNum}.webp'), url('/images/main/map_bg_${props.regionNum}.webp')`};
     background-color: #dff6ff;
     background-repeat: no-repeat;
     background-position: center 35px;

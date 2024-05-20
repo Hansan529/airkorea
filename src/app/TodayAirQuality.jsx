@@ -19,7 +19,7 @@ const InfoButton = styled.button`
     height: 24px;
     border: 1px solid #c6ccd4;
     border-radius: 5px;
-    background: #fff ${props => props.ico && `url('/img_${props.ico}.webp')`} no-repeat center;
+    background: #fff ${props => props.ico && `url('/images/main/img_${props.ico}.webp')`} no-repeat center;
     background-size: ${props => props.ico === 'bg_search' && '70%'};
     &:hover {
         cursor: pointer;
@@ -45,7 +45,7 @@ const InfoInteraction = styled.div`
     }
 `;
 const TitleWrap = styled.div`
-    background: url('/img_bg01.webp') no-repeat;
+    background: url(/images/main/img_bg01.webp) no-repeat;
     height: 55px;
     line-height: 55px;
     border-bottom: 1px solid rgba(0,0,0,0.3);
@@ -60,11 +60,6 @@ const Title = styled.h2`
 `;
 const Container = styled.div`
     position: relative;
-
-    sub {
-        vertical-align: sub;
-        font-size: smaller;
-    }
 
     .sr-only {
         position: absolute;
@@ -97,23 +92,23 @@ const Part = styled.div`
         background-position: 30px center;
     }
     .miniTextIco_1{
-        background-image: url('./img_yebo_na01.webp');
+        background-image: url(/images/main/img_yebo_na01.webp);
         background-color: #1c67d74D;
     }
     .miniTextIco_2{
-        background-image: url('./img_yebo_na02.webp');
+        background-image: url(/images/main/img_yebo_na02.webp);
         background-color: #01b56e4D;
     }
     .miniTextIco_3{
-        background-image: url('./img_yebo_na03.webp');
+        background-image: url(/images/main/img_yebo_na03.webp);
         background-color: #9372004D;
     }
     .miniTextIco_4{
-        background-image: url('./img_yebo_na04.webp');
+        background-image: url(/images/main/img_yebo_na04.webp);
         background-color: #c00d0d4D;
     }
     .miniTextIco_5{
-        background-image: url('./img_yebo_na05.webp');
+        background-image: url(/images/main/img_yebo_na05.webp);
         background-color: #0a0a0a4D;
     }
 `;
@@ -160,7 +155,7 @@ const LegendBase = styled.div`
         border:none;
         width: 70px;
         text-align: left;
-        background: url('./img_handong_more.webp') no-repeat center right;
+        background: url(/images/main/img_handong_more.webp) no-repeat center right;
 
         &:hover {
             cursor: pointer;
@@ -192,7 +187,7 @@ const LegendBase = styled.div`
             right: 0;
             transform: translate(-5px, 7.5px);
             font-size: 0;
-            background: url('./img_cau_close.webp') no-repeat center;
+            background: url(/images/main/img_cau_close.webp) no-repeat center;
             width: 22px;
             height: 22px;
         }
@@ -257,11 +252,11 @@ const LegendBase = styled.div`
                 height: 10px;
                 background: no-repeat 0 0;
             }
-            &.legendRange_1::after { background-image: url('./img_ch01.webp'); }
-            &.legendRange_2::after { background-image: url('./img_ch02.webp'); }
-            &.legendRange_3::after { background-image: url('./img_ch03.webp'); }
-            &.legendRange_4::after { background-image: url('./img_ch04.webp'); }
-            &.legendRange_5::after { background-image: url('./img_ch05.webp'); }
+            &.legendRange_1::after { background-image: url(/images/main/img_ch01.webp); }
+            &.legendRange_2::after { background-image: url(/images/main/img_ch02.webp); }
+            &.legendRange_3::after { background-image: url(/images/main/img_ch03.webp); }
+            &.legendRange_4::after { background-image: url(/images/main/img_ch04.webp); }
+            &.legendRange_5::after { background-image: url(/images/main/img_ch05.webp); }
         }
     }
 `;
@@ -277,10 +272,10 @@ const AirForecastLi = styled(PartLi)`
         line-height: 25px;
     }
     &:nth-of-type(2) p {
-        background: url('./img_bg_to01.webp') no-repeat 0 0;
+        background: url(/images/main/img_bg_to01.webp) no-repeat 0 0;
     }
     &:nth-of-type(3) p {
-        background: url('./img_bg_to02.webp') no-repeat 0 0;
+        background: url(/images/main/img_bg_to02.webp) no-repeat 0 0;
     }
 `;
 
@@ -492,7 +487,7 @@ const TodayAirQuaility = ({Time}) => {
                         <PartUl>
                             <PartLi>
                                 <span><strong>초미세먼지</strong>(PM-2.5)</span>
-                                <img src={`./img_na0${pm25.stateIndex}.webp`} alt="대기질" />
+                                <img src={`/images/main/img_na0${pm25.stateIndex}.webp`} alt="대기질" />
                                 <span style={{color: pm25.stateHex}}>
                                     <strong className="colorValue">{location.pm25Value || '-'}</strong>
                                     <small style={{color: 'initial'}}>㎍/㎥</small>
@@ -501,7 +496,7 @@ const TodayAirQuaility = ({Time}) => {
                             </PartLi>
                             <PartLi>
                                 <span><strong>미세먼지</strong>(PM-10)</span>
-                                <img src={`./img_na0${pm10.stateIndex}.webp`} alt="대기질" />
+                                <img src={`/images/main/img_na0${pm10.stateIndex}.webp`} alt="대기질" />
                                 <span style={{color: pm10.stateHex}}>
                                     <strong className="colorValue">{location.pm10Value || '-'}</strong>
                                     <small style={{color: 'initial'}}>㎍/㎥</small>
@@ -510,7 +505,7 @@ const TodayAirQuaility = ({Time}) => {
                             </PartLi>
                             <PartLi>
                                 <span><strong>오존</strong>(O<sub>3</sub>)</span>
-                                <img src={`./img_na0${o3.stateIndex}.webp`} alt="대기질" />
+                                <img src={`/images/main/img_na0${o3.stateIndex}.webp`} alt="대기질" />
                                 <span style={{color: o3.stateHex}}>
                                     <strong className="colorValue">{location.o3Value === null ? '-' : String(location.o3Value).padEnd(6, '0')}</strong>
                                     <small style={{color: 'initial'}}>ppm</small>

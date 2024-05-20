@@ -29,9 +29,41 @@ const Select = styled.select`
   -moz-appearance: none;
   appearance: none;
 `;
-const Section = styled.section` position: relative; `;
+const Section = styled.section`position: relative; `;
+
+const TimeDiv = styled.div`
+      display: flex;
+      gap: 5px !important;
+      background-color: ${props => props.refresh ? '#e4f7ff' : '#fff'};
+      padding: 5px 15px;
+      border-radius: 25px;
+      align-items: center;
+      position: absolute;
+      font-size: 14px;
+      height: ${props => props.height || "15px"};
+      top: ${props => props.top || 'initial'};
+      right: ${props => props.right || 'initial'};
+      left: ${props => props.left || 'initial'};
+
+      strong { font-weight: 900; }
+`;
+const TimeButtonStyle = styled.button`
+      /* background-image: ${props => props.ico && `url('/images/main/img_${props.ico}.webp')`}; */
+      display: inline-block;
+      background: url(/images/main/img_refresh.webp) no-repeat center;
+      width: 16px;
+      height: 20px;
+      border: none;
+      transition: transform 0.5s;
+      position: relative;
+      transform-origin: center;
+      font-size: 0;
+
+      &:hover { cursor: pointer; }
+`;
+//! 첫번째 섹션
 const FirstSection = styled(Section)`
-  background: url('/img_main_bg.webp') repeat-x 0 0;
+  background: url(/images/main/img_main_bg.webp) repeat-x 0 0;
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -112,7 +144,7 @@ const MMOSelectWrapper = styled.div`
 `;
 const MMOSelect = styled(Select)`
   ${MMOBorder}
-  background-image: ${(props) => props.bg && "url('/img_new_arr_down_on.webp')"};
+  background-image: ${(props) => props.bg && "url('/images/main/img_new_arr_down_on.webp')"};
   width: ${props => props.$width};
   padding: ${(props) => (props.flex ? '0 3px' : '0 15px')};
   display: ${(props) => props.flex && 'flex'};
@@ -158,7 +190,7 @@ const MMWrapper = styled.div`
   width: 700px;
   height: 705px;
   box-sizing: border-box;
-  background: url('/map_svg_warp_bg.webp') no-repeat 5px -10px;
+  background: url(/images/main/map_svg_warp_bg.webp) no-repeat 5px -10px;
   position: relative;
   margin-top: 20px;
   /* overflow: hidden; */
@@ -178,7 +210,7 @@ const Legend = styled.div`
 
     button {
       background: no-repeat right 14px center;
-      background-image: url(./img_bottom_arr_up.webp);
+      background-image: url(/images/main/img_bottom_arr_up.webp);
       border: none;
       width: 100%;
       text-align: left;
@@ -199,8 +231,8 @@ const Legend = styled.div`
     padding: 5px 0;
     small {font-size: 14px;}
 
-    &:first-of-type { background-image: url(./img_cau01.webp); }
-    &:last-of-type { background-image: url(./img_cau02.webp);}
+    &:first-of-type { background-image: url(/images/main/img_cau01.webp); }
+    &:last-of-type { background-image: url(/images/main/img_cau02.webp);}
   }}
 
   .radio {
@@ -262,17 +294,19 @@ const Legend = styled.div`
         transform: translateY(-50%);
         background: no-repeat 0 0;
       }
-      &:first-of-type::before { background-image: url('./img_ch01.webp'); }
-      &:nth-of-type(2)::before { background-image: url('./img_ch02.webp'); }
-      &:nth-of-type(3)::before { background-image: url('./img_ch03.webp'); }
-      &:nth-of-type(4)::before { background-image: url('./img_ch04.webp'); }
-      &:last-of-type::before { background-image: url('./img_ch05.webp'); }
+      &:first-of-type::before { background-image: url(/images/main/img_ch01.webp); }
+      &:nth-of-type(2)::before { background-image: url(/images/main/img_ch02.webp); }
+      &:nth-of-type(3)::before { background-image: url(/images/main/img_ch03.webp); }
+      &:nth-of-type(4)::before { background-image: url(/images/main/img_ch04.webp); }
+      &:last-of-type::before { background-image: url(/images/main/img_ch05.webp); }
       }
   }
 `;
+
+//! 두번째 섹션
 const SecondSection = styled(Section)`
     margin: 50px auto 0;
-    background: url('./img_bg_s_01.webp') repeat-x 0 0;
+    background: url(/images/main/img_bg_s_01.webp) repeat-x 0 0;
     width: 1400px;
 `;
 const SecondBanner = styled.div`
@@ -300,7 +334,7 @@ const SecondBanner = styled.div`
     width: 100%;
     height: 80px;
     padding: 0 60px 0 100px;
-    background: #fff url(./img_bg_s_02.webp) no-repeat right 24px bottom;
+    background: #fff url(/images/main/img_bg_s_02.webp) no-repeat right 24px bottom;
     border-radius: 30px 8px 30px 8px;
     position: relative;
     overflow-y: hidden;
@@ -342,10 +376,10 @@ const SecondBanner = styled.div`
       background: no-repeat center center;
       cursor: pointer;
 
-      &[data-type="up"] {background-image: url('./img_up_down_up.webp');}
-      &[data-type="play"] {background-image: url('./icon_bn_stop.webp');}
-      &[data-type="stop"] {background-image: url('./icon_bn_play.webp');}
-      &[data-type="down"] {background-image: url('./img_up_down_down.webp');}
+      &[data-type="up"] {background-image: url(/images/main/img_up_down_up.webp);}
+      &[data-type="play"] {background-image: url(/images/main/icon_bn_stop.webp);}
+      &[data-type="stop"] {background-image: url(/images/main/icon_bn_play.webp);}
+      &[data-type="down"] {background-image: url(/images/main/img_up_down_down.webp);}
     }
   }
 `;
@@ -371,37 +405,57 @@ const SecondBannerInfo = styled.div`
         }
       }
 `;
-const TimeDiv = styled.div`
-      display: flex;
-      gap: 5px !important;
-      background-color: ${props => props.refresh ? '#e4f7ff' : '#fff'};
-      padding: 5px 15px;
-      border-radius: 25px;
-      align-items: center;
-      position: absolute;
-      font-size: 14px;
-      height: ${props => props.height || "15px"};
-      top: ${props => props.top || 'initial'};
-      right: ${props => props.right || 'initial'};
-      left: ${props => props.left || 'initial'};
-
-      strong { font-weight: 900; }
+//! 하단 배너
+const BannerWrap = styled.div`
+    display: flex;
+    width: 1400px;
+    margin: 0 auto 50px;
+    overflow: hidden;
 `;
-const TimeButtonStyle = styled.button`
-      background-image: ${props => props.ico && `url('/img_${props.ico}.webp')`};
-      display: inline-block;
-      background: url('/img_refresh.webp') no-repeat center;
-      width: 16px;
-      height: 20px;
-      border: none;
-      transition: transform 0.5s;
-      position: relative;
-      transform-origin: center;
-      font-size: 0;
-
-      &:hover { cursor: pointer; }
+const ButtonBox = styled.div`
+    width: 200px;
+    flex-basis: 200px;
+    min-width: 200px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    background-color: #fff;
+    h3 {
+        font-size:  20px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
 `;
+const Btn = styled.button`
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: no-repeat 0 0;
+    cursor: pointer;
+    &[data-btn="left"]  { background-image: url(/images/main/images/main/img_ban_left.webp); }
+    &[data-btn="atop"]  { background-image: url(/images/main/images/main/img_ban_atop.webp); }
+    &[data-btn="auto"]  { background-image: url(/images/main/images/main/img_ban_auto.webp); }
+    &[data-btn="right"] { background-image: url(/images/main/images/main/img_ban_right.webp); }
+`;
+const ListUl = styled.ul`
+    display: flex;
+    flex-wrap: nowrap;
+    transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'};
+    transform: translateX(${props => props.index * 200}px);
+`;
+const ListLi = styled.li`
+    flex: 0 200px;
+    min-width: 200px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
 
+    img {
+        vertical-align: middle;
+    }
+`;
 
 function App() {
   // 측정소 위치 데이터
@@ -825,6 +879,83 @@ function App() {
     return result;
   };
 
+  // ! 하단 배너 모듈
+  // 인덱스
+  const [ulIndex, setUlIndex] = useState(-6);
+
+  // 애니메이션 진행 중
+  const [transitionRunning, setTransitionRunning] = useState(false);
+
+  // 애니메이션 시간 ON/OFF
+  const [bannerDisableDuration, setBannerDisableDuration] = useState(false);
+
+  // 인터벌
+  const [bannerIntervalDelay, setBannerIntervalDelay] = useState(2000);
+  const [bannerIntervalRunning, setBannerIntervalRunning] = useState(true);
+
+  const leftFunction = async () => {
+      if(!transitionRunning){
+          setTransitionRunning(true);
+          setUlIndex(ulIndex + 1);
+          // 무한 롤링
+          if(ulIndex >= -1){
+              await sleep(0.3);
+              setBannerDisableDuration(true);
+              setUlIndex(-23);
+              await sleep(0.1);
+              setBannerDisableDuration(false);
+              setTransitionRunning(false);
+          } else {
+              await sleep(0.3);
+              setTransitionRunning(false);
+          };
+      };
+  };
+  const rightFunction = async () => {
+      if(!transitionRunning){
+          setTransitionRunning(true);
+          setUlIndex(ulIndex - 1);
+          // 무한 롤링
+          if(ulIndex <= -28){
+              await sleep(0.3);
+              setBannerDisableDuration(true);
+              setUlIndex(-6);
+              await sleep(0.1);
+              setBannerDisableDuration(false);
+              setTransitionRunning(false);
+          } else {
+              await sleep(0.3);
+              setTransitionRunning(false);
+          };
+      };
+  };
+
+  useInterval(() => {
+      rightFunction();
+  }, bannerIntervalRunning ? bannerIntervalDelay : null);
+
+  const handle = async (e) => {
+      const btn = e.currentTarget.dataset.btn;
+
+      bannerIntervalRunning && setBannerIntervalRunning(false);
+      switch(btn) {
+          case 'left':
+              leftFunction();
+              break;
+          case 'atop':
+              e.currentTarget.dataset.btn = 'auto';
+              break;
+              case 'auto':
+                  !bannerIntervalRunning && setBannerIntervalRunning(true);
+                  e.currentTarget.dataset.btn = 'atop';
+              break;
+          case 'right':
+              rightFunction();
+              break;
+          default:
+              break;
+      }
+  };
 
   return (
     <>
@@ -945,6 +1076,53 @@ function App() {
             </div>
           </SecondBanner>
         </SecondSection>
+        <BannerWrap>
+          <ButtonBox>
+              <h3>유관기관</h3>
+              <Btn data-btn="left" onClick={handle}></Btn>
+              <Btn data-btn="atop" onClick={handle}></Btn>
+              <Btn data-btn="right" onClick={handle}></Btn>
+          </ButtonBox>
+          <ListUl index={ulIndex} bannerDisableDuration={bannerDisableDuration}>
+              <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="/images/main/img_ban17.webp" /></a></ListLi>
+              <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="/images/main/img_ban18.webp" /></a></ListLi>
+              <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="/images/main/img_ban19.webp" /></a></ListLi>
+              <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="/images/main/img_ban20.webp" /></a></ListLi>
+              <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="/images/main/img_ban21.webp" /></a></ListLi>
+              <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="/images/main/img_ban22.webp" /></a></ListLi>
+              {/* 복제 */}
+              <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="/images/main/img_ban01.webp" /></a></ListLi>
+              <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="/images/main/img_ban02.webp" /></a></ListLi>
+              <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="/images/main/img_ban03.webp" /></a></ListLi>
+              <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="/images/main/img_ban04.webp" /></a></ListLi>
+              <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="/images/main/img_ban05.webp" /></a></ListLi>
+              <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="/images/main/img_ban06.webp" /></a></ListLi>
+              <ListLi><a href="https://www.airnow.gov/" title="미국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="미국실시간 대기 정보" src="/images/main/img_ban06_1.webp" /></a></ListLi>
+              <ListLi><a href="https://air.cnemc.cn:18014/" title="중국실시간 대기 정보" target="_blank" rel="noreferrer"><img alt="중국실시간 대기 정보" src="/images/main/img_ban07.webp" /></a></ListLi>
+              <ListLi><a href="https://soramame.env.go.jp/" title="일본실시간 대기정보" target="_blank" rel="noreferrer"><img alt="일본실시간 대기정보" src="/images/main/img_ban08.webp" /></a></ListLi>
+              <ListLi><a href="https://heis.busan.go.kr" title="부산 보건환경정보 공개시스템" target="_blank" rel="noreferrer"><img alt="부산 보건환경정보 공개시스템" src="/images/main/img_ban09.webp" /></a></ListLi>
+              <ListLi><a href="https://air.daegu.go.kr" title="대구 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="대구 대기정보 시스템" src="/images/main/img_ban10.webp" /></a></ListLi>
+              <ListLi><a href="https://gwangju.go.kr" title="광주 시청" target="_blank" rel="noreferrer"><img alt="광주 대기정보 시스템" src="/images/main/img_ban11.webp" /></a></ListLi>
+              <ListLi><a href="https://www.daejeon.go.kr/hea/airDynamicData.do?menuseq=6858" title="대전 보건환경연구원" target="_blank" rel="noreferrer"><img alt="대전 보건환경연구원" src="/images/main/img_ban12.webp" /></a></ListLi>
+              <ListLi><a href="https://www.ulsan.go.kr/s/uihe/main.ulsan" title="울산 보건환경연구원" target="_blank" rel="noreferrer"><img alt="울산 보건환경연구원" src="/images/main/img_ban13.webp" /></a></ListLi>
+              <ListLi><a href="https://www.sejong.go.kr/air/index.do" title="세종 미세먼지 정보센터" target="_blank" rel="noreferrer"><img alt="세종 미세먼지 정보센터" src="/images/main/img_ban14.webp" /></a></ListLi>
+              <ListLi><a href="http://www.airgangwon.go.kr" title="강원 대기환경정보" target="_blank" rel="noreferrer"><img alt="강원 대기환경정보" src="/images/main/img_ban15.webp" /></a></ListLi>
+              <ListLi><a href="https://www.chungbuk.go.kr/here/index.do" title="충북 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="충북 보건환경 연구원" src="/images/main/img_ban16.webp" /></a></ListLi>
+              <ListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="/images/main/img_ban17.webp" /></a></ListLi>
+              <ListLi><a href="https://air.jeonbuk.go.kr/index.do" title="전북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="전북 대기정보 시스템" src="/images/main/img_ban18.webp" /></a></ListLi>
+              <ListLi><a href="https://jihe.go.kr/main/main.do" title="전남 보건환경 연구원" target="_blank" rel="noreferrer"><img alt="전남 보건환경 연구원" src="/images/main/img_ban19.webp" /></a></ListLi>
+              <ListLi><a href="https://gb.go.kr/Main/open_contents/section/air/index.html" title="경북 대기정보 시스템" target="_blank" rel="noreferrer"><img alt="경북 대기정보 시스템" src="/images/main/img_ban20.webp" /></a></ListLi>
+              <ListLi><a href="https://air.gyeongnam.go.kr/main.do" title="경남 대기환경정보" target="_blank" rel="noreferrer"><img alt="경남 대기환경정보" src="/images/main/img_ban21.webp" /></a></ListLi>
+              <ListLi><a href="http://hei.jeju.go.kr" title="제주 보건환경연구원" target="_blank" rel="noreferrer"><img alt="제주 보건환경연구원" src="/images/main/img_ban22.webp" /></a></ListLi>
+              {/* 복제 */}
+              <ListLi><a href="http://www.keco.or.kr" title="한국환경공단" target="_blank" rel="noreferrer"><img alt="한국환경공단" src="/images/main/img_ban01.webp" /></a></ListLi>
+              <ListLi><a href="http://www.me.go.kr" title="환경부" target="_blank" rel="noreferrer"><img alt="환경부" src="/images/main/img_ban02.webp" /></a></ListLi>
+              <ListLi><a href="http://www.weather.go.kr/weather/main.jsp" title="기상청" target="_blank" rel="noreferrer"><img alt="기상청" src="/images/main/img_ban03.webp" /></a></ListLi>
+              <ListLi><a href="http://cleanair.seoul.go.kr/main.htm" title="서울특별시 대기환경 정보" target="_blank" rel="noreferrer"><img alt="서울특별시 대기환경 정보" src="/images/main/img_ban04.webp" /></a></ListLi>
+              <ListLi><a href="https://air.incheon.go.kr/" title="인천광역시 보건환경 연구원 환경정보공개시스템" target="_blank" rel="noreferrer"><img alt="인천광역시 보건환경 연구원 환경정보공개시스템" src="/images/main/img_ban05.webp" /></a></ListLi>
+              <ListLi><a href="https://air.gg.go.kr/" title="경기도 대기 환경 정보 서비스" target="_blank" rel="noreferrer"><img alt="경기도 대기 환경 정보 서비스" src="/images/main/img_ban06.webp" /></a></ListLi>
+          </ListUl>
+      </BannerWrap>
       </main>
       <FooterComponent />
     </>

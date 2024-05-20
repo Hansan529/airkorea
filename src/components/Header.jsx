@@ -100,7 +100,7 @@ export default function Header() {
       <HeaderContainer>
         <MainLogo>
           <Link to={`/`} title="메인페이지">
-            <img src={'/logo.webp'} alt="logo" />
+            <img src={'/images/global/logo.webp'} alt="logo" />
           </Link>
         </MainLogo>
         <GlobalNav>
@@ -126,10 +126,10 @@ export default function Header() {
           </NavUl>
         </GlobalNav>
         <Util>
-          <UtilBtn bgImg={'img_bg_search.webp'}>
+          <UtilBtn bgImg={'images/global/img_bg_search.webp'}>
             <span>통합검색 열기</span>
           </UtilBtn>
-          <UtilBtn bgImg={'img_bg_ham.webp'}>
+          <UtilBtn bgImg={'images/global/img_bg_ham.webp'}>
             <span>메뉴 열기</span>
           </UtilBtn>
         </Util>
