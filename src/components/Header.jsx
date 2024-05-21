@@ -106,7 +106,7 @@ export default function Header() {
         <GlobalNav>
           <NavUl>
             <NavLi>
-              <Link to={`/info`}>에어코리아란</Link>
+              <Link to={`/info?page=1`}>에어코리아란</Link>
             </NavLi>
             <NavLi>
               <Link to={``}>실시간 자료조회</Link>
