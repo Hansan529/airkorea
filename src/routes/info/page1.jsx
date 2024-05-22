@@ -1,19 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from '@emotion/styled';
 import { useState } from "react";
-import { AElement, Aside, AsideLink, DivStyle, Home, List, ListDetail, Section, TopBar } from './page';
+import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from './page';
 
-const Content = styled.div`
-    padding-bottom: 100px;
-    word-break: keep-all;
-`;
-const ContentTitle = styled.h2`
-    border-bottom: 1px solid rgba(0,0,0,0.2);
-    padding: 20px 20px;
-    margin-bottom: 20px;
-    font-size: 28px;
-    font-weight: 600;
-`;
 const ContentSubTitleWrap = styled.div`
     display: flex;
     flex-direction: column;

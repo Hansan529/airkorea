@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Header from "../../components/Header";
 import Page1 from "./page1";
 import Page2 from "./page2";
+import Page3 from "./page3";
 import Footer from "../../components/Footer";
 
 //정보 네비게이션
@@ -74,14 +75,6 @@ export const ListDetail = styled.ul`
     }
     li+li>a{ border-top: 1px solid #dcdcdc; }
 `;
-
-//정보 메인
-export const Section = styled.section`
-    display: flex;
-    width: 1400px;
-    padding: 40px 0 0 0;
-    gap: 0 50px;
-`;
 //정보 사이드
 export const Aside = styled.aside`
     min-width: 280px;
@@ -123,6 +116,26 @@ export const AsideLink = styled(Link)`
     color: ${({selected}) => selected ? '#0f62cc' : '#000'};
     font-weight: 500;
 `;
+//정보 메인
+export const Section = styled.section`
+    display: flex;
+    width: 1400px;
+    padding: 40px 0 0 0;
+    gap: 0 50px;
+    margin: 0 auto;
+`;
+export const Content = styled.div`
+    flex-grow: 1;
+    padding-bottom: 100px;
+    word-break: keep-all;
+`;
+export const ContentTitle = styled.h2`
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    padding: 20px 20px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+`;
 
 export default function Page() {
     const [searchParams] = useSearchParams();
@@ -131,7 +144,8 @@ export default function Page() {
     const ViewPage = () => {
         const Pages = {
             1: <Page1 />,
-            2: <Page2 />
+            2: <Page2 />,
+            3: <Page3 />
         };
 
         return Pages[Number(pageNum)];
