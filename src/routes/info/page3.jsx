@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from './page';
 import stationInfo from "../../data/stationInfo.json";
+import sleep from '../../functions/sleep.ts';
 
 const ContentSubTitleWrap = styled.ul`
     padding: 20px;
@@ -24,6 +25,17 @@ const ContentSelectWrap = styled.div`
     display: flex;
     justify-content: center;
     gap: 10px;
+
+    button {
+        cursor: pointer;
+        padding: 0 25px;
+        background: #0f62cc;
+        font-size: 14px;
+        color: #fff;
+        font-weight: 400;
+        line-height: 34px;
+        border-radius: 4px;
+    }
 `;
 const ContentSelect = styled.select`
     width: 200px;
@@ -117,7 +129,6 @@ const ContentMapList = styled.ul`
                 text-align: left;
             }
             button {
-                border: none;
                 position: absolute;
                 right: 15px;
                 top: 50%;
@@ -131,8 +142,10 @@ const ContentMapList = styled.ul`
 `;
 /* 측정소 상세 데이터 */
 const ContentMapDetail = styled.div`
-    display: none;
-    padding: 12px 0;
+    transition-duration: ${(props) => props.search ? '0' : '1s'};
+    height: ${({toggle}) => toggle ? '72px' : 0};
+    padding: ${({toggle}) => toggle ? '12px 0' : 0};
+    overflow: hidden;
     background: #f4f9ff;
 
     > div {
@@ -170,7 +183,10 @@ export default function Page() {
     });
     const [mangCode, setMangCode] = useState('도시대기');
     const [district, setDistrict] = useState('전체');
-    const [filterData, setFilterData] = useState(null);
+    const [search, setSearch] = useState(false);
+
+    const [filterData, setFilterData] = useState();
+    const [dataToggle, setDataToggle] = useState();
 
     const toggleHandle = (e, index) => {
         e.preventDefault();
@@ -190,6 +206,14 @@ export default function Page() {
         console.log(e.currentTarget);
     };
 
+    const detailToggleHandle = (e) => {
+        const { index } = e.currentTarget.dataset;
+        setDataToggle(prevData => ({
+            ...prevData,
+            [index]: !dataToggle[index]
+        }));
+    };
+
     useEffect(() => {
         const response = stationInfo.items.filter(station => {
             let result;
@@ -203,9 +227,22 @@ export default function Page() {
             if(a.stationName < b.stationName) return -1;
             if(a.stationName > b.stationName) return 1;
             return 0;
-        })
-        setFilterData(sortedData);
-    }, [mangCode, district]);
+        });
+        const toggleObject = {};
+        sortedData.forEach((_, key) => {
+            toggleObject[key] = false;
+        });
+        if(search) {
+            setFilterData(sortedData);
+            setDataToggle(toggleObject);
+            setTimeout(() => {
+                setSearch(false);
+            }, 0);
+        } else if(!filterData) {
+            setFilterData(sortedData);
+            setDataToggle(toggleObject);
+        };
+    }, [mangCode, district, search]);
     
 
     return (
@@ -277,6 +314,7 @@ export default function Page() {
                             <option value='전북특별자치도'>전북</option>
                             <option value='제주특별자치도'>제주</option>
                         </ContentSelect>
+                        <button onClick={() => setSearch(true)}>조회</button>
                     </ContentSelectWrap>
                     <ContentMain>
                         <ContentMapWrap>
@@ -325,17 +363,18 @@ export default function Page() {
                                 <strong>측정소</strong>
                             </ContentMapListTitle>
                             <ContentMapList>
-                                {filterData && filterData.map((item, key) => {
+                                {filterData.length !== 0 ? filterData.map((item, key) => {
                                     return (
                                         <li key={key}>
-                                            <div onClick={() => console.log("test")}>
+                                            <div data-index={key} onClick={detailToggleHandle}>
                                                 <div><span>{item.stationName}</span></div>
                                                 <div>
                                                     <span>{`${item.addr} ${item.building}`}</span>
                                                     <button></button>
                                                 </div>
                                             </div>
-                                            <ContentMapDetail>
+                                            {/* <ContentMapDetail toggle={dataToggle[key]}> */}
+                                            <ContentMapDetail search={search} toggle={dataToggle[key]}>
                                                 <div>
                                                     <div><ContentMapDetailKey>설치년도</ContentMapDetailKey></div>
                                                     <div><span>{item.year}</span></div>
@@ -346,7 +385,13 @@ export default function Page() {
                                                 </div>
                                             </ContentMapDetail>
                                         </li>
-                                        )})}
+                                        )}) : 
+                                        <li>
+                                             <div>
+                                                <div><span>-</span></div>
+                                                <div><span>-</span></div>
+                                            </div>
+                                        </li>}
                             </ContentMapList>
                         </ContentMapListWrap>
                     </ContentMain>
