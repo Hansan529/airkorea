@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from './page';
+import stationInfo from "../../data/stationInfo.json";
 
 const ContentSubTitleWrap = styled.ul`
     padding: 20px;
@@ -24,7 +25,6 @@ const ContentSelectWrap = styled.div`
     justify-content: center;
     gap: 10px;
 `;
-
 const ContentSelect = styled.select`
     width: 200px;
     height: 40px;
@@ -60,13 +60,105 @@ const ContentMap = styled.img`
     width: 360px;
     height: 426px;
 `;
-const ContentMapList = styled.div`
+const ContentMapListWrap = styled.div`
     float: right;
     width: 510px;
     height: 577px;
     overflow-y: auto;
     border-top: 2px solid #0a0a0a;
     border-bottom: 1px solid #dcdcdc;
+`;
+const ContentMapListTitle = styled.div`
+    height: 50px;
+
+    strong {
+        display: block;
+        float: left;
+        width: 90px;
+        height: 50px;
+        background: #f7f7f7;
+        font-size: 15px;
+        color: #0a0a0a;
+        font-weight: 500;
+        border-bottom: 1px solid #dcdcdc;
+        line-height: 50px;
+        text-align: center;
+    }
+    strong+strong {
+        width: calc(100% - 90px);
+        border-left: 1px solid #dcdcdc;
+    }
+`;
+const ContentMapList = styled.ul`
+    li {
+        width: 100%;
+        font-size: 14px;
+
+        /* 측정소 축약 데이터 */
+        > div:first-of-type {
+            display: flex;
+            border-bottom: 1px solid #dcdcdc;
+            
+            &:hover {background: #d7f4ff;}
+            > div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                width: 90px;
+                text-align: center;
+                vertical-align: middle;
+            }
+            > div + div {
+                flex-grow: 1;
+                justify-content: flex-start;
+                padding: 8px 40px 8px 20px;
+                border-left: 1px solid #dcdcdc;
+                text-align: left;
+            }
+            button {
+                border: none;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                margin: -3px 0 0 0;
+                width: 10px;
+                height: 6px;
+                background: url(/images/info/img_aco_down.webp) no-repeat 0 0;
+            }
+        }
+    }
+`;
+/* 측정소 상세 데이터 */
+const ContentMapDetail = styled.div`
+    display: none;
+    padding: 12px 0;
+    background: #f4f9ff;
+
+    > div {
+        display: flex;
+        align-items: center;
+        > div:first-of-type {
+            width: 90px;
+            text-align: center;
+        }
+        > div:last-of-type {
+            padding-left: 20px;
+        }
+        &+div {
+            margin-top: 4px;
+        }
+    }
+`;
+const ContentMapDetailKey = styled.span`
+    padding: 0 13px;
+    font-size: 13px;
+    color: #464646;
+    font-weight: 400;
+    line-height: 22px;
+    background: #fff;
+    border-radius: 11px;
+    border: 1px solid #dcdcdc;
 `;
 
 
@@ -76,6 +168,9 @@ export default function Page() {
         1: { px: 0, initial: 250},
         2: { px: 0, initial: 100}
     });
+    const [mangCode, setMangCode] = useState('도시대기');
+    const [district, setDistrict] = useState('전체');
+    const [filterData, setFilterData] = useState(null);
 
     const toggleHandle = (e, index) => {
         e.preventDefault();
@@ -88,12 +183,33 @@ export default function Page() {
         }));
     };
 
+    const mangCodeHandle = (e) => setMangCode(e.currentTarget.value);
+    const districtHandle = (e) => setDistrict(e.currentTarget.value);
+
     const mapHandle = (e) => {
         console.log(e.currentTarget);
-    }
+    };
+
+    useEffect(() => {
+        const response = stationInfo.items.filter(station => {
+            let result;
+            
+            if(district === '전체') result = station.mangName === mangCode;
+            else result = station.mangName === mangCode && station.city === district;
+    
+            return result;
+        });
+        const sortedData = response.sort((a, b) => {
+            if(a.stationName < b.stationName) return -1;
+            if(a.stationName > b.stationName) return 1;
+            return 0;
+        })
+        setFilterData(sortedData);
+    }, [mangCode, district]);
+    
 
     return (
-        <main>
+        <main>  
             <DivStyle>
                 <TopBar>
                     <li>
@@ -134,32 +250,32 @@ export default function Page() {
                         <li>조회 후 측정소명을 클릭하면 해당 측정소의 상세 정보를 조회할 수 있습니다.</li>
                     </ContentSubTitleWrap>
                     <ContentSelectWrap>
-                        <ContentSelect name="mang_code" id="mang_code" title="측정망" defaultValue="3">
-                            <option value="1">국가배경</option>
-                            <option value="2">교외대기</option>
-                            <option value="3">도시대기</option>
-                            <option value="4">도로변대기</option>
-                            <option value="5">항만</option>
+                        <ContentSelect name="mang_code" id="mang_code" title="측정망" onChange={mangCodeHandle} value={mangCode}>
+                            <option value="국가배경농도">국가배경</option>
+                            <option value="교외대기">교외대기</option>
+                            <option value="도시대기">도시대기</option>기
+                            <option value="도로변대기">도로변대기</option>
+                            <option value="항만">항만</option>
                         </ContentSelect>
-                        <ContentSelect name="district" id="district" title='지역' defaultValue="전체">
+                        <ContentSelect name="district" id="district" title='지역' onChange={districtHandle} value={district}>
                             <option value='전체'>전체</option>
-                            <option value='02' >서울</option>
-                            <option value='031'>경기</option>
-                            <option value='032'>인천</option>
-                            <option value='033'>강원</option>
-                            <option value='041'>충남</option>
-                            <option value='042'>대전</option>
-                            <option value='043'>충북</option>
-                            <option value='044'>세종</option>
-                            <option value='051'>부산</option>
-                            <option value='052'>울산</option>
-                            <option value='053'>대구</option>
-                            <option value='054'>경북</option>
-                            <option value='055'>경남</option>
-                            <option value='061'>전남</option>
-                            <option value='062'>광주</option>
-                            <option value='063'>전북</option>
-                            <option value='064'>제주</option>
+                            <option value='서울특별시' >서울</option>
+                            <option value='경기도'>경기</option>
+                            <option value='인천광역시'>인천</option>
+                            <option value='강원특별자치도'>강원</option>
+                            <option value='충청남도'>충남</option>
+                            <option value='대전광역시'>대전</option>
+                            <option value='충청북도'>충북</option>
+                            <option value='세종특별자치시'>세종</option>
+                            <option value='부산광역시'>부산</option>
+                            <option value='울산광역시'>울산</option>
+                            <option value='대구광역시'>대구</option>
+                            <option value='경상북도'>경북</option>
+                            <option value='경상남도'>경남</option>
+                            <option value='전라남도'>전남</option>
+                            <option value='광주광역시'>광주</option>
+                            <option value='전북특별자치도'>전북</option>
+                            <option value='제주특별자치도'>제주</option>
                         </ContentSelect>
                     </ContentSelectWrap>
                     <ContentMain>
@@ -203,9 +319,36 @@ export default function Page() {
                                 <ContentMap src="/images/info/sub_map_064.webp" alt="제주" useMap="#Map" />
                             </div>
                         </ContentMapWrap>
-                        <ContentMapList>
-        
-                        </ContentMapList>
+                        <ContentMapListWrap>
+                            <ContentMapListTitle>
+                                <strong>측정소명</strong>
+                                <strong>측정소</strong>
+                            </ContentMapListTitle>
+                            <ContentMapList>
+                                {filterData && filterData.map((item, key) => {
+                                    return (
+                                        <li key={key}>
+                                            <div onClick={() => console.log("test")}>
+                                                <div><span>{item.stationName}</span></div>
+                                                <div>
+                                                    <span>{`${item.addr} ${item.building}`}</span>
+                                                    <button></button>
+                                                </div>
+                                            </div>
+                                            <ContentMapDetail>
+                                                <div>
+                                                    <div><ContentMapDetailKey>설치년도</ContentMapDetailKey></div>
+                                                    <div><span>{item.year}</span></div>
+                                                </div>
+                                                <div>
+                                                    <div><ContentMapDetailKey>측정항목</ContentMapDetailKey></div>
+                                                    <div><span>{item.item}</span></div>
+                                                </div>
+                                            </ContentMapDetail>
+                                        </li>
+                                        )})}
+                            </ContentMapList>
+                        </ContentMapListWrap>
                     </ContentMain>
                 </Content>
             </Section>
