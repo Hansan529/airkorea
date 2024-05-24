@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from '@emotion/styled';
 import { useState } from "react";
-import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from './page';
+import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
 
 const ContentSubTitleWrap = styled.div`
     display: flex;
@@ -126,30 +126,54 @@ export default function Page() {
         }));
     };
 
+    const topbarList = [
+        {
+            title: '에어코리아란',
+            toggleIndex: 1,
+            links: [
+                { text: "실시간 자료조회", to: '/realtime?page=1' },
+                { text: "대기정보 예보 / 경보", to: '/standby?page=1' },
+                { text: "통계정보", to: '/?page=1' },
+                { text: "배움터", to: '/?page=1' },
+            ]
+        },
+        {
+            title: '에어코리아 소개',
+            toggleIndex: 2,
+            links: [
+                { text: "측정망 정보", to: '/info?page=2' },
+                { text: "측정소 정보", to: '/info?page=3' }
+            ]
+        }
+    ]
+
     return (
-        <main>
+        <>
             <DivStyle>
                 <TopBar>
                     <li>
                         <Home to="/" title="홈"></Home>
                     </li>
-                    <List>
-                        <AElement to="./" title="에어코리아란" onClick={(e) => toggleHandle(e, 1)} data-index='1' data-direction={toggles[1].px === toggles[1].initial ? 'up' : 'down'}>에어코리아란</AElement>
-                        <ListDetail $height={toggles[1].px}>
-                            <li><Link>실시간 자료조회</Link></li>
-                            <li><Link>대기정보 예보 / 경보</Link></li>
-                            <li><Link>통계정보</Link></li>
-                            <li><Link>배움터</Link></li>
-                            <li><Link>고객지원</Link></li>
-                        </ListDetail>
-                    </List>
-                    <List>
-                        <AElement to="./" title="에어코리아 소개" onClick={(e) => toggleHandle(e, 2)} data-index='2' data-direction={toggles[2].px === toggles[2].initial ? 'up' : 'down'}>에어코리아 소개</AElement>
-                        <ListDetail $height={toggles[2].px}>
-                            <li><Link to="/info?page=2">측정망 정보</Link></li>
-                            <li><Link to="/info?page=3">측정소 정보</Link></li>
-                        </ListDetail>
-                    </List>
+                    {topbarList.map((item, index) => (
+                        <List key={index}>
+                            <AElement
+                                to="#"
+                                title={item.title}
+                                onClick={(e) => toggleHandle(e, item.toggleIndex)}
+                                data-index={item.toggleIndex}
+                                data-direction={toggles[item.toggleIndex].px === toggles[item.toggleIndex].initial ? 'up' : 'down'}
+                            >
+                                {item.title}
+                            </AElement>
+                            <ListDetail $height={toggles[item.toggleIndex].px}>
+                                {item.links.map((link, linkIndex) => (
+                                    <li key={linkIndex}>
+                                        <Link to={link.to}>{link.text}</Link>
+                                    </li>
+                                ))}
+                            </ListDetail>
+                        </List>
+                    ))}
                 </TopBar>
             </DivStyle>
             <Section>
@@ -235,6 +259,6 @@ export default function Page() {
                     </NuriBox>
                 </Content>
             </Section>
-        </main>
+        </>
     )
 };
