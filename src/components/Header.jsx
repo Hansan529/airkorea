@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const headerHeight = '90px';
@@ -47,21 +48,70 @@ const NavUl = styled.ul`
 
 const NavLi = styled.li`
   display: inline-block;
+  position: relative;
   line-height: ${headerHeight};
   list-style: none;
 
   a {
     text-decoration: none;
+    color: #000;
+    &:visited { color: #000; }
+    &:hover { color: #0f62cc; }
+  }
+  
+  /* 제목 */
+  > a {
     font-weight: 600;
     font-size: 18px;
     display: block;
-    color: #000;
-    &:visited {
-      color: #000;
+  }
+
+  /* hover 팝업 */
+  ul {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    padding: 15px 20px 18px;
+    background: #fff;
+    border: 1px solid #0f62cc;
+    border-radius: 8px;
+    transform: translate(-50%, 0);
+
+    li {
+      position: relative;
+      z-index: 2;
+      font-size: 16px;
+      color: #0a0a0a;
+      font-weight: 400;
+      letter-spacing: -0.6px;
+      line-height: 17px;
+      white-space: nowrap;
+      &+li{ margin-top: 10px; }
+
+      a { 
+        position: relative; 
+
+        &::before {
+          display: block;
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: 0%;
+          z-index: -1;
+          width: 0px;
+          height: 65%;
+          background: #d7f4ff;
+          transition: width .3s ease;
+        }
+      }
     }
-    &:hover {
-      color: #0f62cc;
-    }
+  }
+
+  &.over ul {
+    display: block;
+
+    li a:hover::before { width: 100%; }
   }
 `;
 
@@ -95,6 +145,25 @@ const UtilBtn = styled.button`
 `;
 
 export default function Header() {
+  // # Nav Hover 토글
+  const [isHovering, setIsHovering] = useState({0: false, 1: false, 2: false, 3: false, 4: false});
+  const handleMouseOver = (index) => {
+    setIsHovering(prev => ({
+      ...prev,
+      [index]: true
+    }));
+  }
+  const handleMouseOut = () => setIsHovering({0: false, 1: false, 2: false, 3: false, 4: false});
+
+  // ! Nav 정보
+  const NavList = [
+    {ref: 'info', title: '에어코리아란', subTitle: ['에어코리아 소개', '측정망 정보', '측정소 정보']},
+    {ref: 'realtime', title: '실시간 자료조회', subTitle: ['실시간 대기정보', '시도별 대기정보', '미세먼지 세부 측정정보']},
+    {ref: 'standby', title: '대기정보 예보 / 경보', subTitle: ['오늘/내일/모레 대기정보', '초미세먼지 주간예보', '대기오염경보 발령 내역', '황사 발생현황', '국민 행동요령']},
+    {ref: 'statistics', title: '통계정보', subTitle: ['대기환경 월간/연간 보고서', '최종확정 측정자료 조회', '국외대기 환경정보']},
+    {ref: 'info', title: '배움터', subTitle: ['통합대기환경지수', '대기환경기준물질', '대기환경기준', '대기환경정보 생산 및 공개', '용어사전']},
+  ];
+
   return (
     <HeaderElement>
       <HeaderContainer>
@@ -105,31 +174,29 @@ export default function Header() {
         </MainLogo>
         <GlobalNav>
           <NavUl>
-            <NavLi>
-              <Link to={`/info?page=1`}>에어코리아란</Link>
-            </NavLi>
-            <NavLi>
-              <Link to={``}>실시간 자료조회</Link>
-            </NavLi>
-            <NavLi>
-              <Link to={``}>대기정보 예보 / 경보</Link>
-            </NavLi>
-            <NavLi>
-              <Link to={``}>통계정보</Link>
-            </NavLi>
-            <NavLi>
-              <Link to={``}>배움터</Link>
-            </NavLi>
-            <NavLi>
-              <Link to={``}>고객지원</Link>
-            </NavLi>
+            {NavList.map((data, index) => {
+              return (
+                <Fragment key={index}>
+                  <NavLi
+                    className={isHovering[index] ? 'over' : ''}
+                    onMouseOver={() => handleMouseOver(index)}
+                    onMouseOut={handleMouseOut}
+                  >
+                    <Link to={`/${data.ref}?page=${index+1}`} onClick={handleMouseOut}>{data.title}</Link>
+                    <ul>
+                      {data.subTitle.map((list, subIndex) => <li key={subIndex}><Link to={`/${data.ref}?page=${subIndex+1}`} onClick={handleMouseOut}>{list}</Link></li>)}
+                    </ul>
+                  </NavLi>
+                </Fragment>
+              )
+            })}
           </NavUl>
         </GlobalNav>
         <Util>
-          <UtilBtn bgImg={'images/global/img_bg_search.webp'}>
+          <UtilBtn bgImg={'/images/global/img_bg_search.webp'}>
             <span>통합검색 열기</span>
           </UtilBtn>
-          <UtilBtn bgImg={'images/global/img_bg_ham.webp'}>
+          <UtilBtn bgImg={'/images/global/img_bg_ham.webp'}>
             <span>메뉴 열기</span>
           </UtilBtn>
         </Util>
