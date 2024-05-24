@@ -268,7 +268,7 @@ export default function Page() {
                 default: setImgSrc('all'); break;
             };
             setTimeout(() => { setSearch(false); }, 0);
-        } else if(!filterData) {
+        } else if(filterData.length === 0) {
             setFilterData(sortedData);
             setDataToggle(toggleObject);
         };
