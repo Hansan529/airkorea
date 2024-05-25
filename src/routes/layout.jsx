@@ -32,6 +32,8 @@ export const List = styled.li`
     border-right: 1px solid #dcdcdc;
     position: relative;
     z-index: 10;
+
+    a:hover { text-decoration: underline; }
 `;
 export const AElement = styled(Link)`
     display: block;
@@ -93,14 +95,14 @@ export const Aside = styled.aside`
         border-radius: 10px;
         box-sizing: border-box;
     }
-    ul {
+    > ul {
         margin-top: -30px;
         padding: 37px 20px 54px;
         background-color: #fff;
         border: 1px solid #dadcdf;
         border-radius: 10px;
 
-        li {  border-bottom: 1px solid #dcdcdc; }
+        > li { border-bottom: 1px solid #dcdcdc; }
     }
     `;
 export const AsideLink = styled(Link)`
@@ -111,6 +113,31 @@ export const AsideLink = styled(Link)`
     letter-spacing: -1px;
     color: ${({selected}) => selected ? '#0f62cc' : '#000'};
     font-weight: 500;
+    background: ${({showmore,children_height}) => showmore === 'true' 
+                    ? (children_height === 0 
+                        ? 'url(/images/global/img_left_down.webp) no-repeat right 15px center' 
+                        : 'url(/images/global/img_left_up.webp) no-repeat right 15px center') 
+                    : null};
+
+    &:hover { color: #0f62cc; }
+`;
+export const AsideLinkUl = styled.ul`
+    transition: 0.5s ease;
+    height: ${({$height}) => `${$height}px`};
+    padding: 0 10px;
+    border-top: 2px solid #0f62cc;
+    border-width: ${({$height}) => $height === 0 ? 0 : '2px'};
+    overflow: hidden;
+`;
+export const AsideLinkA = styled(Link)`
+    display: block;
+    height: 50px;
+    padding: 0 15px;
+    font-size: 15px;
+    color: ${({selected}) => selected ? '#0f62cc' : '#464646'};
+    font-weight: 400;
+    line-height: 50px;
+    border-bottom: 1px dotted #dcdcdc;
 `;
 //정보 메인
 export const Section = styled.section`
