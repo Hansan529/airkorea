@@ -108,24 +108,8 @@ const NuriBox = styled.div`
 `;
 
 
-//정보 네비게이션
 export default function Page() {
-    const [toggles, setToggles] = useState({
-        1: { px: 0, initial: 250},
-        2: { px: 0, initial: 100}
-    });
-
-    const toggleHandle = (e, index) => {
-        e.preventDefault();
-        setToggles(prevToggles => ({
-            ...prevToggles,
-            [index]: {
-                px: prevToggles[index].px !== 0 ? 0 : prevToggles[index].initial,
-                initial: prevToggles[index].initial
-            }
-        }));
-    };
-
+    // ! 서브 네비게이션 바 목록
     const topbarList = [
         {
             title: '에어코리아란',
@@ -146,6 +130,22 @@ export default function Page() {
             ]
         }
     ]
+
+    // # 네비게이션 토글
+    const [toggles, setToggles] = useState({
+        1: { px: 0, initial: topbarList[0].links.length * 50},
+        2: { px: 0, initial: topbarList[1].links.length * 50}
+    });
+    const toggleHandle = (e, index) => {
+        e.preventDefault();
+        setToggles(prevToggles => ({
+            ...prevToggles,
+            [index]: {
+                px: prevToggles[index].px !== 0 ? 0 : prevToggles[index].initial,
+                initial: prevToggles[index].initial
+            }
+        }));
+    };
 
     return (
         <>
