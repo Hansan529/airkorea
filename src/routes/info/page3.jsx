@@ -181,7 +181,7 @@ export default function Page() {
             title: '에어코리아란',
             toggleIndex: 1,
             links: [
-                { text: "실시간 자료조회", to: '/realtime?page=1' },
+                { text: "실시간 자료조회", to: '/realtime?page=1&no=1' },
                 { text: "대기정보 예보 / 경보", to: '/standby?page=1' },
                 { text: "통계정보", to: '/?page=1' },
                 { text: "배움터", to: '/?page=1' },
@@ -196,7 +196,6 @@ export default function Page() {
             ]
         }
     ]
-
     // # 네비게이션
     const [toggles, setToggles] = useState({
         1: { px: 0, initial: 250},
@@ -211,6 +210,16 @@ export default function Page() {
                 initial: prevToggles[index].initial
             }
         }));
+    };
+
+    // ! 사이드바 목록
+    const asideList = {
+        title: '에어코리아란',
+        links: [
+            { text: '에어코리아 소개', select: false },
+            { text: '측정망 정보', select: false },
+            { text: '측정소 정보', select: true },
+        ]
     };
 
     // # 측정소 정보
@@ -329,12 +338,43 @@ export default function Page() {
                 </TopBar>
             </DivStyle>
             <Section>
-                <Aside>
-                    <h2>에어코리아란</h2>
+            <Aside>
+                    <h2>{asideList.title}</h2>
                     <ul>
-                        <li><AsideLink to="/info/?page=1">에어코리아 소개</AsideLink></li>
-                        <li><AsideLink to="/info/?page=2">측정망 정보</AsideLink></li>
-                        <li><AsideLink to="/info/?page=3" selected>측정소 정보</AsideLink></li>
+                        {asideList.links.map((link, index) => {
+                            const variableCheck = typeof asideToggle !== 'undefined';
+                            const childrenCheck = 'children' in link;
+                            let result;
+                            if(variableCheck) {
+                                // result = variableCheck && (
+                                //     <li key={index}>
+                                //         <AsideLink 
+                                //             to="#" 
+                                //             onClick={asideHandle}
+                                //             children_height={asideToggle[link.text]?.px}
+                                //             selected={link.select}
+                                //             showmore={childrenCheck ? 'true' : 'false'} 
+                                //             >{link.text}</AsideLink>
+                                //         {childrenCheck && 
+                                //             <AsideLinkUl $height={asideToggle[link.text]?.px}>
+                                //                 {link.children.map((item, _index) => {
+                                //                     return <li key={_index}><AsideLinkA selected={item.select}>{item.text}</AsideLinkA></li>
+                                //                 })}
+                                //             </AsideLinkUl>
+                                //         }
+                                //     </li>
+                                // );
+                            } else {
+                                result = !variableCheck && (
+                                    <li key={index}>
+                                        <AsideLink to={`/info?page=${index + 1}`} selected={link.select}>
+                                            {link.text}
+                                        </AsideLink>
+                                    </li>
+                                );
+                            }
+                            return result;
+                        })}
                     </ul>
                 </Aside>
                 <Content>
