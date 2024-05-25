@@ -157,11 +157,44 @@ export default function Header() {
 
   // ! Nav 정보
   const NavList = [
-    {ref: 'info', title: '에어코리아란', subTitle: ['에어코리아 소개', '측정망 정보', '측정소 정보']},
-    {ref: 'realtime', title: '실시간 자료조회', subTitle: ['실시간 대기정보', '시도별 대기정보', '미세먼지 세부 측정정보']},
-    {ref: 'standby', title: '대기정보 예보 / 경보', subTitle: ['오늘/내일/모레 대기정보', '초미세먼지 주간예보', '대기오염경보 발령 내역', '황사 발생현황', '국민 행동요령']},
-    {ref: 'statistics', title: '통계정보', subTitle: ['대기환경 월간/연간 보고서', '최종확정 측정자료 조회', '국외대기 환경정보']},
-    {ref: 'info', title: '배움터', subTitle: ['통합대기환경지수', '대기환경기준물질', '대기환경기준', '대기환경정보 생산 및 공개', '용어사전']},
+    {ref: 'info', title: '에어코리아란', 
+      subTitle: [
+        { text: '에어코리아 소개', refSub: '' }, 
+        { text: '측정망 정보', refSub: '' }, 
+        { text: '측정소 정보', refSub: '' }
+      ]},
+
+    {ref: 'realtime', refSub: 'no=1', title: '실시간 자료조회', 
+      subTitle: [
+        { text: '실시간 대기정보', refSub: '&no=1' }, 
+        { text: '시도별 대기정보', refSub: '&no=1'}, 
+        { text: '미세먼지 세부 측정정보', refSub: '&no=1'}
+      ]},
+
+    {ref: 'standby', title: '대기정보 예보 / 경보', 
+      subTitle: [
+      { text: '오늘/내일/모레 대기정보', refSub: '' },
+      { text: '초미세먼지 주간예보', refSub: '' },
+      { text: '대기오염경보 발령 내역', refSub: '&no=1' },
+      { text: '황사 발생현황', refSub: '&no=1' },
+      { text: '국민 행동요령', refSub: '&no=1' }
+    ]},
+
+    {ref: 'statistics', title: '통계정보', 
+      subTitle: [
+        { text: '대기환경 월간/연간 보고서', refSub: '' },
+        { text: '최종확정 측정자료 조회', refSub: '' },
+        { text: '국외대기 환경정보', refSub: '' }
+      ]},
+
+    {ref: 'learning', title: '배움터', 
+      subTitle: [
+        { text: '통합대기환경지수', refSub: ''},
+        { text: '대기환경기준물질', refSub: ''},
+        { text: '대기환경기준', refSub: '&no=1'},
+        { text: '대기환경정보 생산 및 공개', refSub: ''},
+        { text: '용어사전', refSub: ''}
+      ]},
   ];
 
   return (
@@ -182,9 +215,14 @@ export default function Header() {
                     onMouseOver={() => handleMouseOver(index)}
                     onMouseOut={handleMouseOut}
                   >
-                    <Link to={`/${data.ref}?page=${index+1}`} onClick={handleMouseOut}>{data.title}</Link>
+                    <Link to={`/${data.ref}?page=1`} onClick={handleMouseOut}>{data.title}</Link>
                     <ul>
-                      {data.subTitle.map((list, subIndex) => <li key={subIndex}><Link to={`/${data.ref}?page=${subIndex+1}`} onClick={handleMouseOut}>{list}</Link></li>)}
+                      {data.subTitle.map((list, subIndex) => (
+                        <li key={subIndex}>
+                          <Link to={`/${data.ref}?page=${subIndex+1}${list.refSub}`} onClick={handleMouseOut}>
+                            {list.text}
+                          </Link>
+                        </li>))}
                     </ul>
                   </NavLi>
                 </Fragment>
