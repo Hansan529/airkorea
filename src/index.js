@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 import ErrorPage from "./components/ErrorPage.jsx";
 import App from './App';
 import InfoElement from './routes/info/page';
+import RealtimeElement from './routes/realtime/page';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: 'info',
     element: <InfoElement />,
+  },
+  {
+    path: 'realtime',
+    element: <RealtimeElement />,
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(
