@@ -32,6 +32,27 @@ const ContentSearchInput = styled.input`
     color: #0a0a0a;
     font-weight: 400;
 `;
+const ContentTable = styled.table`
+    width: 100%;
+    border-top: 2px solid #000;
+    margin: 20px 0;
+
+    caption { 
+        text-align: left;
+        margin-bottom: 10px;
+        ul { list-style: inside; }
+    }
+
+    th { font-weight: 600; }
+
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #dcdcdc;
+        padding: 15px 10px;
+        font-size: 14px;
+    }
+`;
 
 export default function Page() {
     // ! 서브 네비게이션 바 목록
@@ -223,6 +244,17 @@ export default function Page() {
                         <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" />
                         <button>검색</button>
                     </ContentSearchWrap>
+                    <ContentTable>
+                        <thead>
+                            <tr>
+                                <th>선택</th>
+                                <th>측정소명</th>
+                                <th>측정소 주소</th>
+                                <th>거리</th>
+                                <th>측정망</th>
+                            </tr>
+                        </thead>
+                    </ContentTable>
                 </Content>
             </Section>
         </>
