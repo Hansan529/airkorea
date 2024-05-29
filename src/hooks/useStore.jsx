@@ -61,6 +61,8 @@ const useStore = create(
             "innerLeft": "235.531"
         },
 
+        nearStation: [{}],
+
         // 결과 필터
         // 농도 범위 필터링
         filterRange: [true, true, true, true, true],

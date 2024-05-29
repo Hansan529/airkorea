@@ -496,7 +496,7 @@ function App() {
 
   //! 측정소 데이터, 예보 텍스트 fetch 후 store에 저장 하여 캐싱처리
   useEffect(() => {
-    const fetchHandle = (async (type) => {
+    const fetchHandle = async (type) => {
       try {
           const cacheData = JSON.parse(sessionStorage.getItem('fetchStorage'));
           if(cacheData && cacheData.state[type]) {
@@ -506,7 +506,7 @@ function App() {
       } catch (err) {
           console.error('err: ', err);
       }
-    })
+    }
     // 데이터가 존재하는지, fetch 여부 확인 후 데이터 호출
     if(!data && !dataFetchBoolean) {
         fetchHandle('data');
@@ -542,6 +542,7 @@ function App() {
       const controller = new AbortController();
 
       const fetchStationData = async (latitude, longitude, controller) => {
+        console.log('latitude, longitude, controller: ', latitude, longitude, controller);
         try {
           const response = await fetch('http://localhost:3500/api/airkorea/coordinate', {
             method: "POST",
@@ -549,6 +550,8 @@ function App() {
             body: JSON.stringify({ latitude, longitude }),
             signal: controller.signal
           });
+
+          console.log("response: ", response);
 
           if(!response.ok) throw new Error('Network response was not ok');
 
@@ -564,19 +567,27 @@ function App() {
 
           if(!responseStation.ok) throw new Error('Network response was not ok');
 
+          // # 가까운 측정소 (3)
           const stations = await responseStation.json();
-          // 가까운 측정소
+          changer('nearStation', stations);
+
+          // # 가까운 측정소 (1)
           const stationData = stationsInfo.find(item => item.stationName === stations[0].stationName);
           changer('station', stationData);
+
           console.info("station API Fetch operation completed");
-        } catch {
-          changer('station', defaultStation);
+        } catch(err) {
+          if(err.name === 'AbortError') {
+            console.log('Fetch aborted');
+          } else {
+            console.log("error: ",err);
+            changer('station', defaultStation);
+          }
         }
       };
 
       if ('geolocation' in navigator) {
         if (!stationFetchBoolean) {
-          console.log("실행", stationFetchBoolean);
           changer('stationFetchBoolean', true);
 
           if (window.confirm("현재위치 정보를 이용해서 측정소 정보를 보시겠습니까?")) {
@@ -605,9 +616,9 @@ function App() {
         changer('stationFetchBoolean', true);
       };
 
-      return () => {
-        controller.abort();
-      }
+      // return () => {
+      //   controller.abort();
+      // }
   }, [changer, stationFetchBoolean, stationsInfo]);
 
   // !모든 데이터가 Fetch 되어 데이터 출력에 문제가 없을 경우, 로딩이 되지 않았을 경우에 Loading
