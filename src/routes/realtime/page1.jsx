@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import { AElement, Aside, AsideLink, AsideLinkA, AsideLinkUl, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
+import useStore from '../../hooks/useStore';
+import stationInfoJSON from '../../data/stationInfo.json';
 
 const ContentSearchWrap = styled.div`
     position: relative;
@@ -55,6 +57,9 @@ const ContentTable = styled.table`
 `;
 
 export default function Page() {
+    const { nearStation } = useStore(store => store);
+    const stationInfo = stationInfoJSON.items;
+
     // ! 서브 네비게이션 바 목록
     const topbarList = [
         {
@@ -254,6 +259,22 @@ export default function Page() {
                                 <th>측정망</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            {nearStation.map((station, index) => {
+                                const filter = stationInfo.filter(item => item.stationName === station.stationName);
+                                const mangName = filter.length > 0 ? filter[0].mangName : null;
+
+                                return (
+                                    <tr key={index}>
+                                        <td><input type="radio" name="" id="" /></td>
+                                        <td>{station.stationName}</td>
+                                        <td>{station.addr}</td>
+                                        <td>{station.tm} km</td>
+                                        <td>{mangName}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
                     </ContentTable>
                 </Content>
             </Section>
