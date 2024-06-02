@@ -78,6 +78,108 @@ const ContentResultTap = styled.div`
     -webkit-box-shadow: ${({selectCheck}) => selectCheck && '0px 5px 5px -1px #eeeeee;'};
     box-shadow: ${({selectCheck}) => selectCheck && '0px 5px 5px -1px #eeeeee;'};
 `;
+const ContentResultSearchBox = styled.div`
+    margin-top: 20px;
+    position: relative;
+    padding: 20px 20px 20px 30px;
+    background: #f7f7f7;
+
+    > div {
+        display: flex;
+        height: 40px;
+        align-items: center;
+
+        &:first-of-type { margin-bottom: 10px; }
+        strong {
+            position: relative;
+            display: inline-block;
+            width: 90px;
+
+            &::after {
+                content: "";
+                display: block;
+                clear: both;
+                position: absolute;
+                width: 2px;
+                height: 100%;
+                top: 0;
+                right: 0;
+                background-color: gray;
+            }
+        }
+        > div {
+            padding: 0 0 0 20px;
+
+            label:first-of-type+input {
+                margin-left: 10px;
+            }
+        }
+    }
+`;
+
+const DisableFeat = styled.div`
+    display: flex;
+    align-items: center;
+
+    > * {
+        height: 40px;
+        padding: 10px 15px;
+    }
+    p {
+        -webkit-touch-callout: none;
+        user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        border: 1px solid #dcdcdc;
+        margin-right: 10px;
+        color: gray;
+
+        &:last-of-type { margin-left: 10px; }
+    }
+    select { margin-right: 10px; }
+`;
+const DisableBtn = styled.div`
+    position: absolute;
+    right: 0;
+
+    button {
+        padding: 0 25px;
+        background: #0f62cc80;
+        font-size: 14px;
+        color: #fff;
+        font-weight: 400;
+        line-height: 34px;
+        border-radius: 4px;
+
+        &:last-of-type { 
+            margin-left: 5px;
+            background: #64646480; 
+        }
+    }
+`;
+
+const ContentResultTableWrap = styled.div`
+    h2 {
+        position: relative;
+        font-size: 22px;
+        color: #0a0a0a;
+        font-weight: 500;
+        margin: 50px 0 14px 0;
+        display: block;
+    }
+    > span {
+        display: inline-block;
+        height: 28px;
+        padding: 0 20px;
+        font-size: 14px;
+        color: #0f62cc;
+        line-height: 28px;
+        letter-spacing: -0.6px;
+        border-radius: 13px;
+        border: 1px solid #0f62cc;
+    }
+`;
 
 export default function Page() {
     const { nearStation } = useStore(store => store);
@@ -200,13 +302,25 @@ export default function Page() {
 
     // --
 
+    // # 측정소 선택
+    const [selectStation, setSelectStation] = useState('온의동');
+
     // # 인풋 텍스트문
     const [searchValue, setSearchValue] = useState('');
-    const stationInputHandle = (e) => setSearchValue(e.currentTarget.value);
+    const stationInputHandle = (e) => {
+        const {value} = e.currentTarget;
+        const [,addr] = value.match(/(.*)\|/);
+        const [,stationName] = value.match(/\|(.*)/);
+        setSearchValue(addr);
+        setSelectStation(stationName);
+    };
 
     // # 조회 종류
     const [viewSelectIndex, setViewSelectIndex] = useState(0);
+    const [dataDivision, setDataDivision] = useState();
 
+    // 
+    const date = new Date();
     return (
         <>
             <DivStyle>
@@ -280,7 +394,7 @@ export default function Page() {
                     <ContentTitle>우리동네 대기 정보</ContentTitle>
                     <ContentSearchWrap>
                         <label htmlFor="search">지역명 검색</label>
-                        <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" value={searchValue} onChange={stationInputHandle} />
+                        <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" value={searchValue} onChange={(e) => e.currentTarget.value} />
                         <button>검색</button>
                     </ContentSearchWrap>
                     <ContentTable>
@@ -301,7 +415,7 @@ export default function Page() {
                                 return (
                                     <tr key={index}>
                                         <td><input type="radio" name="station" 
-                                                value={station.addr}
+                                                value={`${station.addr}|${station.stationName}`}
                                                 onChange={stationInputHandle} 
                                                 defaultChecked={index === 0} />
                                         </td>
@@ -324,6 +438,170 @@ export default function Page() {
                                 환경지수 조회
                             </ContentResultTap>
                         </div>
+                        <ContentResultSearchBox>
+                            <div>
+                                <strong>데이터 구분</strong>
+                                <div>
+                                    <input 
+                                        type="radio" 
+                                        name="dataDivision" 
+                                        value="time" 
+                                        id="searchBox_time" 
+                                        defaultChecked={true} 
+                                        onChange={(e) => setDataDivision(e.currentTarget.value)}
+                                    /><label htmlFor="searchBox_time">시간</label>
+                                    {viewSelectIndex === 0 && <>
+                                    <input 
+                                        type="radio" 
+                                        name="dataDivision" 
+                                        value="daily" 
+                                        id="searchBox_daily" 
+                                        onChange={(e) => setDataDivision(e.currentTarget.value)} 
+                                    /><label htmlFor="searchBox_daily">일평균</label>
+                                    </>}
+                                </div>
+                            </div>
+                            <div>
+                                <strong>조회 기간</strong>
+                                <div>
+                                    <DisableFeat>
+                                        <p>{`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`}</p>
+                                        {dataDivision === 'time' &&
+                                            <select disabled value="1">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                            </select>}
+                                        ~
+                                        <p>{`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`}</p>
+                                        {dataDivision === 'time' &&
+                                            <select disabled value={date.getHours()}>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                            </select>}
+                                            <DisableBtn>
+                                                <button disabled>검색</button>
+                                                <button disabled>그래프보기</button>
+                                            </DisableBtn>
+                                    </DisableFeat>
+                                </div>
+                            </div>
+                        </ContentResultSearchBox>
+                        <ContentResultTableWrap>
+                            <h2>측정자료&#40;수치&#41;</h2>
+                            <span>{selectStation}</span>
+                            <ContentTable>
+                                <thead>
+                                    <tr>
+                                        <th rowSpan={2}>날짜<br />&#40;월-일:시&#41;</th>
+                                        <th colSpan={2}>PM-10(㎍/㎥)</th>
+                                        <th colSpan={2}>PM-2.5(㎍/㎥)</th>
+                                        <th colSpan={2}>오존(ppm)</th>
+                                        <th colSpan={2}>이산화질소(ppm)</th>
+                                        <th colSpan={2}>일산화탄소(ppm)</th>
+                                        <th colSpan={2}>아황산가스(ppm)</th>
+                                    </tr>
+                                    <tr>
+                                        <th colSpan={2}>1시간</th>
+                                        <th colSpan={2}>1시간</th>
+                                        <th colSpan={2}>1시간</th>
+                                        <th colSpan={2}>1시간</th>
+                                        <th colSpan={2}>1시간</th>
+                                        <th colSpan={2}>1시간</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>06-03:03</td>
+                                        <td>img</td>
+                                        <td>10</td>
+                                        <td>img</td>
+                                        <td>-</td>
+                                        <td>img</td>
+                                        <td>0.0219</td>
+                                        <td>img</td>
+                                        <td>0.0067</td>
+                                        <td>img</td>
+                                        <td>0.29</td>
+                                        <td>img</td>
+                                        <td>0.0014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>06-03:02</td>
+                                        <td>img</td>
+                                        <td>10</td>
+                                        <td>img</td>
+                                        <td>-</td>
+                                        <td>img</td>
+                                        <td>0.0219</td>
+                                        <td>img</td>
+                                        <td>0.0067</td>
+                                        <td>img</td>
+                                        <td>0.29</td>
+                                        <td>img</td>
+                                        <td>0.0014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>06-03:01</td>
+                                        <td>img</td>
+                                        <td>10</td>
+                                        <td>img</td>
+                                        <td>-</td>
+                                        <td>img</td>
+                                        <td>0.0219</td>
+                                        <td>img</td>
+                                        <td>0.0067</td>
+                                        <td>img</td>
+                                        <td>0.29</td>
+                                        <td>img</td>
+                                        <td>0.0014</td>
+                                    </tr>
+                                </tbody>
+                            </ContentTable>
+                        </ContentResultTableWrap>
                     </ContentResultWrap>
                 </Content>
             </Section>
