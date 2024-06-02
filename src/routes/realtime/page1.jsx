@@ -41,7 +41,8 @@ const ContentTable = styled.table`
 
     caption { 
         text-align: left;
-        margin-bottom: 10px;
+        margin-top: 10px;
+        caption-side: bottom;
         ul { list-style: inside; }
     }
 
@@ -54,6 +55,28 @@ const ContentTable = styled.table`
         padding: 15px 10px;
         font-size: 14px;
     }
+`;
+
+const ContentResultWrap = styled.div`
+    margin-top: 40px;
+`;
+const ContentResultTap = styled.div`
+    display: inline-block;
+    cursor: pointer;
+    width: calc(50% - 5px);
+    height: 40px;
+    font-size: 16px;
+    line-height: 40px;
+    background: ${({selectCheck}) => selectCheck ? '#fff' : '#eaeef8'};
+    color: ${({selectCheck}) => selectCheck ? '#0f62cc' : '#0a0a0a'};
+    font-weight: ${({selectCheck}) => selectCheck ? '500' : '400'};
+    border: 1px solid;
+    border-color: ${({selectCheck}) => selectCheck ? '#0f62cc' : '#eaeef8'};
+    border-radius: 6px;
+    text-align: center;
+
+    -webkit-box-shadow: ${({selectCheck}) => selectCheck && '0px 5px 5px -1px #eeeeee;'};
+    box-shadow: ${({selectCheck}) => selectCheck && '0px 5px 5px -1px #eeeeee;'};
 `;
 
 export default function Page() {
@@ -106,6 +129,8 @@ export default function Page() {
             }
         }));
     };
+
+    // --
 
     // ! 사이드바 목록
     const asideList = {
@@ -172,6 +197,15 @@ export default function Page() {
             });
         };
     };
+
+    // --
+
+    // # 인풋 텍스트문
+    const [searchValue, setSearchValue] = useState('');
+    const stationInputHandle = (e) => setSearchValue(e.currentTarget.value);
+
+    // # 조회 종류
+    const [viewSelectIndex, setViewSelectIndex] = useState(0);
 
     return (
         <>
@@ -246,7 +280,7 @@ export default function Page() {
                     <ContentTitle>우리동네 대기 정보</ContentTitle>
                     <ContentSearchWrap>
                         <label htmlFor="search">지역명 검색</label>
-                        <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" />
+                        <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" value={searchValue} onChange={stationInputHandle} />
                         <button>검색</button>
                     </ContentSearchWrap>
                     <ContentTable>
@@ -266,7 +300,11 @@ export default function Page() {
 
                                 return (
                                     <tr key={index}>
-                                        <td><input type="radio" name="" id="" /></td>
+                                        <td><input type="radio" name="station" 
+                                                value={station.addr}
+                                                onChange={stationInputHandle} 
+                                                defaultChecked={index === 0} />
+                                        </td>
                                         <td>{station.stationName}</td>
                                         <td>{station.addr}</td>
                                         <td>{station.tm} km</td>
@@ -275,7 +313,18 @@ export default function Page() {
                                 )
                             })}
                         </tbody>
+                        <caption>※ 거주지역의 대표 대기질은 "도시대기" 측정자료를 참고하시기 바랍니다.</caption>
                     </ContentTable>
+                    <ContentResultWrap>
+                        <div>
+                            <ContentResultTap selectCheck={viewSelectIndex === 0} onClick={() => setViewSelectIndex(0)} style={{marginRight: '10px'}}>
+                                측정자료 조회통합대기
+                            </ContentResultTap>
+                            <ContentResultTap  selectCheck={viewSelectIndex === 1} onClick={() => setViewSelectIndex(1)}>
+                                환경지수 조회
+                            </ContentResultTap>
+                        </div>
+                    </ContentResultWrap>
                 </Content>
             </Section>
         </>
