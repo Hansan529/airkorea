@@ -542,28 +542,16 @@ function App() {
       const controller = new AbortController();
 
       const fetchStationData = async (latitude, longitude, controller) => {
-        console.log('latitude, longitude, controller: ', latitude, longitude, controller);
         try {
-          const response = await fetch('http://localhost:3500/api/airkorea/coordinate', {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ latitude, longitude }),
-            signal: controller.signal
-          });
-
-          console.log("response: ", response);
+          // # 현재 좌표를 기준으로 TM 좌표로 변한
+          const response = await fetch(`http://localhost:3500/api/airkorea/coordinate?latitude=${latitude}&longitude=${longitude}`);
 
           if(!response.ok) throw new Error('Network response was not ok');
 
           const {documents: [{x, y}]} = await response.json();
 
-          // 측정소 데이터 API 호출
-          const responseStation = await fetch('http://localhost:3500/api/airkorea/station', {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ x, y }),
-            signal: controller.signal
-          });
+          // # 측정소 데이터 API 호출
+          const responseStation = await fetch(`http://localhost:3500/api/airkorea/station?x=${x}&y=${y}`);
 
           if(!responseStation.ok) throw new Error('Network response was not ok');
 
