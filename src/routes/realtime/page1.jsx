@@ -1,10 +1,15 @@
 import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ko from 'date-fns/locale/ko';
 
 import { AElement, Aside, AsideLink, AsideLinkA, AsideLinkUl, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
 import useStore from '../../hooks/useStore';
 import stationInfoJSON from '../../data/stationInfo.json';
+
+registerLocale('ko', ko);
 
 const ContentSearchWrap = styled.div`
     position: relative;
@@ -121,23 +126,27 @@ const DisableFeat = styled.div`
     display: flex;
     align-items: center;
 
-    > * {
+    /* > * {
         height: 40px;
         padding: 10px 15px;
-    }
-    p {
-        -webkit-touch-callout: none;
-        user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
-        border: 1px solid #dcdcdc;
-        margin-right: 10px;
-        color: gray;
+    } */
 
-        &:last-of-type { margin-left: 10px; }
+    .react-datepicker-wrapper {
+        margin: 0 10px 0 10px;
+        &:first-of-type { margin: 0 10px 0 0; }
+
+        .react-datepicker__input-container {
+            input {
+                width: 100px;
+                padding: 5px 10px;
+            }
+            .react-datepicker-ignore-onclickoutside {}
+        }
     }
-    select { margin-right: 10px; }
+    select { 
+        padding: 5px 10px;
+        &:first-of-type { margin-right: 10px; }
+    }
 `;
 const DisableBtn = styled.div`
     position: absolute;
@@ -317,10 +326,20 @@ export default function Page() {
 
     // # 조회 종류
     const [viewSelectIndex, setViewSelectIndex] = useState(0);
-    const [dataDivision, setDataDivision] = useState();
+    const [dataDivision, setDataDivision] = useState('time');
 
-    // 
-    const date = new Date();
+    // # 캘린더 설정
+    const currentDate = new Date();
+    const yesterday =  new Date();
+    const pastDate = new Date();
+    yesterday.setDate(currentDate.getDate() - 1);
+    pastDate.setDate(currentDate.getDate() - 60);
+
+    const [selectedBginDate, setSelectedBginDate] = useState(yesterday);
+    const [bginHour, setBginHour] = useState('1');
+    const [selectedEndDate, setSelectedEndDate] = useState(yesterday);
+    const [endHour, setEndHour] = useState('3');
+
     return (
         <>
             <DivStyle>
@@ -465,9 +484,17 @@ export default function Page() {
                                 <strong>조회 기간</strong>
                                 <div>
                                     <DisableFeat>
-                                        <p>{`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`}</p>
+                                        <DatePicker
+                                            dateFormat='yyyy-MM-dd' // 날짜 형태
+                                            shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
+                                            minDate={pastDate} // minDate 이전 날짜 선택 불가
+                                            maxDate={yesterday} // maxDate 이후 날짜 선택 불가
+                                            selected={selectedBginDate}
+                                            locale={ko}
+                                            onChange={(date) => setSelectedBginDate(date)}
+                                        />
                                         {dataDivision === 'time' &&
-                                            <select disabled value="1">
+                                            <select value={bginHour} onChange={(e) => setBginHour(e.currentTarget.value)}>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -494,9 +521,17 @@ export default function Page() {
                                                 <option value="24">24</option>
                                             </select>}
                                         ~
-                                        <p>{`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`}</p>
+                                        <DatePicker
+                                            dateFormat='yyyy-MM-dd' // 날짜 형태
+                                            shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
+                                            minDate={pastDate} // minDate 이전 날짜 선택 불가
+                                            maxDate={yesterday} // maxDate 이후 날짜 선택 불가
+                                            selected={selectedEndDate}
+                                            locale={ko}
+                                            onChange={(date) => setSelectedEndDate(date)}
+                                        />
                                         {dataDivision === 'time' &&
-                                            <select disabled value={date.getHours()}>
+                                            <select value={endHour} onChange={(e) => setEndHour(e.currentTarget.value)}>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
