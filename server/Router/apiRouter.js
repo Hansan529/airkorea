@@ -73,9 +73,34 @@ router.get('/station', async (req, res) => {
 router.get('/getMsrstnAcctoRDyrg', async (req, res) => {
     console.log('날짜별 조회');
     try {
-        const { inqBginDt, inqEndDt, stationName } = req.query;
-        const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&stationName=${stationName}&dataTerm=3MONTH`)).data;
-        return res.json(items);
+        const { inqBginDt, inqEndDt, stationName, type, bginHour, endHour } = req.query;
+
+        // Fixme: 클라이언트에서 요청한 날짜가 있는 경우, API 요청을 진행하지 않도록 수정 (서버 작업 -> 클라이언트)
+        // 서버는 전체 items을 return 하도록 변경
+        let response = {};
+        if(type === 'time') {
+            const startYear = inqBginDt.substring(0, 4);
+            const startMonth = inqBginDt.substring(4, 6);
+            const startDay = inqBginDt.substring(6, 8);
+
+            const endYear = inqEndDt.substring(0 ,4);
+            const endMonth = inqEndDt.substring(4, 6);
+            const endDay = inqEndDt.substring(6, 8);
+
+            const startDateFormatting = new Date(`${startYear}-${startMonth}-${startDay}T${bginHour}:00`);
+            const endDateFormatting = new Date(`${endYear}-${endMonth}-${endDay}T${endHour}:00`);
+
+            const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&stationName=${stationName}&dataTerm=3MONTH`)).data;
+            response = items.filter(item => {
+                const itemDate = new Date(item.dataTime);
+                return itemDate >= startDateFormatting && itemDate <= endDateFormatting;
+            });
+            console.log("response: ", response);
+        } else {
+            const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnStatsSvc/getMsrstnAcctoRDyrg?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&inqBginDt=${inqBginDt}&inqEndDt=${inqEndDt}&msrstnName=${stationName}`)).data;
+            response = items;
+        }
+        return res.json(response);
     } catch(err) {
         console.error("error: ", err);
         return res.json(false);

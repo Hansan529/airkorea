@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from 'date-fns/locale/ko';
@@ -150,21 +150,17 @@ const DisableFeat = styled.div`
 `;
 const DisableBtn = styled.div`
     position: absolute;
-    right: 0;
+    right: 20px;
 
     button {
+        cursor: pointer;
         padding: 0 25px;
-        background: #0f62cc80;
+        background: #0f62cc;
         font-size: 14px;
         color: #fff;
         font-weight: 400;
         line-height: 34px;
         border-radius: 4px;
-
-        &:last-of-type { 
-            margin-left: 5px;
-            background: #64646480; 
-        }
     }
 `;
 
@@ -190,7 +186,15 @@ const ContentResultTableWrap = styled.div`
     }
 `;
 
+const LoadingWrap = styled.div`
+    display: none;
+    position: absolute;
+    z-index: 3001;
+    transform: translate(-50%, -50%);
+/* display: none; */
+`;
 export default function Page() {
+
     const { nearStation } = useStore(store => store);
     const stationInfo = stationInfoJSON.items;
 
@@ -340,8 +344,45 @@ export default function Page() {
     const [selectedEndDate, setSelectedEndDate] = useState(yesterday);
     const [endHour, setEndHour] = useState('3');
 
+    // # 통계 검색
+    const [tableResult, setTableResult] = useState([{}])
+    const handleCenterButton = async (e) => {
+        e.preventDefault();
+
+        const bginYear = selectedBginDate.getFullYear();
+        const bginMonth = String(selectedBginDate.getMonth() + 1).padStart(2, '0');
+        const bginDay = String(selectedBginDate.getDate()).padStart(2, '0');
+
+        // TODO: 로딩 추가
+        const { innerWidth, innerHeight } = window;
+        const value = 100;
+    
+        const left = (innerWidth - value) / 2 + window.scrollX;
+        const top = (innerHeight - value) / 2 + window.scrollY;
+    
+        setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
+        
+        const response = await fetch(`http://localhost:3500/api/airkorea/getMsrstnAcctoRDyrg?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}&bginHour=${bginHour.padStart(2, '0')}&endHour=${endHour.padStart(2, '0')}`);
+        const arrayResult = await response.json();
+        setTableResult(arrayResult);
+        console.log('arrayResult: ', arrayResult);
+        setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
+    }
+
+    // ! 화면 중앙
+    const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
+
+
+    // # 기본 값 설정
+    // useEffect(() => {
+    //     handleCenterButton();
+    // }, []);
+
     return (
         <>
+            <LoadingWrap style={loadingStyle}>
+                <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
+            </LoadingWrap>
             <DivStyle>
                 <TopBar>
                     <li>
@@ -558,8 +599,7 @@ export default function Page() {
                                                 <option value="24">24</option>
                                             </select>}
                                             <DisableBtn>
-                                                <button disabled>검색</button>
-                                                <button disabled>그래프보기</button>
+                                                <button onClick={handleCenterButton}>검색</button>
                                             </DisableBtn>
                                     </DisableFeat>
                                 </div>
