@@ -73,8 +73,8 @@ router.get('/station', async (req, res) => {
 router.get('/getMsrstnAcctoRDyrg', async (req, res) => {
     console.log('날짜별 조회');
     try {
-        const { inqBginDt, inqEndDt, msrstnName } = req.query;
-        const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnStatsSvc/getMsrstnAcctoRDyrg?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&inqBginDt=${inqBginDt}&inqEndDt=${inqEndDt}&msrstnName=${msrstnName}`)).data;
+        const { inqBginDt, inqEndDt, stationName } = req.query;
+        const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&stationName=${stationName}&dataTerm=3MONTH`)).data;
         return res.json(items);
     } catch(err) {
         console.error("error: ", err);
