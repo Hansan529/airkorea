@@ -8,6 +8,7 @@ import ko from 'date-fns/locale/ko';
 import { AElement, Aside, AsideLink, AsideLinkA, AsideLinkUl, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
 import useStore from '../../hooks/useStore';
 import stationInfoJSON from '../../data/stationInfo.json';
+import getColorValue from '../../functions/getColorValue.ts';
 
 registerLocale('ko', ko);
 
@@ -51,7 +52,10 @@ const ContentTable = styled.table`
         ul { list-style: inside; }
     }
 
-    th { font-weight: 600; }
+    th { 
+        font-weight: 600; 
+        background: #f7f7f7;
+    }
 
     th, td {
         text-align: center;
@@ -187,7 +191,7 @@ const ContentResultTableWrap = styled.div`
 `;
 
 const LoadingWrap = styled.div`
-    display: none;
+    display: ${({init}) => init ? 'block' : 'none'};
     position: absolute;
     z-index: 3001;
     transform: translate(-50%, -50%);
@@ -316,7 +320,7 @@ export default function Page() {
     // --
 
     // # 측정소 선택
-    const [selectStation, setSelectStation] = useState('온의동');
+    const [selectStation, setSelectStation] = useState(nearStation[0].stationName || '온의동');
 
     // # 인풋 텍스트문
     const [searchValue, setSearchValue] = useState('');
@@ -340,12 +344,13 @@ export default function Page() {
     pastDate.setDate(currentDate.getDate() - 60);
 
     const [selectedBginDate, setSelectedBginDate] = useState(yesterday);
-    const [bginHour, setBginHour] = useState('1');
+    const [bginHour, setBginHour] = useState('01');
     const [selectedEndDate, setSelectedEndDate] = useState(yesterday);
-    const [endHour, setEndHour] = useState('3');
+    const [endHour, setEndHour] = useState('03');
 
     // # 통계 검색
-    const [tableResult, setTableResult] = useState([{}])
+    const [tableResult, setTableResult] = useState([{}]);
+    const [tableDom, setTableDom] = useState([]);
     const handleCenterButton = async (e) => {
         e.preventDefault();
 
@@ -353,7 +358,10 @@ export default function Page() {
         const bginMonth = String(selectedBginDate.getMonth() + 1).padStart(2, '0');
         const bginDay = String(selectedBginDate.getDate()).padStart(2, '0');
 
-        // TODO: 로딩 추가
+        const endYear = selectedEndDate.getFullYear();
+        const endMonth = String(selectedEndDate.getMonth() + 1).padStart(2, '0');
+        const endDay = String(selectedEndDate.getDate()).padStart(2, '0');
+
         const { innerWidth, innerHeight } = window;
         const value = 100;
     
@@ -361,11 +369,32 @@ export default function Page() {
         const top = (innerHeight - value) / 2 + window.scrollY;
     
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
-        
-        const response = await fetch(`http://localhost:3500/api/airkorea/getMsrstnAcctoRDyrg?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}&bginHour=${bginHour.padStart(2, '0')}&endHour=${endHour.padStart(2, '0')}`);
-        const arrayResult = await response.json();
-        setTableResult(arrayResult);
-        console.log('arrayResult: ', arrayResult);
+
+        const startDateFormatting = new Date(`${bginYear}-${bginMonth}-${bginDay}T${bginHour}:00`);
+        const endDateFormatting = new Date(`${endYear}-${endMonth}-${endDay}T${endHour}:00`);
+
+        // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
+        const checkResult = tableResult.filter(item => {
+            const { dataTime, stationName } = item;
+            const itemDate = new Date(dataTime);
+            return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && stationName === selectStation;
+        });
+
+        if(checkResult.length === 0) {
+            const response = await fetch(`http://localhost:3500/api/airkorea/getMsrstnAcctoRDyrg?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
+            const arrayResult = await response.json();
+
+            const filterDate = arrayResult.filter(data => {
+                const { dataTime } = data;
+                const itemDate = new Date(dataTime);
+                return itemDate >= startDateFormatting && itemDate <= endDateFormatting;
+            });
+            // # 측정소 3개월치의 데이터
+            setTableResult(arrayResult);
+            // # 날짜 필터를 진행 한 결과 데이터
+            setTableDom(filterDate);
+        } else setTableDom(checkResult);
+
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
     }
 
@@ -374,13 +403,38 @@ export default function Page() {
 
 
     // # 기본 값 설정
-    // useEffect(() => {
-    //     handleCenterButton();
-    // }, []);
+    const [initLoading, setInitLoading] = useState(false);
+    useEffect(() => {
+        const fetchData = async () => {
+            const year = yesterday.getFullYear();
+            const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+            const day = String(yesterday.getDate()).padStart(2, '0');
+
+            const startDate = new Date(`${year}-${month}-${day}T01:00`);
+            const endDate = new Date(`${year}-${month}-${day}T03:00`);
+
+            // # 로딩
+            setInitLoading(true);
+
+            const response = await fetch(`http://localhost:3500/api/airkorea/getMsrstnAcctoRDyrg?inqBginDt=${year}${month}${day}&inqEndDt=${year}${month}${day}&stationName=%EC%A4%91%EA%B5%AC&type=time`);
+            const arrayResult = await response.json();
+
+            setTableResult(arrayResult);
+            const tableDomResult = arrayResult.filter(item => {
+                const newDate = new Date(item.dataTime);
+                return newDate >= startDate && newDate <= endDate;
+            });
+            
+            setTableDom(tableDomResult);
+
+            setInitLoading(false);
+        };
+        if(tableDom.length === 0) fetchData();
+    }, [yesterday]);
 
     return (
         <>
-            <LoadingWrap style={loadingStyle}>
+            <LoadingWrap style={loadingStyle} init={initLoading}>
                 <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
             </LoadingWrap>
             <DivStyle>
@@ -536,15 +590,15 @@ export default function Page() {
                                         />
                                         {dataDivision === 'time' &&
                                             <select value={bginHour} onChange={(e) => setBginHour(e.currentTarget.value)}>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
+                                                <option value="01">1</option>
+                                                <option value="02">2</option>
+                                                <option value="03">3</option>
+                                                <option value="04">4</option>
+                                                <option value="05">5</option>
+                                                <option value="06">6</option>
+                                                <option value="07">7</option>
+                                                <option value="08">8</option>
+                                                <option value="09">9</option>
                                                 <option value="10">10</option>
                                                 <option value="11">11</option>
                                                 <option value="12">12</option>
@@ -573,15 +627,15 @@ export default function Page() {
                                         />
                                         {dataDivision === 'time' &&
                                             <select value={endHour} onChange={(e) => setEndHour(e.currentTarget.value)}>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
+                                                <option value="01">1</option>
+                                                <option value="02">2</option>
+                                                <option value="03">3</option>
+                                                <option value="04">4</option>
+                                                <option value="05">5</option>
+                                                <option value="06">6</option>
+                                                <option value="07">7</option>
+                                                <option value="08">8</option>
+                                                <option value="09">9</option>
                                                 <option value="10">10</option>
                                                 <option value="11">11</option>
                                                 <option value="12">12</option>
@@ -611,7 +665,7 @@ export default function Page() {
                             <ContentTable>
                                 <thead>
                                     <tr>
-                                        <th rowSpan={2}>날짜<br />&#40;월-일:시&#41;</th>
+                                        <th rowSpan={2}>날짜<br />&#40;년-월-일:시&#41;</th>
                                         <th colSpan={2}>PM-10(㎍/㎥)</th>
                                         <th colSpan={2}>PM-2.5(㎍/㎥)</th>
                                         <th colSpan={2}>오존(ppm)</th>
@@ -629,51 +683,40 @@ export default function Page() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>06-03:03</td>
-                                        <td>img</td>
-                                        <td>10</td>
-                                        <td>img</td>
-                                        <td>-</td>
-                                        <td>img</td>
-                                        <td>0.0219</td>
-                                        <td>img</td>
-                                        <td>0.0067</td>
-                                        <td>img</td>
-                                        <td>0.29</td>
-                                        <td>img</td>
-                                        <td>0.0014</td>
-                                    </tr>
-                                    <tr>
-                                        <td>06-03:02</td>
-                                        <td>img</td>
-                                        <td>10</td>
-                                        <td>img</td>
-                                        <td>-</td>
-                                        <td>img</td>
-                                        <td>0.0219</td>
-                                        <td>img</td>
-                                        <td>0.0067</td>
-                                        <td>img</td>
-                                        <td>0.29</td>
-                                        <td>img</td>
-                                        <td>0.0014</td>
-                                    </tr>
-                                    <tr>
-                                        <td>06-03:01</td>
-                                        <td>img</td>
-                                        <td>10</td>
-                                        <td>img</td>
-                                        <td>-</td>
-                                        <td>img</td>
-                                        <td>0.0219</td>
-                                        <td>img</td>
-                                        <td>0.0067</td>
-                                        <td>img</td>
-                                        <td>0.29</td>
-                                        <td>img</td>
-                                        <td>0.0014</td>
-                                    </tr>
+                                    {tableDom.map((tr, idx) => {
+                                        const [,,,,pm10] = getColorValue(tr.pm10Value, 'pm10Value');
+                                        const [,,,,pm25] = getColorValue(tr.pm25Value, 'pm25Value');
+                                        const [,,,,o3] = getColorValue(tr.o3Value, 'o3Value');
+                                        const [,,,,no2] = getColorValue(tr.no2Value, 'no2Value');
+                                        const [,,,,co] = getColorValue(tr.coValue, 'coValue');
+                                        const [,,,,so2] = getColorValue(tr.so2Value, 'so2Value');
+
+                                        const altStatus = (status) => {
+                                            switch (status) {
+                                                case "1": return '좋음';
+                                                case "2": return '보통';
+                                                case "3": return '나쁨';
+                                                case "4": return '매우나쁨';
+                                                default: return '데이터 없음';
+                                            }
+                                        }
+                                        return (
+                                            <tr key={idx}>
+                                                <td>{tr.dataTime.substring(2, 10)}:{tr.dataTime.substring(11, 13)}</td>
+                                                <td><img src={`/images/realtime/img_bum0${pm10}.webp`} alt={altStatus(pm10)} /></td>
+                                                <td>{tr.pm10Value}</td>
+                                                <td><img src={`/images/realtime/img_bum0${pm25}.webp`} alt={altStatus(pm25)} /></td>
+                                                <td>{tr.pm25Value}</td>
+                                                <td><img src={`/images/realtime/img_bum0${o3}.webp`} alt={altStatus(o3)} /></td>
+                                                <td>{tr.o3Value}</td>
+                                                <td><img src={`/images/realtime/img_bum0${no2}.webp`} alt={altStatus(no2)} /></td>
+                                                <td>{tr.no2Value}</td>
+                                                <td><img src={`/images/realtime/img_bum0${co}.webp`} alt={altStatus(co)} /></td>
+                                                <td>{tr.coValue}</td>
+                                                <td><img src={`/images/realtime/img_bum0${so2}.webp`} alt={altStatus(so2)} /></td>
+                                                <td>{tr.so2Value}</td>
+                                            </tr>)
+                                    })}
                                 </tbody>
                             </ContentTable>
                         </ContentResultTableWrap>
