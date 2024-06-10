@@ -61,7 +61,21 @@ const useStore = create(
             "innerLeft": "235.531"
         },
 
-        nearStation: [{}],
+        nearStation: [{
+            "tm": 0.4,
+            "addr": "서울 중구 덕수궁길 15 시청서소문별관 3동",
+            "stationName": "중구"
+        },
+        {
+            "tm": 1.5,
+            "addr": "서울 용산구 한강대로 405 (서울역 앞)",
+            "stationName": "한강대로"
+        },
+        {
+            "tm": 1.9,
+            "addr": "서울 종로구 종로 169 (종묘주차장 앞)",
+            "stationName": "종로"
+        }],
 
         // 결과 필터
         // 농도 범위 필터링
