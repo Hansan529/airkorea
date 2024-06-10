@@ -10,6 +10,7 @@ export const DivStyle = styled.div`
     height: 50px;
     position: sticky;
     top: 0;
+    z-index: 10000;
 `;
 export const TopBar = styled.ul`
     display: flex;
