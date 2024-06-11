@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from 'date-fns/locale/ko';
@@ -211,8 +211,12 @@ const ContentResultTableWrap = styled.div`
         letter-spacing: -0.6px;
         border-radius: 13px;
         border: 1px solid #0f62cc;
-        margin-bottom: 20px;
+        margin: 0 10px 20px 0;
     }
+`;
+const ContentResultTableSpan = styled.span`
+    background: ${({effect}) => effect && '#0f62cc'} !important;
+    color: ${({effect}) => effect && '#fff'} !important;
 `;
 
 const LoadingWrap = styled.div`
@@ -404,30 +408,7 @@ export default function Page() {
         setSearchValue(addr);
         setSelectStation(stationName);
     };
-
-    // @ 인접 측정소 3구역 출력 컴포넌트
-    const NearStationComponent = () => {
-        const children = nearStation.map((station, index) => {
-            const filter = stationInfo.filter(item => item.stationName === station.stationName);
-            const mangName = filter.length > 0 ? filter[0].mangName : null;
-
-            return (
-                <tr key={index}>
-                    <td><input type="radio" name="station" 
-                            value={`${station.addr}|${station.stationName}`}
-                            onChange={stationInputHandle} 
-                            defaultChecked={index === 0} />
-                    </td>
-                    <td>{station.stationName}</td>
-                    <td>{station.addr}</td>
-                    <td>{station.tm} km</td>
-                    <td>{mangName}</td>
-                </tr>
-            )
-        });
-        return <tbody>{children}</tbody>
-    }
-
+    
     // # 조회 종류
     const [viewSelectIndex, setViewSelectIndex] = useState(0);
     const [dataDivision, setDataDivision] = useState('time');
@@ -516,6 +497,17 @@ export default function Page() {
         });
     }
 
+    // # 데이터 데이터 구분 필터링 함수
+    const filterResult = (data, startDateFormatting, endDateFormatting) => {
+        return data.filter(item => {
+            const { dataTime, stationName, msurDt, msrstnName } = item;
+            const type = typeof dataTime !== 'undefined' ? dataTime : msurDt;
+            const itemDate = new Date(type);
+            const stationExists = typeof stationName !== 'undefined' ? stationName : msrstnName;
+            return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && (stationExists === selectStation);
+        });
+    }
+
     // # 데이터 검색 버튼 핸들러
     const handleCenterButton = async (e) => {
         e.preventDefault();
@@ -552,23 +544,13 @@ export default function Page() {
         const endDateFormatting = new Date(endDateString);
 
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
-        const checkResult = tableResult.filter(item => {
-            const { dataTime, stationName } = item;
-            const itemDate = new Date(dataTime);
-            return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && stationName === selectStation;
-        });
+        const checkResult = filterResult(tableResult, startDateFormatting, endDateFormatting);
 
         if((dataDivision === 'time' && checkResult.length === 0) || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))) {
             const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
             const arrayResult = await response.json();
 
-            const filterDate = arrayResult.filter(data => {
-                const { dataTime, msurDt } = data;
-                
-                let createDate = dataDivision === 'time' ? dataTime : msurDt;
-                const itemDate = new Date(createDate);
-                return itemDate >= startDateFormatting && itemDate <= endDateFormatting;
-            });
+            const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting)
             // # 측정소 3개월치의 데이터
             setTableResult(arrayResult);
             // # 날짜 필터를 진행 한 결과 데이터
@@ -645,7 +627,27 @@ export default function Page() {
                                 <th>측정망</th>
                             </tr>
                         </thead>
-                        {/* 컴포넌트: tbody  */}<NearStationComponent />
+                        {/* 컴포넌트: tbody  */}
+                        <tbody>
+                        {nearStation.map((station, index) => {
+                        const filter = stationInfo.filter(item => item.stationName === station.stationName);
+                        const mangName = filter.length > 0 ? filter[0].mangName : null;
+                        return (
+                            <tr key={index}>
+                                <td><input type="radio" name="station" 
+                                        value={`${station.addr}|${station.stationName}`}
+                                        onChange={stationInputHandle} 
+                                        defaultChecked={index === 0}
+                                        />
+                                </td>
+                                <td>{station.stationName}</td>
+                                <td>{station.addr}</td>
+                                <td>{station.tm} km</td>
+                                <td>{mangName}</td>
+                            </tr>
+                        )
+                        })}
+                        </tbody>
                         <caption>※ 거주지역의 대표 대기질은 "도시대기" 측정자료를 참고하시기 바랍니다.</caption>
                     </ContentTable>
                     <ContentResultWrap>
@@ -766,20 +768,15 @@ export default function Page() {
                         </ContentResultSearchBox>
                         <ContentResultTableWrap>
                             <h2>측정자료&#40;수치&#41;</h2>
-                            <span>{selectStation}</span>
+                            {nearStation.map((station, idx) => {
+                                const effectBoolean = selectStation === station.stationName;
+                                return <Fragment key={idx}>
+                                    <ContentResultTableSpan effect={effectBoolean}>{station.stationName}</ContentResultTableSpan>
+                                </Fragment>;
+                            })}
                             <ContentTableWrap>
                                 <ContentTable>
                                     <thead>
-                                        {/* {(dataDivision === 'time' && tableDom.some(item => typeof item.dataTime !== 'undefined')) && 
-                                        <tr>
-                                            <th rowSpan={2}>날짜<br />&#40;년-월-일:시&#41;</th>
-                                            <th colSpan={2}>PM-10(㎍/㎥)</th>
-                                            <th colSpan={2}>PM-2.5(㎍/㎥)</th>
-                                            <th colSpan={2}>오존(ppm)</th>
-                                            <th colSpan={2}>이산화질소(ppm)</th>
-                                            <th colSpan={2}>일산화탄소(ppm)</th>
-                                            <th colSpan={2}>아황산가스(ppm)</th>
-                                        </tr>} */}
                                         <tr>
                                             <th rowSpan={2}>날짜<br />{(dataDivision === 'time' && tableDom.some(item => typeof item.dataTime !== 'undefined')) ? `(년-월-일:시)` : `(년-월-일)`}</th>
                                             <th rowSpan={tableRowSpan} colSpan="2">PM-10(㎍/㎥)</th>
