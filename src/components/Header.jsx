@@ -9,7 +9,7 @@ const HeaderElement = styled.header`
   position: relative;
   width: 100%;
   height: ${headerHeight};
-  z-index: 100;
+  z-index: 11000;
   background-color: #fff;
   border-bottom: 1px solid #dcdcdc;
 `;
