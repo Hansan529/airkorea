@@ -70,7 +70,7 @@ router.get('/station', async (req, res) => {
 })
 
 // # 측정소 별 대기 오염 통계 현황 (날짜 조회)
-router.get('/getMsrstnAcctoRDyrg', async (req, res) => {
+router.get('/neighborhood', async (req, res) => {
     console.log('날짜별 조회');
     try {
         const { inqBginDt, inqEndDt, stationName, type } = req.query;
