@@ -463,7 +463,7 @@ const Standby = ({Time}) => {
 					left: regionList[regName][key].left,
 					top: regionList[regName][key].top,
 					}}
-					value={getColorValue(value(key), type)[2]}
+					value={getColorValue(0, {value: value(key), type})[2]}
 					onClick={() => airStationHandle('station')}
 				>
 					{el.name}
@@ -478,8 +478,8 @@ const Standby = ({Time}) => {
 					id={`m_${regNum}_${String(key + 1).padStart(3, '0')}`}
 					title={`${regName}_${el.name}${el.district}`}
 					d={pathData[`m_${regNum}_${String(key + 1).padStart(3, '0')}`]}
-					fillColor={selectInfo === 'air' ? getColorValue(value(key), type)[0] : '#fff'}
-					fillHoverColor={selectInfo === 'air' ? getColorValue(value(key), type)[1] : '#fff'}
+					fillColor={selectInfo === 'air' ? getColorValue(0, {value: value(key), type})[0] : '#fff'}
+					fillHoverColor={selectInfo === 'air' ? getColorValue(0, {value: value(key), type})[1] : '#fff'}
 					onClick={() => airStationHandle('station')}
 				></InnerMapPath>
 				);
@@ -546,7 +546,7 @@ const Standby = ({Time}) => {
 					{(selectInfo === 'station' || selectInfo === 'station') && <InnerStationCollection>
 						{filterStationData?.map((el, key) => {
 							const filterStationAirData = data?.find(item => item.stationName === el.stationName);
-							const icoNum = getColorValue(filterStationAirData?.[type], type)[4];
+							const [,,,,icoNum] = getColorValue(0, {value: filterStationAirData?.[type], type});
 							if(!filterRange[icoNum - 1]){
 								return <Fragment key={key}></Fragment>
 							}
@@ -557,7 +557,7 @@ const Standby = ({Time}) => {
 									onClick={() => changer('station', el)}
 									top={el.innerTop}
 									left={el.innerLeft}
-									ico={getColorValue(filterStationAirData?.[type], type)[4]}
+									ico={getColorValue(0, {value: filterStationAirData?.[type], type})[4]}
 								/>
 							)
 						})}
@@ -608,7 +608,7 @@ const Standby = ({Time}) => {
 			let color;
 			let hoverColor;
 			let hoverChk = false;
-			const ifResult = getColorValue(regionAvgValue(key, type), type);
+			const ifResult = getColorValue(0, {value: regionAvgValue(key, type), type});
 
 			color = ifResult[0];
 			hoverChk = false;
@@ -634,7 +634,7 @@ const Standby = ({Time}) => {
 					<MapNameButton
 						left={el.left}
 						top={el.top}
-						bgColor={getColorValue(regionAvgValue(key, type), type)[2]}
+						bgColor={getColorValue(0, {value: regionAvgValue(key, type), type})[2]}
 						onClick={() => innerClickHandle(el.num)}
 					>
 						{el.name}
@@ -669,7 +669,7 @@ const Standby = ({Time}) => {
 				{stationsInfo?.map((list, key) => {
 					// 장계면 데이터 없음
 					const filterStationAirData = data?.find(item => (item.stationName === list.stationName));
-					const icoNum = getColorValue(filterStationAirData?.[type], type)[4];
+					const icoNum = getColorValue(0, {value: filterStationAirData?.[type], type})[4];
 					const icoColor = {
 						1: "#48c9ff",
 						2: "#7eff90",

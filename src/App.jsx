@@ -615,7 +615,7 @@ function App() {
         changer('loading', true);
   }, [data, text, dataFetchBoolean, textFetchBoolean, stationFetchBoolean, changer, loading]);
 
-  const typeRange = getColorValue(0, type, true);
+  const typeRange = getColorValue(0, {type, boolean: true});
 // ------------------------------------------------ component
   const TimeText = (() => {
     if(data) {

@@ -224,14 +224,23 @@ const LoadingWrap = styled.div`
     position: absolute;
     z-index: 3001;
     transform: translate(-50%, -50%);
-/* display: none; */
 `;
 export default function Page() {
-
+    // ! 기타
+    // # 조회 종류
+    const [viewSelectIndex, setViewSelectIndex] = useState(0);
+    const [dataDivision, setDataDivision] = useState('time');
+    // # 화면 중앙
+    const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
+    // # 측정소 정보
     const { nearStation } = useStore(store => store);
     const stationInfo = stationInfoJSON.items;
+    // # 측정소 선택
+    const [selectStation, setSelectStation] = useState(nearStation[0].stationName || '온의동');
 
-    // ! 서브 네비게이션 바 목록
+
+    // ! 서브 네비게이션
+    // # 서브 네비게이션 바 목록
     const topbarList = [
         {
             title: '실시간 자료조회',
@@ -261,7 +270,6 @@ export default function Page() {
             ]
         }
     ];
-
     // @ 서브 네비게이션 바 컴포넌트
     const TopBarListComponent = () => {
         return topbarList.map((item, index) => (
@@ -281,13 +289,13 @@ export default function Page() {
             </List>
         ))
     }
-
-    // # 네비게이션 토글
+    // # 네비게이션 토글 상태
     const [toggles, setToggles] = useState({
         1: { px: 0, initial: 250},
         2: { px: 0, initial: 100},
         3: { px: 0, initial: 100}
     });
+    // # 네비게이션 토글 함수
     const toggleHandle = (e, index) => {
         e.preventDefault();
         setToggles(prevToggles => ({
@@ -299,9 +307,9 @@ export default function Page() {
         }));
     };
 
-    // ------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // ! 사이드바 목록
+    // ! 사이드바 
+    // # 사이드바 목록
     const asideList = {
             title: '실시간 자료조회',
             links: [
@@ -332,13 +340,13 @@ export default function Page() {
                 },
             ]
     };
-
     // # 사이드바 토글
     const [asideToggle, setAsideToggle] = useState({
         [asideList.links[0].text]: { px: 150, initial: asideList.links[0].children.length * 50 },
         [asideList.links[1].text]: { px: 0, initial: asideList.links[1].children.length * 50 },
         [asideList.links[2].text]: { px: 0, initial: asideList.links[2].children.length * 50 },
     });
+    // # 사이드바 토글 함수
     const asideHandle = (e) => {
         e.preventDefault();
         const key = e.currentTarget.innerText;
@@ -366,7 +374,6 @@ export default function Page() {
             });
         };
     };
-
     // @ 사이드바 컴포넌트
     const AsideComponent = () => {
         const children = asideList.links.map((link, index) => {
@@ -392,15 +399,13 @@ export default function Page() {
         
     });
     return <ul>{children}</ul>
-};
+    };
 
-    // ------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // # 측정소 선택
-    const [selectStation, setSelectStation] = useState(nearStation[0].stationName || '온의동');
-
+    // ! 지역명 검색 input
     // # 인풋 텍스트문
     const [searchValue, setSearchValue] = useState('');
+    // # 인풋 텍스트문 선택 함수
     const stationInputHandle = (e) => {
         const {value} = e.currentTarget;
         const [,addr] = value.match(/(.*)\|/);
@@ -409,33 +414,50 @@ export default function Page() {
         setSelectStation(stationName);
     };
     
-    // # 조회 종류
-    const [viewSelectIndex, setViewSelectIndex] = useState(0);
-    const [dataDivision, setDataDivision] = useState('time');
 
-    // # 데이터 구분 함수
-    const dataDivisionChangeHandle = (e) => {
-        const { value } = e.currentTarget;
-        setDataDivision(value);
-    }
-
+    // ! 조회 기간 캘린더
     // # 캘린더 설정
     const currentDate = new Date();
     const yesterday =  new Date();
     const pastDate = new Date();
     yesterday.setDate(currentDate.getDate() - 1);
     pastDate.setDate(currentDate.getDate() - 60);
-
     const [selectedBginDate, setSelectedBginDate] = useState(yesterday);
-    const [bginHour, setBginHour] = useState('01');
     const [selectedEndDate, setSelectedEndDate] = useState(yesterday);
+    const [bginHour, setBginHour] = useState('01');
     const [endHour, setEndHour] = useState('03');
+    // @ 캘린더 컴포넌트
+    const RenderDatePicker = ({selectedDate, setSelectedDate, showTimeSelect, division, setHour}) => {
+        return (<>
+                <DatePicker
+                    dateFormat='yyyy-MM-dd'
+                    shouldCloseOnSelect
+                    minDate={pastDate}
+                    maxDate={yesterday}
+                    selected={selectedDate}
+                    locale={ko}
+                    onChange={(date) => setSelectedDate(date)}
+                />
+                {showTimeSelect && <DatePickerTimeSelect division={division} onChange={(e) => setHour(e.currentTarget.value)} />}
+            </>)
+    }
+    // @ 캘린더 시간 선택 컴포넌트
+    const DatePickerTimeSelect = (props) => {
+        const values = [...Array(24)].map((_,idx) => idx + 1);
+            return <select value={props.division} onChange={props.onChange}>
+                    {values.map(item => {
+                        const numbering = String(item).padStart(2, '0');
+                        return <option key={item} value={numbering}>{numbering}</option>
+                    })}
+                </select>
+    }
 
+
+    // ! 측정자료
     // # 통계 검색
     const [tableResult, setTableResult] = useState([{}]);
     const [tableDom, setTableDom] = useState([]);
     const tableRowSpan = dataDivision === 'time' ? 1 : 2;
-
     // @ 통계 테이블 컴포넌트
     const TableDomComponent = () => {
         // 최초 상태
@@ -447,45 +469,36 @@ export default function Page() {
         }
 
         return tableDom.map((tr, idx) => {
-            const [,,,,pm10] = getColorValue(tr.pm10Value, 'pm10Value');
-            const [,,,,pm25] = getColorValue(tr.pm25Value, 'pm25Value');
-            const [,,,,o3] = getColorValue(tr.o3Value, 'o3Value');
-            const [,,,,no2] = getColorValue(tr.no2Value, 'no2Value');
-            const [,,,,co] = getColorValue(tr.coValue, 'coValue');
-            const [,,,,so2] = getColorValue(tr.so2Value, 'so2Value');
-            
             const colSpanVariable = dataDivision === 'time' ? 1 : 2;
-            const altStatus = (status) => {
-                switch (status) {
-                    case "1": return '좋음';
-                    case "2": return '보통';
-                    case "3": return '나쁨';
-                    case "4": return '매우나쁨';
-                    default: return '데이터 없음';
-                }
-            }
+            const { gradeText: khaiGradeTxt } = getColorValue(tr?.khaiGrade);
+            const { gradeText: pm10GradeTxt } = getColorValue(tr.pm10Grade);
+            const { gradeText: pm25GradeTxt } = getColorValue(tr.pm25Grade);
+            const { gradeText: o3GradeTxt } = getColorValue(tr.o3Grade);
+            const { gradeText: no2GradeTxt } = getColorValue(tr.no2Grade);
+            const { gradeText: coGradeTxt } = getColorValue(tr.coGrade);
+            const { gradeText: so2GradeTxt } = getColorValue(tr.so2Grade);
 
             let returnDom;
             if(dataTimeCheck && dataDivision === 'time') { returnDom = 
                 <tr key={idx}>
-                    <td>{`${tr.dataTime.substring(2, 10)}:${tr.dataTime.substring(11, 13)}`}</td>
-                    <td><img src={`/images/realtime/img_bum0${pm10}.webp`} alt={altStatus(pm10)} /></td>
+                    <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.pm10Grade}.webp`} alt={pm10GradeTxt} /></td>
                     <td>{tr.pm10Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${pm25}.webp`} alt={altStatus(pm25)} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.pm25Grade}.webp`} alt={pm25GradeTxt} /></td>
                     <td>{tr.pm25Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${o3}.webp`} alt={altStatus(o3)} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.o3Grade}.webp`} alt={o3GradeTxt} /></td>
                     <td>{tr.o3Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${no2}.webp`} alt={altStatus(no2)} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.no2Grade}.webp`} alt={no2GradeTxt} /></td>
                     <td>{tr.no2Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${co}.webp`} alt={altStatus(co)} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.coGrade}.webp`} alt={coGradeTxt} /></td>
                     <td>{tr.coValue}</td>
-                    <td><img src={`/images/realtime/img_bum0${so2}.webp`} alt={altStatus(so2)} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.so2Grade}.webp`} alt={so2GradeTxt} /></td>
                     <td>{tr.so2Value}</td>
                 </tr>}
 
             if(dataDailyCheck && dataDivision === 'daily') { returnDom = 
                 <tr key={idx}>
-                    <td>{tr.msurDt}</td>
+                    <td>{tr.msurDt.substring(5)}</td>
                     <td colSpan={colSpanVariable}>{tr.pm10Value}</td>
                     <td colSpan={colSpanVariable}>{tr.pm25Value}</td>
                     <td colSpan={colSpanVariable}>{tr.o3Value}</td>
@@ -493,22 +506,33 @@ export default function Page() {
                     <td colSpan={colSpanVariable}>{tr.coValue}</td>
                     <td colSpan={colSpanVariable}>{tr.so2Value}</td>
                 </tr>}
+
+            if(dataTimeCheck && dataDivision === 'total') { returnDom =
+                <tr key={idx}>
+                    <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
+                    <td></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.khaiGrade}.webp`} alt={khaiGradeTxt} /></td>
+                    <td>{tr.khaiValue}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.pm10Grade}.webp`} alt={pm10GradeTxt} /></td>
+                    <td>{tr.pm10Value24}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.pm25Grade}.webp`} alt={pm25GradeTxt} /></td>
+                    <td>{tr.pm25Value24}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.o3Grade}.webp`} alt={o3GradeTxt} /></td>
+                    <td>{tr.o3Value}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.no2Grade}.webp`} alt={no2GradeTxt} /></td>
+                    <td>{tr.no2Value}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.coGrade}.webp`} alt={coGradeTxt} /></td>
+                    <td>{tr.coValue}</td>
+                    <td><img src={`/images/realtime/img_bum0${tr.so2Grade}.webp`} alt={so2GradeTxt} /></td>
+                    <td>{tr.so2Value}</td>
+                </tr>
+
+            }
+
             return returnDom;
         });
     }
-
-    const DatePickerTimeSelect = (e) => {
-        const { division } = e;
-        const values = [...Array(24)].map((_,idx) => idx + 1);
-            return <select value={division} onChange={e.onChange}>
-                    {values.map(item => {
-                        const numbering = String(item).padStart(2, '0');
-                        return <option value={numbering}>{numbering}</option>
-                    })}
-                </select>
-    }
-
-    // # 데이터 데이터 구분 필터링 함수
+    // ### 데이터 데이터 구분 필터링 함수
     const filterResult = (data, startDateFormatting, endDateFormatting) => {
         return data.filter(item => {
             const { dataTime, stationName, msurDt, msrstnName } = item;
@@ -518,12 +542,11 @@ export default function Page() {
             return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && (stationExists === selectStation);
         });
     }
-
     // # 데이터 검색 버튼 핸들러
     const handleCenterButton = async (e) => {
         e.preventDefault();
 
-        // ! 일평균 데이터 생성 주기 '매일 1시 전후' 전 날 데이터 조회
+        // # 일평균 데이터 생성 주기 '매일 1시 전후' 전 날 데이터 조회
         const bginYear = selectedBginDate.getFullYear();
         const bginMonth = String(selectedBginDate.getMonth() + 1).padStart(2, '0');
         const bginDay = (dataDivision === 'daily' && selectedBginDate.getHours() === 0)
@@ -557,7 +580,9 @@ export default function Page() {
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
         const checkResult = filterResult(tableResult, startDateFormatting, endDateFormatting);
 
-        if((dataDivision === 'time' && checkResult.length === 0) || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))) {
+        if((dataDivision === 'time' && checkResult.length === 0) 
+            || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))
+            || (dataDivision === 'total' && !checkResult.some(item => item.khaiValue))) {
             const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
             const arrayResult = await response.json();
 
@@ -567,10 +592,8 @@ export default function Page() {
             // # 날짜 필터를 진행 한 결과 데이터
             setTableDom(filterDate);
         } else setTableDom(checkResult);
-
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
     }
-
     // @ 특정 측정소의 측정자료가 선택한 측정소와 일치하는지 체크하는 컴포넌트
     const ContentResultTableStation = () => {
         return nearStation.map((station, idx) => {
@@ -582,41 +605,6 @@ export default function Page() {
                 <ContentResultTableSpan effect={effectBoolean} opacity={opacity}>{station.stationName}</ContentResultTableSpan>
             </Fragment>;
     })};
-
-    // ! 화면 중앙
-    const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
-
-
-    // # 기본 값 설정
-    // const [initLoading, setInitLoading] = useState(false);
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const year = yesterday.getFullYear();
-    //         const month = String(yesterday.getMonth() + 1).padStart(2, '0');
-    //         const day = String(yesterday.getDate()).padStart(2, '0');
-
-    //         const startDate = new Date(`${year}-${month}-${day}T01:00`);
-    //         const endDate = new Date(`${year}-${month}-${day}T03:00`);
-
-    //         // # 로딩
-    //         setInitLoading(true);
-
-    //         const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${year}${month}${day}&inqEndDt=${year}${month}${day}&stationName=%EC%A4%91%EA%B5%AC&type=time`);
-    //         const arrayResult = await response.json();
-
-    //         setTableResult(arrayResult);
-    //         const tableDomResult = arrayResult.filter(item => {
-    //             const newDate = new Date(item.dataTime);
-    //             return newDate >= startDate && newDate <= endDate;
-    //         });
-            
-    //         setTableDom(tableDomResult);
-
-    //         setInitLoading(false);
-    //     };
-    //     if(tableDom.length === 0) fetchData();
-    // }, [yesterday]);
-
     return (
         <>
             <LoadingWrap style={loadingStyle}>
@@ -674,12 +662,8 @@ export default function Page() {
                     </ContentTable>
                     <ContentResultWrap>
                         <div>
-                            <ContentResultTap selectCheck={viewSelectIndex === 0} onClick={() => setViewSelectIndex(0)} style={{marginRight: '10px'}}>
-                                측정자료 조회통합대기
-                            </ContentResultTap>
-                            <ContentResultTap  selectCheck={viewSelectIndex === 1} onClick={() => setViewSelectIndex(1)}>
-                                환경지수 조회
-                            </ContentResultTap>
+                            <ContentResultTap selectCheck={viewSelectIndex === 0} onClick={() => {setViewSelectIndex(0); setDataDivision('time');}} style={{marginRight: '10px'}}>측정자료 조회통합대기</ContentResultTap>
+                            <ContentResultTap selectCheck={viewSelectIndex === 1} onClick={() => {setViewSelectIndex(1); setDataDivision('total');}}>통합대기 환경지수 조회</ContentResultTap>
                         </div>
                         <ContentResultSearchBox>
                             <div>
@@ -691,7 +675,7 @@ export default function Page() {
                                         value="time" 
                                         id="searchBox_time" 
                                         defaultChecked={true} 
-                                        onChange={dataDivisionChangeHandle}
+                                        onChange={(e) => setDataDivision(e.currentTarget.value)}
                                     /><label htmlFor="searchBox_time">시간</label>
                                     {viewSelectIndex === 0 && <>
                                     <input 
@@ -699,7 +683,7 @@ export default function Page() {
                                         name="dataDivision" 
                                         value="daily" 
                                         id="searchBox_daily" 
-                                        onChange={dataDivisionChangeHandle} 
+                                        onChange={(e) => setDataDivision(e.currentTarget.value)} 
                                     /><label htmlFor="searchBox_daily">일평균</label>
                                     </>}
                                 </div>
@@ -708,27 +692,9 @@ export default function Page() {
                                 <strong>조회 기간</strong>
                                 <div>
                                     <DisableFeat>
-                                        <DatePicker
-                                            dateFormat='yyyy-MM-dd' // 날짜 형태
-                                            shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                                            minDate={pastDate} // minDate 이전 날짜 선택 불가
-                                            maxDate={yesterday} // maxDate 이후 날짜 선택 불가
-                                            selected={selectedBginDate}
-                                            locale={ko}
-                                            onChange={(date) => setSelectedBginDate(date)}
-                                        />
-                                        {dataDivision === 'time' && <DatePickerTimeSelect division={bginHour} onChange={(e) => setBginHour(e.currentTarget.value)} />}
+                                        <RenderDatePicker selectedDate={selectedBginDate} setSelectedDate={setSelectedBginDate} showTimeSelect={dataDivision !== 'daily'} division={bginHour} setHour={setBginHour} />
                                         ~
-                                        <DatePicker
-                                            dateFormat='yyyy-MM-dd' // 날짜 형태
-                                            shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                                            minDate={pastDate} // minDate 이전 날짜 선택 불가
-                                            maxDate={yesterday} // maxDate 이후 날짜 선택 불가
-                                            selected={selectedEndDate}
-                                            locale={ko}
-                                            onChange={(date) => setSelectedEndDate(date)}
-                                        />
-                                        {dataDivision === 'time' && <DatePickerTimeSelect division={endHour} onChange={(e) => setEndHour(e.currentTarget.value)} /> }
+                                        <RenderDatePicker selectedDate={selectedEndDate} setSelectedDate={setSelectedEndDate} showTimeSelect={dataDivision !== 'daily'} division={endHour} setHour={setEndHour}/>
                                             <DisableBtn>
                                                 <button onClick={handleCenterButton}>검색</button>
                                             </DisableBtn>
@@ -742,8 +708,10 @@ export default function Page() {
                             <ContentTableWrap>
                                 <ContentTable>
                                     <thead>
-                                        <tr>
-                                            <th rowSpan={2}>날짜<br />{(dataDivision === 'time' && tableDom.some(item => typeof item.dataTime !== 'undefined')) ? `(년-월-일:시)` : `(년-월-일)`}</th>
+                                        {dataDivision !== 'total' ?
+                                        // ^ time, daily
+                                        <><tr>
+                                            <th rowSpan={2}>날짜<br />{(dataDivision === 'time' && tableDom.some(item => typeof item.dataTime !== 'undefined')) ? `(월-일:시)` : `(월-일)`}</th>
                                             <th rowSpan={tableRowSpan} colSpan="2">PM-10(㎍/㎥)</th>
                                             <th rowSpan={tableRowSpan} colSpan="2">PM-2.5(㎍/㎥)</th>
                                             <th rowSpan={tableRowSpan} colSpan="2">오존(ppm)</th>
@@ -759,7 +727,31 @@ export default function Page() {
                                             <th colSpan={2}>1시간</th>
                                             <th colSpan={2}>1시간</th>
                                             <th colSpan={2}>1시간</th>
-                                        </tr>}
+                                        </tr>}</> 
+                                        // ^ total
+                                        : <><tr>
+                                            <th rowSpan="2">날짜<br />&#40;월-일:시&#41;</th>
+                                            <th colSpan="3">통합대기환경지수</th>
+                                            <th colSpan="2">PM-10<br />&#40;㎍/㎥&#41;</th>
+                                            <th colSpan="2">PM-2.5<br />&#40;㎍/㎥&#41;</th>
+                                            <th colSpan="2">오존<br />&#40;ppm&#41;</th>
+                                            <th colSpan="2">이산화질소<br />&#40;ppm&#41;</th>
+                                            <th colSpan="2">일산화탄소<br />&#40;ppm&#41;</th>
+                                            <th colSpan="2">아황산가스<br />&#40;ppm&#41;</th>
+                                        </tr>
+                                        <tr>
+                                            <th>주오염물질</th>
+                                            <th>등급</th>
+                                            <th>지수</th>
+                                            <th colSpan="2">24시간</th>
+                                            <th colSpan="2">24시간</th>
+                                            <th colSpan="2">1시간</th>
+                                            <th colSpan="2">1시간</th>
+                                            <th colSpan="2">1시간</th>
+                                            <th colSpan="2">1시간</th>
+                                        </tr>
+                                        </>
+                                        }
                                     </thead>
                                     <tbody>
                                         <TableDomComponent />

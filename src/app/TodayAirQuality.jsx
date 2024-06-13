@@ -304,7 +304,7 @@ const TodayAirQuaility = ({Time}) => {
     // 범례 종류 선택: khai, pm25, pm10, o3, no2, co, so2
     const [selectLegend, setSelectLegend] = useState('khaiValue');
     // 범례 유형별 범위
-    const [legendRange, setLegendRange] = useState(getColorValue(0, `khaiValue`, true));
+    const [legendRange, setLegendRange] = useState(getColorValue(0, {type: `khaiValue`, boolean: true}));
     // pm25
 
 
@@ -404,17 +404,18 @@ const TodayAirQuaility = ({Time}) => {
             }
 
             // 오늘의 대기질
-            const [,,,pm25Color] = getColorValue(currentLocation?.pm25Value, 'pm25Value');
-            const [,,,pm10Color] = getColorValue(currentLocation?.pm10Value, 'pm10Value');
-            const [,,,o3Color] = getColorValue(currentLocation?.o3Value, 'o3Value');
+            let { pm25Grade, pm10Grade, o3Grade } = currentLocation;
+            if(!pm25Grade) [,,,,pm25Grade] = getColorValue(0, {value: currentLocation?.pm25Value, type: 'pm25Value'});
+            if(!pm10Grade) [,,,,pm10Grade] = getColorValue(0, {value: currentLocation?.pm10Value, type: 'pm10Value'});
+            if(!o3Grade) [,,,,o3Grade] = getColorValue(0, {value: currentLocation?.o3Value, type: 'o3Value'});
 
-            const pm25Data = airState(pm25Color);
-            const pm10Data = airState(pm10Color);
-            const o3Data = airState(o3Color);
+            const pm25Data = getColorValue(pm25Grade);
+            const pm10Data = getColorValue(pm10Grade);
+            const o3Data = getColorValue(o3Grade);
 
-            const [pm25Text, pm25Index] = pm25Data;
-            const [pm10Text, pm10Index] = pm10Data;
-            const [o3Text, o3Index] = o3Data;
+            const {gradeText: pm25Text, textColor: pm25Color} = pm25Data;
+            const {gradeText: pm10Text, textColor: pm10Color} = pm10Data;
+            const {gradeText: o3Text, textColor: o3Color} = o3Data;
 
             // 대기정보 예보
             const pm25Today = objectCurrentStationInfo.pm25Today[stateNickname];
@@ -430,10 +431,10 @@ const TodayAirQuaility = ({Time}) => {
             const [, pm10TomorrowIndex] = airState(pm10Tomorrow);
 
             const parameters = [
-                { key: 'pm25', color: pm25Color, text: pm25Text, index: pm25Index, today: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrow: pm25Tomorrow },
-                { key: 'pm10', color: pm10Color, text: pm10Text, index: pm10Index, today: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrow: pm10Tomorrow },
-                { key: 'o3', color: o3Color, text: o3Text, index: o3Index, todayIndex: 5, tomorrowIndex: '-', tomorrow: 5 }
-            ];
+                { key: 'pm25', color: pm25Color, text: pm25Text, index: pm25Grade, today: pm25Today, todayIndex: pm25TodayIndex, tomorrowIndex: pm25TomorrowIndex, tomorrow: pm25Tomorrow },
+                { key: 'pm10', color: pm10Color, text: pm10Text, index: pm10Grade, today: pm10Today, todayIndex: pm10TodayIndex, tomorrowIndex: pm10TomorrowIndex, tomorrow: pm10Tomorrow },
+                { key: 'o3', color: o3Color, text: o3Text, index: o3Grade, todayIndex: 5, tomorrowIndex: '-', tomorrow: 5 }
+                ];
 
             parameters.forEach(param => airQualityChanger(param.key, {
                 stateHex: param.color,
