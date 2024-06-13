@@ -215,8 +215,8 @@ const ContentResultTableWrap = styled.div`
     }
 `;
 const ContentResultTableSpan = styled.span`
-    background: ${({effect}) => effect && '#0f62cc'} !important;
-    color: ${({effect}) => effect && '#fff'} !important;
+    background: ${({effect, opacity}) => effect && (opacity ? '#0f62cc80' : '#0f62cc')} !important;
+    color: ${({effect, opacity}) => effect && (opacity ? '#ffffff80' : '#fff')} !important;
 `;
 
 const LoadingWrap = styled.div`
@@ -497,6 +497,17 @@ export default function Page() {
         });
     }
 
+    const DatePickerTimeSelect = (e) => {
+        const { division } = e;
+        const values = [...Array(24)].map((_,idx) => idx + 1);
+            return <select value={division} onChange={e.onChange}>
+                    {values.map(item => {
+                        const numbering = String(item).padStart(2, '0');
+                        return <option value={numbering}>{numbering}</option>
+                    })}
+                </select>
+    }
+
     // # 데이터 데이터 구분 필터링 함수
     const filterResult = (data, startDateFormatting, endDateFormatting) => {
         return data.filter(item => {
@@ -559,6 +570,18 @@ export default function Page() {
 
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
     }
+
+    // @ 특정 측정소의 측정자료가 선택한 측정소와 일치하는지 체크하는 컴포넌트
+    const ContentResultTableStation = () => {
+        return nearStation.map((station, idx) => {
+            const effectBoolean = selectStation === station.stationName;
+            let opacity;
+            if(dataDivision === 'time') opacity = tableDom.find(table => table.stationName === station.stationName) ? null : 80;
+            if(dataDivision === 'daily') opacity = tableDom.find(table => table.msrstnName === station.stationName) ? null : 80;
+            return <Fragment key={idx}>
+                <ContentResultTableSpan effect={effectBoolean} opacity={opacity}>{station.stationName}</ContentResultTableSpan>
+            </Fragment>;
+    })};
 
     // ! 화면 중앙
     const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
@@ -627,7 +650,6 @@ export default function Page() {
                                 <th>측정망</th>
                             </tr>
                         </thead>
-                        {/* 컴포넌트: tbody  */}
                         <tbody>
                         {nearStation.map((station, index) => {
                         const filter = stationInfo.filter(item => item.stationName === station.stationName);
@@ -695,33 +717,7 @@ export default function Page() {
                                             locale={ko}
                                             onChange={(date) => setSelectedBginDate(date)}
                                         />
-                                        {dataDivision === 'time' &&
-                                            <select value={bginHour} onChange={(e) => setBginHour(e.currentTarget.value)}>
-                                                <option value="01">1</option>
-                                                <option value="02">2</option>
-                                                <option value="03">3</option>
-                                                <option value="04">4</option>
-                                                <option value="05">5</option>
-                                                <option value="06">6</option>
-                                                <option value="07">7</option>
-                                                <option value="08">8</option>
-                                                <option value="09">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                                <option value="21">21</option>
-                                                <option value="22">22</option>
-                                                <option value="23">23</option>
-                                                <option value="24">24</option>
-                                            </select>}
+                                        {dataDivision === 'time' && <DatePickerTimeSelect division={bginHour} onChange={(e) => setBginHour(e.currentTarget.value)} />}
                                         ~
                                         <DatePicker
                                             dateFormat='yyyy-MM-dd' // 날짜 형태
@@ -732,33 +728,7 @@ export default function Page() {
                                             locale={ko}
                                             onChange={(date) => setSelectedEndDate(date)}
                                         />
-                                        {dataDivision === 'time' &&
-                                            <select value={endHour} onChange={(e) => setEndHour(e.currentTarget.value)}>
-                                                <option value="01">1</option>
-                                                <option value="02">2</option>
-                                                <option value="03">3</option>
-                                                <option value="04">4</option>
-                                                <option value="05">5</option>
-                                                <option value="06">6</option>
-                                                <option value="07">7</option>
-                                                <option value="08">8</option>
-                                                <option value="09">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                                <option value="21">21</option>
-                                                <option value="22">22</option>
-                                                <option value="23">23</option>
-                                                <option value="24">24</option>
-                                            </select>}
+                                        {dataDivision === 'time' && <DatePickerTimeSelect division={endHour} onChange={(e) => setEndHour(e.currentTarget.value)} /> }
                                             <DisableBtn>
                                                 <button onClick={handleCenterButton}>검색</button>
                                             </DisableBtn>
@@ -768,12 +738,7 @@ export default function Page() {
                         </ContentResultSearchBox>
                         <ContentResultTableWrap>
                             <h2>측정자료&#40;수치&#41;</h2>
-                            {nearStation.map((station, idx) => {
-                                const effectBoolean = selectStation === station.stationName;
-                                return <Fragment key={idx}>
-                                    <ContentResultTableSpan effect={effectBoolean}>{station.stationName}</ContentResultTableSpan>
-                                </Fragment>;
-                            })}
+                            {/* 컴포넌트 */} <ContentResultTableStation />
                             <ContentTableWrap>
                                 <ContentTable>
                                     <thead>
