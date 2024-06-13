@@ -465,7 +465,8 @@ export default function Page() {
         const dataDailyCheck = tableDom.some(dom => dom.msurDt);
 
         if(tableDom.length === 0 || (!dataTimeCheck && dataDivision === 'time') || (!dataDailyCheck && dataDivision === 'daily')) {
-            return <tr><td colSpan={12}>검색된 자료가 없습니다.</td></tr>;
+            const colSpan = dataDivision === 'total' ? 16 : 12
+            return <tr><td colSpan={colSpan}>검색된 자료가 없습니다.</td></tr>;
         }
 
         return tableDom.map((tr, idx) => {
