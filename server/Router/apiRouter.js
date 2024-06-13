@@ -78,7 +78,7 @@ router.get('/neighborhood', async (req, res) => {
         // Fixme: 클라이언트에서 요청한 날짜가 있는 경우, API 요청을 진행하지 않도록 수정 (서버 작업 -> 클라이언트)
         // 서버는 전체 items을 return 하도록 변경
         let response = {};
-        if(type === 'time') {
+        if(type === 'time' || type === 'total') {
             /**
              * getMsrstnAcctoRltmMesureDnsty
              * ❔ 버전 1.0을 호출할 경우 : PM2.5 데이터가 포함된 결과 표출.
@@ -88,7 +88,8 @@ router.get('/neighborhood', async (req, res) => {
              * ❔ 버전 1.4을 호출할 경우 : 측정소명, 측정소 코드 정보가 포함된 결과 표출
              * ✅ 버전 1.5을 호출할 경우 : 측정값 소수점 아래 자리 수 확대 (CO : 1 → 2, O3/SO2/NO2 : 3 → 4)
              */
-            const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&stationName=${stationName}&dataTerm=3MONTH&ver=1.5`)).data;
+            const ver = type === 'time' ? 1.5 : 1.1;
+            const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&stationName=${stationName}&dataTerm=3MONTH&ver=${ver}`)).data;
             response = items;
         } else {
             const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnStatsSvc/getMsrstnAcctoRDyrg?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=1000&pageNo=1&inqBginDt=${inqBginDt}&inqEndDt=${inqEndDt}&msrstnName=${stationName}`)).data;
