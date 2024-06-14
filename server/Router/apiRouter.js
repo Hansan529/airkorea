@@ -43,19 +43,6 @@ router.get('/text', async (req, res) => {
     }
 });
 
-// # 접속 기기의 좌표를 TM 형식 좌표로 변경
-router.get('/coordinate', async (req, res) => {
-    console.log('coordinate: ');
-    try{
-        const { latitude, longitude } = req.query;
-        const response = await (await axios.get(`https://dapi.kakao.com/v2/local/geo/transcoord.json?x=${longitude}&y=${latitude}&input_coord=WGS84&output_coord=TM`, { headers: { Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API}`}})).data;
-        return res.json(response);
-    }catch(err){
-        console.error("error: ", err);
-        return res.status(404).send('not found');
-    }
-})
-
 // # 가까운 측정소 찾기
 router.get('/station', async (req, res) => {
     console.log('station: ');
