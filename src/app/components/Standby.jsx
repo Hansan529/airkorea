@@ -1,234 +1,33 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 import { Fragment, useRef, useState } from 'react';
 import useStore from '../hooks/useStore.jsx';
 
-import { backgroundPathData, innerBackgroundPathData, pathData} from '../paths/paths.js';
+import { backgroundPathData, innerBackgroundPathData, pathData} from '../data/paths.js';
 import regionList from "../data/regionList.json";
 import stationJson from "../data/stationInfo.json";
 import getColorValue from '../functions/getColorValue.ts';
 
-import { SeoulInner } from '../paths/Seoul.js';
-import { IncheonInner, IncheonPath } from '../paths/Incheon.js';
-import { ChungnamInner, ChungnamPath } from '../paths/Chungnam.js';
-import { GyeongbukInner, GyeongbukPath } from '../paths/Gyeongbuk.js';
-import { GyeongnamInner, GyeongnamPath } from '../paths/Gyeongnam.js';
-import { JeonnamInner, JeonnamPath } from '../paths/Jeonnam.js';
-import { JeonbukInner, JeonbukPath } from '../paths/Jeonbuk.js';
-import { JejuInner, JejuPath } from '../paths/Jeju.js';
-import { GyeonggiPath } from '../paths/Gyeonggi.js';
-import { GangwonPath } from '../paths/Gangwon.js';
-import { DaejeonPath } from '../paths/Daejeon.js';
-import { SejongPath } from '../paths/Sejong.js';
-import { BusanPath } from '../paths/Busan.js';
-import { UlsanPath } from '../paths/Ulsan.js';
-import { DaeguPath } from '../paths/Daegu.js';
-import { GwangjuPath } from '../paths/Gwangju.js';
-import { ChungbukPath } from '../paths/Chungbuk.js';
-
-const Pseudo = `
-	content: "";
-	display: block;
-	position: absolute;
-`;
-const InnerMapButton = styled.button`
-	position: absolute;
-	width: 42px;
-	height: 42px;
-	border-radius: 50px;
-	border: none;
-	text-align: center;
-	line-height: 17px;
-	font-size: 13px;
-	background-color: ${(props) => props.value || '#abb0b3'};
-	padding: 0;
-	strong {
-	display: block;
-	}
-`;
-const FillColor = styled.path` fill: ${(props) => props.fillColor || '#cbd0d3'}; `
-const MapPath = styled(FillColor)`
-	&:hover{ fill: ${props => props.hoverColor || null} }
-	cursor: pointer;
-	filter: ${props => props.hoverConnection && "drop-shadow(5px 5px 3px rgba(0,0,0,0.2))" };
-`;
-const MapSvgStyle = styled.svg`
-	position: absolute;
-	left: 0;
-	top: 0;
-	pointer-events: none;
-	margin-top: -35px;
-	margin-left: 5px;
-
-	path {
-		pointer-events: auto;
-	}
-`
-const InnerMapPathStyle = styled(FillColor)`&:hover { fill: ${props => props.fillHoverColor || '#c1c5c7'};}`;
-const MainContainer = styled.div`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	/* overflow: hidden; */
-`;
-const LoopContainer = styled.div` position: relative; `;
-const MapNameButton = styled.button`
-	position: absolute;
-	top: ${({top}) => `${top}px`};
-	left: ${({left}) => `${left}px`};
-	background-color: ${({bgColor}) => bgColor};
-	border: none;
-	width: 60px;
-	height: 60px;
-	border-radius: 30px;
-	text-align: center;
-	line-height: 17px;
-	opacity: 1;
-	cursor: pointer;
-	font-weight: bold;
-	z-index: 10;
-
-	&:hover { text-decoration: underline; }
-
-	> span { display: block; }
-`;
-const StationKeyframe = keyframes`
-	from {transform: scale(0.5);}
-	to {transform: scale(1.8);}
-`;
-const Station = styled.div`
-	position: absolute;
-	top: ${({top}) => `${top}px`};
-	left: ${({left}) => `${left}px`};
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background-color: #000;
-	background-image: url('/images/main/img_ch0${props => props.ico}.webp');
-	cursor: pointer;
-
-	&[data-checked="ani"]::after,
-	&[data-checked="ani"]::before {
-		${Pseudo}
-		top: 0;
-		left: 0;
-		width: 10px;
-		height: 10px;
-	}
-	&[data-checked="ani"]::after {
-		background-image: url('/images/main/img_ch0${props => props.ico}.webp');
-		z-index: 11;
-	}
-	&[data-checked="ani"]::before {
-		border-radius: 50px;
-		animation: ${StationKeyframe} 0.5s 0s ease-in-out infinite;
-		background: ${props => props.icoColor};
-		z-index: 10;
-	}
-`;
-const StationPopupStyle = styled.div`
-	position: absolute;
-	visibility: hidden;
-	transform: translateX(-50%);
-	background-color: #414d52;
-	white-space: nowrap;
-	padding: 10px;
-	color: #fff;
-	border-radius: 10px;
-	transform : translate(-50%, -90px);
-
-	top: ${props => props.top || 'initial'}px;
-	left: ${props => props.left || 'initial'}px;
-
-	&::after {
-		content: "";
-		display: block;
-		position: absolute;
-		width: 0;
-		height: 0;
-		left: 50%;
-		transform: translateX(calc(-50% + 5px));
-		border-top: calc(10px * 1.732) solid #414d52;
-		border-left: 10px solid transparent;
-		border-right: 10px solid transparent;
-	}
-
-	div{
-		margin-bottom: 5px;
-		&:last-of-type{margin-bottom: 0;}
-	}
-
-	strong { color: #ffea5c; }
-`;
-const InnerTitle = styled.div`
-    position: relative;
-    height: 35px;
-    background-color: #414d5d;
-    text-align: center;
-    line-height: 35px;
-    border-radius: 10px 10px 0 0;
-
-    h2 {
-        color: #fff;
-        font-weight: 600;
-    }
-
-    button {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        font-size: 0;
-        width: 22px;
-        height: 22px;
-        background: url(/images/main/img_cau_close.webp) no-repeat center;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-    }
-`;
-const InnerButtonWrap = styled.div`
-    width: 100%;
-    height: 100%;
-    position: relative;
-`;
-const InnerStationCollection = styled.div`
-    top:10px;
-    left:-5px;
-    position: relative;
-`;
-const InnerDetailContainer = styled.div`
-    background-image: ${props => props.noImage ? '' : `url('/images/main/${props.regionNum}.webp'), url('/images/main/map_bg_${props.regionNum}.webp')`};
-    background-color: #dff6ff;
-    background-repeat: no-repeat;
-    background-position: center 35px;
-    position: absolute;
-    border-radius: 10px;
-    border: 1px solid #000;
-    opacity: 0;
-    visibility: hidden;
-`;
-const InnerSelectDiv = styled.div`
-    height: 20px;
-    position: absolute;
-    top: 50px;
-    right: 15px;
-    background-color: #fff;
-    border-radius: 25px;
-    border: 5px solid #fff;
-
-    button {
-        border: none;
-        background: #fff;
-        border-radius: 25px;
-
-        &:hover { text-decoration: underline; }
-    }
-`;
+import { SeoulInner } from '../data/Seoul.js';
+import { IncheonInner, IncheonPath } from '../data/Incheon.js';
+import { ChungnamInner, ChungnamPath } from '../data/Chungnam.js';
+import { GyeongbukInner, GyeongbukPath } from '../data/Gyeongbuk.js';
+import { GyeongnamInner, GyeongnamPath } from '../data/Gyeongnam.js';
+import { JeonnamInner, JeonnamPath } from '../data/Jeonnam.js';
+import { JeonbukInner, JeonbukPath } from '../data/Jeonbuk.js';
+import { JejuInner, JejuPath } from '../data/Jeju.js';
+import { GyeonggiPath } from '../data/Gyeonggi.js';
+import { GangwonPath } from '../data/Gangwon.js';
+import { DaejeonPath } from '../data/Daejeon.js';
+import { SejongPath } from '../data/Sejong.js';
+import { BusanPath } from '../data/Busan.js';
+import { UlsanPath } from '../data/Ulsan.js';
+import { DaeguPath } from '../data/Daegu.js';
+import { GwangjuPath } from '../data/Gwangju.js';
+import { ChungbukPath } from '../data/Chungbuk.js';
+import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../StyleComponent.jsx';
 
 
-// * 지역 데이터
-// Array
+// ! 지역 데이터
 const regionDetailData = [
 	{ num: '02',  name: '서울', fullName: '서울특별시', left: '241', top: '120'},
 	{ num: '031', name: '경기', fullName: '경기도', left: '290', top: '175'},
@@ -248,7 +47,6 @@ const regionDetailData = [
 	{ num: '063', name: '전북', fullName: '전북특별자치도', left: '257', top: '422'},
 	{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45', top: '640'},
 ];
-// Object
 const regionNumList = {
 	'02': '서울',
 	'031': '경기',
@@ -269,10 +67,15 @@ const regionNumList = {
 	'064': '제주',
 };
 
-// * Components
+
+// ! 측정소 데이터
+const stationsInfo = stationJson.items;
+
+
+// @ 전체 지도 SVG 컴포넌트
 const MapSvg = ({ className, children }) => {
 	return (
-		<MapSvgStyle
+		<StandbyMapSvgStyle
 			className={className}
 			version="1.1"
 			xmlns="http://www.w3.org/2000/svg"
@@ -284,29 +87,69 @@ const MapSvg = ({ className, children }) => {
 			viewBox="0 0 700 730"
 			enableBackground="new 0 0 700 730"
 			xmlSpace="preserve"
-		>{children}</MapSvgStyle>
+		>{children}</StandbyMapSvgStyle>
 	)
 
 };
-const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) =>
-	<InnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor}></InnerMapPathStyle>;
+// @ 내부 지도 Path 컴포넌트
+const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) => {
+	return <StandbyInnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor}></StandbyInnerMapPathStyle>;
+}
 
 
+// @@@ 출력 컴포넌트 @@@
 const Standby = ({Time}) => {
 	const { type, data, changer, loading, station, openMap, filterData, filterRange, selectInfo } = useStore(state => state);
-	// 측정소 위치 데이터
-	const stationsInfo = stationJson.items;
-
+	// # 실시간 대기정보 토글 (지도 범례 On/Off)
+	const [isOn0, setIsOn0] = useState(true);
+	const [isOn1, setIsOn1] = useState(true);
+	const [isOn2, setIsOn2] = useState(false);
 	const mapName = useRef();
+	// # 범례 팝업 함수
+	const ClickLegendPopup = (e) => {
+		const legendElement = e.currentTarget.closest('[data-legend-index]');
+		const { legendIndex } = legendElement.dataset;
+	
+		const stateUpdater = {
+		  0: setIsOn0,
+		  1: setIsOn1,
+		  2: setIsOn2,
+		};
+	
+		const updater = stateUpdater[legendIndex];
+		if(updater)
+		  updater(prev => !prev);
+	  };
+	// # 범례 필터링 핸들러
+	const filterRangeHandle = (e) => {
+	const { value } = e.currentTarget;
 
-	// * 호버
-	// 해당 지역 번호
+	const data = [...filterRange];
+	data[value - 1] = e.currentTarget.checked;
+
+	changer('filterRange', data);
+	};
+	const filterDataHandle = (e) => {
+	const { innerText }= e.currentTarget.parentNode;
+
+	const data = {...filterData};
+	data[innerText] = e.currentTarget.checked;
+
+	changer('filterData', data);
+	};
+
+
+	// ! 호버
+	// # 해당 지역 번호
 	const [hover, setHover] = useState();
-	// 해당 측정소 명
+	// # 해당 측정소 명
 	const [hoverStation, setHoverStation] = useState({top: null, left: null, innerTop: null, innerLeft: null});
-	// 해당 측정소에 대한 데이터
+	// # 해당 측정소에 대한 데이터
 	const [hoverStationData, setHoverStationData] = useState({});
 
+
+	// # 범주 상태 목록 (좋음, 보통, 나쁨, 매우나쁨)
+	const typeRange = getColorValue(0, {type, boolean: true});
 // ---------------------------------- event
 	const hoverHandle = (element) => setHover(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
@@ -432,7 +275,7 @@ const Standby = ({Time}) => {
 					return;
 			}
 		})();
-		const DynamicStyle = styled(StationPopupStyle)`
+		const DynamicStyle = styled(StandbyStationPopupStyle)`
 			&[data-name="${hoverStation?.stationName}"]{
 				z-index: 10;
 				visibility: visible;
@@ -456,7 +299,7 @@ const Standby = ({Time}) => {
 			const renderButton = (el, key) => {
 				const id = `p_${regNum}_${String(key + 1).padStart(3, '0')}`;
 				return (
-				<InnerMapButton
+				<StandbyInnerMapButton
 					key={key}
 					id={id}
 					style={{
@@ -468,7 +311,7 @@ const Standby = ({Time}) => {
 				>
 					{el.name}
 					<strong>{loading && ((!result || result[key] === 0) ? '-' : result[key])}</strong>
-				</InnerMapButton>
+				</StandbyInnerMapButton>
 				);
 			};
 			const renderPath = (el, key) => {
@@ -507,14 +350,14 @@ const Standby = ({Time}) => {
 			const DynamicComponent = Components[regName];
 
 			/* dynamic */
-			const DetailContainer = styled(InnerDetailContainer)`
+			const DetailContainer = styled(StandbyInnerDetailContainer)`
 				&[data-region_num="${openMap}"]{
 					z-index: 50;
 					opacity: 1;
 					visibility: visible;
 				}
 			`;
-			const SelectDiv = styled(InnerSelectDiv)`
+			const SelectDiv = styled(StandbyInnerSelectDiv)`
 				button[data-type="${selectInfo}"] {
 						background-color: #0f62cc;
 						color: #fff;
@@ -528,22 +371,22 @@ const Standby = ({Time}) => {
 
 			return (
 				<DetailContainer data-region_num={regNum} regionNum={regNum}>
-					<InnerTitle>
+					<StandbyInnerTitle>
 						<h2>{fullName}</h2>
 						<button onClick={() => {
 							innerClickHandle(0);
 							changer('openMap', 0);
 							changer('regionNum', 'none');
 						}}>창 닫기</button>
-					</InnerTitle>
+					</StandbyInnerTitle>
 					<Time top="50px" left="15px" height="20px" right="initial" />
 					<SelectDiv>
 						<button data-type="air" onClick={() => airStationHandle('air')}>대기/경보 정보</button>
 						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
 					</SelectDiv>
 					{/* 버튼 */}
-					{(selectInfo === 'air') && <InnerButtonWrap>{regionList[regName]?.map(renderButton)}</InnerButtonWrap>}
-					{(selectInfo === 'station' || selectInfo === 'station') && <InnerStationCollection>
+					{(selectInfo === 'air') && <StandbyInnerButtonWrap>{regionList[regName]?.map(renderButton)}</StandbyInnerButtonWrap>}
+					{(selectInfo === 'station' || selectInfo === 'station') && <StandbyInnerStationCollection>
 						{filterStationData?.map((el, key) => {
 							const filterStationAirData = data?.find(item => item.stationName === el.stationName);
 							const [,,,,icoNum] = getColorValue(0, {value: filterStationAirData?.[type], type});
@@ -551,7 +394,7 @@ const Standby = ({Time}) => {
 								return <Fragment key={key}></Fragment>
 							}
 							return (
-								<Station key={key}
+								<StandbyStation key={key}
 									onMouseEnter={() => stationPopupHandle(el, filterStationAirData)}
 									onMouseOut={() => hoverStationHandle('')}
 									onClick={() => changer('station', el)}
@@ -562,7 +405,7 @@ const Standby = ({Time}) => {
 							)
 						})}
 						<StationPopup top={hoverStation.innerTop} left={hoverStation.innerLeft} />
-					</InnerStationCollection>}
+					</StandbyInnerStationCollection>}
 					{/* SVG */}
 					<InnerMapSvg>
 						{DynamicComponent && <DynamicComponent />}
@@ -625,13 +468,13 @@ const Standby = ({Time}) => {
 			const PathComponent = Components[el.name];
 
 			return (
-				<LoopContainer key={key}
+				<StandbyLoopContainer key={key}
 					className={`regions region_${el.num}`}
 					onMouseOver={() => hoverHandle(el.num)}
 					onMouseOut={() => hoverHandle('')}
 				>
 					{selectInfo === 'air' &&
-					<MapNameButton
+					<StandbyMapNameButton
 						left={el.left}
 						top={el.top}
 						bgColor={getColorValue(0, {value: regionAvgValue(key, type), type})[2]}
@@ -639,12 +482,12 @@ const Standby = ({Time}) => {
 					>
 						{el.name}
 						{loading && <span>{regionAvgValue(key, type)}</span>}
-					</MapNameButton>
+					</StandbyMapNameButton>
 					}
 					{loading && <InnerComponent regNum={el.num} regName={el.name} fullName={el.fullName} />}
 					<MapSvg className={`region_${el.num}`}  key={key}>
 						{(el.name === '인천' && PathComponent) && <PathComponent />}
-						<MapPath
+						<StandbyMapPath
 							key={key}
 							title={`${el.name} 지도 배경`}
 							fillColor={color}
@@ -652,10 +495,10 @@ const Standby = ({Time}) => {
 							hoverConnection={hoverChk}
 							onClick={() => innerClickHandle(el.num)}
 							d={backgroundPathData[el.num]}
-						></MapPath>
+						></StandbyMapPath>
 						{(el.name !== '인천' && PathComponent) && <PathComponent />}
 					</MapSvg>
-				</LoopContainer>
+				</StandbyLoopContainer>
 			);
 		})
 	}
@@ -688,7 +531,7 @@ const Standby = ({Time}) => {
 					const checked = station.stationName === list.stationName ? 'ani' : 'not';
 
 					return (
-						<Station key={key}
+						<StandbyStation key={key}
 							onMouseEnter={() => stationPopupHandle(list, filterStationAirData)}
 							onMouseOut={() => hoverStationHandle('')}
 							onClick={() => changer('station', list)}
@@ -707,10 +550,59 @@ const Standby = ({Time}) => {
 
 	return (
 		<>
-			<MainContainer ref={mapName}>
+			<StandbyMainContainer ref={mapName}>
 				<RegionComponents />
 				{selectInfo === 'station' && <StationComponent />}
-			</MainContainer>
+			</StandbyMainContainer>
+			<Time right="0" />
+			<AppLegendWrapper>
+			{selectInfo === 'air' ?
+			<AppLegend data-legend-index="0" className={isOn0 && 'on'} height="55px">
+				<div>
+				<button onClick={ClickLegendPopup}>범례</button>
+				</div>
+				<ul>
+				<li><small>주의보</small></li>
+				<li><small>경보</small></li>
+				</ul>
+			</AppLegend> :
+			<>
+			<AppLegend data-legend-index="1" className={isOn1 && 'on'} height="145px">
+				<div className="title">
+				<button onClick={ClickLegendPopup}>농도범위</button>
+				</div>
+				<div className="radio">
+					<label><input type="checkbox" onChange={filterRangeHandle} value="1" checked={filterRange[0]} />
+					<span>좋음 ({`0~${type === 'o3Value' ? typeRange[1].toFixed(3) : typeRange[1]}`})</span>
+					</label>
+					<label><input type="checkbox" onChange={filterRangeHandle} value="2" checked={filterRange[1]} />
+					<span>보통 ({`${type === 'o3Value' ? typeRange[2].toFixed(3) : typeRange[2]}~${type === 'o3Value' ? typeRange[3].toFixed(3) : typeRange[3]}`})</span>
+					</label>
+					<label><input type="checkbox" onChange={filterRangeHandle} value="3" checked={filterRange[2]} />
+					<span>나쁨 ({`${type === 'o3Value' ? typeRange[4].toFixed(3) : typeRange[4]}~${type === 'o3Value' ? typeRange[5].toFixed(3): typeRange[5]}`})</span>
+					</label>
+					<label><input type="checkbox" onChange={filterRangeHandle} value="4" checked={filterRange[3]} />
+					<span>매우나쁨 ({`${typeRange[6]}~`})</span>
+					</label>
+					<label><input type="checkbox" onChange={filterRangeHandle} value="5" checked={filterRange[4]} />
+					<span>데이터 없음</span>
+					</label>
+				</div>
+			</AppLegend>
+			<AppLegend data-legend-index="2"  className={isOn2 && 'on'} height="145px">
+				<div className="title">
+				<button onClick={ClickLegendPopup}>측정망 구분</button>
+				</div>
+				<div className="radio">
+					<label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[0]} />도시대기</label>
+					<label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[1]} />국가배경농도</label>
+					<label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[2]} />도로변대기</label>
+					<label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[3]} />교외대기</label>
+					<label><input type="checkbox" onChange={filterDataHandle} checked={Object.values(filterData)[4]} />항만</label>
+				</div>
+			</AppLegend>
+			</>}
+			</AppLegendWrapper>
 		</>
 	)
 };

@@ -4,279 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import useStore from "../hooks/useStore.jsx";
 import useAirQualityStore from "../hooks/useAirQualityStore.jsx";
 import getColorValue from "../functions/getColorValue.ts";
+import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQualityInfoButton, TodayAirQualityInfoContainer, TodayAirQualityInfoInteraction, TodayAirQualityInfoWrap, TodayAirQualityInfoWrapper, TodayAirQualityLegendBase, TodayAirQualityPart, TodayAirQualityPartLi, TodayAirQualityPartTitle, TodayAirQualityPartUl, TodayAirQualityTitle, TodayAirQualityTitleWrap } from "../StyleComponent.jsx";
 
-const InfoContainer = styled.div`width: 660px;`;
-const InfoWrapper = styled.div`
-    border: 5px solid #00aeee;
-    border-radius: 20px;
-    padding: 15px;
-    background-color: #fff;
-`;
-const InfoButton = styled.button`
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 1px solid #c6ccd4;
-    border-radius: 5px;
-    background: #fff ${props => props.ico && `url('/images/main/img_${props.ico}.webp')`} no-repeat center;
-    background-size: ${props => props.ico === 'bg_search' && '70%'};
-    &:hover {
-        cursor: pointer;
-        background-color: rgba(0,0,0,0.2);
-    }
-`;
-const InfoWrap = styled.div`
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-`;
-const InfoInteraction = styled.div`
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-    > p  {
-        font-size: 18px;
-        > strong { color: #0f62cc; }
-        > span { display: block; margin-top: 5px; font-size: 14px; }
-    }
-    button {
-        font-size: 0;
-    }
-`;
-const TitleWrap = styled.div`
-    background: url(/images/main/img_bg01.webp) no-repeat;
-    height: 55px;
-    line-height: 55px;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    margin-bottom: 15px;
-`;
-const Title = styled.h2`
-    font-size: 30px;
-    font-weight: 700;
-    text-align: center;
-
-    span {color: #0f62cc;}
-`;
-const Container = styled.div`
-    position: relative;
-
-    .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-    }
-
-`;
-const Part = styled.div`
-    display: block;
-    border: 1px solid #d2d2d2;
-    border-radius: 10px;
-    flex-grow: 1;
-    background-color: #eaedee;
-    overflow: hidden;
-    margin-bottom: 20px;
-
-    &:last-of-type {
-        margin-bottom: 0;
-    }
-
-    .miniText{
-        line-height: 2;
-        background-repeat: no-repeat;
-        background-position: 30px center;
-    }
-    .miniTextIco_1{
-        background-image: url(/images/main/img_yebo_na01.webp);
-        background-color: #1c67d74D;
-    }
-    .miniTextIco_2{
-        background-image: url(/images/main/img_yebo_na02.webp);
-        background-color: #01b56e4D;
-    }
-    .miniTextIco_3{
-        background-image: url(/images/main/img_yebo_na03.webp);
-        background-color: #9372004D;
-    }
-    .miniTextIco_4{
-        background-image: url(/images/main/img_yebo_na04.webp);
-        background-color: #c00d0d4D;
-    }
-    .miniTextIco_5{
-        background-image: url(/images/main/img_yebo_na05.webp);
-        background-color: #0a0a0a4D;
-    }
-`;
-const PartTitle = styled.h3`
-    padding: 10px 0;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-`;
-const PartUl = styled.ul`
-    padding: 30px 0px 25px;
-    background-color: #fff;
-    display: flex;
-    align-items: flex-end;
-`;
-const PartLi = styled.li`
-    flex: 1;
-    text-align: center;
-    box-sizing: border-box;
-
-    &:not(:last-child){
-        border-right: 0.5px solid rgba(0,0,0,0.3);
-    }
-    strong, small, span {
-        display: block;
-        margin-bottom: 5px;
-
-        &:not(strong:first-of-type){
-            margin-top: 10px;
-        }
-    }
-    .colorValue {
-        font-size: 24px;
-        font-weight: bold;
-    }
-    img {
-        margin: 10px 0;
-    }
-`;
-const LegendBase = styled.div`
-    text-align: center;
-
-    button {
-        border:none;
-        width: 70px;
-        text-align: left;
-        background: url(/images/main/img_handong_more.webp) no-repeat center right;
-
-        &:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-    }
-
-    .legendPopup {
-        display: none;
-        position: absolute;
-        bottom: -100px;
-        width: 100%;
-        border: 1px solid #0a0a0a;
-        background-color: #fafafa;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .legendTitle {
-        background-color: #414d5d;
-        color: #fafafa;
-        padding: 10px 0;
-        position: relative;
-        height: 15px;
-
-        button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(-5px, 7.5px);
-            font-size: 0;
-            background: url(/images/main/img_cau_close.webp) no-repeat center;
-            width: 22px;
-            height: 22px;
-        }
-    }
-
-    .legendFlex {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        height: 30px;
-        padding: 15px 10px 0 10px;
-
-        &:last-of-type{ padding: 10px 10px 15px 10px; }
-
-        > div {
-            flex: 1;
-            border: 1px solid #d2d2d2;
-            padding: 5px 0;
-            cursor: pointer;
-        }
-    }
-
-    .legendRange {
-        padding: 0 10px 10px 10px;
-        white-space: nowrap;
-
-        li {
-            display: inline-block;
-            width: 20%;
-            background-color: #f1fbff;
-            box-sizing: border-box;
-            padding: 5px;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #c6eeff;
-            border-left: none;
-            border-right: none;
-            &:first-of-type{
-                border-left: 1px solid #c6eeff;
-                border-radius: 5px 0 0 5px;
-            }
-            &:last-of-type {
-                border-right: 1px solid #c6eeff;
-                border-radius: 0 5px 5px 0;
-            }
-        }
-
-        span {
-            display: block;
-            position: relative;
-            font-size: 11px;
-            padding-left: 25px;
-            text-align: left;
-
-            &::after {
-                display: block;
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 10px;
-                width: 10px;
-                height: 10px;
-                background: no-repeat 0 0;
-            }
-            &.legendRange_1::after { background-image: url(/images/main/img_ch01.webp); }
-            &.legendRange_2::after { background-image: url(/images/main/img_ch02.webp); }
-            &.legendRange_3::after { background-image: url(/images/main/img_ch03.webp); }
-            &.legendRange_4::after { background-image: url(/images/main/img_ch04.webp); }
-            &.legendRange_5::after { background-image: url(/images/main/img_ch05.webp); }
-        }
-    }
-`;
-const AirForecastLi = styled(PartLi)`
-    position: relative;
-    p {
-        position: absolute;
-        top: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90px;
-        height: 33px;
-        line-height: 25px;
-    }
-    &:nth-of-type(2) p {
-        background: url(/images/main/img_bg_to01.webp) no-repeat 0 0;
-    }
-    &:nth-of-type(3) p {
-        background: url(/images/main/img_bg_to02.webp) no-repeat 0 0;
-    }
-`;
 
 /**
  * 금일 시간별 미세먼지
@@ -449,7 +178,7 @@ const TodayAirQuaility = ({Time}) => {
         };
     }, [text, data, airQualityChanger, station, stationsInfo])
     // ---------------------------------------------------- Dyanmic Styled
-    const Legend = styled(LegendBase)`
+    const Legend = styled(TodayAirQualityLegendBase)`
         .legendPopup {
                 display: ${legendPopupState && "block"};
         }
@@ -495,26 +224,26 @@ const TodayAirQuaility = ({Time}) => {
 
     // ---------------------------------------------------- Components
     return (
-        <InfoContainer>
-            <InfoWrapper>
-                <TitleWrap>
-                    <Title>우리동네 <span>대기정보</span></Title>
-                </TitleWrap>
-                <InfoWrap>
-                    <InfoInteraction>
-                        <InfoButton ico={'pos'} onClick={remeasureHandle}>현위치</InfoButton>
+        <TodayAirQualityInfoContainer>
+            <TodayAirQualityInfoWrapper>
+                <TodayAirQualityTitleWrap>
+                    <TodayAirQualityTitle>우리동네 <span>대기정보</span></TodayAirQualityTitle>
+                </TodayAirQualityTitleWrap>
+                <TodayAirQualityInfoWrap>
+                    <TodayAirQualityInfoInteraction>
+                        <TodayAirQualityInfoButton ico={'pos'} onClick={remeasureHandle}>현위치</TodayAirQualityInfoButton>
                         <p>
                             <strong>{station.stationName}</strong> 중심으로 측정
                             <span>({`${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
                         </p>
-                    </InfoInteraction>
+                    </TodayAirQualityInfoInteraction>
                     <Time refresh onClick={refreshHandle} right="0" />
-                </InfoWrap>
-                <Container>
-                    <Part>
-                        <PartTitle>오늘의 대기질</PartTitle>
-                        <PartUl>
-                            <PartLi>
+                </TodayAirQualityInfoWrap>
+                <TodayAirQualityContainer>
+                    <TodayAirQualityPart>
+                        <TodayAirQualityPartTitle>오늘의 대기질</TodayAirQualityPartTitle>
+                        <TodayAirQualityPartUl>
+                            <TodayAirQualityPartLi>
                                 <span><strong>초미세먼지</strong>(PM-2.5)</span>
                                 <img src={`/images/main/img_na0${pm25.stateIndex}.webp`} alt="대기질" />
                                 <span style={{color: pm25.stateHex}}>
@@ -522,8 +251,8 @@ const TodayAirQuaility = ({Time}) => {
                                     <small style={{color: 'initial'}}>㎍/㎥</small>
                                     {pm25.stateText}
                                 </span>
-                            </PartLi>
-                            <PartLi>
+                            </TodayAirQualityPartLi>
+                            <TodayAirQualityPartLi>
                                 <span><strong>미세먼지</strong>(PM-10)</span>
                                 <img src={`/images/main/img_na0${pm10.stateIndex}.webp`} alt="대기질" />
                                 <span style={{color: pm10.stateHex}}>
@@ -531,8 +260,8 @@ const TodayAirQuaility = ({Time}) => {
                                     <small style={{color: 'initial'}}>㎍/㎥</small>
                                     {pm10.stateText}
                                     </span>
-                            </PartLi>
-                            <PartLi>
+                            </TodayAirQualityPartLi>
+                            <TodayAirQualityPartLi>
                                 <span><strong>오존</strong>(O<sub>3</sub>)</span>
                                 <img src={`/images/main/img_na0${o3.stateIndex}.webp`} alt="대기질" />
                                 <span style={{color: o3.stateHex}}>
@@ -540,29 +269,29 @@ const TodayAirQuaility = ({Time}) => {
                                     <small style={{color: 'initial'}}>ppm</small>
                                     {o3.stateText}
                                 </span>
-                            </PartLi>
-                        </PartUl>
-                    </Part>
-                    <Part>
-                        <PartTitle>대기정보 예보</PartTitle>
-                        <PartUl>
-                            <AirForecastLi>
+                            </TodayAirQualityPartLi>
+                        </TodayAirQualityPartUl>
+                    </TodayAirQualityPart>
+                    <TodayAirQualityPart>
+                        <TodayAirQualityPartTitle>대기정보 예보</TodayAirQualityPartTitle>
+                        <TodayAirQualityPartUl>
+                            <TodayAirQualityAirForecastLi>
                                 <p></p>
                                 <span><strong>초미세먼지</strong>(PM-2.5)</span>
                                 <span><strong>미세먼지</strong>(PM-10)</span>
-                            </AirForecastLi>
-                            <AirForecastLi>
+                            </TodayAirQualityAirForecastLi>
+                            <TodayAirQualityAirForecastLi>
                                 <p>오늘</p>
                                 <span className={`miniText miniTextIco_${pm25.todayIndex}`} style={{color: airState(pm25.todayState)[1]}}>{pm25.todayState}</span>
                                 <span className={`miniText miniTextIco_${pm10.todayIndex}`} style={{color: airState(pm10.todayState)[1]}}>{pm10.todayState}</span>
-                            </AirForecastLi>
-                            <AirForecastLi>
+                            </TodayAirQualityAirForecastLi>
+                            <TodayAirQualityAirForecastLi>
                                 <p>내일</p>
                                 <span className={`miniText miniTextIco_${pm25.tomorrowIndex}`} style={{color: airState(pm25.tomorrowState)[1]}}>{pm25.tomorrowState}</span>
                                 <span className={`miniText miniTextIco_${pm10.tomorrowIndex}`} style={{color: airState(pm10.tomorrowState)[1]}}>{pm10.tomorrowState}</span>
-                            </AirForecastLi>
-                        </PartUl>
-                    </Part>
+                            </TodayAirQualityAirForecastLi>
+                        </TodayAirQualityPartUl>
+                    </TodayAirQualityPart>
                     <Legend>
                         <button onClick={legendPopupHandle}>범례보기</button>
                         <div ref={legendPopupRef} className="legendPopup">
@@ -592,9 +321,9 @@ const TodayAirQuaility = ({Time}) => {
                             </div>
                         </div>
                     </Legend>
-                </Container>
-            </InfoWrapper>
-        </InfoContainer>
+                </TodayAirQualityContainer>
+            </TodayAirQualityInfoWrapper>
+        </TodayAirQualityInfoContainer>
     )
 }
 

@@ -1,230 +1,16 @@
-import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from 'date-fns/locale/ko';
 
-import { AElement, Aside, AsideLink, AsideLinkA, AsideLinkUl, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
-import useStore from '../../hooks/useStore';
-import stationInfoJSON from '../../data/stationInfo.json';
-import getColorValue from '../../functions/getColorValue.ts';
+import useStore from '../../app/hooks/useStore.jsx';
+import stationInfoJSON from '../../app/data/stationInfo.json';
+import getColorValue from '../../app/functions/getColorValue.ts';
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableSpan, ContentResultTableWrap, ContentResultTap, ContentResultWrap, ContentSearchInput, ContentSearchWrapRealtime, ContentTableRealtimePage1, ContentTableWrap, LayoutContentTitle, DisableBtn, DisableFeat, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar } from '../../app/StyleComponent.jsx';
 
 registerLocale('ko', ko);
 
-const ContentSearchWrap = styled.div`
-    position: relative;
-    margin: 30px 0 0 0;
-    padding: 15px 0 15px 245px;
-    background: #f7f7f7;
-
-    button {
-        padding: 0 25px;
-        background: #0f62cc;
-        font-size: 14px;
-        color: #fff;
-        font-weight: 400;
-        line-height: 34px;
-        border-radius: 4px;
-        margin: 3px 0 0 10px;
-    }
-`;
-const ContentSearchInput = styled.input`
-    width: 360px;
-    height: 40px;
-    margin: 0 0 0 10px;
-    padding: 0 14px;
-    line-height: 40px;
-    border: 1px solid #dcdcdc;
-    font-size: 14px;
-    color: #0a0a0a;
-    font-weight: 400;
-`;
-const ContentTableWrap = styled.div`
-    height: 600px;
-    overflow: auto;
-
-    table {
-        margin: 0;
-        border-collapse: separate;
-        border: none;
-        thead {
-            position: sticky;
-            top: 0;
-            &::before {
-                content: "";
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 2px;
-                background: #000;
-            }
-        }
-    }
-`;
-const ContentTable = styled.table`
-    width: 100%;
-    border-top: 2px solid #000;
-    margin: 20px 0;
-
-    caption { 
-        text-align: left;
-        margin-top: 10px;
-        caption-side: bottom;
-        ul { list-style: inside; }
-    }
-
-    th { 
-        font-weight: 600; 
-        background: #f7f7f7;
-    }
-
-    th, td {
-        text-align: center;
-        vertical-align: middle;
-        border: 1px solid #dcdcdc;
-        padding: 15px 10px;
-        font-size: 14px;
-    }
-`;
-
-const ContentResultWrap = styled.div`
-    margin-top: 40px;
-`;
-const ContentResultTap = styled.div`
-    display: inline-block;
-    cursor: pointer;
-    width: calc(50% - 5px);
-    height: 40px;
-    font-size: 16px;
-    line-height: 40px;
-    background: ${({selectCheck}) => selectCheck ? '#fff' : '#eaeef8'};
-    color: ${({selectCheck}) => selectCheck ? '#0f62cc' : '#0a0a0a'};
-    font-weight: ${({selectCheck}) => selectCheck ? '500' : '400'};
-    border: 1px solid;
-    border-color: ${({selectCheck}) => selectCheck ? '#0f62cc' : '#eaeef8'};
-    border-radius: 6px;
-    text-align: center;
-
-    -webkit-box-shadow: ${({selectCheck}) => selectCheck && '0px 5px 5px -1px #eeeeee;'};
-    box-shadow: ${({selectCheck}) => selectCheck && '0px 5px 5px -1px #eeeeee;'};
-`;
-const ContentResultSearchBox = styled.div`
-    margin-top: 20px;
-    position: relative;
-    padding: 20px 20px 20px 30px;
-    background: #f7f7f7;
-
-    > div {
-        display: flex;
-        height: 40px;
-        align-items: center;
-
-        &:first-of-type { margin-bottom: 10px; }
-        strong {
-            position: relative;
-            display: inline-block;
-            width: 90px;
-
-            &::after {
-                content: "";
-                display: block;
-                clear: both;
-                position: absolute;
-                width: 2px;
-                height: 100%;
-                top: 0;
-                right: 0;
-                background-color: gray;
-            }
-        }
-        > div {
-            padding: 0 0 0 20px;
-
-            label:first-of-type+input {
-                margin-left: 10px;
-            }
-        }
-    }
-`;
-
-const DisableFeat = styled.div`
-    display: flex;
-    align-items: center;
-
-    /* > * {
-        height: 40px;
-        padding: 10px 15px;
-    } */
-
-    .react-datepicker-wrapper {
-        margin: 0 10px 0 10px;
-        &:first-of-type { margin: 0 10px 0 0; }
-
-        .react-datepicker__input-container {
-            input {
-                width: 100px;
-                padding: 5px 10px;
-            }
-            .react-datepicker-ignore-onclickoutside {}
-        }
-    }
-    select { 
-        padding: 5px 10px;
-        &:first-of-type { margin-right: 10px; }
-    }
-`;
-const DisableBtn = styled.div`
-    position: absolute;
-    right: 20px;
-
-    button {
-        cursor: pointer;
-        padding: 0 25px;
-        background: #0f62cc;
-        font-size: 14px;
-        color: #fff;
-        font-weight: 400;
-        line-height: 34px;
-        border-radius: 4px;
-    }
-`;
-
-const ContentResultTableWrap = styled.div`
-    h2 {
-        position: relative;
-        font-size: 22px;
-        color: #0a0a0a;
-        font-weight: 500;
-        margin: 50px 0 14px 0;
-        display: block;
-    }
-    > span {
-        display: inline-block;
-        height: 28px;
-        padding: 0 20px;
-        font-size: 14px;
-        color: #0f62cc;
-        line-height: 28px;
-        letter-spacing: -0.6px;
-        border-radius: 13px;
-        border: 1px solid #0f62cc;
-        margin: 0 10px 20px 0;
-    }
-`;
-const ContentResultTableSpan = styled.span`
-    background: ${({effect, opacity}) => effect && (opacity ? '#0f62cc80' : '#0f62cc')} !important;
-    color: ${({effect, opacity}) => effect && (opacity ? '#ffffff80' : '#fff')} !important;
-`;
-
-const LoadingWrap = styled.div`
-    display: none;
-    position: absolute;
-    z-index: 3001;
-    transform: translate(-50%, -50%);
-`;
 export default function Page() {
     // ! 기타
     // # 조회 종류
@@ -273,8 +59,8 @@ export default function Page() {
     // @ 서브 네비게이션 바 컴포넌트
     const TopBarListComponent = () => {
         return topbarList.map((item, index) => (
-            <List key={index}>
-                <AElement
+            <LayoutList key={index}>
+                <LayoutAElement
                     to="./"
                     title={item.title}
                     onClick={(e) => toggleHandle(e, item.toggleIndex)}
@@ -282,11 +68,11 @@ export default function Page() {
                     data-direction={toggles[item.toggleIndex].px === toggles[item.toggleIndex].initial ? 'up' : 'down'}
                 >
                     {item.title}
-                </AElement>
-                <ListDetail $height={toggles[item.toggleIndex].px}>
+                </LayoutAElement>
+                <LayoutListDetail $height={toggles[item.toggleIndex].px}>
                     {item.links.map((link, linkIndex) => <li key={linkIndex}><Link to={link.to}>{link.text}</Link></li>)}
-                </ListDetail>
-            </List>
+                </LayoutListDetail>
+            </LayoutList>
         ))
     }
     // # 네비게이션 토글 상태
@@ -382,20 +168,20 @@ export default function Page() {
             if(variableCheck) {
                 return (
                     <li key={index}>
-                        <AsideLink 
+                        <LayoutAsideLink 
                             to="#" 
                             onClick={asideHandle}
                             children_height={asideToggle[link.text]?.px}
                             selected={link.select}
                             showmore={childrenCheck ? 'true' : 'false'} 
-                            >{link.text}</AsideLink>
+                            >{link.text}</LayoutAsideLink>
                         {childrenCheck && 
-                        <AsideLinkUl $height={asideToggle[link.text]?.px}>
-                            {link.children.map((item, _index) => <li key={_index}><AsideLinkA selected={item.select}>{item.text}</AsideLinkA></li>)}
-                        </AsideLinkUl>}
+                        <LayoutAsideLinkUl $height={asideToggle[link.text]?.px}>
+                            {link.children.map((item, _index) => <li key={_index}><LayoutAsideLinkA selected={item.select}>{item.text}</LayoutAsideLinkA></li>)}
+                        </LayoutAsideLinkUl>}
                     </li>
                 );
-            } else return <li key={index}><AsideLink to={`/info?page=${index + 1}`} selected={link.select}>{link.text}</AsideLink></li>;
+            } else return <li key={index}><LayoutAsideLink to={`/info?page=${index + 1}`} selected={link.select}>{link.text}</LayoutAsideLink></li>;
         
     });
     return <ul>{children}</ul>
@@ -611,25 +397,25 @@ export default function Page() {
             <LoadingWrap style={loadingStyle}>
                 <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
             </LoadingWrap>
-            <DivStyle>
-                <TopBar>
-                    <li><Home to="/" title="홈"></Home></li>
+            <LayoutDivStyle>
+                <LayoutTopBar>
+                    <li><LayoutHome to="/" title="홈"></LayoutHome></li>
                     {/* 컴포넌트 */} <TopBarListComponent />
-                </TopBar>
-            </DivStyle>
-            <Section>
-                <Aside>
+                </LayoutTopBar>
+            </LayoutDivStyle>
+            <LayoutSection>
+                <LayoutAside>
                     <h2>{asideList.title}</h2>
                     {/* 컴포넌트: ul */} <AsideComponent />
-                </Aside>
-                <Content>
-                    <ContentTitle>우리동네 대기 정보</ContentTitle>
-                    <ContentSearchWrap>
+                </LayoutAside>
+                <LayoutContent>
+                    <LayoutContentTitle>우리동네 대기 정보</LayoutContentTitle>
+                    <ContentSearchWrapRealtime>
                         <label htmlFor="search">지역명 검색</label>
                         <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" value={searchValue} onChange={(e) => e.currentTarget.value} />
                         <button>검색</button>
-                    </ContentSearchWrap>
-                    <ContentTable>
+                    </ContentSearchWrapRealtime>
+                    <ContentTableRealtimePage1>
                         <thead>
                             <tr>
                                 <th>선택</th>
@@ -660,7 +446,7 @@ export default function Page() {
                         })}
                         </tbody>
                         <caption>※ 거주지역의 대표 대기질은 "도시대기" 측정자료를 참고하시기 바랍니다.</caption>
-                    </ContentTable>
+                    </ContentTableRealtimePage1>
                     <ContentResultWrap>
                         <div>
                             <ContentResultTap selectCheck={viewSelectIndex === 0} onClick={() => {setViewSelectIndex(0); setDataDivision('time');}} style={{marginRight: '10px'}}>측정자료 조회통합대기</ContentResultTap>
@@ -707,7 +493,7 @@ export default function Page() {
                             <h2>측정자료&#40;수치&#41;</h2>
                             {/* 컴포넌트 */} <ContentResultTableStation />
                             <ContentTableWrap>
-                                <ContentTable>
+                                <ContentTableRealtimePage1>
                                     <thead>
                                         {dataDivision !== 'total' ?
                                         // ^ time, daily
@@ -757,12 +543,12 @@ export default function Page() {
                                     <tbody>
                                         <TableDomComponent />
                                     </tbody>
-                                </ContentTable>
+                                </ContentTableRealtimePage1>
                             </ContentTableWrap>
                         </ContentResultTableWrap>
                     </ContentResultWrap>
-                </Content>
-            </Section>
+                </LayoutContent>
+            </LayoutSection>
         </>
     )
 };

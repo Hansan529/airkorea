@@ -1,12 +1,9 @@
 import { useRouteError } from "react-router-dom";
 import { ErrorDiv, ErrorTitle } from "../StyleComponent";
 
-
+// @@@ 출력 컴포넌트 @@@
 export default function ErrorPage() {
     const error = useRouteError();
-    console.log('error: ', error);
-    console.error(error);
-
     return (
         <ErrorDiv>
             <ErrorTitle>문제 발생!</ErrorTitle>

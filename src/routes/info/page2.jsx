@@ -1,43 +1,6 @@
-import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
-import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
-
-const ContentTable = styled.table`
-    width: 100%;
-    border-top: 2px solid #000;
-    margin: 20px 0;
-
-    caption { 
-        text-align: left;
-        margin-bottom: 10px;
-        h2 { 
-            font-size: 22px; 
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        p { margin-top: 15px; }
-    }
-
-    th { 
-        font-weight: 600; 
-        font-size: 16px;
-    }
-    td {
-        font-size: 13px;
-    }
-    th, td {
-        text-align: center;
-        vertical-align: middle;
-        border: 1px solid #dcdcdc;
-        padding: 15px 10px;
-        word-break: keep-all;
-    }
-    tbody > tr th {
-        background-color: #EAFAF3;
-    }
-`;
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage2ContentTable } from '../../app/StyleComponent';
 
 //정보 네비게이션
 export default function Page() {
@@ -91,14 +54,14 @@ export default function Page() {
 
     return (
         <>
-            <DivStyle>
-                <TopBar>
+            <LayoutDivStyle>
+                <LayoutTopBar>
                     <li>
-                        <Home to={'/'} title="홈"></Home>
+                        <LayoutHome to={'/'} title="홈"></LayoutHome>
                     </li>
                     {topbarList.map((item, index) => (
-                        <List key={index}>
-                            <AElement
+                        <LayoutList key={index}>
+                            <LayoutAElement
                                 to="./"
                                 title={item.title}
                                 onClick={(e) => toggleHandle(e, item.toggleIndex)}
@@ -106,20 +69,20 @@ export default function Page() {
                                 data-direction={toggles[item.toggleIndex].px === toggles[item.toggleIndex].initial ? 'up' : 'down'}
                             >
                                 {item.title}
-                            </AElement>
-                            <ListDetail $height={toggles[item.toggleIndex].px}>
+                            </LayoutAElement>
+                            <LayoutListDetail $height={toggles[item.toggleIndex].px}>
                                 {item.links.map((link, linkIndex) => (
                                     <li key={linkIndex}>
                                         <Link to={link.to}>{link.text}</Link>
                                     </li>
                                 ))}
-                            </ListDetail>
-                        </List>
+                            </LayoutListDetail>
+                        </LayoutList>
                     ))}
-                </TopBar>
-            </DivStyle>
-            <Section>
-            <Aside>
+                </LayoutTopBar>
+            </LayoutDivStyle>
+            <LayoutSection>
+            <LayoutAside>
                     <h2>{asideList.title}</h2>
                     <ul>
                         {asideList.links.map((link, index) => {
@@ -148,19 +111,19 @@ export default function Page() {
                             } else {
                                 result = !variableCheck && (
                                     <li key={index}>
-                                        <AsideLink to={`/info?page=${index + 1}`} selected={link.select}>
+                                        <LayoutAsideLink to={`/info?page=${index + 1}`} selected={link.select}>
                                             {link.text}
-                                        </AsideLink>
+                                        </LayoutAsideLink>
                                     </li>
                                 );
                             }
                             return result;
                         })}
                     </ul>
-                </Aside>
-                <Content>
-                    <ContentTitle>측정망 정보</ContentTitle>
-                    <ContentTable>
+                </LayoutAside>
+                <LayoutContent>
+                    <LayoutContentTitle>측정망 정보</LayoutContentTitle>
+                    <InfoPage2ContentTable>
                         <caption>
                             <h2>일반대기환경측정망</h2>
                             <p>전국적인 대기오염실태, 변화추이 및 대기환경기준 달성여부 등을 파악하기 위하여 대기오염물질 측정장비를 설치&#183;운영하고 있습니다.</p>
@@ -199,8 +162,8 @@ export default function Page() {
                                 <td>SO<sub>2</sub>, CO, NO<sub>2</sub>, O<sub>3</sub>, PM-10, PM-2.5 등</td>
                             </tr>
                         </tbody>
-                    </ContentTable>
-                    <ContentTable>
+                    </InfoPage2ContentTable>
+                    <InfoPage2ContentTable>
                         <caption>
                             <h2>특수대기환경측정망</h2>
                         </caption>
@@ -252,9 +215,9 @@ export default function Page() {
                                 <td>초미세먼지&#40;PM-2.5&#41; 질량, 탄소성분&#40;OC,EC&#41;,초미세먼지&#40;PM-2.5&#41; 중<br />이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub><sup>-</sup>, SO<sub>4</sub><sup>2-</sup>, NH<sub>4</sub><sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg<sup>2+</sup>&#41;,<br />중금속성분&#40;Pb, Cd, Cr, Cu, Mn, Fe, Ni, As, Be&#41;</td>
                             </tr>
                         </tbody>
-                    </ContentTable>
-                </Content>
-            </Section>
+                    </InfoPage2ContentTable>
+                </LayoutContent>
+            </LayoutSection>
         </>
     )
 };

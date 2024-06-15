@@ -1,178 +1,7 @@
-import styled from '@emotion/styled';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import { AElement, Aside, AsideLink, Content, ContentTitle, DivStyle, Home, List, ListDetail, Section, TopBar } from '../layout';
-import stationInfo from "../../data/stationInfo.json";
-
-const ContentSubTitleWrap = styled.ul`
-    padding: 20px;
-    border: 1px solid #e4eef8;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    list-style: inside;
-
-    li+li {
-        margin-top: 10px;
-    }
-`;
-const ContentSelectWrap = styled.div`
-    background: #f7f7f7;
-    padding: 15px;
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-
-    button {
-        cursor: pointer;
-        padding: 0 25px;
-        background: #0f62cc;
-        font-size: 14px;
-        color: #fff;
-        font-weight: 400;
-        line-height: 34px;
-        border-radius: 4px;
-    }
-`;
-const ContentSelect = styled.select`
-    width: 200px;
-    height: 40px;
-    padding: 0 15px;
-    background: #fff url(/images/info/img_sel.webp) no-repeat right 15px center;
-    font-size: 14px;
-    color: #0a0a0a;
-    font-weight: 400;
-    border: 1px solid #dcdcdc;
-    appearance: none;
-`;
-const ContentMain = styled.div`
-    margin-top: 20px;
-`;
-const ContentMapWrap = styled.div`
-    position: relative;
-    float: left;
-    width: 510px;
-    height: 577px;
-    padding: 75px;
-    background: #f4f9ff;
-    map {
-        position: relative;
-        z-index: 10;
-    }
-    area { cursor: pointer; }
-`;
-const ContentMap = styled.img`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 360px;
-    height: 426px;
-`;
-const ContentMapListWrap = styled.div`
-    float: right;
-    width: 510px;
-    height: 577px;
-    overflow-y: auto;
-    border-top: 2px solid #0a0a0a;
-    border-bottom: 1px solid #dcdcdc;
-`;
-const ContentMapListTitle = styled.div`
-    height: 50px;
-
-    strong {
-        display: block;
-        float: left;
-        width: 90px;
-        height: 50px;
-        background: #f7f7f7;
-        font-size: 15px;
-        color: #0a0a0a;
-        font-weight: 500;
-        border-bottom: 1px solid #dcdcdc;
-        line-height: 50px;
-        text-align: center;
-    }
-    strong+strong {
-        width: calc(100% - 90px);
-        border-left: 1px solid #dcdcdc;
-    }
-`;
-const ContentMapList = styled.ul`
-    li {
-        width: 100%;
-        font-size: 14px;
-
-        /* 측정소 축약 데이터 */
-        > div:first-of-type {
-            display: flex;
-            border-bottom: 1px solid #dcdcdc;
-            
-            &:hover {background: #d7f4ff;}
-            > div {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                position: relative;
-                width: 90px;
-                text-align: center;
-                vertical-align: middle;
-            }
-            > div + div {
-                flex-grow: 1;
-                justify-content: flex-start;
-                padding: 8px 40px 8px 20px;
-                border-left: 1px solid #dcdcdc;
-                text-align: left;
-            }
-            button {
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                margin: -3px 0 0 0;
-                width: 10px;
-                height: 6px;
-                background: url(/images/info/img_aco_down.webp) no-repeat 0 0;
-            }
-        }
-    }
-`;
-/* 측정소 상세 데이터 */
-const ContentMapDetail = styled.div`
-    transition-duration: ${(props) => props.search ? '0' : '1s'};
-    height: ${({toggle}) => toggle ? '72px' : 0};
-    padding: ${({toggle}) => toggle ? '12px 0' : 0};
-    overflow: hidden;
-    background: #f4f9ff;
-
-    > div {
-        display: flex;
-        align-items: center;
-        > div:first-of-type {
-            width: 90px;
-            text-align: center;
-        }
-        > div:last-of-type {
-            padding-left: 20px;
-        }
-        &+div {
-            margin-top: 4px;
-        }
-    }
-`;
-const ContentMapDetailKey = styled.span`
-    padding: 0 13px;
-    font-size: 13px;
-    color: #464646;
-    font-weight: 400;
-    line-height: 22px;
-    background: #fff;
-    border-radius: 11px;
-    border: 1px solid #dcdcdc;
-`;
-
+import stationInfo from "../../app/data/stationInfo.json";
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage3ContentSubTitleWrap, InfoPage3ContentSelectWrap, InfoPage3ContentSelect, InfoPage3ContentMain, InfoPage3ContentMapWrap, InfoPage3ContentMap, InfoPage3ContentMapListWrap, InfoPage3ContentMapListTitle, InfoPage3ContentMapList, InfoPage3ContentMapDetail, InfoPage3ContentMapDetailKey } from '../../app/StyleComponent';
 
 export default function Page() {
     // ! 서브 네비게이션 바 목록
@@ -310,14 +139,14 @@ export default function Page() {
 
     return (
         <>  
-            <DivStyle>
-                <TopBar>
+            <LayoutDivStyle>
+                <LayoutTopBar>
                     <li>
-                        <Home to={'/'} title="홈"></Home>
+                        <LayoutHome to={'/'} title="홈"></LayoutHome>
                     </li>
                     {topbarList.map((item, index) => (
-                        <List key={index}>
-                            <AElement
+                        <LayoutList key={index}>
+                            <LayoutAElement
                                 to="./"
                                 title={item.title}
                                 onClick={(e) => toggleHandle(e, item.toggleIndex)}
@@ -325,20 +154,20 @@ export default function Page() {
                                 data-direction={toggles[item.toggleIndex].px === toggles[item.toggleIndex].initial ? 'up' : 'down'}
                             >
                                 {item.title}
-                            </AElement>
-                            <ListDetail $height={toggles[item.toggleIndex].px}>
+                            </LayoutAElement>
+                            <LayoutListDetail $height={toggles[item.toggleIndex].px}>
                                 {item.links.map((link, linkIndex) => (
                                     <li key={linkIndex}>
                                         <Link to={link.to}>{link.text}</Link>
                                     </li>
                                 ))}
-                            </ListDetail>
-                        </List>
+                            </LayoutListDetail>
+                        </LayoutList>
                     ))}
-                </TopBar>
-            </DivStyle>
-            <Section>
-            <Aside>
+                </LayoutTopBar>
+            </LayoutDivStyle>
+            <LayoutSection>
+            <LayoutAside>
                     <h2>{asideList.title}</h2>
                     <ul>
                         {asideList.links.map((link, index) => {
@@ -367,31 +196,31 @@ export default function Page() {
                             } else {
                                 result = !variableCheck && (
                                     <li key={index}>
-                                        <AsideLink to={`/info?page=${index + 1}`} selected={link.select}>
+                                        <LayoutAsideLink to={`/info?page=${index + 1}`} selected={link.select}>
                                             {link.text}
-                                        </AsideLink>
+                                        </LayoutAsideLink>
                                     </li>
                                 );
                             }
                             return result;
                         })}
                     </ul>
-                </Aside>
-                <Content>
-                    <ContentTitle>측정소 정보</ContentTitle>
-                    <ContentSubTitleWrap>
+                </LayoutAside>
+                <LayoutContent>
+                    <LayoutContentTitle>측정소 정보</LayoutContentTitle>
+                    <InfoPage3ContentSubTitleWrap>
                         <li>지도의 지역명을 클릭하면 각 지역에 해당하는 측정소 위치 정보를 조회할 수 있습니다.</li>
                         <li>조회 후 측정소명을 클릭하면 해당 측정소의 상세 정보를 조회할 수 있습니다.</li>
-                    </ContentSubTitleWrap>
-                    <ContentSelectWrap>
-                        <ContentSelect name="mang_code" id="mang_code" title="측정망" onChange={mangCodeHandle} value={mangCode}>
+                    </InfoPage3ContentSubTitleWrap>
+                    <InfoPage3ContentSelectWrap>
+                        <InfoPage3ContentSelect name="mang_code" id="mang_code" title="측정망" onChange={mangCodeHandle} value={mangCode}>
                             <option value="국가배경농도">국가배경</option>
                             <option value="교외대기">교외대기</option>
                             <option value="도시대기">도시대기</option>기
                             <option value="도로변대기">도로변대기</option>
                             <option value="항만">항만</option>
-                        </ContentSelect>
-                        <ContentSelect name="district" id="district" title='지역' onChange={districtHandle} value={district}>
+                        </InfoPage3ContentSelect>
+                        <InfoPage3ContentSelect name="district" id="district" title='지역' onChange={districtHandle} value={district}>
                             <option value='all'>전체</option>
                             <option value='서울특별시' >서울</option>
                             <option value='경기도'>경기</option>
@@ -410,11 +239,11 @@ export default function Page() {
                             <option value='광주광역시'>광주</option>
                             <option value='전북특별자치도'>전북</option>
                             <option value='제주특별자치도'>제주</option>
-                        </ContentSelect>
+                        </InfoPage3ContentSelect>
                         <button onClick={() => setSearch(true)}>조회</button>
-                    </ContentSelectWrap>
-                    <ContentMain>
-                        <ContentMapWrap>
+                    </InfoPage3ContentSelectWrap>
+                    <InfoPage3ContentMain>
+                        <InfoPage3ContentMapWrap>
                             <map name="Map">
                                 <area title="인천광역시" className="submap032" shape="poly" href="#" onClick={mapHandle} coords="122,107,116,110,113,109,116,105,114,99,110,94,103,93,98,88,95,83,91,77,94,75,97,78,98,72,103,68,109,69,110,74,109,79,111,87,122,81,125,90,131,94,131,97,127,99" alt="인천" />
                                 <area title="서울특별시" className="submap02"  shape="poly" href="#" onClick={mapHandle} coords="127,87,124,89,127,92,130,93,131,97,133,102,138,103,140,100,144,103,147,101,150,101,151,99,151,96,154,93,154,90,151,90,151,85,150,80,143,79,140,83,137,83,134,85,131,85" alt="서울" />
@@ -435,15 +264,15 @@ export default function Page() {
                                 <area title="제주특별자치도" className="submap064" shape="poly" href="#" onClick={mapHandle} coords="44,410,36,410,35,412,24,411,21,414,20,414,15,409,14,402,19,398,21,394,31,390,45,388,55,385,59,387,63,389,65,393,64,394,63,398,60,401,58,404,54,405,50,408" alt="제주" />
                             </map>
                             <div>
-                                <ContentMap show src={`/images/info/sub_map_${imgSrc}.webp`}  alt="전체" useMap="#Map" />
+                                <InfoPage3ContentMap show src={`/images/info/sub_map_${imgSrc}.webp`}  alt="전체" useMap="#Map" />
                             </div>
-                        </ContentMapWrap>
-                        <ContentMapListWrap>
-                            <ContentMapListTitle>
+                        </InfoPage3ContentMapWrap>
+                        <InfoPage3ContentMapListWrap>
+                            <InfoPage3ContentMapListTitle>
                                 <strong>측정소명</strong>
                                 <strong>측정소</strong>
-                            </ContentMapListTitle>
-                            <ContentMapList>
+                            </InfoPage3ContentMapListTitle>
+                            <InfoPage3ContentMapList>
                                 {filterData.length !== 0 ? filterData.map((item, key) => {
                                     return (
                                         <li key={key}>
@@ -455,29 +284,29 @@ export default function Page() {
                                                 </div>
                                             </div>
                                             {/* <ContentMapDetail toggle={dataToggle[key]}> */}
-                                            <ContentMapDetail search={search} toggle={dataToggle[key]}>
+                                            <InfoPage3ContentMapDetail search={search} toggle={dataToggle[key]}>
                                                 <div>
-                                                    <div><ContentMapDetailKey>설치년도</ContentMapDetailKey></div>
+                                                    <div><InfoPage3ContentMapDetailKey>설치년도</InfoPage3ContentMapDetailKey></div>
                                                     <div><span>{item.year}</span></div>
                                                 </div>
                                                 <div>
-                                                    <div><ContentMapDetailKey>측정항목</ContentMapDetailKey></div>
+                                                    <div><InfoPage3ContentMapDetailKey>측정항목</InfoPage3ContentMapDetailKey></div>
                                                     <div><span>{item.item}</span></div>
                                                 </div>
-                                            </ContentMapDetail>
+                                            </InfoPage3ContentMapDetail>
                                         </li>
                                         )}) : 
                                         <li>
-                                             <div>
+                                            <div>
                                                 <div><span>-</span></div>
                                                 <div><span>-</span></div>
                                             </div>
                                         </li>}
-                            </ContentMapList>
-                        </ContentMapListWrap>
-                    </ContentMain>
-                </Content>
-            </Section>
+                            </InfoPage3ContentMapList>
+                        </InfoPage3ContentMapListWrap>
+                    </InfoPage3ContentMain>
+                </LayoutContent>
+            </LayoutSection>
         </>
     )
 };

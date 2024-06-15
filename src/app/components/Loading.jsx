@@ -1,23 +1,7 @@
-import styled from "@emotion/styled/macro";
 import useStore from "../hooks/useStore";
+import { Loading } from "../StyleComponent";
 
-const Loading = styled.div`
-    display: ${props => props.loading === 'true' ? 'none' : 'block'};
-    position: absolute;
-    z-index: 100;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    border: 1px solid #bcd0e8;
-    background: url('/loading_bg.webp');
-
-    div {
-    margin-top: 360px;
-    font-size: 20px;
-    color: #0054a6;
-    }
-`;
-
+// @@@ 출력 컴포넌트 @@@
 const LoadingScreen = () => {
     const loading = useStore(state => state.loading);
     return (
