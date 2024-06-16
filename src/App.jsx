@@ -51,6 +51,77 @@ function App() {
   const stationsInfo = stationInfoJSON.items;
   // # 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
+  const AppMMOContainerResultComponent = () => {
+    switch(tapSelect) {
+      case 0:
+        return <>
+        <AppMMOSelectWrapper flex align="left">
+          <AppMMOSelect id="area1" bg $width="180px" onChange={(e) => eventHandler('type', e.currentTarget.value)} value={type}>
+            <option value="khaiValue">통합대기환경지수(CAI)</option>
+            <option value="pm25Value">초미세먼지 (PM-2.5)</option>
+            <option value="pm10Value">미세먼지 (PM-10)</option>
+            <option value="o3Value">오존(O₃)</option>
+            <option value="no2Value">이산화질소(NO₂)</option>
+            <option value="coValue">일산화탄소 (CO)</option>
+            <option value="so2Value">아황산가스 (SO₂)</option>
+          </AppMMOSelect>
+        </AppMMOSelectWrapper>
+        <AppMMOSelectWrapper flex>
+          <label htmlFor="area2" style={{ marginRight: '5px' }}>
+            시/도
+          </label>
+          <AppMMOSelect id="area2" bg $width="130px"
+          onChange={(e) => {
+            eventHandler('openMap', e.currentTarget.value);
+            eventHandler('regionNum', e.currentTarget.value);
+          }}
+          value={regionNum}>
+            <option value="none">-전체-</option>
+            <option value="02">서울특별시</option>
+            <option value="031">경기도</option>
+            <option value="032">인천광역시</option>
+            <option value="033">강원특별자치도</option>
+            <option value="041">충청남도</option>
+            <option value="042">대전광역시</option>
+            <option value="043">충청북도</option>
+            <option value="044">세종특별자치시</option>
+            <option value="051">부산광역시</option>
+            <option value="052">울산광역시</option>
+            <option value="053">대구광역시</option>
+            <option value="054">경상북도</option>
+            <option value="055">경상남도</option>
+            <option value="061">전라남도</option>
+            <option value="062">광주광역시</option>
+            <option value="063">전라북도</option>
+            <option value="064">제주특별자치도</option>
+          </AppMMOSelect>
+        </AppMMOSelectWrapper>
+        <AppMMOBorderDiv flex>
+          <button onClick={(e) => eventHandler('selectInfo', 'air')}     active={selectInfo === 'air' ? 'on' : 'off'}   >대기/경보 정보</button>
+          <button onClick={(e) => eventHandler('selectInfo', 'station')} active={selectInfo === 'station' ? 'on' : 'off'}>측정소 정보</button>
+        </AppMMOBorderDiv>
+      </>;
+      case 1:
+        return <>
+        <AppMMOSelectWrapper flex align="left">
+          <AppMMOSelect bg $width="180px" onChange={standbyTypeHandle} value={standbyType}>
+            <option value="pm25">초미세먼지 (PM-2.5)</option>
+            <option value="pm10">미세먼지 (PM-10)</option>
+            <option value="o3">오존 (O3)</option>
+          </AppMMOSelect>
+        </AppMMOSelectWrapper>
+        <AppMMOBorderDiv>
+          <button onClick={forecastDateHandle} active={forecastDate === "0" ? 'on' : 'off'} data-date="0">오늘</button>
+          <button onClick={forecastDateHandle} active={forecastDate === "1" ? 'on' : 'off'} data-date="1">내일</button>
+          <button onClick={forecastDateHandle} active={forecastDate === "2" ? 'on' : 'off'} data-date="2">모레</button>
+        </AppMMOBorderDiv>
+      </>;
+      default:
+        return;
+    }
+  }
+
+
   // # 인터벌
   const [intervalDelay] = useState(5000);
   const [intervalRunning, setIntervalRunning] = useState(true);
@@ -101,9 +172,7 @@ function App() {
         "innerLeft": "235.531"
       };
 
-      const controller = new AbortController();
-
-      const fetchStationData = async (longitude, latitude, controller) => {
+      const fetchStationData = async ({ longitude, latitude }) => {
         // # 현재 좌표를 기준으로 TM 좌표로 변한 (WGS84 -> EPSG:2097 변환)
         const tmCoordinates = proj4(wgs84, epsg2097, [longitude, latitude]);
         const [tmX, tmY] = tmCoordinates;
@@ -140,8 +209,8 @@ function App() {
             changer('loading', false);
 
             const success = (pos) => {
-              const { latitude, longitude } = pos.coords;
-              fetchStationData(latitude, longitude, controller);
+              const { longitude, latitude } = pos.coords;
+              fetchStationData({ longitude, latitude });
             };
 
             const error = (err) => {
@@ -220,14 +289,13 @@ function App() {
     return ( <Result Time={Time} standbyType={tapSelect === 1 && standbyType} forecastDate={tapSelect === 1 && forecastDate} /> );
   };
 
-  // ! event, function
+  
+  // ! 핸들
   const eventHandler = (target, value) => changer(target, value);
-
   const tapSelectHandle = (index) => setTapSelect(index);
   const standbyTypeHandle = (e) => setStandbyType(e.target.value);
   const forecastDateHandle = (e) => setForecastDate(e.currentTarget.dataset.date);
-
-  // 예보 발표 이벤트 함수
+  // # 예보 발표 이벤트 함수
   const airInfoIndexHandle = async (e) => {
     let { type } = e.currentTarget.dataset;
     if(!running){
@@ -270,11 +338,13 @@ function App() {
       setRunning(false);
     };
   };
+  // # 무한 반복 스크롤 이벤트
   useInterval(() => {
     airInfoIndexHandle({ currentTarget: { dataset: { type: 'up'}}});
   }, intervalRunning ? intervalDelay : null);
 
-  // 예보 텍스트
+
+  // @ 예보 텍스트 컴포넌트
   function BannerData() {
     const array = [23, 17, 11, 5];
     let target;
@@ -346,38 +416,17 @@ function App() {
     return result;
   };
 
+
   // ! 하단 배너 모듈
-  // 인덱스
   const [ulIndex, setUlIndex] = useState(-6);
-
-  // 애니메이션 진행 중
+  // # 애니메이션 진행 중
   const [transitionRunning, setTransitionRunning] = useState(false);
-
-  // 애니메이션 시간 ON/OFF
+  // # 애니메이션 시간 ON/OFF
   const [bannerDisableDuration, setBannerDisableDuration] = useState(false);
-
-  // 인터벌
+  // # 인터벌
   const [bannerIntervalDelay] = useState(2000);
   const [bannerIntervalRunning, setBannerIntervalRunning] = useState(true);
-
-  const leftFunction = async () => {
-      if(!transitionRunning){
-          setTransitionRunning(true);
-          setUlIndex(ulIndex + 1);
-          // 무한 롤링
-          if(ulIndex >= -1){
-              await sleep(0.3);
-              setBannerDisableDuration(true);
-              setUlIndex(-23);
-              await sleep(0.1);
-              setBannerDisableDuration(false);
-              setTransitionRunning(false);
-          } else {
-              await sleep(0.3);
-              setTransitionRunning(false);
-          };
-      };
-  };
+  // # 우측 이동 클릭 이벤트
   const rightFunction = async () => {
       if(!transitionRunning){
           setTransitionRunning(true);
@@ -396,18 +445,33 @@ function App() {
           };
       };
   };
-
+  // # 자동 이동 인터벌
   useInterval(() => {
       rightFunction();
   }, bannerIntervalRunning ? bannerIntervalDelay : null);
-
-  const handle = async (e) => {
+  // # 유관기관 이동 핸들러
+  const AppMoveHandle = async (e) => {
       const btn = e.currentTarget.dataset.btn;
 
       bannerIntervalRunning && setBannerIntervalRunning(false);
       switch(btn) {
           case 'left':
-              leftFunction();
+              if(!transitionRunning){
+                  setTransitionRunning(true);
+                  setUlIndex(ulIndex + 1);
+                  // 무한 롤링
+                  if(ulIndex >= -1){
+                      await sleep(0.3);
+                      setBannerDisableDuration(true);
+                      setUlIndex(-23);
+                      await sleep(0.1);
+                      setBannerDisableDuration(false);
+                      setTransitionRunning(false);
+                  } else {
+                      await sleep(0.3);
+                      setTransitionRunning(false);
+                  };
+              };
               break;
           case 'atop':
               e.currentTarget.dataset.btn = 'auto';
@@ -423,18 +487,13 @@ function App() {
               break;
       }
   };
-
   return (
     <>
       <HeaderComponent />
       <main>
-        {/* 첫번째 색션 */}
         <AppFirstSection>
-          {/* 로딩창 */}
           <Loading />
-          {/* 대기/기상 지도 정보 */}
           <AppMMLayout>
-            {/* Main Map 설정 */}
             <AppMMOptionLayout>
               <AppMMOList>
                 <li select={tapSelect === 0 ? 'on' : 'off'}>
@@ -451,68 +510,7 @@ function App() {
                 </li>
               </AppMMOList>
               <AppMMOContainer>
-                {tapSelect === 0 &&
-                <>
-                  <AppMMOSelectWrapper flex align="left">
-                    <AppMMOSelect id="area1" bg $width="180px" onChange={(e) => eventHandler('type', e.currentTarget.value)} value={type}>
-                      <option value="khaiValue">통합대기환경지수(CAI)</option>
-                      <option value="pm25Value">초미세먼지 (PM-2.5)</option>
-                      <option value="pm10Value">미세먼지 (PM-10)</option>
-                      <option value="o3Value">오존(O₃)</option>
-                      <option value="no2Value">이산화질소(NO₂)</option>
-                      <option value="coValue">일산화탄소 (CO)</option>
-                      <option value="so2Value">아황산가스 (SO₂)</option>
-                    </AppMMOSelect>
-                  </AppMMOSelectWrapper>
-                  <AppMMOSelectWrapper flex>
-                    <label htmlFor="area2" style={{ marginRight: '5px' }}>
-                      시/도
-                    </label>
-                    <AppMMOSelect id="area2" bg $width="130px"
-                    onChange={(e) => {
-                      eventHandler('openMap', e.currentTarget.value);
-                      eventHandler('regionNum', e.currentTarget.value);
-                    }}
-                    value={regionNum}>
-                      <option value="none">-전체-</option>
-                      <option value="02">서울특별시</option>
-                      <option value="031">경기도</option>
-                      <option value="032">인천광역시</option>
-                      <option value="033">강원특별자치도</option>
-                      <option value="041">충청남도</option>
-                      <option value="042">대전광역시</option>
-                      <option value="043">충청북도</option>
-                      <option value="044">세종특별자치시</option>
-                      <option value="051">부산광역시</option>
-                      <option value="052">울산광역시</option>
-                      <option value="053">대구광역시</option>
-                      <option value="054">경상북도</option>
-                      <option value="055">경상남도</option>
-                      <option value="061">전라남도</option>
-                      <option value="062">광주광역시</option>
-                      <option value="063">전라북도</option>
-                      <option value="064">제주특별자치도</option>
-                    </AppMMOSelect>
-                  </AppMMOSelectWrapper>
-                  <AppMMOBorderDiv flex>
-                    <button onClick={(e) => eventHandler('selectInfo', 'air')}     active={selectInfo === 'air' ? 'on' : 'off'}   >대기/경보 정보</button>
-                    <button onClick={(e) => eventHandler('selectInfo', 'station')} active={selectInfo === 'station' ? 'on' : 'off'}>측정소 정보</button>
-                  </AppMMOBorderDiv>
-                </>}
-                {tapSelect === 1 && <>
-                  <AppMMOSelectWrapper flex align="left">
-                    <AppMMOSelect bg $width="180px" onChange={standbyTypeHandle} value={standbyType}>
-                      <option value="pm25">초미세먼지 (PM-2.5)</option>
-                      <option value="pm10">미세먼지 (PM-10)</option>
-                      <option value="o3">오존 (O3)</option>
-                    </AppMMOSelect>
-                  </AppMMOSelectWrapper>
-                  <AppMMOBorderDiv>
-                    <button onClick={forecastDateHandle} active={forecastDate === "0" ? 'on' : 'off'} data-date="0">오늘</button>
-                    <button onClick={forecastDateHandle} active={forecastDate === "1" ? 'on' : 'off'} data-date="1">내일</button>
-                    <button onClick={forecastDateHandle} active={forecastDate === "2" ? 'on' : 'off'} data-date="2">모레</button>
-                  </AppMMOBorderDiv>
-                </>}
+                <AppMMOContainerResultComponent />
               </AppMMOContainer>
             </AppMMOptionLayout>
             {/* Main Map 전국 지도 */}
@@ -546,9 +544,9 @@ function App() {
         <AppBannerWrap>
           <AppButtonBox>
               <h3>유관기관</h3>
-              <AppBtn data-btn="left" onClick={handle}></AppBtn>
-              <AppBtn data-btn="atop" onClick={handle}></AppBtn>
-              <AppBtn data-btn="right" onClick={handle}></AppBtn>
+              <AppBtn data-btn="left" onClick={AppMoveHandle}></AppBtn>
+              <AppBtn data-btn="atop" onClick={AppMoveHandle}></AppBtn>
+              <AppBtn data-btn="right" onClick={AppMoveHandle}></AppBtn>
           </AppButtonBox>
           <AppListUl index={ulIndex} bannerDisableDuration={bannerDisableDuration}>
               <AppListLi><a href="https://www.chungnam.go.kr/healthenvMain.do?" title="충남 보건환경연구원" target="_blank" rel="noreferrer"><img alt="충남 보건환경연구원" src="/images/main/img_ban17.webp" /></a></AppListLi>
