@@ -67,6 +67,76 @@ const regionNumList = {
 	'064': '제주',
 };
 
+// ! 데이터 함수
+/**
+	 * # 전체 지역 평균값
+	 * @param {*} order	순서
+	 * @param {*} returnValue 출력 타입 value
+	 * @param {*} data 측정소 데이터
+	 * @returns 지역 측정소별 측정 총합의 평균값
+	 */
+const regionAvgValue = (order, returnValue, data) => {
+	if(data){
+		const filterValue = Object.values(regionNumList)?.map((list) => {
+			return data?.filter((data) => {
+				return data.sidoName === list;
+			});
+		});
+
+		const filterTotalValue = filterValue?.map((arr) => {
+		return arr.reduce((accumulator, currentValue) => {
+			const valueToAdd = parseFloat(currentValue[returnValue]);
+			if (!isNaN(valueToAdd)) {
+			return accumulator + valueToAdd;
+			} else {
+			return accumulator;
+			}
+		}, 0);
+		});
+		const result = filterTotalValue[order] / filterValue[order]?.length;
+		const fixedValue = ['o3Value', 'no2Value', 'so2Value'];
+		if (fixedValue.includes(returnValue)) {
+			return result.toFixed(4);
+		} else if (returnValue === 'coValue') {
+			return result.toFixed(2);
+		} else return Math.round(result);
+	} else {
+		return 0;
+	}
+};
+/**
+	 * # 상세 지역 측정소 값 총합, 평균값
+	 * @param {*} props
+	 * @param {*} list
+	 * @param {*} data 측정소 데이터
+	 * @returns 상세 지역 측정소 총합 평균값
+	 */
+const filterStationReturnValue = (type, list, data) => {
+	if(data){
+		const filterStationValue = list?.map((region) => {
+			return region.station?.map((station) => {
+				const findData = data?.find((data) => data.stationName === station)?.[type];
+				const formatter = Number(findData);
+				return isNaN(formatter) ? 0 : formatter;
+			});
+		});
+		const result = filterStationValue?.map((val) => {
+			const sumValue = val.reduce((acc, cur) => acc + cur);
+			if(type === 'khaiValue' || type === 'pm10Value' || type === 'pm25Value') {
+				return Math.round(sumValue / val.length);
+			} else {
+				return (sumValue / val.length).toFixed(type=== 'coValue' ? 2 : 4);
+			}
+		});
+		const avgValue = Math.round(
+			result.reduce((acc, cur) => acc + cur) / result.length
+		);
+		return { result, avgValue };
+	} else {
+		return { result: null, avgValue: null }
+	}
+};
+
 
 // ! 측정소 데이터
 const stationsInfo = stationJson.items;
@@ -93,7 +163,7 @@ const MapSvg = ({ className, children }) => {
 };
 // @ 내부 지도 Path 컴포넌트
 const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) => {
-	return <StandbyInnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor}></StandbyInnerMapPathStyle>;
+	return <StandbyInnerMapPathStyle id={id} title={title} d={d} onClick={onClick} fillColor={fillColor} fillHoverColor={fillHoverColor} />;
 }
 
 
@@ -111,15 +181,15 @@ const Standby = ({Time}) => {
 		const { legendIndex } = legendElement.dataset;
 	
 		const stateUpdater = {
-		  0: setIsOn0,
-		  1: setIsOn1,
-		  2: setIsOn2,
+			0: setIsOn0,
+			1: setIsOn1,
+			2: setIsOn2,
 		};
 	
 		const updater = stateUpdater[legendIndex];
 		if(updater)
 		  updater(prev => !prev);
-	  };
+	};
 	// # 범례 필터링 핸들러
 	const filterRangeHandle = (e) => {
 	const { value } = e.currentTarget;
@@ -150,7 +220,9 @@ const Standby = ({Time}) => {
 
 	// # 범주 상태 목록 (좋음, 보통, 나쁨, 매우나쁨)
 	const typeRange = getColorValue(0, {type, boolean: true});
-// ---------------------------------- event
+
+
+	// ! 핸들
 	const hoverHandle = (element) => setHover(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
 	const innerClickHandle = (element) => changer('openMap', element);
@@ -163,78 +235,8 @@ const Standby = ({Time}) => {
 	const filterDataKeys = Object.keys(filterData);
 	const filterDataValues = Object.values(filterData);
 
-	// ^-------------------------------------------------------------- JSON
-	/** JSON 사용 */
-	/**
-	 * 전체 지역 평균값
-	 * @param {*} order	순서
-	 * @param {*} returnValue 출력 타입 value
-	 * @returns 지역 측정소별 측정 총합의 평균값
-	 */
-	const regionAvgValue = (order, returnValue) => {
-		if(data){
-			const filterValue = Object.values(regionNumList)?.map((list) => {
-				return data?.filter((data) => {
-					return data.sidoName === list;
-				});
-			});
 
-			const filterTotalValue = filterValue?.map((arr) => {
-			return arr.reduce((accumulator, currentValue) => {
-				const valueToAdd = parseFloat(currentValue[returnValue]);
-				if (!isNaN(valueToAdd)) {
-				return accumulator + valueToAdd;
-				} else {
-				return accumulator;
-				}
-			}, 0);
-			});
-			const result = filterTotalValue[order] / filterValue[order]?.length;
-			const fixedValue = ['o3Value', 'no2Value', 'so2Value'];
-			if (fixedValue.includes(returnValue)) {
-				return result.toFixed(4);
-			} else if (returnValue === 'coValue') {
-				return result.toFixed(2);
-			} else return Math.round(result);
-		} else {
-			return 0;
-		}
-	};
-	/**
-	 * JSON 사용
-	 * 상세 지역 측정소 값 총합, 평균값
-	 * @param {*} props
-	 * @param {*} list
-	 * @returns 상세 지역 측정소 총합 평균값
-	 */
-	const filterStationReturnValue = (type, list) => {
-		if(data){
-			const filterStationValue = list?.map((region) => {
-				return region.station?.map((station) => {
-					const findData = data?.find((data) => data.stationName === station)?.[type];
-					const formatter = Number(findData);
-					return isNaN(formatter) ? 0 : formatter;
-				});
-			});
-			const result = filterStationValue?.map((val) => {
-				const sumValue = val.reduce((acc, cur) => acc + cur);
-				if(type === 'khaiValue' || type === 'pm10Value' || type === 'pm25Value') {
-					return Math.round(sumValue / val.length);
-				} else {
-					return (sumValue / val.length).toFixed(type=== 'coValue' ? 2 : 4);
-				}
-			});
-			const avgValue = Math.round(
-				result.reduce((acc, cur) => acc + cur) / result.length
-			);
-			return { result, avgValue };
-		} else {
-			return { result: null, avgValue: null }
-		}
-	};
-	// ^-------------------------------------------------------------- JSON
-
-	// * Component
+	// @ 상세 지도 SVG 컴포넌트
 	const InnerMapSvg = ({ children }) => {
 		return (
 			<svg
@@ -254,6 +256,7 @@ const Standby = ({Time}) => {
 			</svg>
 		);
 	};
+	// @ 측정소 정보 팝업 컴포넌트
 	const StationPopup = ({top, left}) => {
 		const legend = (() => {
 			switch(type) {
@@ -289,12 +292,12 @@ const Standby = ({Time}) => {
 			</DynamicStyle>
 		)
 	}
-	// * 지역별 컴포넌트
+	// ! 지역별
+	// @ 지역별 컴포넌트
 	const RegionComponents = () => {
-
-		/** 상세 지역 컴포넌트 (버튼)  */
+		// @ 지역별 상세 지역 버튼 컴포넌트
 		const InnerComponent = ({ regNum, regName, fullName }) => {
-			const { result } = filterStationReturnValue(type, regionList[regName]);
+			const { result } = filterStationReturnValue(type, regionList[regName], data);
 			const value = (key) => result ? result[key] : 0;
 			const renderButton = (el, key) => {
 				const id = `p_${regNum}_${String(key + 1).padStart(3, '0')}`;
@@ -327,7 +330,7 @@ const Standby = ({Time}) => {
 				></InnerMapPath>
 				);
 			};
-
+	
 			const Components = {
 				서울: SeoulInner,
 				경기: null,
@@ -348,7 +351,7 @@ const Standby = ({Time}) => {
 				제주: JejuInner,
 			}
 			const DynamicComponent = Components[regName];
-
+	
 			/* dynamic */
 			const DetailContainer = styled(StandbyInnerDetailContainer)`
 				&[data-region_num="${openMap}"]{
@@ -363,12 +366,12 @@ const Standby = ({Time}) => {
 						color: #fff;
 				}
 			`;
-
+	
 			// 입력된 지역의 전체 측정소 위치 데이터
 			const filterStationData = stationsInfo?.filter(item => {
 				return (item.city === fullName) && filterDataValues[filterDataKeys?.indexOf(item.mangName)];
 			});
-
+	
 			return (
 				<DetailContainer data-region_num={regNum} regionNum={regNum}>
 					<StandbyInnerTitle>
@@ -409,7 +412,7 @@ const Standby = ({Time}) => {
 					{/* SVG */}
 					<InnerMapSvg>
 						{DynamicComponent && <DynamicComponent />}
-
+	
 						{/* 지역 배경 Path */}
 						<path
 						title={`${regName}_BG`}
@@ -417,15 +420,14 @@ const Standby = ({Time}) => {
 						stroke="#9EAEC2"
 						d={innerBackgroundPathData[regNum]}
 						></path>
-
+	
 						{/* 지역 SVG */}
 						{regionList[regName]?.map(renderPath)}
 					</InnerMapSvg>
 				</DetailContainer>
 			);
 		};
-
-		/** 패스 컴포넌트 */
+		// # 패스 데이터
 		const Components = {
 			서울: null,
 			경기: GyeonggiPath,
@@ -445,26 +447,23 @@ const Standby = ({Time}) => {
 			전북: JeonbukPath,
 			제주: JejuPath,
 		}
-
-		/** 전체 맵 버튼, 상세 지역, 전체 맵 SVG */
+		// # 전체 맵 버튼, 상세 지역, 전체 맵 SVG
 		return regionDetailData?.map((el, key) => {
 			let color;
 			let hoverColor;
 			let hoverChk = false;
-			const ifResult = getColorValue(0, {value: regionAvgValue(key, type), type});
-
+			const regionAvgValueResult = regionAvgValue(key, type, data);
+			const ifResult = getColorValue(0, {value: regionAvgValueResult, type});
 			color = ifResult[0];
 			hoverChk = false;
 			if (hover === el.num) {
 				color = ifResult[1];
 				hoverChk = true;
 			}
-
 			if(selectInfo === 'station'){
 				color = '#fff';
 				hoverColor = "#f5fcff";
 			}
-
 			const PathComponent = Components[el.name];
 
 			return (
@@ -477,11 +476,11 @@ const Standby = ({Time}) => {
 					<StandbyMapNameButton
 						left={el.left}
 						top={el.top}
-						bgColor={getColorValue(0, {value: regionAvgValue(key, type), type})[2]}
+						bgColor={getColorValue(0, {value: regionAvgValueResult, type})[2]}
 						onClick={() => innerClickHandle(el.num)}
 					>
 						{el.name}
-						{loading && <span>{regionAvgValue(key, type)}</span>}
+						{loading && <span>{regionAvgValueResult}</span>}
 					</StandbyMapNameButton>
 					}
 					{loading && <InnerComponent regNum={el.num} regName={el.name} fullName={el.fullName} />}
@@ -503,12 +502,10 @@ const Standby = ({Time}) => {
 		})
 	}
 
-	// * 측정소 컴포넌트
+	// @ 측정소 컴포넌트
 	const StationComponent = () => {
-		const Div = styled.div`position: relative;`
-		// const stationData = stationsInfo.find(item => item.stationName === hoverStation);
 		return (
-			<Div>
+			<div style={{position: 'relative'}}>
 				{stationsInfo?.map((list, key) => {
 					// 장계면 데이터 없음
 					const filterStationAirData = data?.find(item => (item.stationName === list.stationName));
@@ -544,7 +541,7 @@ const Standby = ({Time}) => {
 					)
 				})}
 				{openMap === 0 && <StationPopup top={hoverStation.top} left={hoverStation.left} />}
-			</Div>
+			</div>
 		)
 	}
 

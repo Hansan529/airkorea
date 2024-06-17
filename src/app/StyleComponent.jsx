@@ -726,8 +726,8 @@ export const AppSecondBanner = styled.div`
   }
 `;
 export const AppSecondBannerInfo = styled.div`
-      transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'};
-      transform: translateY(-${props => props.index * 80}px);
+      transition-duration: var(--transition-duration);
+      transform: translateY(var(--translate-y));
 
       div {
         display: flex;
@@ -784,8 +784,8 @@ export const AppBtn = styled.button`
 export const AppListUl = styled.ul`
     display: flex;
     flex-wrap: nowrap;
-    transition-duration: ${(props) => props.disableDuration === true ? '0ms' : '300ms'};
-    transform: translateX(${props => props.index * 200}px);
+    transition-duration: var(--transition-duration);
+    transform: translateX(var(--translate-x));
 `;
 export const AppListLi = styled.li`
     flex: 0 200px;
