@@ -1,13 +1,22 @@
+// ! System
 import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from 'date-fns/locale/ko';
 
-import useStore from '../../app/hooks/useStore.jsx';
+// ! JSON
 import stationInfoJSON from '../../app/data/stationInfo.json';
+
+// ! Hooks
+import useStore from '../../app/hooks/useStore.jsx';
+
+// ! Functions
 import getColorValue from '../../app/functions/getColorValue.ts';
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableSpan, ContentResultTableWrap, ContentResultTap, ContentResultWrap, ContentSearchInput, ContentSearchWrapRealtime, ContentTableRealtimePage1, ContentTableWrap, LayoutContentTitle, DisableBtn, DisableFeat, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar } from '../../app/StyleComponent.jsx';
+
+// ! Styles
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableSpan, ContentResultTableWrap, ContentResultTap, ContentResultWrap, ContentSearchInput, ContentSearchWrap, RealtimePage1ContentTable, ContentTableWrap, LayoutContentTitle, ContentResultSearchBtn, ContentResultSearchBtnWrap, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar } from '../../app/StyleComponent.jsx';
+
 
 registerLocale('ko', ko);
 
@@ -43,7 +52,7 @@ export default function Page() {
             title: '실시간 대기 정보',
             toggleIndex: 2,
             links: [
-                { text: "시도별 대기정보", to: '/realtime?page=2' },
+                { text: "시도별 대기정보", to: '/realtime?page=2&type=pm25' },
                 { text: "미세먼지 세부 측정정보", to: '/realtime?page=3' }
             ]
         },
@@ -396,12 +405,12 @@ export default function Page() {
                 </LayoutAside>
                 <LayoutContent>
                     <LayoutContentTitle>우리동네 대기 정보</LayoutContentTitle>
-                    <ContentSearchWrapRealtime>
+                    <ContentSearchWrap>
                         <label htmlFor="search">지역명 검색</label>
                         <ContentSearchInput type="text" id="search" placeholder="도로명 또는 동을 입력하세요. 예) 서소문로" value={searchValue} onChange={(e) => e.currentTarget.value} />
                         <button>검색</button>
-                    </ContentSearchWrapRealtime>
-                    <ContentTableRealtimePage1>
+                    </ContentSearchWrap>
+                    <RealtimePage1ContentTable>
                         <thead>
                             <tr>
                                 <th>선택</th>
@@ -432,7 +441,7 @@ export default function Page() {
                         })}
                         </tbody>
                         <caption>※ 거주지역의 대표 대기질은 "도시대기" 측정자료를 참고하시기 바랍니다.</caption>
-                    </ContentTableRealtimePage1>
+                    </RealtimePage1ContentTable>
                     <ContentResultWrap>
                         <div>
                             <ContentResultTap selectCheck={viewSelectIndex === 0} onClick={() => {setViewSelectIndex(0); setDataDivision('time');}} style={{marginRight: '10px'}}>측정자료 조회통합대기</ContentResultTap>
@@ -464,14 +473,14 @@ export default function Page() {
                             <div>
                                 <strong>조회 기간</strong>
                                 <div>
-                                    <DisableFeat>
+                                    <ContentResultSearchBtnWrap>
                                         <RenderDatePicker selectedDate={selectedBginDate} setSelectedDate={setSelectedBginDate} showTimeSelect={dataDivision !== 'daily'} division={bginHour} setHour={setBginHour} />
                                         ~
                                         <RenderDatePicker selectedDate={selectedEndDate} setSelectedDate={setSelectedEndDate} showTimeSelect={dataDivision !== 'daily'} division={endHour} setHour={setEndHour}/>
-                                            <DisableBtn>
+                                            <ContentResultSearchBtn>
                                                 <button onClick={handleCenterButton}>검색</button>
-                                            </DisableBtn>
-                                    </DisableFeat>
+                                            </ContentResultSearchBtn>
+                                    </ContentResultSearchBtnWrap>
                                 </div>
                             </div>
                         </ContentResultSearchBox>
@@ -479,7 +488,7 @@ export default function Page() {
                             <h2>측정자료&#40;수치&#41;</h2>
                             {/* 컴포넌트 */} <ContentResultTableStation />
                             <ContentTableWrap>
-                                <ContentTableRealtimePage1>
+                                <RealtimePage1ContentTable>
                                     <thead>
                                         {dataDivision !== 'total' ?
                                         // ^ time, daily
@@ -529,7 +538,7 @@ export default function Page() {
                                     <tbody>
                                         <TableDomComponent />
                                     </tbody>
-                                </ContentTableRealtimePage1>
+                                </RealtimePage1ContentTable>
                             </ContentTableWrap>
                         </ContentResultTableWrap>
                     </ContentResultWrap>

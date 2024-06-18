@@ -1315,7 +1315,7 @@ export const TodayAirQualityAirForecastLi = styled(TodayAirQualityPartLi)`
 `;
 
 // ! 상속
-const ContentTable = styled.table`
+export const ContentTable = styled.table`
     width: 100%;
     border-top: 2px solid #000;
     margin: 20px 0;
@@ -1612,7 +1612,7 @@ export const InfoPage3ContentMapDetailKey = styled.span`
 
 
 // @ realtime/page1.jsx
-export const ContentSearchWrapRealtime = styled.div`
+export const ContentSearchWrap = styled.div`
     position: relative;
     margin: 30px 0 0 0;
     padding: 15px 0 15px 245px;
@@ -1664,7 +1664,7 @@ export const ContentTableWrap = styled.div`
         }
     }
 `;
-export const ContentTableRealtimePage1 = styled(ContentTable)`
+export const RealtimePage1ContentTable = styled(ContentTable)`
     caption { 
         margin-bottom: 0;
         margin-top: 10px;
@@ -1731,7 +1731,7 @@ export const ContentResultSearchBox = styled.div`
         }
     }
 `;
-export const DisableFeat = styled.div`
+export const ContentResultSearchBtnWrap = styled.div`
     display: flex;
     align-items: center;
 
@@ -1757,7 +1757,7 @@ export const DisableFeat = styled.div`
         &:first-of-type { margin-right: 10px; }
     }
 `;
-export const DisableBtn = styled.div`
+export const ContentResultSearchBtn = styled.div`
     position: absolute;
     right: 20px;
 
@@ -1803,6 +1803,22 @@ export const LoadingWrap = styled.div`
     position: absolute;
     z-index: 3001;
     transform: translate(-50%, -50%);
+`;
+
+
+// @ realtime/page2.jsx
+export const RealtimePage2ContentResultSearchBox = styled.div`
+    > div:first-of-type {
+        display: flex;
+        > div {
+            flex-grow: 1;
+        }
+    }
+`;
+export const RealtimePage2ContentResultSearchBtn = styled.div`
+    display: initial !important;
+    position: relative !important;
+    float: right;
 `;
 
 
