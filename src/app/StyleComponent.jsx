@@ -1812,6 +1812,9 @@ export const RealtimePage2ContentResultSearchBox = styled.div`
         display: flex;
         > div {
             flex-grow: 1;
+           label + span {
+            margin-left: 10px;
+           }
         }
     }
 `;
