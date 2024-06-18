@@ -1664,7 +1664,7 @@ export const ContentTableWrap = styled.div`
         }
     }
 `;
-export const ContentTableRealtimePage1 = styled.table`
+export const ContentTableRealtimePage1 = styled(ContentTable)`
     caption { 
         margin-bottom: 0;
         margin-top: 10px;
