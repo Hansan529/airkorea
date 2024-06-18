@@ -52,7 +52,6 @@ export default function Page() {
             toggleIndex: 3,
             links: [
                 { text: '국가산단주변 미세먼지 정보', to: '' },
-                { text: '우리학교 주변 대기 정보', to: '' }
             ]
         }
     ];
@@ -77,9 +76,9 @@ export default function Page() {
     }
     // # 네비게이션 토글 상태
     const [toggles, setToggles] = useState({
-        1: { px: 0, initial: 250},
-        2: { px: 0, initial: 100},
-        3: { px: 0, initial: 100}
+        1: { px: 0, initial: topbarList[0].links.length * 50},
+        2: { px: 0, initial: topbarList[1].links.length * 50},
+        3: { px: 0, initial: topbarList[2].links.length * 50}
     });
     // # 네비게이션 토글 함수
     const toggleHandle = (e, index) => {
@@ -104,7 +103,6 @@ export default function Page() {
                     children: [
                     { text: '우리동네 대기 정보',        select: true },
                     { text: '국가산단주변 미세먼지 정보',  select: false },
-                    { text: '우리학교 주변 대기 정보',    select: false }
                     ] 
                 },
                 { text: '시도별 대기정보',
@@ -128,7 +126,7 @@ export default function Page() {
     };
     // # 사이드바 토글
     const [asideToggle, setAsideToggle] = useState({
-        [asideList.links[0].text]: { px: 150, initial: asideList.links[0].children.length * 50 },
+        [asideList.links[0].text]: { px: asideList.links[0].children.length * 50 , initial: asideList.links[0].children.length * 50 },
         [asideList.links[1].text]: { px: 0, initial: asideList.links[1].children.length * 50 },
         [asideList.links[2].text]: { px: 0, initial: asideList.links[2].children.length * 50 },
     });
