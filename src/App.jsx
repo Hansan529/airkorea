@@ -7,14 +7,10 @@ import stationInfoJSON from './app/data/stationInfo.json';
 
 // ! Hooks
 import useStore from './app/hooks/useStore.jsx';
-import useInterval from './app/hooks/useInterval.ts';
-
-// ! Function
-import sleep from './app/functions/sleep.ts';
 
 // ! 스타일
 import './App.css';
-import { AppBannerWrap, AppBtn, AppButtonBox, AppFirstSection, AppListLi, AppListUl, AppMMLayout, AppMMOBorderDiv, AppMMOContainer, AppMMOList, AppMMOSelect, AppMMOSelectWrapper, AppMMOptionLayout, AppMMWrapper, AppSecondBanner, AppSecondBannerInfo, AppSecondSection, AppTimeButtonStyle, AppTimeDiv } from './app/StyleComponent.jsx';
+import { AppFirstSection, AppMMLayout, AppMMOBorderDiv, AppMMOContainer, AppMMOList, AppMMOSelect, AppMMOSelectWrapper, AppMMOptionLayout, AppMMWrapper, AppSecondBanner, AppSecondSection, AppTimeButtonStyle, AppTimeDiv } from './app/StyleComponent.jsx';
 
 // @ 컴포넌트
 import HeaderComponent from './app/components/Header';
