@@ -47,13 +47,6 @@ export default function Page() {
                 { text: "미세먼지 세부 측정정보", to: '/realtime?page=3' }
             ]
         },
-        {
-            title: '우리동네 대기 정보',
-            toggleIndex: 3,
-            links: [
-                { text: '국가산단주변 미세먼지 정보', to: '' },
-            ]
-        }
     ];
     // @ 서브 네비게이션 바 컴포넌트
     const TopBarListComponent = () => {
@@ -78,7 +71,6 @@ export default function Page() {
     const [toggles, setToggles] = useState({
         1: { px: 0, initial: topbarList[0].links.length * 50},
         2: { px: 0, initial: topbarList[1].links.length * 50},
-        3: { px: 0, initial: topbarList[2].links.length * 50}
     });
     // # 네비게이션 토글 함수
     const toggleHandle = (e, index) => {
@@ -100,10 +92,6 @@ export default function Page() {
             links: [
                 { text: '실시간 대기 정보', 
                     select: true, 
-                    children: [
-                    { text: '우리동네 대기 정보',        select: true },
-                    { text: '국가산단주변 미세먼지 정보',  select: false },
-                    ] 
                 },
                 { text: '시도별 대기정보',
                     select: false,
@@ -126,7 +114,7 @@ export default function Page() {
     };
     // # 사이드바 토글
     const [asideToggle, setAsideToggle] = useState({
-        [asideList.links[0].text]: { px: asideList.links[0].children.length * 50 , initial: asideList.links[0].children.length * 50 },
+        [asideList.links[0].text]: { px: 0 , initial: 0 },
         [asideList.links[1].text]: { px: 0, initial: asideList.links[1].children.length * 50 },
         [asideList.links[2].text]: { px: 0, initial: asideList.links[2].children.length * 50 },
     });
@@ -384,7 +372,7 @@ export default function Page() {
         return nearStation.map((station, idx) => {
             const effectBoolean = selectStation === station.stationName;
             let opacity;
-            if(dataDivision === 'time') opacity = tableDom.find(table => table.stationName === station.stationName) ? null : 80;
+            if(dataDivision === 'time' || dataDivision === 'total') opacity = tableDom.find(table => table.stationName === station.stationName) ? null : 80;
             if(dataDivision === 'daily') opacity = tableDom.find(table => table.msrstnName === station.stationName) ? null : 80;
             return <Fragment key={idx}>
                 <ContentResultTableSpan effect={effectBoolean} opacity={opacity}>{station.stationName}</ContentResultTableSpan>
