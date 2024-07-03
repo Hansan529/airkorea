@@ -3,33 +3,29 @@ import { useEffect, useState } from "react";
 import stationInfo from "../../app/data/stationInfo.json";
 import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage3ContentSubTitleWrap, InfoPage3ContentSelectWrap, InfoPage3ContentSelect, InfoPage3ContentMain, InfoPage3ContentMapWrap, InfoPage3ContentMap, InfoPage3ContentMapListWrap, InfoPage3ContentMapListTitle, InfoPage3ContentMapList, InfoPage3ContentMapDetail, InfoPage3ContentMapDetailKey } from '../../app/StyleComponent';
 
-export default function Page() {
-    // ! 서브 네비게이션 바 목록
-    const topbarList = [
-        {
-            title: '에어코리아란',
-            toggleIndex: 1,
-            links: [
-                { text: "실시간 자료조회", to: '/realtime?page=1&no=1' },
-                { text: "대기정보 예보 / 경보", to: '/standby?page=1' },
-                { text: "통계정보", to: '/?page=1' },
-                { text: "배움터", to: '/?page=1' },
-            ]
-        },
-        {
-            title: '측정소 정보',
-            toggleIndex: 2,
-            links: [
-                { text: "에어코리아란", to: '/info?page=1' },
-                { text: "측정망 정보", to: '/info?page=2' },
-            ]
-        }
-    ]
-    // # 네비게이션
-    const [toggles, setToggles] = useState({
-        1: { px: 0, initial: 250},
-        2: { px: 0, initial: 100}
+export default function Page({ topbarMain, topbarList }) {
+     // # 서브 네비게이션이 객체인지 배열인지 체크
+     const objectExist = Object.prototype.toString.call(topbarList) === "[object Object]";
+
+     // # 네비게이션 토글
+     const [toggles, setToggles] = useState({
+        1: { px: 0, initial: topbarMain.links.length * 50},
+        2: { px: 0, initial: objectExist ? topbarList.links.length * 50 : topbarList[0].links.length * 50}
     });
+    useEffect(() => {
+        if(!objectExist) {
+            const toggleKeys = Object.keys(toggles).map(Number);
+            const maxKey = Math.max(...toggleKeys);
+            const newToggles = { ...toggles };
+
+            for (let i = 0; i < topbarList.length; i++) {
+                const key = maxKey + i + 1;
+                newToggles[key] = { px: 0, initial: topbarList[i].links.length * 50 };
+            }
+
+            setToggles(newToggles);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }}, [objectExist, topbarList])
     const toggleHandle = (e, index) => {
         e.preventDefault();
         setToggles(prevToggles => ({
@@ -40,6 +36,67 @@ export default function Page() {
             }
         }));
     };
+
+    // @ 서브 네비게이션 컴포넌트
+    const TopbarLayout = () => {
+        return (
+            <LayoutTopBar>
+                    <li>
+                        <LayoutHome to="/" title="홈"></LayoutHome>
+                    </li>
+                    {/* topbarMain */}
+                    <LayoutList>
+                        <LayoutAElement
+                            to="#"
+                            title={topbarMain.title}
+                            onClick={(e) => toggleHandle(e, topbarMain.toggleIndex)}
+                            data-index={topbarMain.toggleIndex}
+                            data-direction={toggles[topbarMain.toggleIndex].px === toggles[topbarMain.toggleIndex].initial ? 'up' : 'down'}
+                        >
+                            {topbarMain.title}
+                        </LayoutAElement>
+                        <LayoutListDetail $height={toggles[topbarMain.toggleIndex].px}>
+                            {topbarMain.links.map((link, idx) => (
+                                <li key={idx}>
+                                    <Link to={link.to}>{link.text}</Link>
+                                </li>
+                            ))}
+                        </LayoutListDetail>
+                    </LayoutList>
+                    {/* topbarList */}
+                    {objectExist 
+                    ? (<LayoutList>
+                        <LayoutAElement
+                            to="#"
+                            title={topbarList.title}
+                            onClick={(e) => toggleHandle(e, topbarList.toggleIndex)}
+                            data-index={topbarList.toggleIndex}
+                            data-direction={toggles[topbarList.toggleIndex].px === toggles[topbarList.toggleIndex].initial ? 'up' : 'down'}
+                        >{topbarList.title}</LayoutAElement>
+                        <LayoutListDetail $height={toggles[topbarList.toggleIndex].px}>{topbarList.links.map((link, idx) => <li key={idx}><Link to={link.to}>{link.text}</Link></li>)}</LayoutListDetail>
+                        </LayoutList>) 
+                    : topbarList.map((list, idx) => {
+                        return (
+                            <LayoutList>
+                                <LayoutAElement
+                                    to="#"
+                                    title={list.title}
+                                    onClick={(e) => toggleHandle(e, list.toggleIndex)}
+                                    data-index={list.toggleIndex}
+                                    data-direction={toggles[list.toggleIndex].px === toggles[list.toggleIndex].initial ? 'up' : 'down'}
+                                >
+                                    {list.title}
+                                </LayoutAElement>
+                                <LayoutListDetail $height={toggles[list.toggleIndex].px}>
+                                    {list.links.map((link, idx2) => <li key={idx2}><Link to={link.to}>{link.text}</Link></li>)}
+                                </LayoutListDetail>
+                            </LayoutList>
+                        )
+                    })}
+                </LayoutTopBar>
+        )
+    }
+
 
     // ! 사이드바 목록
     const asideList = {
@@ -140,31 +197,7 @@ export default function Page() {
     return (
         <>  
             <LayoutDivStyle>
-                <LayoutTopBar>
-                    <li>
-                        <LayoutHome to={'/'} title="홈"></LayoutHome>
-                    </li>
-                    {topbarList.map((item, index) => (
-                        <LayoutList key={index}>
-                            <LayoutAElement
-                                to="./"
-                                title={item.title}
-                                onClick={(e) => toggleHandle(e, item.toggleIndex)}
-                                data-index={item.toggleIndex}
-                                data-direction={toggles[item.toggleIndex].px === toggles[item.toggleIndex].initial ? 'up' : 'down'}
-                            >
-                                {item.title}
-                            </LayoutAElement>
-                            <LayoutListDetail $height={toggles[item.toggleIndex].px}>
-                                {item.links.map((link, linkIndex) => (
-                                    <li key={linkIndex}>
-                                        <Link to={link.to}>{link.text}</Link>
-                                    </li>
-                                ))}
-                            </LayoutListDetail>
-                        </LayoutList>
-                    ))}
-                </LayoutTopBar>
+                <TopbarLayout />
             </LayoutDivStyle>
             <LayoutSection>
             <LayoutAside>
@@ -172,7 +205,7 @@ export default function Page() {
                     <ul>
                         {asideList.links.map((link, index) => {
                             const variableCheck = typeof asideToggle !== 'undefined';
-                            const childrenCheck = 'children' in link;
+                            // const childrenCheck = 'children' in link;
                             let result;
                             if(variableCheck) {
                                 // result = variableCheck && (

@@ -139,6 +139,7 @@ export const LayoutAsideLinkA = styled(Link)`
     font-weight: 400;
     line-height: 50px;
     border-bottom: 1px dotted #dcdcdc;
+    &:hover { color: #0f62cc; }
 `;
 //정보 메인
 export const LayoutSection = styled.section`

@@ -1,5 +1,5 @@
 // ! System
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,6 +18,9 @@ registerLocale('ko', ko);
 
 export default function Page() {
     // ! 기타
+    // # pathname
+    const { pathname } = useLocation();
+
     // # search 파라미터
     const [searchParams] = useSearchParams();
     const [searchType, setSearchType] = useState('pm25');
@@ -68,7 +71,6 @@ export default function Page() {
                 { text: "대기정보 예보 / 경보", to: '/standby?page=1' },
                 { text: "통계정보", to: '/?page=1' },
                 { text: "배움터", to: '/?page=1' },
-                { text: "고객지원", to: '/?page=1 '}
             ]
         },
         {
@@ -140,25 +142,23 @@ export default function Page() {
                 { text: '시도별 대기정보',
                     select: true,
                     children: [
-                    { text: '시도별 대기정보(PM-2.5)',  type: 'pm25' },
-                    { text: '시도별 대기정보(PM-10)',   type: 'pm10' },
-                    { text: '시도별 대기정보(오존)',     type: 'o3' },
-                    { text: '시도별 대기정보(이산화질소)', type: 'no2' },
-                    { text: '시도별 대기정보(일산화탄소)', type: 'co' },
-                    { text: '시도별 대기정보(아황산가스)', type: 'so2' }] 
+                    { text: '시도별 대기정보(PM-2.5)',  select: false, type: 'pm25' },
+                    { text: '시도별 대기정보(PM-10)',   select: false, type: 'pm10' },
+                    { text: '시도별 대기정보(오존)',     select: false, type: 'o3' },
+                    { text: '시도별 대기정보(이산화질소)', select: false, type: 'no2' },
+                    { text: '시도별 대기정보(일산화탄소)', select: false, type: 'co' },
+                    { text: '시도별 대기정보(아황산가스)', select: false, type: 'so2' }] 
                 },
                 { text: '미세먼지 세부 측정정보', 
                     select: false,
                     children: [
-                    { text: '초미세먼지 (PM-2.5)',      select: false },
-                    { text: '미세먼지 (PM-10)',        select: false },
-                    { text: '미세먼지 (미량원소 성분)',    select: false }]
+                    { text: '초미세먼지 (PM-2.5)',      select: false, type: 'detail-pm25' },
+                    { text: '미세먼지 (PM-10)',        select: false, type: 'detail-pm10' }]
                 },
             ]
     };
     // # 사이드바 토글
     const [asideToggle, setAsideToggle] = useState({
-        [asideList.links[0].text]: { px: 0 , initial: 0 },
         [asideList.links[1].text]: { px: asideList.links[1].children.length * 50, initial: asideList.links[1].children.length * 50 },
         [asideList.links[2].text]: { px: 0, initial: asideList.links[2].children.length * 50 },
     });
@@ -196,29 +196,28 @@ export default function Page() {
             const variableCheck = typeof asideToggle !== 'undefined';
             const childrenCheck = 'children' in link;
             if(variableCheck) {
-                return (
-                    <li key={index}>
-                        <LayoutAsideLink 
-                            to="#" 
-                            onClick={asideHandle}
-                            children_height={asideToggle[link.text]?.px}
-                            selected={link.select}
-                            showmore={childrenCheck ? 'true' : 'false'} 
-                            >{link.text}</LayoutAsideLink>
-                        {childrenCheck && 
-                        <LayoutAsideLinkUl $height={asideToggle[link.text]?.px}>
-                            {link.children.map((item, _index) =>
-                                <li key={_index}>
-                                    <LayoutAsideLinkA selected={item.type === searchType} to={`/realtime?page=${index + 1}${'type' in item ? `&type=${item.type}` : ''}`}>
-                                        {item.text}
-                                    </LayoutAsideLinkA>
-                                </li>
-                                )}
-                        </LayoutAsideLinkUl>}
-                    </li>
-                );
-            } else return <li key={index}><LayoutAsideLink to={`/realtime?page=2&type=pm25`} selected={link.select}>{link.text}</LayoutAsideLink></li>;
-        
+                const hasOwnProperty = asideToggle.hasOwnProperty(link.text);
+
+                if(hasOwnProperty){
+                    return (
+                        <li key={index}>
+                            <LayoutAsideLink 
+                                to="" 
+                                onClick={asideHandle}
+                                children_height={asideToggle[link.text]?.px}
+                                selected={link.select}
+                                showmore={childrenCheck ? 'true' : 'false'} 
+                                >{link.text}</LayoutAsideLink>
+                            {childrenCheck && 
+                            <LayoutAsideLinkUl $height={asideToggle[link.text]?.px}>
+                                {link.children.map((item, _index) => <li key={_index}>
+                                    <LayoutAsideLinkA selected={item.type === searchType} to={`${pathname}?page=${index + 1}&type=${item.type}`}>{item.text}</LayoutAsideLinkA>
+                                    </li>)}
+                            </LayoutAsideLinkUl>}
+                        </li>
+                    );
+                }
+            } return <li key={index}><LayoutAsideLink to={`/realtime?page=${index + 1}`} selected={link.select}>{link.text}</LayoutAsideLink></li>;
     });
     return <ul>{children}</ul>
     };
