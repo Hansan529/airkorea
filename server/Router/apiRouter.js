@@ -4,45 +4,6 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 
-// # 측정소 별 대기 데이터
-router.get('/data', async (req, res) => {
-    console.log('data: ');
-    try {
-        const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=700&pageNo=1&sidoName=전국&ver=1.0`)).data;
-        return res.json(items);
-    } catch(err) {
-        console.error("error: ", err);
-        return res.json(false);
-    }
-});
-
-// # 대기 예보 텍스트
-router.get('/text', async (req, res) => {
-    console.log('text: ');
-    try {
-        const today = new Date();
-
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        const hour = today.getHours();
-
-        let result;
-
-        if(hour < 5) {
-            result = `${year}.${month}.${day-1}`;
-        } else {
-            result = `${year}.${month}.${day}`;
-        }
-
-        const {response: { body: { items }}} = await (await axios.get(`http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth?serviceKey=${process.env.REACT_APP_OPENAPI_SERVICEKEY}&returnType=json&numOfRows=700&pageNo=1&searchDate=${result}`)).data;
-        return res.json(items);
-    } catch(err) {
-        console.error("error: ", err);
-        return res.json(false);
-    }
-});
-
 // # 가까운 측정소 찾기
 router.get('/station', async (req, res) => {
     console.log('station: ');

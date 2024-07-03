@@ -123,7 +123,7 @@ function App() {
           if(cacheData && cacheData.state[type]) {
               return;
           }
-          getFetch(type, `http://localhost:3500/api/airkorea/${type}`);
+          getFetch(type, `https://apis.hansan-web.link/station-${type}`);
       } catch (err) {
           console.error('err: ', err);
       }
