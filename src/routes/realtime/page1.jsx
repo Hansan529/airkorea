@@ -365,7 +365,7 @@ export default function Page() {
         if((dataDivision === 'time' && checkResult.length === 0) 
             || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))
             || (dataDivision === 'total' && !checkResult.some(item => item.khaiValue))) {
-            const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
+            const response = await fetch(`https://apis.hansan-web.link/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
             const arrayResult = await response.json();
 
             const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting)

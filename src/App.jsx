@@ -165,7 +165,7 @@ function App() {
         const [tmX, tmY] = tmCoordinates;
         try {
           // # 측정소 데이터 API 호출
-          const responseStation = await fetch(`http://localhost:3500/api/airkorea/station?x=${tmX}&y=${tmY}`);
+          const responseStation = await fetch(`https://apis.hansan-web.link/station?x=${tmX}&y=${tmY}`);
 
           if(!responseStation.ok) throw new Error('Network response was not ok');
 
