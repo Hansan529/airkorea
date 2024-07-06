@@ -1808,18 +1808,21 @@ export const LoadingWrap = styled.div`
 
 
 // @ realtime/page2.jsx
-export const RealtimePage2ContentResultSearchBox = styled.div`
-    > div:first-of-type {
-        display: flex;
-        > div {
-            flex-grow: 1;
-           label + span {
-            margin-left: 10px;
-           }
+export const RealtimePage2ContentResultSearchBox = styled(ContentResultSearchBox)`
+    > div {
+        height: 60px;
+        &:first-of-type {
+            display: flex;
+            > div {
+                flex-grow: 1;
+               label + span {
+                margin-left: 10px;
+               }
+            }
         }
     }
 `;
-export const RealtimePage2ContentResultSearchBtn = styled.div`
+export const RealtimePage2ContentResultSearchBtn = styled(ContentResultSearchBtn)`
     display: initial !important;
     position: relative !important;
     float: right;

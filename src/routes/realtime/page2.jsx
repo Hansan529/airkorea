@@ -8,11 +8,8 @@ import ko from 'date-fns/locale/ko';
 // ! JSON
 import regionListJSON from '../../app/data/regionList.json';
 
-// ! Functions
-import getColorValue from '../../app/functions/getColorValue.ts';
-
 // ! Styles
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableWrap, ContentResultWrap, ContentTableWrap, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar, ContentTable, ContentResultSearchBtnWrap, ContentResultSearchBtn, RealtimePage2ContentResultSearchBtnWrap, RealtimePage2ContentResultSearchBtn, RealtimePage2ContentResultSearchBox } from '../../app/StyleComponent.jsx';
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultTableWrap, ContentResultWrap, ContentTableWrap, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar, ContentTable, ContentResultSearchBtnWrap, ContentResultSearchBtn, RealtimePage2ContentResultSearchBtnWrap, RealtimePage2ContentResultSearchBtn, RealtimePage2ContentResultSearchBox } from '../../app/StyleComponent.jsx';
 
 registerLocale('ko', ko);
 
@@ -228,7 +225,6 @@ export default function Page() {
     const [selectRegion, setSelectRegion] = useState('전체');
 
 
-
     // ! 조회 기간 캘린더
     // # 캘린더 설정
     const currentDate = new Date();
@@ -239,43 +235,160 @@ export default function Page() {
     // ! 측정자료
     // # 통계 검색
     const [tableResult, setTableResult] = useState([{}]);
-    const [tableDom, setTableDom] = useState([]);
-    const tableRowSpan = dataDivision === 'time' ? 1 : 2;
+    const [tableDom, setTableDom] = useState({hour: [], daily: []});
+    
     // @ 통계 테이블 컴포넌트
     const TableDomComponent = () => {
         // 최초 상태
-        const dataTimeCheck = tableDom.some(dom => dom.dataTime);
-        const dataDailyCheck = tableDom.some(dom => dom.msurDt);
+        // const dataTimeCheck = tableDom.some(dom => dom.dataTime);
+        // const dataDailyCheck = tableDom.some(dom => dom.msurDt);
 
-        if(tableDom.length === 0 || (!dataTimeCheck && dataDivision === 'time') || (!dataDailyCheck && dataDivision === 'daily')) {
-            const colSpan = dataDivision === 'total' ? 16 : 12
-            return <tr><td colSpan={colSpan}>검색된 자료가 없습니다.</td></tr>;
-        }
+        const startTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T00:00:00`);
+        const endTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T${String(currentDate.getHours()).padStart(2, '0')}:00:00`);
 
-        return tableDom.map((tr, idx) => {
-            const colSpanVariable = dataDivision === 'time' ? 1 : 2;
-            const { gradeText: khaiGradeTxt } = getColorValue(tr?.khaiGrade);
-            const { gradeText: pm10GradeTxt } = getColorValue(tr.pm10Grade);
-            const { gradeText: pm25GradeTxt } = getColorValue(tr.pm25Grade);
-            const { gradeText: o3GradeTxt } = getColorValue(tr.o3Grade);
-            const { gradeText: no2GradeTxt } = getColorValue(tr.no2Grade);
-            const { gradeText: coGradeTxt } = getColorValue(tr.coGrade);
-            const { gradeText: so2GradeTxt } = getColorValue(tr.so2Grade);
+        const initialState = '-';
+        const maxValues = {
+            seoul: initialState,
+            busan: initialState,
+            daegu: initialState,
+            incheon: initialState,
+            gwangju: initialState,
+            daejeon: initialState,
+            ulsan: initialState,
+            gyeonggi: initialState,
+            gangwon: initialState,
+            chungbuk: initialState,
+            chungnam: initialState,
+            jeonbuk: initialState,
+            jeonnam: initialState,
+            sejong: initialState,
+            gyeongbuk: initialState,
+            gyeongnam: initialState,
+            jeju: initialState
+        };
+        const minValues = {
+            seoul: initialState,
+            busan: initialState,
+            daegu: initialState,
+            incheon: initialState,
+            gwangju: initialState,
+            daejeon: initialState,
+            ulsan: initialState,
+            gyeonggi: initialState,
+            gangwon: initialState,
+            chungbuk: initialState,
+            chungnam: initialState,
+            jeonbuk: initialState,
+            jeonnam: initialState,
+            sejong: initialState,
+            gyeongbuk: initialState,
+            gyeongnam: initialState,
+            jeju: initialState
+        };
 
-            let returnDom;
-            return returnDom;
-        });
-    }
-    // ### 데이터 데이터 구분 필터링 함수
-    const filterResult = (data, startDateFormatting, endDateFormatting) => {
-        return data.filter(item => {
-            const { dataTime, stationName, msurDt, msrstnName } = item;
-            const type = typeof dataTime !== 'undefined' ? dataTime : msurDt;
-            const itemDate = new Date(type);
-            const stationExists = typeof stationName !== 'undefined' ? stationName : msrstnName;
-            return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && (stationExists === selectRegion);
-        });
-    }
+        if(tableDom.hasOwnProperty('hour')){
+            console.log('tableDom: ', tableDom);
+            const filteredData = tableDom.hour.filter(item => {
+                const itemTime = new Date(item.dataTime.replace(' ', 'T'));
+                return itemTime >= startTime && itemTime <= endTime;
+            });
+            const getMaxValue = (region) => {
+                if(filteredData.length === 0) return initialState;
+
+                let maxValue = Number(filteredData[0][region]);
+                filteredData.forEach(item => {
+                    const value = Number(item[region]);
+                    if (!isNaN(value) && value > maxValue) {
+                        maxValue = value;
+                    }
+                });
+                return isNaN(maxValue) ? initialState : maxValue;
+            };
+            const getMinValue = (region) => {
+                if(filteredData.length === 0) return initialState;
+
+                let minValue = Number(filteredData[0][region]);
+                filteredData.forEach(item => {
+                    const value = Number(item[region]);
+                    if (!isNaN(value) && value < minValue) {
+                        minValue = value;
+                    }
+                });
+                return isNaN(minValue) ? initialState : minValue;
+            };
+            
+            const regions = ['seoul', 'busan', 'daegu', 'incheon', 'gwangju', 'daejeon', 'ulsan', 'gyeonggi', 'gangwon', 'chungbuk', 'chungnam', 'jeonbuk', 'jeonnam', 'sejong', 'gyeongbuk', 'gyeongnam', 'jeju'];
+
+            regions.forEach(region => {
+                maxValues[region] = getMaxValue(region);
+                minValues[region] = getMinValue(region);
+            });
+        } else <tr><td colSpan="18">검색된 자료가 없습니다.</td></tr>
+        return (
+            <>
+                <tr>
+                    <td>시간평균</td>
+                    <td>{!isNaN(Math.round((maxValues.seoul + minValues.seoul) / 2)) ? Math.round((maxValues.seoul + minValues.seoul) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.busan + minValues.busan) / 2)) ? Math.round((maxValues.busan + minValues.busan) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.daegu + minValues.daegu) / 2)) ? Math.round((maxValues.daegu + minValues.daegu) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.incheon + minValues.incheon) / 2)) ? Math.round((maxValues.incheon + minValues.incheon) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.gwangju + minValues.gwangju) / 2)) ? Math.round((maxValues.gwangju + minValues.gwangju) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.daejeon + minValues.daejeon) / 2)) ? Math.round((maxValues.daejeon + minValues.daejeon) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.ulsan + minValues.ulsan) / 2)) ? Math.round((maxValues.ulsan + minValues.ulsan) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.gyeonggi + minValues.gyeonggi) / 2)) ? Math.round((maxValues.gyeonggi + minValues.gyeonggi) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.gangwon + minValues.gangwon) / 2)) ? Math.round((maxValues.gangwon + minValues.gangwon) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.chungbuk + minValues.chungbuk) / 2)) ? Math.round((maxValues.chungbuk + minValues.chungbuk) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.chungnam + minValues.chungnam) / 2)) ? Math.round((maxValues.chungnam + minValues.chungnam) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.jeonbuk + minValues.jeonbuk) / 2)) ? Math.round((maxValues.jeonbuk + minValues.jeonbuk) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.jeonnam + minValues.jeonnam) / 2)) ? Math.round((maxValues.jeonnam + minValues.jeonnam) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.sejong + minValues.sejong) / 2)) ? Math.round((maxValues.sejong + minValues.sejong) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.gyeongbuk + minValues.gyeongbuk) / 2)) ? Math.round((maxValues.gyeongbuk + minValues.gyeongbuk) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.gyeongnam + minValues.gyeongnam) / 2)) ? Math.round((maxValues.gyeongnam + minValues.gyeongnam) / 2) : '-'}</td>
+                    <td>{!isNaN(Math.round((maxValues.jeju + minValues.jeju) / 2)) ? Math.round((maxValues.jeju + minValues.jeju) / 2) : '-'}</td>
+                </tr>
+                <tr>
+                    <td>최고값</td>
+                    <td>{maxValues.seoul}</td>
+                    <td>{maxValues.busan}</td>
+                    <td>{maxValues.daegu}</td>
+                    <td>{maxValues.incheon}</td>
+                    <td>{maxValues.gwangju}</td>
+                    <td>{maxValues.daejeon}</td>
+                    <td>{maxValues.ulsan}</td>
+                    <td>{maxValues.gyeonggi}</td>
+                    <td>{maxValues.gangwon}</td>
+                    <td>{maxValues.chungbuk}</td>
+                    <td>{maxValues.chungnam}</td>
+                    <td>{maxValues.jeonbuk}</td>
+                    <td>{maxValues.jeonnam}</td>
+                    <td>{maxValues.sejong}</td>
+                    <td>{maxValues.gyeongbuk}</td>
+                    <td>{maxValues.gyeongnam}</td>
+                    <td>{maxValues.jeju}</td>
+                </tr>
+                <tr>
+                    <td>최저값</td>
+                    <td>{minValues.seoul}</td>
+                    <td>{minValues.busan}</td>
+                    <td>{minValues.daegu}</td>
+                    <td>{minValues.incheon}</td>
+                    <td>{minValues.gwangju}</td>
+                    <td>{minValues.daejeon}</td>
+                    <td>{minValues.ulsan}</td>
+                    <td>{minValues.gyeonggi}</td>
+                    <td>{minValues.gangwon}</td>
+                    <td>{minValues.chungbuk}</td>
+                    <td>{minValues.chungnam}</td>
+                    <td>{minValues.jeonbuk}</td>
+                    <td>{minValues.jeonnam}</td>
+                    <td>{minValues.sejong}</td>
+                    <td>{minValues.gyeongbuk}</td>
+                    <td>{minValues.gyeongnam}</td>
+                    <td>{minValues.jeju}</td>
+                </tr>
+            </>
+        );
+    };
     // # 데이터 검색 버튼 핸들러
     const handleCenterButton = async (e) => {
         e.preventDefault();
@@ -289,20 +402,17 @@ export default function Page() {
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
 
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
-        // const checkResult = filterResult(tableResult, startDateFormatting, endDateFormatting);
+        try {
+            // FIXME: 완료 후 API 서버 복구
+            // const response = await fetch(`https://apis.hansan-web.link/airkorea/realtime-data?itemCode=PM25&dataGubun=DAILY&searchCondition=MONTH`);
+            const response = await fetch(`http://localhost:3500/api/airkorea/realtime-data?itemCode=PM25&dataGubun=DAILY&searchCondition=MONTH`);
+            if (!response.ok)
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+            setTableResult(data);
+            setTableDom({hour: data.hour, daily: data.daily});
+        } catch {}
 
-        // if((dataDivision === 'time' && checkResult.length === 0) 
-        //     || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))
-        //     || (dataDivision === 'total' && !checkResult.some(item => item.khaiValue))) {
-        //     const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectRegion}&type=${dataDivision}`);
-        //     const arrayResult = await response.json();
-
-        //     const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting)
-        //     // # 측정소 3개월치의 데이터
-        //     setTableResult(arrayResult);
-        //     // # 날짜 필터를 진행 한 결과 데이터
-        //     setTableDom(filterDate);
-        // } else setTableDom(checkResult);
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
     }
     return (
@@ -368,7 +478,7 @@ export default function Page() {
                                             onChange={(e) => setDataDivision(e.currentTarget.value)}
                                         />
                                         <label htmlFor="searchBox_month">1달</label>
-                                        <span>{currentMonth}월 01일 </span>~<span> {currentMonth}월 {currentDay}일 </span><span>&#40;실시간&#41;</span>
+                                        <span>{currentMonth - 1}월 {currentDay - 1}일 </span>~<span> {currentMonth}월 {currentDay}일 </span><span>&#40;실시간&#41;</span>
                                     </div>
                                 </div>
                             </div>
@@ -376,12 +486,34 @@ export default function Page() {
                                 <button onClick={handleCenterButton}>검색</button>
                             </RealtimePage2ContentResultSearchBtn>
                         </RealtimePage2ContentResultSearchBox>
+                        <p>※측정시간 : {tableDom?.hour[0]?.dataTime !== undefined ? tableDom.hour[0].dataTime : '0000-00-00 00'}시 기준.</p>
                         <ContentResultTableWrap>
                             <h2>시간자료&#40;수치&#41;</h2>
+                            <p>시도명 클릭시 상세 자료를 보실 수 있습니다.</p>
                             <ContentTableWrap>
                                 <ContentTable>
-                                    <caption>시도명 클릭시 상세 자료를 보실 수 있습니다.</caption>
+                                    <caption>단위&#40;㎍/㎥&#41;</caption>
                                     <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>서울</th>
+                                            <th>부산</th>
+                                            <th>대구</th>
+                                            <th>인천</th>
+                                            <th>광주</th>
+                                            <th>대전</th>
+                                            <th>울산</th>
+                                            <th>경기</th>
+                                            <th>강원</th>
+                                            <th>충북</th>
+                                            <th>충남</th>
+                                            <th>전북</th>
+                                            <th>전남</th>
+                                            <th>세종</th>
+                                            <th>경북</th>
+                                            <th>경남</th>
+                                            <th>제주</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         <TableDomComponent />
