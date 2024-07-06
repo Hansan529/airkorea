@@ -1,12 +1,28 @@
-import styled from '@emotion/styled';
-import { Fragment, useRef, useState } from 'react';
-import useStore from '../hooks/useStore.jsx';
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
 
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
+import { Fragment, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+
+// ~ Json
 import { backgroundPathData, innerBackgroundPathData, pathData} from '../data/paths.js';
 import regionList from "../data/regionList.json";
 import stationJson from "../data/stationInfo.json";
-import getColorValue from '../functions/getColorValue.ts';
-
 import { SeoulInner } from '../data/Seoul.js';
 import { IncheonInner, IncheonPath } from '../data/Incheon.js';
 import { ChungnamInner, ChungnamPath } from '../data/Chungnam.js';
@@ -24,8 +40,13 @@ import { UlsanPath } from '../data/Ulsan.js';
 import { DaeguPath } from '../data/Daegu.js';
 import { GwangjuPath } from '../data/Gwangju.js';
 import { ChungbukPath } from '../data/Chungbuk.js';
-import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../StyleComponent.jsx';
 
+// ~ Hooks
+import getColorValue from '../functions/getColorValue.ts';
+import useStore from '../hooks/useStore.jsx';
+
+// ~ Style
+import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../StyleComponent.jsx';
 
 // ! 지역 데이터
 const regionDetailData = [

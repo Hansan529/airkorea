@@ -1,11 +1,34 @@
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import styled from "@emotion/styled";
-import stationJson from "../data/stationInfo.json";
 import { useEffect, useRef, useState } from "react";
+
+// ~ Json
+import stationJson from "../data/stationInfo.json";
+
+// ~ Hooks
 import useStore from "../hooks/useStore.jsx";
 import useAirQualityStore from "../hooks/useAirQualityStore.jsx";
 import getColorValue from "../functions/getColorValue.ts";
-import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQualityInfoButton, TodayAirQualityInfoContainer, TodayAirQualityInfoInteraction, TodayAirQualityInfoWrap, TodayAirQualityInfoWrapper, TodayAirQualityLegendBase, TodayAirQualityPart, TodayAirQualityPartLi, TodayAirQualityPartTitle, TodayAirQualityPartUl, TodayAirQualityTitle, TodayAirQualityTitleWrap } from "../StyleComponent.jsx";
 
+// ~ Style
+import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQualityInfoButton, TodayAirQualityInfoContainer, TodayAirQualityInfoInteraction, TodayAirQualityInfoWrap, TodayAirQualityInfoWrapper, TodayAirQualityLegendBase, TodayAirQualityPart, TodayAirQualityPartLi, TodayAirQualityPartTitle, TodayAirQualityPartUl, TodayAirQualityTitle, TodayAirQualityTitleWrap } from "../StyleComponent.jsx";
 
 /**
  * 금일 시간별 미세먼지
@@ -21,6 +44,7 @@ import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQuality
  * 대기오염정보: 대기질 예보통보 조회(getMinuDustFrcstDspth)
  */
 
+// @@@ 출력 컴포넌트 @@@
 const TodayAirQuaility = ({Time}) => {
     const { data, text, station, changer: storeChanger } = useStore(state => state);
     const { pm10, pm25, o3, currentLocation: location, changer: airQualityChanger } = useAirQualityStore(state => state);

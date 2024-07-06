@@ -1,5 +1,25 @@
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// ~ Style
 import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage2ContentTable } from '../../app/StyleComponent';
 
 //정보 네비게이션

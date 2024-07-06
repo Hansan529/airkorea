@@ -1,7 +1,30 @@
-import useStore from '../app/hooks/useStore';
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import { useState } from 'react';
+
+// ~ Hooks
+import useStore from '../app/hooks/useStore';
+
+// ~ Component
 import { StandbyMain, StandbyNames } from './StyleComponent';
 
+// # 색상 코드
 const hexCode = {
     '좋음': '#d0ecff',
     '보통': '#caf2de',
@@ -10,6 +33,7 @@ const hexCode = {
     '데이터 없음': '#cbd0d3',
 }
 
+// @@@ 출력 컴포넌트 @@@
 const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
     const { text } = useStore(state => state);
     const [notData, setNotData] = useState(false);

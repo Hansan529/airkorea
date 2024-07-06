@@ -1,25 +1,41 @@
-// ! System
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import { Link, useLocation } from "react-router-dom";
 import { Fragment, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ko from 'date-fns/locale/ko';
 
-// ! JSON
+// ~ JSON
 import stationInfoJSON from '../../app/data/stationInfo.json';
 
-// ! Hooks
+// ~ Hooks
 import useStore from '../../app/hooks/useStore.jsx';
-
-// ! Functions
 import getColorValue from '../../app/functions/getColorValue.ts';
 
-// ! Styles
+// ~ Style
 import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableSpan, ContentResultTableWrap, ContentResultTap, ContentResultWrap, ContentSearchInput, ContentSearchWrap, RealtimePage1ContentTable, ContentTableWrap, LayoutContentTitle, ContentResultSearchBtn, ContentResultSearchBtnWrap, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar } from '../../app/StyleComponent.jsx';
 
-
+// ~ Package Settings
 registerLocale('ko', ko);
 
+// @@@ 출력 컴포넌트 @@@
 export default function Page() {
     // ! 기타
     // # pathname
@@ -369,7 +385,8 @@ export default function Page() {
         if((dataDivision === 'time' && checkResult.length === 0) 
             || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))
             || (dataDivision === 'total' && !checkResult.some(item => item.khaiValue))) {
-            const response = await fetch(`https://apis.hansan-web.link/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
+            // const response = await fetch(`https://apis.hansan-web.link/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
+            const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
             const arrayResult = await response.json();
 
             const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting)

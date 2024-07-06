@@ -1,3 +1,21 @@
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Style
 import { FooterCopyRight, FooterCopyRightImg, FooterComp, FooterInfoArea, FooterInfoAreaCallDust, FooterInfoAreaIconWrap, FooterInfoAreaLogo, FooterInfoAreaPseudo } from "../StyleComponent";
 
 // @@@ 출력 컴포넌트 @@@

@@ -1,5 +1,25 @@
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import { useState } from "react";
 import { AppBannerWrap, AppBtn, AppButtonBox, AppListLi, AppListUl, AppSecondBannerInfo } from "../StyleComponent"
+
+// ~ Hooks
 import sleep from "../functions/sleep.ts";
 import useInterval from "../hooks/useInterval.ts";
 

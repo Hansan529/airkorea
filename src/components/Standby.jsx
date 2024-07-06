@@ -1,12 +1,28 @@
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import styled from '@emotion/styled';
 import { Fragment, useRef, useState } from 'react';
-import useStore from '../app/hooks/useStore.jsx';
 
+// ~ Json
 import { backgroundPathData, innerBackgroundPathData, pathData} from '../app/data/paths.js';
 import regionList from "../app/data/regionList.json";
 import stationJson from "../app/data/stationInfo.json";
-import getColorValue from '../app/functions/getColorValue.ts';
-
 import { SeoulInner } from '../app/data/Seoul.js';
 import { IncheonInner, IncheonPath } from '../app/data/Incheon.js';
 import { ChungnamInner, ChungnamPath } from '../app/data/Chungnam.js';
@@ -24,11 +40,16 @@ import { UlsanPath } from '../app/data/Ulsan.js';
 import { DaeguPath } from '../app/data/Daegu.js';
 import { GwangjuPath } from '../app/data/Gwangju.js';
 import { ChungbukPath } from '../app/data/Chungbuk.js';
+
+// ~ Hooks
+import useStore from '../app/hooks/useStore.jsx';
+import getColorValue from '../app/functions/getColorValue.ts';
+
+// ~ Style
 import { InnerButtonWrap, InnerDetailContainer, InnerMapButton, InnerMapPathStyle, InnerSelectDiv, InnerStationCollection, InnerTitle, LoopContainer, MainContainer, MapNameButton, MapPath, MapSvgStyle, Station, StationPopupStyle } from './StyleComponent.jsx';
 
-
-// * 지역 데이터
-// Array
+// ! 지역 데이터
+// # Array
 const regionDetailData = [
 	{ num: '02',  name: '서울', fullName: '서울특별시', left: '241', top: '120'},
 	{ num: '031', name: '경기', fullName: '경기도', left: '290', top: '175'},
@@ -48,7 +69,7 @@ const regionDetailData = [
 	{ num: '063', name: '전북', fullName: '전북특별자치도', left: '257', top: '422'},
 	{ num: '064', name: '제주', fullName: '제주특별자치도', left:  '45', top: '640'},
 ];
-// Object
+// # Object
 const regionNumList = {
 	'02': '서울',
 	'031': '경기',
@@ -69,7 +90,7 @@ const regionNumList = {
 	'064': '제주',
 };
 
-// * Components
+// @ Components
 const MapSvg = ({ className, children }) => {
 	return (
 		<MapSvgStyle
@@ -94,20 +115,20 @@ const InnerMapPath = ({ id, title, d, fillColor, fillHoverColor, onClick }) =>
 
 const Standby = ({Time}) => {
 	const { type, data, changer, loading, station, openMap, filterData, filterRange, selectInfo } = useStore(state => state);
-	// 측정소 위치 데이터
+	// # 측정소 위치 데이터
 	const stationsInfo = stationJson.items;
 
 	const mapName = useRef();
 
-	// * 호버
-	// 해당 지역 번호
+	// ! 호버
+	// # 해당 지역 번호
 	const [hover, setHover] = useState();
-	// 해당 측정소 명
+	// # 해당 측정소 명
 	const [hoverStation, setHoverStation] = useState({top: null, left: null, innerTop: null, innerLeft: null});
-	// 해당 측정소에 대한 데이터
+	// # 해당 측정소에 대한 데이터
 	const [hoverStationData, setHoverStationData] = useState({});
 
-// ---------------------------------- event
+	// ! 이벤트
 	const hoverHandle = (element) => setHover(element);
 	const hoverStationHandle = (element) => setHoverStation(element);
 	const innerClickHandle = (element) => changer('openMap', element);

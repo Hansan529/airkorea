@@ -1,5 +1,25 @@
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// ~ Style
 import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, LayoutContentTitle, InfoPage1ContentCharacter, InfoPage1ContentCharacterWrap, InfoPage1ContentSubTitleWrap, InfoPage1ContentTable, InfoPage1NuriBox } from "../../app/StyleComponent";
 
 // ! props: 서브 네비게이션 바 목록

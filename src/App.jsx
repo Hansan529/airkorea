@@ -1,18 +1,35 @@
-// ! System
+/*
+    ! 주제
+    @ 컴포넌트
+    # 설명
+    & 강조
+    ~ 세팅
+*/
+
+/*
+    Package
+    Json
+    Hooks
+    Style
+    Component
+    Package Settings
+*/
+
+// ~ Package
 import { useEffect, useState } from 'react';
 import proj4 from 'proj4';
 
-// ! JSON
+// ~ Json
 import stationInfoJSON from './app/data/stationInfo.json';
 
-// ! Hooks
+// ~ Hooks
 import useStore from './app/hooks/useStore.jsx';
 
-// ! 스타일
+// ~ Style
 import './App.css';
 import { AppFirstSection, AppMMLayout, AppMMOBorderDiv, AppMMOContainer, AppMMOList, AppMMOSelect, AppMMOSelectWrapper, AppMMOptionLayout, AppMMWrapper, AppSecondBanner, AppSecondSection, AppTimeButtonStyle, AppTimeDiv } from './app/StyleComponent.jsx';
 
-// @ 컴포넌트
+// ~ Component
 import HeaderComponent from './app/components/Header';
 import { AppSecondBannerInfoComponent, AppEndBannerComponent } from './app/components/AppBanner.jsx';
 import FooterComponent from './app/components/Footer';
@@ -22,7 +39,7 @@ import StandbyForecast from './app/components/StandbyForecast.jsx';
 import Weather from './app/components/Weather.jsx';
 import TodayAirQuality from './app/components/TodayAirQuality.jsx';
 
-// ! 라이브러리 설정
+// ~ Package Settings
 const wgs84 = '+proj=longlat +datum=WGS84 +no_defs'; /* WGS84 좌표계 (기본 설정) */
 const epsg2097 = '+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=GRS80 +units=m +no_defs'; /* EPSG:2097 (Korea Central Belt / Korean 1985) */
 
@@ -123,7 +140,9 @@ function App() {
           if(cacheData && cacheData.state[type]) {
               return;
           }
-          getFetch(type, `https://apis.hansan-web.link/station-${type}`);
+          // TODO: 변경
+          // getFetch(type, `https://apis.hansan-web.link/airkorea/station-${type}`);
+          getFetch(type, `http://localhost:3500/api/airkorea/${type}`);
       } catch (err) {
           console.error('err: ', err);
       }
@@ -165,7 +184,9 @@ function App() {
         const [tmX, tmY] = tmCoordinates;
         try {
           // # 측정소 데이터 API 호출
-          const responseStation = await fetch(`https://apis.hansan-web.link/station?x=${tmX}&y=${tmY}`);
+          // TODO:
+          // const responseStation = await fetch(`https://apis.hansan-web.link/station?x=${tmX}&y=${tmY}`);
+          const responseStation = await fetch(`http://localhost:3500/api/airkorea/station?x=${tmX}&y=${tmY}`);
 
           if(!responseStation.ok) throw new Error('Network response was not ok');
 
