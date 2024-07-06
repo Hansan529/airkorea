@@ -1827,7 +1827,10 @@ export const RealtimePage2ContentResultSearchBtn = styled(ContentResultSearchBtn
     position: relative !important;
     float: right;
 `;
-
+export const RealtimePage2ContentTableWrap = styled(ContentTableWrap)`
+    height: initial;
+    overflow: initial;
+`
 
 
 // -------------------------------------------------------------
