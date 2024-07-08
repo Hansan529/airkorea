@@ -1809,23 +1809,24 @@ export const LoadingWrap = styled.div`
 
 // @ realtime/page2.jsx
 export const RealtimePage2ContentResultSearchBox = styled(ContentResultSearchBox)`
-    > div {
+    > div:first-of-type {
         height: 60px;
-        &:first-of-type {
-            display: flex;
+        margin-bottom: initial;
+        > div {
+            flex-grow: 1;
             > div {
-                flex-grow: 1;
-               label + span {
-                margin-left: 10px;
-               }
+                margin: 5px 0;
+            }
+            label + span {
+            margin-left: 10px;
             }
         }
     }
 `;
 export const RealtimePage2ContentResultSearchBtn = styled(ContentResultSearchBtn)`
-    display: initial !important;
-    position: relative !important;
-    float: right;
+    position: absolute !important;
+    height: initial;
+    bottom: 10px;
 `;
 export const RealtimePage2ContentTableWrap = styled(ContentTableWrap)`
     height: initial;

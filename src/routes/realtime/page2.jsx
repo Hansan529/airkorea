@@ -602,7 +602,7 @@ export default function Page() {
                             <p>시도명 클릭시 상세 자료를 보실 수 있습니다.</p>
                             <p style={{textAlign: 'right'}}>단위&#40;㎍/㎥&#41;</p>
                             <RealtimePage2ContentTableWrap>
-                                <ContentTable>
+                                <ContentTable style={{ marginBottom: '15px'}}>
                                     <thead>
                                         <tr style={{backgroundColor: '#fff'}}>
                                             <th></th>
@@ -617,9 +617,11 @@ export default function Page() {
                             <p>※ PM-2.5측정장비가 적은 일부지역의 경우 PM-2.5평균이 PM-10평균보다 높을수있음.</p>
                         </ContentResultTableWrap>
                     </ContentResultWrap>
-                    <h3>17개 지자체별</h3>
-                    <p>각 지역의 챠트를 클릭하시면 지역별오염도의 정보를 볼 수 있습니다.</p>
-                    <p>해당 시도별 당일 00시부터 현재시간까지 산술평균한 값임.</p>
+                    <h3 style={{ margin: '10px 0', fontSize: '22px'}}>17개 지자체별</h3>
+                    <ul style={{ listStyle: 'inside'}}>
+                        <li>각 지역의 챠트를 클릭하시면 지역별오염도의 정보를 볼 수 있습니다.</li>
+                        <li>해당 시도별 당일 00시부터 현재시간까지 산술평균한 값임.</li>
+                    </ul>
                     <Bar options={options} data={data} ref={chartRef} onClick={chartOnClick} />
                 </LayoutContent>
             </LayoutSection>
