@@ -501,6 +501,11 @@ export default function Page() {
             },
         },
         scales: {
+            x: {
+                grid: {
+                    display: false, // 세로선 제거
+                }
+            },
             y: {
                 max: 40 // 최대값
             }
@@ -596,7 +601,7 @@ export default function Page() {
                                 <button onClick={handleCenterButton}>검색</button>
                             </RealtimePage2ContentResultSearchBtn>
                         </RealtimePage2ContentResultSearchBox>
-                        <p>※측정시간 : {tableDom?.hour[0]?.dataTime !== undefined ? tableDom.hour[0].dataTime : '0000-00-00 00'}시 기준.</p>
+                        <p style={{ margin: '10px 0'}}>※측정시간 : {tableDom?.hour[0]?.dataTime !== undefined ? tableDom.hour[0].dataTime : '0000-00-00 00'}시 기준.</p>
                         <ContentResultTableWrap>
                             <h2>시간자료&#40;수치&#41;</h2>
                             <p>시도명 클릭시 상세 자료를 보실 수 있습니다.</p>
@@ -617,7 +622,7 @@ export default function Page() {
                             <p>※ PM-2.5측정장비가 적은 일부지역의 경우 PM-2.5평균이 PM-10평균보다 높을수있음.</p>
                         </ContentResultTableWrap>
                     </ContentResultWrap>
-                    <h3 style={{ margin: '10px 0', fontSize: '22px'}}>17개 지자체별</h3>
+                    <h3 style={{ margin: '30px 0 10px', fontSize: '22px'}}>17개 지자체별</h3>
                     <ul style={{ listStyle: 'inside'}}>
                         <li>각 지역의 챠트를 클릭하시면 지역별오염도의 정보를 볼 수 있습니다.</li>
                         <li>해당 시도별 당일 00시부터 현재시간까지 산술평균한 값임.</li>
