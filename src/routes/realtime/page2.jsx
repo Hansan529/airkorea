@@ -29,7 +29,7 @@ import {
     PointElement,
     LineElement,
   } from 'chart.js';
-  import { Bar, getElementAtEvent } from 'react-chartjs-2';
+  import { Bar, getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
 // ~ HOOKS
@@ -91,10 +91,8 @@ export default function Page() {
     const [dataDivision, setDataDivision] = useState('daily');
     // # 화면 중앙
     const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
-    // # 차트 데이터
-    const [chartData, setChartData] = useState(Array.from(17).fill(0));
 
-
+    
     // ! 네비게이션
     // # 서브 네비게이션 바 목록
     const topbarList = [
@@ -288,17 +286,43 @@ export default function Page() {
         gyeongnam: '경남',
         jeju: '제주'
     }
-    const regionListKey = Object.keys(regionList);
-    const regionListValues = Object.values(regionList);
-    const initialState = '-';
+    const regionList_eng = Object.keys(regionList);
+    const regionList_kor = Object.values(regionList);
+
+    // # 차트 데이터
+    const [barChartData, setBarChartData] = useState(new Array(regionList_eng.length).fill(0));
+    const [lineChartData, setLineChartData] = useState(Array.from({length: 7}, () => Array(17).fill(0)));
+
+    const initialState = 0;
     const maxValues = {};
     const values = {};
     const minValues = {};
-    regionListKey.forEach(region => {
-        maxValues[region] = initialState;
-        values[region] = initialState;
-        minValues[region] = initialState;
-    });
+    useEffect(() => {
+        regionList_eng.forEach(region => {
+            maxValues[region] = initialState;
+            values[region] = initialState;
+            minValues[region] = initialState;
+        });
+        const data = regionList_eng.map(region => values[region]);
+        setBarChartData(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        const data = tableDom.daily.map(obj => {
+            return regionList_eng.map(key => obj[key]);
+        });
+        switch(dataDivision) {
+            case 'daily':
+                return setBarChartData(Object.values(values));
+            case 'oneWeek':
+                return setLineChartData(data.slice(0, 7));
+            case 'month':
+                return setLineChartData(data);
+            default:
+                return;
+        }
+    }, [tableDom.daily, dataDivision]);
     // @ 통계 테이블 컴포넌트
     const TableDomComponent = () => {
         const startTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T00:00:00`);
@@ -332,7 +356,7 @@ export default function Page() {
                 });
                 return isNaN(minValue) ? initialState : minValue;
             };
-            regionListKey.forEach(region => {
+            regionList_eng.forEach(region => {
                 const max = getMaxValue(region);
                 const min = getMinValue(region);
                 maxValues[region] = max;
@@ -345,51 +369,27 @@ export default function Page() {
                     <>
                         <tr>
                             <td>시간평균</td>
-                            {regionListKey.map((region, key) => 
+                            {regionList_eng.map((region, key) => 
                                 <Fragment key={key}>
-                                    <td>{!isNaN(values[region]) ? values[region] : '-'}</td>
+                                    <td>{values[region] !== 0 ? values[region] : '-'}</td>
                                 </Fragment>
                             )}
                         </tr>
                         <tr>
                             <td>최고값</td>
-                            <td>{maxValues.seoul}</td>
-                            <td>{maxValues.busan}</td>
-                            <td>{maxValues.daegu}</td>
-                            <td>{maxValues.incheon}</td>
-                            <td>{maxValues.gwangju}</td>
-                            <td>{maxValues.daejeon}</td>
-                            <td>{maxValues.ulsan}</td>
-                            <td>{maxValues.gyeonggi}</td>
-                            <td>{maxValues.gangwon}</td>
-                            <td>{maxValues.chungbuk}</td>
-                            <td>{maxValues.chungnam}</td>
-                            <td>{maxValues.jeonbuk}</td>
-                            <td>{maxValues.jeonnam}</td>
-                            <td>{maxValues.sejong}</td>
-                            <td>{maxValues.gyeongbuk}</td>
-                            <td>{maxValues.gyeongnam}</td>
-                            <td>{maxValues.jeju}</td>
+                            {regionList_eng.map((region, key) => 
+                                <Fragment key={key}>
+                                    <td>{maxValues[region] !== 0 ? maxValues[region] : '-'}</td>
+                                </Fragment>
+                            )}
                         </tr>
                         <tr>
                             <td>최저값</td>
-                            <td>{minValues.seoul}</td>
-                            <td>{minValues.busan}</td>
-                            <td>{minValues.daegu}</td>
-                            <td>{minValues.incheon}</td>
-                            <td>{minValues.gwangju}</td>
-                            <td>{minValues.daejeon}</td>
-                            <td>{minValues.ulsan}</td>
-                            <td>{minValues.gyeonggi}</td>
-                            <td>{minValues.gangwon}</td>
-                            <td>{minValues.chungbuk}</td>
-                            <td>{minValues.chungnam}</td>
-                            <td>{minValues.jeonbuk}</td>
-                            <td>{minValues.jeonnam}</td>
-                            <td>{minValues.sejong}</td>
-                            <td>{minValues.gyeongbuk}</td>
-                            <td>{minValues.gyeongnam}</td>
-                            <td>{minValues.jeju}</td>
+                            {regionList_eng.map((region, key) => 
+                                <Fragment key={key}>
+                                    <td>{minValues[region] !== 0 ? minValues[region] : '-'}</td>
+                                </Fragment>
+                            )}
                         </tr>
                     </>
                 );
@@ -490,7 +490,7 @@ export default function Page() {
         console.log(getElementAtEvent(chartRef.current, e));
     }
     // # 차트 부가 옵션
-    const options = {
+    const barOptions = {
         responsive: true, // 반응형
         plugins: {
             legend: { display: false }, // 범례 제거
@@ -501,33 +501,39 @@ export default function Page() {
             },
         },
         scales: {
-            x: {
-                grid: {
-                    display: false, // 세로선 제거
+            x: { grid: { display: false }}, // 세로선 제거
+            y: { max: 40, ticks: { stepSize: 10} } // 최대값 40, 단위 10
+        },
+        maintainAspectRatio: false
+    };
+    const lineOptions = {
+        responsive: true,
+        plugins: {
+            legend: { 
+                display: true,
+                labels: {
+                    boxWidth: 15,
+                    boxHeight: 1
                 }
             },
-            y: {
-                max: 40 // 최대값
-            }
-        }
-    };
-    useEffect(() => {
-        const data = regionListKey.map(region => values[region]);
-        setChartData(data);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[tableDom]);
+        },
+        scales: {
+            y: { max: 40, ticks: { stepSize: 10 }}, // 최대값 40, 단위 10
+        },
+        maintainAspectRatio: false
+    }
     // # 차트 값
-    const labels = regionListValues;
+    const labels = regionList_kor;
     // # 차트 결과
-    const data = {
+    const barData = {
         labels,
         datasets: [
             {
-                data: chartData,
+                data: barChartData,
                 // 가장 큰 값인 경우 초록색 배경색 설정
                 backgroundColor: (ctx) => {
-                    const maxValues = Math.max(...data.datasets[0].data);
-                    return data.datasets[0].data.map((value) => {
+                    const maxValues = Math.max(...barData.datasets[0].data);
+                    return barData.datasets[0].data.map((value) => {
                         if (value === maxValues) {
                             return 'rgb(26, 206, 135)';
                         }
@@ -537,6 +543,70 @@ export default function Page() {
             },
         ],
     };
+    function getLast7Days(currentDate) {
+        const dates = [];
+        const current = new Date(currentDate);
+
+        for(let i = 6; i>=0; i--) {
+            const date = new Date(current);
+            date.setDate(current.getDate() - i);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            dates.push(`${year}-${month}-${day}`);
+        }
+        return dates;
+    };
+    function getLastMonth(currentDate) {
+        const dates = [];
+        const current = new Date(currentDate);
+        
+        for(let i = 30; i>=0; i--) {
+            const date = new Date(current);
+            date.setDate(current.getDate() - i);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            dates.push(`${year}-${month}-${day}`);
+        }
+        return dates;
+    }
+    const lineWeekLabels = getLast7Days(currentDate);
+    const lineMonthLabels = getLastMonth(currentDate);
+    const lineWeekData = {
+        labels: lineWeekLabels,
+        datasets: regionList_kor.map((name, idx) => {
+            return {
+                label: name,
+                data: lineWeekLabels.map((_, idx2) => lineChartData[idx2][idx])
+            }
+        })
+    };
+    const lineMonthData = {
+        labels: lineMonthLabels,
+        datasets: regionList_kor.map((name, regionOrder) => {
+            return {
+                label: name,
+                data: lineChartData.map((_, day) => {
+                    return lineChartData[day][regionOrder];
+                })
+            }
+        })
+    };
+    // # 차트 목록
+    const ChartComponent = () => {
+        switch(dataDivision) {
+            case 'daily':
+                return <Bar options={barOptions} data={barData} ref={chartRef} onClick={chartOnClick} />
+            case 'oneWeek':
+                return <Line options={lineOptions} data={lineWeekData} ref={chartRef} onClick={chartOnClick} />
+            case 'month':
+                return <Line options={lineOptions} data={lineMonthData} ref={chartRef} onClick={chartOnClick} />
+            default:
+                return <></>
+        }
+    }
+
 
 
     // ! 결과
@@ -605,7 +675,7 @@ export default function Page() {
                         <ContentResultTableWrap>
                             <h2>시간자료&#40;수치&#41;</h2>
                             <p>시도명 클릭시 상세 자료를 보실 수 있습니다.</p>
-                            <p style={{textAlign: 'right'}}>단위&#40;㎍/㎥&#41;</p>
+                            <p style={{textAlign: 'right', marginBottom: '5px'}}>단위&#40;㎍/㎥&#41;</p>
                             <RealtimePage2ContentTableWrap>
                                 <ContentTable style={{ marginBottom: '15px'}}>
                                     <thead>
@@ -624,10 +694,12 @@ export default function Page() {
                     </ContentResultWrap>
                     <h3 style={{ margin: '30px 0 10px', fontSize: '22px'}}>17개 지자체별</h3>
                     <ul style={{ listStyle: 'inside'}}>
-                        <li>각 지역의 챠트를 클릭하시면 지역별오염도의 정보를 볼 수 있습니다.</li>
                         <li>해당 시도별 당일 00시부터 현재시간까지 산술평균한 값임.</li>
                     </ul>
-                    <Bar options={options} data={data} ref={chartRef} onClick={chartOnClick} />
+                    {/* ---------- 그래프 ---------- */}
+                    <div style={{ height: '300px'}}>
+                        <ChartComponent />
+                    </div>
                 </LayoutContent>
             </LayoutSection>
         </>
