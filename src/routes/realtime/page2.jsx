@@ -543,65 +543,51 @@ export default function Page() {
             },
         ],
     };
-    function getLast7Days(currentDate) {
+    function getLastDays(currentDate, days) {
         const dates = [];
         const current = new Date(currentDate);
 
-        for(let i = 6; i>=0; i--) {
+        for(let i = days - 1; i >= 0; i--) {
             const date = new Date(current);
             date.setDate(current.getDate() - i);
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             dates.push(`${year}-${month}-${day}`);
-        }
+        };
         return dates;
     };
-    function getLastMonth(currentDate) {
-        const dates = [];
-        const current = new Date(currentDate);
-        
-        for(let i = 30; i>=0; i--) {
-            const date = new Date(current);
-            date.setDate(current.getDate() - i);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            dates.push(`${year}-${month}-${day}`);
-        }
-        return dates;
-    }
-    const lineWeekLabels = getLast7Days(currentDate);
-    const lineMonthLabels = getLastMonth(currentDate);
-    const lineWeekData = {
-        labels: lineWeekLabels,
-        datasets: regionList_kor.map((name, idx) => {
-            return {
-                label: name,
-                data: lineWeekLabels.map((_, idx2) => lineChartData[idx2][idx])
-            }
-        })
+    function createLineData(labels) {
+        return {
+            labels: labels,
+            datasets: regionList_kor.map((name, idx) => {
+                return {
+                    label: name,
+                    data: [...lineChartData.map((_, labelIdx) => lineChartData[labelIdx] ? lineChartData[labelIdx][idx] : 0)].reverse()
+                };
+            })
+        };
     };
-    const lineMonthData = {
-        labels: lineMonthLabels,
-        datasets: regionList_kor.map((name, regionOrder) => {
-            return {
-                label: name,
-                data: lineChartData.map((_, day) => {
-                    return lineChartData[day][regionOrder];
-                })
-            }
-        })
-    };
+
+    const lineWeekLabels = getLastDays(currentDate, 7);
+    const lineMonthLabels = getLastDays(currentDate, 31);
+
+    const lineWeekData = createLineData(lineWeekLabels);
+    const lineMonthData = createLineData(lineMonthLabels);
+
+    function LineChart({ period, lineOptions, chartRef, chartOnClick }) {
+        const lineData = period === 'oneWeek' ? lineWeekData : lineMonthData;
+        return <Line options={lineOptions} data={lineData} ref={chartRef} onClick={chartOnClick} />;
+      }
     // # 차트 목록
     const ChartComponent = () => {
         switch(dataDivision) {
             case 'daily':
                 return <Bar options={barOptions} data={barData} ref={chartRef} onClick={chartOnClick} />
             case 'oneWeek':
-                return <Line options={lineOptions} data={lineWeekData} ref={chartRef} onClick={chartOnClick} />
+                return <LineChart period="oneWeek" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
             case 'month':
-                return <Line options={lineOptions} data={lineMonthData} ref={chartRef} onClick={chartOnClick} />
+                return <LineChart period="month" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
             default:
                 return <></>
         }
