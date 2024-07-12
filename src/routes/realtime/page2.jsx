@@ -62,27 +62,27 @@ export default function Page() {
         switch(searchParams.get('type')) {
             case 'pm25':
                 setSearchTypeText('PM-2.5');
-                setSearchType('pm25')
+                setSearchType('pm25');
                 break;
             case 'pm10':
                 setSearchTypeText('PM-10');
-                setSearchType('pm10')
+                setSearchType('pm10');
                 break;
             case 'o3':
                 setSearchTypeText('오존');
-                setSearchType('o3')
+                setSearchType('o3');
                 break;
             case 'no2':
                 setSearchTypeText('이산화질소');
-                setSearchType('no2')
+                setSearchType('no2');
                 break;
             case 'co':
                 setSearchTypeText('일산화탄소');
-                setSearchType('co')
+                setSearchType('co');
                 break;
             case 'so2':
                 setSearchTypeText('아황산가스');
-                setSearchType('so2')
+                setSearchType('so2');
                 break;
             default: break;
         }
@@ -417,8 +417,8 @@ export default function Page() {
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
         try {
             // FIXME: 완료 후 API 서버 복구
-            // const response = await fetch(`https://apis.hansan-web.link/airkorea/realtime-data?itemCode=PM25&dataGubun=DAILY&searchCondition=MONTH`);
-            const response = await fetch(`http://localhost:3500/api/airkorea/realtime-data?itemCode=PM25&dataGubun=DAILY&searchCondition=MONTH`);
+            // const response = await fetch(`https://apis.hansan-web.link/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
+            const response = await fetch(`http://localhost:3500/api/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
             if (!response.ok)
                 throw new Error(`HTTP error! Status: ${response.status}`);
             const data = await response.json();
