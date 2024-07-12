@@ -92,7 +92,7 @@ export default function Page() {
     // # 화면 중앙
     const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
 
-    
+
     // ! 네비게이션
     // # 서브 네비게이션 바 목록
     const topbarList = [
@@ -164,13 +164,13 @@ export default function Page() {
     };
 
 
-    // ! 사이드바 
+    // ! 사이드바
     // # 사이드바 목록
     const asideList = {
             title: '실시간 자료조회',
             links: [
-                { text: '실시간 대기 정보', 
-                    select: false, 
+                { text: '실시간 대기 정보',
+                    select: false,
                 },
                 { text: '시도별 대기정보',
                     select: true,
@@ -180,9 +180,9 @@ export default function Page() {
                     { text: '시도별 대기정보(오존)',     select: false, type: 'o3' },
                     { text: '시도별 대기정보(이산화질소)', select: false, type: 'no2' },
                     { text: '시도별 대기정보(일산화탄소)', select: false, type: 'co' },
-                    { text: '시도별 대기정보(아황산가스)', select: false, type: 'so2' }] 
+                    { text: '시도별 대기정보(아황산가스)', select: false, type: 'so2' }]
                 },
-                { text: '미세먼지 세부 측정정보', 
+                { text: '미세먼지 세부 측정정보',
                     select: false,
                     children: [
                     { text: '초미세먼지 (PM-2.5)',      select: false, type: 'detail-pm25' },
@@ -234,14 +234,14 @@ export default function Page() {
                 if(hasOwnProperty){
                     return (
                         <li key={index}>
-                            <LayoutAsideLink 
-                                to="" 
+                            <LayoutAsideLink
+                                to=""
                                 onClick={asideHandle}
                                 children_height={asideToggle[link.text]?.px}
                                 selected={link.select}
-                                showmore={childrenCheck ? 'true' : 'false'} 
+                                showmore={childrenCheck ? 'true' : 'false'}
                                 >{link.text}</LayoutAsideLink>
-                            {childrenCheck && 
+                            {childrenCheck &&
                             <LayoutAsideLinkUl $height={asideToggle[link.text]?.px}>
                                 {link.children.map((item, _index) => <li key={_index}>
                                     <LayoutAsideLinkA selected={item.type === searchType} to={`${pathname}?page=${index + 1}&type=${item.type}`}>{item.text}</LayoutAsideLinkA>
@@ -327,134 +327,80 @@ export default function Page() {
     const TableDomComponent = () => {
         const startTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T00:00:00`);
         const endTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T${String(currentDate.getHours()).padStart(2, '0')}:00:00`);
+        // # tableDom이 children을 갖고 있는지 체크
         if(tableDom.hasOwnProperty('hour')){
+            // # 검색하고자 하는 시작 날짜와 종료 날짜 범위 내에 있는 데이터 필터링
             const filteredData = tableDom.hour.filter(item => {
                 const itemTime = new Date(item.dataTime.replace(' ', 'T'));
                 return itemTime >= startTime && itemTime <= endTime;
             });
-            const getMaxValue = (region) => {
+            // # 테이블 데이터
+            function getValue(region, comparator) {
                 if(filteredData.length === 0) return initialState;
 
-                let maxValue = Number(filteredData[0][region]);
+                let extremeValue = Number(filteredData[0][region]);
                 filteredData.forEach(item => {
                     const value = Number(item[region]);
-                    if (!isNaN(value) && value > maxValue) {
-                        maxValue = value;
+                    if (!isNaN(value) && comparator(value, extremeValue)) {
+                        extremeValue = value;
                     }
                 });
-                return isNaN(maxValue) ? initialState : maxValue;
-            };
-            const getMinValue = (region) => {
-                if(filteredData.length === 0) return initialState;
-
-                let minValue = Number(filteredData[0][region]);
-                filteredData.forEach(item => {
-                    const value = Number(item[region]);
-                    if (!isNaN(value) && value < minValue) {
-                        minValue = value;
-                    }
-                });
-                return isNaN(minValue) ? initialState : minValue;
-            };
+                return isNaN(extremeValue) ? initialState : extremeValue;
+            }
+            // # 데이터 기입
             regionList_eng.forEach(region => {
-                const max = getMaxValue(region);
-                const min = getMinValue(region);
+                const max = getValue(region, (a, b) => a > b);
+                const min = getValue(region, (a, b) => a < b);
                 maxValues[region] = max;
                 values[region] = Math.round((max + min) / 2);
                 minValues[region] = min;
             });
+        // # 테이블 렌더링 함수
+        function renderTableRow(data) {
+            return (
+                <>
+                    {data.map((day, key) =>
+                    <tr key={key}>
+                        <td>{day.dataTime ? day.dataTime : '-'}</td>
+                        {regionList_eng.map((reg, idx) => {
+                            return <td key={idx}>{day[reg] ? day[reg] : '-'}</td>
+                        })}
+                    </tr>
+                )}
+                </>
+            )
+        };
+        // # 타입 별 출력
         switch(dataDivision) {
             case 'daily':
+                function returnValue(type) {
+                    return regionList_eng.map((region, key) => <td key={key}>{type[region] !== 0 ? type[region] : '-'}</td>)
+                };
                 return (
                     <>
                         <tr>
                             <td>시간평균</td>
-                            {regionList_eng.map((region, key) => 
-                                <Fragment key={key}>
-                                    <td>{values[region] !== 0 ? values[region] : '-'}</td>
-                                </Fragment>
-                            )}
+                            {returnValue(values)}
                         </tr>
                         <tr>
                             <td>최고값</td>
-                            {regionList_eng.map((region, key) => 
-                                <Fragment key={key}>
-                                    <td>{maxValues[region] !== 0 ? maxValues[region] : '-'}</td>
-                                </Fragment>
-                            )}
+                            {returnValue(maxValues)}
                         </tr>
                         <tr>
                             <td>최저값</td>
-                            {regionList_eng.map((region, key) => 
-                                <Fragment key={key}>
-                                    <td>{minValues[region] !== 0 ? minValues[region] : '-'}</td>
-                                </Fragment>
-                            )}
+                            {returnValue(minValues)}
                         </tr>
                     </>
                 );
             case 'oneWeek':
-                return (
-                    <>
-                        {tableDom.daily.slice(0, 7).map((day, key) => {
-                            return (
-                                <tr key={key}>
-                                    <td>{day.dataTime}</td>
-                                    <td>{day.seoul}</td>
-                                    <td>{day.busan}</td>
-                                    <td>{day.daegu}</td>
-                                    <td>{day.incheon}</td>
-                                    <td>{day.gwangju}</td>
-                                    <td>{day.daejeon}</td>
-                                    <td>{day.ulsan}</td>
-                                    <td>{day.gyeonggi}</td>
-                                    <td>{day.gangwon}</td>
-                                    <td>{day.chungbuk}</td>
-                                    <td>{day.chungnam}</td>
-                                    <td>{day.jeonbuk}</td>
-                                    <td>{day.jeonnam}</td>
-                                    <td>{day.sejong}</td>
-                                    <td>{day.gyeongbuk}</td>
-                                    <td>{day.gyeongnam}</td>
-                                    <td>{day.jeju}</td>
-                                </tr>
-                            )
-                        })}
-                    </>
-                );
+                return renderTableRow(tableDom.daily.slice(0, 7));
             case 'month':
-                return (
-                    <>
-                        {tableDom.daily.map((day, key) => {
-                            return (
-                                <tr key={key}>
-                                    <td>{day.dataTime}</td>
-                                    <td>{day.seoul}</td>
-                                    <td>{day.busan}</td>
-                                    <td>{day.daegu}</td>
-                                    <td>{day.incheon}</td>
-                                    <td>{day.gwangju}</td>
-                                    <td>{day.daejeon}</td>
-                                    <td>{day.ulsan}</td>
-                                    <td>{day.gyeonggi}</td>
-                                    <td>{day.gangwon}</td>
-                                    <td>{day.chungbuk}</td>
-                                    <td>{day.chungnam}</td>
-                                    <td>{day.jeonbuk}</td>
-                                    <td>{day.jeonnam}</td>
-                                    <td>{day.sejong}</td>
-                                    <td>{day.gyeongbuk}</td>
-                                    <td>{day.gyeongnam}</td>
-                                    <td>{day.jeju}</td>
-                                </tr>
-                            )
-                        })}
-                    </>
-                );
+                return renderTableRow(tableDom.daily);
             default:
-                return <tr><td colSpan="18">검색된 자료가 없습니다.</td></tr>
+                break;
         };
-        } else <tr><td colSpan="18">검색된 자료가 없습니다.</td></tr>
+        }
+        return <tr><td colSpan="18">검색된 자료가 없습니다.</td></tr>
     };
     // # 데이터 검색 버튼 핸들러
     const handleCenterButton = async (e) => {
@@ -462,10 +408,10 @@ export default function Page() {
 
         const { innerWidth, innerHeight } = window;
         const value = 100;
-    
+
         const left = (innerWidth - value) / 2 + window.scrollX;
         const top = (innerHeight - value) / 2 + window.scrollY;
-    
+
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
 
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
@@ -509,7 +455,7 @@ export default function Page() {
     const lineOptions = {
         responsive: true,
         plugins: {
-            legend: { 
+            legend: {
                 display: true,
                 labels: {
                     boxWidth: 15,
