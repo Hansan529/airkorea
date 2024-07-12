@@ -435,6 +435,14 @@ export default function Page() {
     const chartOnClick = (e) => {
         console.log(getElementAtEvent(chartRef.current, e));
     }
+    const chartScaleY = {
+        pm25: { max: 40, step: 10 },
+        pm10: { max: 125, step: 25 },
+        o3: { max: 0.125, step: 0.025 },
+        no2: { max: 0.125, step: 0.025 },
+        co: { max: 30, step: 10 },
+        so2: { max: 0.2, step: 0.05 }
+    };
     // # 차트 부가 옵션
     const barOptions = {
         responsive: true, // 반응형
@@ -448,7 +456,13 @@ export default function Page() {
         },
         scales: {
             x: { grid: { display: false }}, // 세로선 제거
-            y: { max: 40, ticks: { stepSize: 10} } // 최대값 40, 단위 10
+            y: {
+                max: chartScaleY[searchType].max,
+                ticks: {
+                    format: { maximumFractionDigits: 3 }, // 소수점 최대 3자리
+                    stepSize: chartScaleY[searchType].step
+                },
+            }
         },
         maintainAspectRatio: false
     };
@@ -464,10 +478,18 @@ export default function Page() {
             },
         },
         scales: {
-            y: { max: 40, ticks: { stepSize: 10 }}, // 최대값 40, 단위 10
+            y: {
+                max: chartScaleY[searchType].max,
+                ticks: {
+                    format: { maximumFractionDigits: 3 }, // 소수점 최대 3자리
+                    stepSize: chartScaleY[searchType].step
+                },
+            }
         },
         maintainAspectRatio: false
     }
+    console.log('chartScaleY[searchType].max: ', chartScaleY[searchType].max);
+    console.log('chartScaleY[searchType].step: ', chartScaleY[searchType].step);
     // # 차트 값
     const labels = regionList_kor;
     // # 차트 결과
