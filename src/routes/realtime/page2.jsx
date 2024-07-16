@@ -458,6 +458,7 @@ export default function Page() {
             x: { grid: { display: false }}, // 세로선 제거
             y: {
                 max: chartScaleY[searchType].max,
+                min: 0,
                 ticks: {
                     format: { maximumFractionDigits: 3 }, // 소수점 최대 3자리
                     stepSize: chartScaleY[searchType].step
@@ -467,29 +468,18 @@ export default function Page() {
         maintainAspectRatio: false
     };
     const lineOptions = {
-        responsive: true,
+        ...barOptions,
         plugins: {
             legend: {
                 display: true,
+                title: { display: false },
                 labels: {
                     boxWidth: 15,
                     boxHeight: 1
                 }
             },
         },
-        scales: {
-            y: {
-                max: chartScaleY[searchType].max,
-                ticks: {
-                    format: { maximumFractionDigits: 3 }, // 소수점 최대 3자리
-                    stepSize: chartScaleY[searchType].step
-                },
-            }
-        },
-        maintainAspectRatio: false
-    }
-    console.log('chartScaleY[searchType].max: ', chartScaleY[searchType].max);
-    console.log('chartScaleY[searchType].step: ', chartScaleY[searchType].step);
+    };
     // # 차트 값
     const labels = regionList_kor;
     // # 차트 결과
