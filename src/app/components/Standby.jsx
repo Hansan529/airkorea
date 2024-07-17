@@ -200,13 +200,13 @@ const Standby = ({Time}) => {
 	const ClickLegendPopup = (e) => {
 		const legendElement = e.currentTarget.closest('[data-legend-index]');
 		const { legendIndex } = legendElement.dataset;
-	
+
 		const stateUpdater = {
 			0: setIsOn0,
 			1: setIsOn1,
 			2: setIsOn2,
 		};
-	
+
 		const updater = stateUpdater[legendIndex];
 		if(updater)
 		  updater(prev => !prev);
@@ -351,7 +351,7 @@ const Standby = ({Time}) => {
 				></InnerMapPath>
 				);
 			};
-	
+
 			const Components = {
 				서울: SeoulInner,
 				경기: null,
@@ -372,7 +372,7 @@ const Standby = ({Time}) => {
 				제주: JejuInner,
 			}
 			const DynamicComponent = Components[regName];
-	
+
 			/* dynamic */
 			const DetailContainer = styled(StandbyInnerDetailContainer)`
 				&[data-region_num="${openMap}"]{
@@ -382,17 +382,31 @@ const Standby = ({Time}) => {
 				}
 			`;
 			const SelectDiv = styled(StandbyInnerSelectDiv)`
-				button[data-type="${selectInfo}"] {
-						background-color: #0f62cc;
-						color: #fff;
+				height: 30px;
+				box-sizing: content-box;
+				border: none;
+				display: flex;
+				justify-content: center;
+				gap: 0 10px;
+				align-items: center;
+				padding: 0 5px;
+
+				button {
+					font-size: 14px;
+					padding: 3px;
+
+					&[data-type="${selectInfo}"] {
+							background-color: #0f62cc;
+							color: #fff;
+					}
 				}
 			`;
-	
+
 			// 입력된 지역의 전체 측정소 위치 데이터
 			const filterStationData = stationsInfo?.filter(item => {
 				return (item.city === fullName) && filterDataValues[filterDataKeys?.indexOf(item.mangName)];
 			});
-	
+
 			return (
 				<DetailContainer data-region_num={regNum} regionNum={regNum}>
 					<StandbyInnerTitle>
@@ -403,7 +417,7 @@ const Standby = ({Time}) => {
 							changer('regionNum', 'none');
 						}}>창 닫기</button>
 					</StandbyInnerTitle>
-					<Time top="50px" left="15px" height="20px" right="initial" />
+					<Time top="50px" left="15px" height="30px" right="initial" />
 					<SelectDiv>
 						<button data-type="air" onClick={() => airStationHandle('air')}>대기/경보 정보</button>
 						<button data-type="station" onClick={() => airStationHandle('station')}>측정소 정보</button>
@@ -433,7 +447,7 @@ const Standby = ({Time}) => {
 					{/* SVG */}
 					<InnerMapSvg>
 						{DynamicComponent && <DynamicComponent />}
-	
+
 						{/* 지역 배경 Path */}
 						<path
 						title={`${regName}_BG`}
@@ -441,7 +455,7 @@ const Standby = ({Time}) => {
 						stroke="#9EAEC2"
 						d={innerBackgroundPathData[regNum]}
 						></path>
-	
+
 						{/* 지역 SVG */}
 						{regionList[regName]?.map(renderPath)}
 					</InnerMapSvg>
