@@ -28,10 +28,11 @@
     "zustand": "^4.5.2"
   },
   "scripts": {
-    "start": "export PORT=3002 && react-scripts start",
+    "start": "HTTPS=true SSL_CRT_FILE=./.cert/cert.pem SSL_KEY_FILE=./.cert/key.pem react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "local-server": "node ./server/server.js"
   },
   "eslintConfig": {
     "extends": [
@@ -53,5 +54,6 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "nodemon": "^3.1.0"
-  }
+  },
+  "proxy": "https://localhost:3000"
 }
