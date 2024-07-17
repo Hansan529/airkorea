@@ -23,7 +23,7 @@ import { useEffect, useRef, useState } from "react";
 import stationJson from "../data/stationInfo.json";
 
 // ~ Hooks
-import useStore from "../hooks/useStore.jsx";
+import useStore from "../hooks/useStore.tsx";
 import useAirQualityStore from "../hooks/useAirQualityStore.jsx";
 import getColorValue from "../functions/getColorValue.ts";
 
@@ -61,7 +61,7 @@ const TodayAirQuaility = ({Time}) => {
     // pm25
 
 
-    
+
     // function
     /**
      *
@@ -87,7 +87,7 @@ const TodayAirQuaility = ({Time}) => {
                 return [results[2], 3, colorList[2]];
             case 3:
             case '매우나쁨':
-            case '#c00d0d': 
+            case '#c00d0d':
                 return [results[3], 4, colorList[3]];
             default:
                 return [results[4], 5, colorList[4]];
@@ -105,7 +105,7 @@ const TodayAirQuaility = ({Time}) => {
 
         // 예보 텍스트
         if(text){
-            const filterForecast = text.filter((item, index) => index < 4);
+            const filterForecast = text.filter((_, index) => index < 4);
 
             // 대기 예측 정보 데이터 기입
             filterForecast.forEach((forecast, idx) => {
@@ -261,7 +261,7 @@ const TodayAirQuaility = ({Time}) => {
                             <span>({`${station.addr.split(' ')[0]} ${station.addr.split(' ')[1]} ${station.stationName}`} 측정소 기준)</span>
                         </p>
                     </TodayAirQualityInfoInteraction>
-                    <Time refresh onClick={refreshHandle} right="0" />
+                    <Time refresh onClick={refreshHandle} right="0" height="30"/>
                 </TodayAirQualityInfoWrap>
                 <TodayAirQualityContainer>
                     <TodayAirQualityPart>

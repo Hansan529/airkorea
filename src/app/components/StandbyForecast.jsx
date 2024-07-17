@@ -19,7 +19,7 @@
 import { useState } from 'react';
 
 // ~ Hooks
-import useStore from '../hooks/useStore';
+import useStore from '../hooks/useStore.tsx';
 
 // ~ Style
 import { StyledbyForecastMain, StyledbyForecastNames } from '../StyleComponent';
@@ -73,7 +73,7 @@ const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
             return (item?.informData === date) && (item?.informCode === standbyType.toUpperCase());
         });
         timeData = text[0]?.dataTime?.split(' ');
-    
+
         // 전국 대기 예보 텍스트 오브젝트로 분리
         findData?.informGrade.split(',').forEach(item => {
             const b = item.split(' : ');
@@ -89,7 +89,7 @@ const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
     return (
         <StyledbyForecastMain>
             <StyledbyForecastNames>
-                {notData ? 
+                {notData ?
                 <span className="mp07"><strong>17시 이후 발표</strong></span> : <>
                 <span className="mp03">서울 <strong>{obj['서울']}</strong></span>
                 <span className="mp19">제주 <strong>{obj['제주']}</strong></span>
@@ -2059,7 +2059,7 @@ const StandbyForecast = ({ Time, standbyType, forecastDate }) => {
                     c-0.188,2.9,1.312,4.691,3.247,6.516c0.778,0.732,1.334,1.654,2.023,2.461c0.743,0.867,1.267,2.045,2.15,2.734
                     c0.727,0.568,1.635,1.025,2.322,1.691C40.559,693.773,40.884,694.881,41.982,695.338z"></path>
             </svg>
-            <Time custom={timeData} right="0" top="0" />
+            <Time custom={timeData} right="0" top="0" height="30" />
         </StyledbyForecastMain>
     )
 }

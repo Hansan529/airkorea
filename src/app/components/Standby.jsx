@@ -43,7 +43,7 @@ import { ChungbukPath } from '../data/Chungbuk.js';
 
 // ~ Hooks
 import getColorValue from '../functions/getColorValue.ts';
-import useStore from '../hooks/useStore.jsx';
+import useStore from '../hooks/useStore.tsx';
 
 // ~ Style
 import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../StyleComponent.jsx';
@@ -586,7 +586,7 @@ const Standby = ({Time}) => {
 				<RegionComponents />
 				{selectInfo === 'station' && <StationComponent />}
 			</StandbyMainContainer>
-			<Time right="0" />
+			<Time right="0" height="30" />
 			<AppLegendWrapper>
 			{selectInfo === 'air' ?
 			<AppLegend data-legend-index="0" className={isOn0 && 'on'} height="55px">

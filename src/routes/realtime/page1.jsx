@@ -26,7 +26,7 @@ import ko from 'date-fns/locale/ko';
 import stationInfoJSON from '../../app/data/stationInfo.json';
 
 // ~ Hooks
-import useStore from '../../app/hooks/useStore.jsx';
+import useStore from '../../app/hooks/useStore.tsx';
 import getColorValue from '../../app/functions/getColorValue.ts';
 
 // ~ Style
@@ -270,6 +270,7 @@ export default function Page() {
             return <tr><td colSpan={colSpan}>검색된 자료가 없습니다.</td></tr>;
         }
 
+        console.log('tableDom: ', tableDom);
         return tableDom.map((tr, idx) => {
             const colSpanVariable = dataDivision === 'time' ? 1 : 2;
             const { gradeText: khaiGradeTxt } = getColorValue(tr?.khaiGrade);
@@ -284,17 +285,17 @@ export default function Page() {
             if(dataTimeCheck && dataDivision === 'time') { returnDom =
                 <tr key={idx}>
                     <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.pm10Grade}.webp`} alt={pm10GradeTxt} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.pm10Grade || 5}.webp`} alt={pm10GradeTxt} /></td>
                     <td>{tr.pm10Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.pm25Grade}.webp`} alt={pm25GradeTxt} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.pm25Grade || 5}.webp`} alt={pm25GradeTxt} /></td>
                     <td>{tr.pm25Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.o3Grade}.webp`} alt={o3GradeTxt} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.o3Grade || 5}.webp`} alt={o3GradeTxt} /></td>
                     <td>{tr.o3Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.no2Grade}.webp`} alt={no2GradeTxt} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.no2Grade || 5}.webp`} alt={no2GradeTxt} /></td>
                     <td>{tr.no2Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.coGrade}.webp`} alt={coGradeTxt} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.coGrade || 5}.webp`} alt={coGradeTxt} /></td>
                     <td>{tr.coValue}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.so2Grade}.webp`} alt={so2GradeTxt} /></td>
+                    <td><img src={`/images/realtime/img_bum0${tr.so2Grade || 5}.webp`} alt={so2GradeTxt} /></td>
                     <td>{tr.so2Value}</td>
                 </tr>}
 
@@ -335,13 +336,30 @@ export default function Page() {
         });
     }
     // ### 데이터 데이터 구분 필터링 함수
-    const filterResult = (data, startDateFormatting, endDateFormatting) => {
+    const filterResult = (data, startDateFormatting, endDateFormatting, selectStation) => {
+        // # 데이터가 빈 배열인 경우 처리
+        if (!Array.isArray(data) || data.length === 0) {
+            return [];
+        }
+
         return data.filter(item => {
-            const { dataTime, stationName, msurDt, msrstnName } = item;
-            const type = typeof dataTime !== 'undefined' ? dataTime : msurDt;
-            const itemDate = new Date(type);
-            const stationExists = typeof stationName !== 'undefined' ? stationName : msrstnName;
-            return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && (stationExists === selectStation);
+            // # 객체가 존재하는지 확인
+            if (!item || typeof item !== 'object' || Object.keys(item).length === 0) {
+                return false;
+            }
+
+            // # 데이터에 따라 필요한 필드를 선택
+            const dataTime = item.dataTime || item.msurDt;
+            const stationName = item.stationName || item.msrstnName;
+
+            // # 유효한 날짜인지 확인
+            const itemDate = new Date(dataTime);
+            if (isNaN(itemDate.getTime())) {
+                return false; // 유효하지 않은 날짜인 경우 필터링
+            }
+
+            // # 선택한 측정소와 일치하는지 확인
+            return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && (stationName === selectStation);
         });
     }
     // # 데이터 검색 버튼 핸들러

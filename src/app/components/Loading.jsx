@@ -16,7 +16,7 @@
 */
 
 // ~ Package
-import useStore from "../hooks/useStore";
+import useStore from "../hooks/useStore.tsx";
 
 // ~ Style
 import { Loading } from "../StyleComponent";

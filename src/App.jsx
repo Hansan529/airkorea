@@ -23,7 +23,7 @@ import proj4 from 'proj4';
 import stationInfoJSON from './app/data/stationInfo.json';
 
 // ~ Hooks
-import useStore from './app/hooks/useStore.jsx';
+import useStore from './app/hooks/useStore.tsx';
 
 // ~ Style
 import './App.css';
