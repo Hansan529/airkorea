@@ -633,7 +633,7 @@ export const AppLegend = styled.div`
         width: 10px;
         height: 10px;
         top: 50%;
-        left: 25px;
+        left: 22px;
         transform: translateY(-50%);
         background: no-repeat 0 0;
       }

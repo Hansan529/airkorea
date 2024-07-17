@@ -301,7 +301,7 @@ const Standby = ({Time}) => {
 		})();
 		const DynamicStyle = styled(StandbyStationPopupStyle)`
 			&[data-name="${hoverStation?.stationName}"]{
-				z-index: 10;
+				z-index: 15;
 				visibility: visible;
 			}
 		`;
