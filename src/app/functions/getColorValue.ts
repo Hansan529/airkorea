@@ -22,7 +22,7 @@ interface StringObject {
   gradeText: string;
 }
 
-const getColorValue = (grade: number, rangeValueShow?: RangeValueShow): StringObject | string[] => {
+const getColorValue = (grade: number | null, rangeValueShow?: RangeValueShow): StringObject | string[] => {
   const resultList = {
     0: { default: '#d0ecff', hover: '#7ed6ff', button: '#6ac8fe', textColor: '#1c67d7', gradeText: '좋음' },
     1: { default: '#caf2de', hover: '#94edbc', button: '#59e494', textColor: '#01b56e', gradeText: '보통' },
@@ -45,19 +45,21 @@ const getColorValue = (grade: number, rangeValueShow?: RangeValueShow): StringOb
 
     if(rangeValueShow?.boolean) return typeRangeValue[rangeValueShow.type];
 
-    if (rangeValueShow.value >= values[0] && rangeValueShow.value <= values[1]) { return ['#d0ecff', '#7ed6ff', '#6ac8fe', '#1c67d7', '1']; } 
-    else if (rangeValueShow.value >= values[2] && rangeValueShow.value <= values[3]) { return ['#caf2de', '#94edbc', '#59e494', '#01b56e', '2']; } 
-    else if (rangeValueShow.value >= values[4] && rangeValueShow.value <= values[5]) { return ['#f8f7c6', '#ffeb8b', '#ffda58', '#937200', '3']; } 
-    else if (rangeValueShow.value >= values[6]) { return ['#ffd6da', '#ffc1c5', '#ffa8a8', '#c00d0d', '4']; } 
+    if (rangeValueShow.value >= values[0] && rangeValueShow.value <= values[1]) { return ['#d0ecff', '#7ed6ff', '#6ac8fe', '#1c67d7', '1']; }
+    else if (rangeValueShow.value >= values[2] && rangeValueShow.value <= values[3]) { return ['#caf2de', '#94edbc', '#59e494', '#01b56e', '2']; }
+    else if (rangeValueShow.value >= values[4] && rangeValueShow.value <= values[5]) { return ['#f8f7c6', '#ffeb8b', '#ffda58', '#937200', '3']; }
+    else if (rangeValueShow.value >= values[6]) { return ['#ffd6da', '#ffc1c5', '#ffa8a8', '#c00d0d', '4']; }
     else { return ['#cbd0d3', '#c1c5c7', '#abb0b3', '#0a0a0a', '5']; }
   } else {
-    switch(Number(grade)) {
-      case 1: return resultList[0];
-      case 2: return resultList[1];
-      case 3: return resultList[2];
-      case 4: return resultList[3];
-      default: return resultList[4];
-    }
+    if(grade !== null) {
+      switch(Number(grade)) {
+        case 1: return resultList[0];
+        case 2: return resultList[1];
+        case 3: return resultList[2];
+        case 4: return resultList[3];
+        default: return resultList[4];
+      }
+    } else return resultList[4];
   }
 
 };
