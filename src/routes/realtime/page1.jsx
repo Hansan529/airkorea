@@ -256,8 +256,9 @@ export default function Page() {
 
     // ! 측정자료
     // # 통계 검색
-    const [tableResult, setTableResult] = useState([{}]);
+    const [tableResult, setTableResult] = useState(null);
     const [tableDom, setTableDom] = useState([]);
+    const [tableDomStation, setTableDomStation] = useState('중구');
     const tableRowSpan = dataDivision === 'time' ? 1 : 2;
     // @ 통계 테이블 컴포넌트
     const TableDomComponent = () => {
@@ -270,74 +271,84 @@ export default function Page() {
             return <tr><td colSpan={colSpan}>검색된 자료가 없습니다.</td></tr>;
         }
 
-        console.log('tableDom: ', tableDom);
-        return tableDom.map((tr, idx) => {
-            const colSpanVariable = dataDivision === 'time' ? 1 : 2;
-            const { gradeText: khaiGradeTxt } = getColorValue(tr?.khaiGrade);
-            const { gradeText: pm10GradeTxt } = getColorValue(tr.pm10Grade);
-            const { gradeText: pm25GradeTxt } = getColorValue(tr.pm25Grade);
-            const { gradeText: o3GradeTxt } = getColorValue(tr.o3Grade);
-            const { gradeText: no2GradeTxt } = getColorValue(tr.no2Grade);
-            const { gradeText: coGradeTxt } = getColorValue(tr.coGrade);
-            const { gradeText: so2GradeTxt } = getColorValue(tr.so2Grade);
+        if(dataDivision === 'time') {
+            return tableDom.map((tr, idx) => {
+                const { gradeText: pm10GradeTxt } = getColorValue(tr.pm10Grade);
+                const { gradeText: pm25GradeTxt } = getColorValue(tr.pm25Grade);
+                const { gradeText: o3GradeTxt } = getColorValue(tr.o3Grade);
+                const { gradeText: no2GradeTxt } = getColorValue(tr.no2Grade);
+                const { gradeText: coGradeTxt } = getColorValue(tr.coGrade);
+                const { gradeText: so2GradeTxt } = getColorValue(tr.so2Grade);
+                return (
+                    <tr key={idx}>
+                        <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.pm10Grade || 5}.webp`} alt={pm10GradeTxt} /></td>
+                        <td>{tr.pm10Value}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.pm25Grade || 5}.webp`} alt={pm25GradeTxt} /></td>
+                        <td>{tr.pm25Value}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.o3Grade || 5}.webp`} alt={o3GradeTxt} /></td>
+                        <td>{tr.o3Value}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.no2Grade || 5}.webp`} alt={no2GradeTxt} /></td>
+                        <td>{tr.no2Value}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.coGrade || 5}.webp`} alt={coGradeTxt} /></td>
+                        <td>{tr.coValue}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.so2Grade || 5}.webp`} alt={so2GradeTxt} /></td>
+                        <td>{tr.so2Value}</td>
+                    </tr>
+                )
+            });
+        } else if(dataDivision === 'daily') {
+            return tableDom.map((tr, idx) => {
+                const colSpanVariable = 2;
+                return (
+                    <tr key={idx}>
+                        <td>{tr.msurDt.substring(5)}</td>
+                        <td colSpan={colSpanVariable}>{tr.pm10Value}</td>
+                        <td colSpan={colSpanVariable}>{tr.pm25Value}</td>
+                        <td colSpan={colSpanVariable}>{tr.o3Value}</td>
+                        <td colSpan={colSpanVariable}>{tr.no2Value}</td>
+                        <td colSpan={colSpanVariable}>{tr.coValue}</td>
+                        <td colSpan={colSpanVariable}>{tr.so2Value}</td>
+                    </tr>
+                )
+            });
+        } else {
+            return tableDom.map((tr, idx) => {
+                const { gradeText: khaiGradeTxt } = getColorValue(tr?.khaiGrade);
+                const { gradeText: pm10GradeTxt } = getColorValue(tr.pm10Grade);
+                const { gradeText: pm25GradeTxt } = getColorValue(tr.pm25Grade);
+                const { gradeText: o3GradeTxt } = getColorValue(tr.o3Grade);
+                const { gradeText: no2GradeTxt } = getColorValue(tr.no2Grade);
+                const { gradeText: coGradeTxt } = getColorValue(tr.coGrade);
+                const { gradeText: so2GradeTxt } = getColorValue(tr.so2Grade);
 
-            let returnDom;
-            if(dataTimeCheck && dataDivision === 'time') { returnDom =
-                <tr key={idx}>
-                    <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.pm10Grade || 5}.webp`} alt={pm10GradeTxt} /></td>
-                    <td>{tr.pm10Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.pm25Grade || 5}.webp`} alt={pm25GradeTxt} /></td>
-                    <td>{tr.pm25Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.o3Grade || 5}.webp`} alt={o3GradeTxt} /></td>
-                    <td>{tr.o3Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.no2Grade || 5}.webp`} alt={no2GradeTxt} /></td>
-                    <td>{tr.no2Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.coGrade || 5}.webp`} alt={coGradeTxt} /></td>
-                    <td>{tr.coValue}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.so2Grade || 5}.webp`} alt={so2GradeTxt} /></td>
-                    <td>{tr.so2Value}</td>
-                </tr>}
+                return (
+                    <tr key={idx}>
+                        <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
+                        <td></td>
+                        <td><img src={`/images/realtime/img_bum0${tr.khaiGrade}.webp`} alt={khaiGradeTxt} /></td>
+                        <td>{tr.khaiValue}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.pm10Grade}.webp`} alt={pm10GradeTxt} /></td>
+                        <td>{tr.pm10Value24}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.pm25Grade}.webp`} alt={pm25GradeTxt} /></td>
+                        <td>{tr.pm25Value24}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.o3Grade}.webp`} alt={o3GradeTxt} /></td>
+                        <td>{tr.o3Value}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.no2Grade}.webp`} alt={no2GradeTxt} /></td>
+                        <td>{tr.no2Value}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.coGrade}.webp`} alt={coGradeTxt} /></td>
+                        <td>{tr.coValue}</td>
+                        <td><img src={`/images/realtime/img_bum0${tr.so2Grade}.webp`} alt={so2GradeTxt} /></td>
+                        <td>{tr.so2Value}</td>
+                    </tr>
+                )
+            });
 
-            if(dataDailyCheck && dataDivision === 'daily') { returnDom =
-                <tr key={idx}>
-                    <td>{tr.msurDt.substring(5)}</td>
-                    <td colSpan={colSpanVariable}>{tr.pm10Value}</td>
-                    <td colSpan={colSpanVariable}>{tr.pm25Value}</td>
-                    <td colSpan={colSpanVariable}>{tr.o3Value}</td>
-                    <td colSpan={colSpanVariable}>{tr.no2Value}</td>
-                    <td colSpan={colSpanVariable}>{tr.coValue}</td>
-                    <td colSpan={colSpanVariable}>{tr.so2Value}</td>
-                </tr>}
-
-            if(dataTimeCheck && dataDivision === 'total') { returnDom =
-                <tr key={idx}>
-                    <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
-                    <td></td>
-                    <td><img src={`/images/realtime/img_bum0${tr.khaiGrade}.webp`} alt={khaiGradeTxt} /></td>
-                    <td>{tr.khaiValue}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.pm10Grade}.webp`} alt={pm10GradeTxt} /></td>
-                    <td>{tr.pm10Value24}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.pm25Grade}.webp`} alt={pm25GradeTxt} /></td>
-                    <td>{tr.pm25Value24}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.o3Grade}.webp`} alt={o3GradeTxt} /></td>
-                    <td>{tr.o3Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.no2Grade}.webp`} alt={no2GradeTxt} /></td>
-                    <td>{tr.no2Value}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.coGrade}.webp`} alt={coGradeTxt} /></td>
-                    <td>{tr.coValue}</td>
-                    <td><img src={`/images/realtime/img_bum0${tr.so2Grade}.webp`} alt={so2GradeTxt} /></td>
-                    <td>{tr.so2Value}</td>
-                </tr>
-
-            }
-
-            return returnDom;
-        });
+        }
     }
     // ### 데이터 데이터 구분 필터링 함수
-    const filterResult = (data, startDateFormatting, endDateFormatting, selectStation) => {
-        // # 데이터가 빈 배열인 경우 처리
+    const filterResult = (data, startDateFormatting, endDateFormatting) => {
+        // # 데이터가 빈 배열인 경우 (기본 값) 처리
         if (!Array.isArray(data) || data.length === 0) {
             return [];
         }
@@ -349,14 +360,14 @@ export default function Page() {
             }
 
             // # 데이터에 따라 필요한 필드를 선택
-            const dataTime = item.dataTime || item.msurDt;
+            const dataTime = item.dataTime || `${item.msurDt}T09:00`;
             const stationName = item.stationName || item.msrstnName;
 
             // # 유효한 날짜인지 확인
             const itemDate = new Date(dataTime);
             if (isNaN(itemDate.getTime())) {
                 return false; // 유효하지 않은 날짜인 경우 필터링
-            }
+            };
 
             // # 선택한 측정소와 일치하는지 확인
             return (itemDate >= startDateFormatting && itemDate <= endDateFormatting) && (stationName === selectStation);
@@ -398,21 +409,30 @@ export default function Page() {
         const endDateFormatting = new Date(endDateString);
 
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
+        // # 최대 조회 날짜인 3개월치 fetch 후, 같은 측정소인 경우 데이터를 활용해 재요청하지 않으면서 필터링 처리
         const checkResult = filterResult(tableResult, startDateFormatting, endDateFormatting);
 
-        if((dataDivision === 'time' && checkResult.length === 0)
-            || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))
-            || (dataDivision === 'total' && !checkResult.some(item => item.khaiValue))) {
-            // const response = await fetch(`https://apis.hansan-web.link/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
-            const response = await fetch(`https://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
+        // # 현재 일평균 결과 값에 존재하지 않는 날짜가 있을 경우 새롭게 요청함
+        if (
+            checkResult.length === 0 ||
+            (selectStation !== tableDomStation) ||
+            (checkResult &&
+             (checkResult.some(item => item.msurDt !== startDateString) ||
+              checkResult.some(item => item.msurDt !== endDateString)))
+        ) {
+            // const response = await fetch(`https://apis.hansan-web.link/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${endYear}${endMonth}${endDay}&stationName=${selectStation}&type=${dataDivision}`);
+            const response = await fetch(`https://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${endYear}${endMonth}${endDay}&stationName=${selectStation}&type=${dataDivision}`);
             const arrayResult = await response.json();
 
-            const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting)
+            const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting);
             // # 측정소 3개월치의 데이터
             setTableResult(arrayResult);
             // # 날짜 필터를 진행 한 결과 데이터
             setTableDom(filterDate);
-        } else setTableDom(checkResult);
+            // # 해당 데이터의 측정소 이름
+            setTableDomStation(selectStation);
+        } else
+            setTableDom(checkResult);
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
     }
     // @ 특정 측정소의 측정자료가 선택한 측정소와 일치하는지 체크하는 컴포넌트
@@ -420,8 +440,8 @@ export default function Page() {
         return nearStation.map((station, idx) => {
             const effectBoolean = selectStation === station.stationName;
             let opacity;
-            if(dataDivision === 'time' || dataDivision === 'total') opacity = tableDom.find(table => table.stationName === station.stationName) ? null : 80;
-            if(dataDivision === 'daily') opacity = tableDom.find(table => table.msrstnName === station.stationName) ? null : 80;
+            if(dataDivision === 'time' || dataDivision === 'total') opacity = tableDomStation === selectStation ? null : 80;
+            if(dataDivision === 'daily') opacity = tableDomStation === selectStation ? null : 80;
             return <Fragment key={idx}>
                 <ContentResultTableSpan effect={effectBoolean} opacity={opacity}>{station.stationName}</ContentResultTableSpan>
             </Fragment>;
