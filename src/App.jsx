@@ -142,7 +142,7 @@ function App() {
           }
           // TODO: 변경
           // getFetch(type, `https://apis.hansan-web.link/airkorea/station-${type}`);
-          getFetch(type, `http://localhost:3500/api/airkorea/${type}`);
+          getFetch(type, `https://localhost:3500/api/airkorea/${type}`);
       } catch (err) {
           console.error('err: ', err);
       }
@@ -185,8 +185,8 @@ function App() {
         try {
           // # 측정소 데이터 API 호출
           // TODO:
-          // const responseStation = await fetch(`https://apis.hansan-web.link/station?x=${tmX}&y=${tmY}`);
-          const responseStation = await fetch(`http://localhost:3500/api/airkorea/station?x=${tmX}&y=${tmY}`);
+          // const responseStation = await fetch(`https://apis.hansan-web.link/airkorea/station?x=${tmX}&y=${tmY}`);
+          const responseStation = await fetch(`https://localhost:3500/api/airkorea/station?x=${tmX}&y=${tmY}`);
 
           if(!responseStation.ok) throw new Error('Network response was not ok');
 
@@ -285,7 +285,7 @@ function App() {
     }
   };
 
-  
+
   // ! 핸들
   const eventHandler = (target, value) => changer(target, value);
   const tapSelectHandle = (index) => setTapSelect(index);
@@ -377,7 +377,7 @@ function App() {
     const Result = Components[tapSelect];
     return ( <Result Time={Time} standbyType={tapSelect === 1 && standbyType} forecastDate={tapSelect === 1 && forecastDate} /> );
   };
-  
+
   return (
     <>
       <HeaderComponent />

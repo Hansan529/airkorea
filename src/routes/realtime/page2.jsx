@@ -418,7 +418,7 @@ export default function Page() {
         try {
             // FIXME: 완료 후 API 서버 복구
             // const response = await fetch(`https://apis.hansan-web.link/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
-            const response = await fetch(`http://localhost:3500/api/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
+            const response = await fetch(`https://localhost:3500/api/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
             if (!response.ok)
                 throw new Error(`HTTP error! Status: ${response.status}`);
             const data = await response.json();

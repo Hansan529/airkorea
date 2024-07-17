@@ -114,10 +114,10 @@ export const LayoutAsideLink = styled(Link)`
     letter-spacing: -1px;
     color: ${({selected}) => selected ? '#0f62cc' : '#000'};
     font-weight: 500;
-    background: ${({showmore,children_height}) => showmore === 'true' 
-                    ? (children_height === 0 
-                        ? 'url(/images/global/img_left_down.webp) no-repeat right 15px center' 
-                        : 'url(/images/global/img_left_up.webp) no-repeat right 15px center') 
+    background: ${({showmore,children_height}) => showmore === 'true'
+                    ? (children_height === 0
+                        ? 'url(/images/global/img_left_down.webp) no-repeat right 15px center'
+                        : 'url(/images/global/img_left_up.webp) no-repeat right 15px center')
                     : null};
 
     &:hover { color: #0f62cc; }
@@ -214,7 +214,7 @@ export const HeaderNavLi = styled.li`
     &:visited { color: #000; }
     &:hover { color: #0f62cc; }
   }
-  
+
   /* 제목 */
   > a {
     font-weight: 600;
@@ -245,8 +245,8 @@ export const HeaderNavLi = styled.li`
       white-space: nowrap;
       &+li{ margin-top: 10px; }
 
-      a { 
-        position: relative; 
+      a {
+        position: relative;
 
         &::before {
           display: block;
@@ -603,7 +603,7 @@ export const AppLegend = styled.div`
 
       button {
         color: #fff;
-        background-image: url(./img_bottom_arr_down.webp);
+        background-image: url(../images/main/img_bottom_arr_down.webp);
       }
     }
 
@@ -1321,7 +1321,7 @@ export const ContentTable = styled.table`
     border-top: 2px solid #000;
     margin: 20px 0;
 
-    caption { 
+    caption {
         text-align: left;
         margin-bottom: 10px;
         ul { list-style: inside; }
@@ -1393,7 +1393,7 @@ export const InfoPage1ContentCharacter = styled.li`
     border-radius: 10px;
     border: 1px solid #dcdcdc;
     overflow: hidden;
-    
+
     p {
         display: table;
         position: absolute;
@@ -1402,7 +1402,7 @@ export const InfoPage1ContentCharacter = styled.li`
         width: 60px;
         height: 60px;
         background-color: #f7f7f7;
-        
+
         em {
             display: table-cell;
             text-align: center;
@@ -1424,16 +1424,16 @@ export const InfoPage1NuriBox = styled.div`
 
 // @ info/page2.jsx
 export const InfoPage2ContentTable = styled(ContentTable)`
-    caption { 
-        h2 { 
-            font-size: 22px; 
+    caption {
+        h2 {
+            font-size: 22px;
             font-weight: 600;
             margin-top: 10px;
         }
         p { margin-top: 15px; }
     }
-    th, td { 
-        word-break: keep-all; 
+    th, td {
+        word-break: keep-all;
         font-size: initial;
     }
     th { font-size: 16px; }
@@ -1547,7 +1547,7 @@ export const InfoPage3ContentMapList = styled.ul`
         > div:first-of-type {
             display: flex;
             border-bottom: 1px solid #dcdcdc;
-            
+
             &:hover {background: #d7f4ff;}
             > div {
                 display: flex;
@@ -1666,7 +1666,7 @@ export const ContentTableWrap = styled.div`
     }
 `;
 export const RealtimePage1ContentTable = styled(ContentTable)`
-    caption { 
+    caption {
         margin-bottom: 0;
         margin-top: 10px;
         caption-side: bottom;
@@ -1753,7 +1753,7 @@ export const ContentResultSearchBtnWrap = styled.div`
             .react-datepicker-ignore-onclickoutside {}
         }
     }
-    select { 
+    select {
         padding: 5px 10px;
         &:first-of-type { margin-right: 10px; }
     }
@@ -1862,7 +1862,7 @@ export const Loading = styled.div`
     height: 100%;
     text-align: center;
     border: 1px solid #bcd0e8;
-    background: url('/loading_bg.webp');
+    background: url('./images/global/loading_bg.webp');
 
     div {
     margin-top: 360px;

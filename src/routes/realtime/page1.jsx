@@ -113,13 +113,13 @@ export default function Page() {
     };
 
 
-    // ! 사이드바 
+    // ! 사이드바
     // # 사이드바 목록
     const asideList = {
             title: '실시간 자료조회',
             links: [
-                { text: '실시간 대기 정보', 
-                    select: true, 
+                { text: '실시간 대기 정보',
+                    select: true,
                 },
                 { text: '시도별 대기정보',
                     select: false,
@@ -129,9 +129,9 @@ export default function Page() {
                     { text: '시도별 대기정보(오존)',     select: false, type: 'o3' },
                     { text: '시도별 대기정보(이산화질소)', select: false, type: 'no2' },
                     { text: '시도별 대기정보(일산화탄소)', select: false, type: 'co' },
-                    { text: '시도별 대기정보(아황산가스)', select: false, type: 'so2' }] 
+                    { text: '시도별 대기정보(아황산가스)', select: false, type: 'so2' }]
                 },
-                { text: '미세먼지 세부 측정정보', 
+                { text: '미세먼지 세부 측정정보',
                     select: false,
                     children: [
                     { text: '초미세먼지 (PM-2.5)',      select: false, type: 'pm25' },
@@ -183,14 +183,14 @@ export default function Page() {
                 if(hasOwnProperty){
                     return (
                         <li key={index}>
-                            <LayoutAsideLink 
-                                to="" 
+                            <LayoutAsideLink
+                                to=""
                                 onClick={asideHandle}
                                 children_height={asideToggle[link.text]?.px}
                                 selected={link.select}
-                                showmore={childrenCheck ? 'true' : 'false'} 
+                                showmore={childrenCheck ? 'true' : 'false'}
                                 >{link.text}</LayoutAsideLink>
-                            {childrenCheck && 
+                            {childrenCheck &&
                             <LayoutAsideLinkUl $height={asideToggle[link.text]?.px}>
                                 {link.children.map((item, _index) => <li key={_index}><LayoutAsideLinkA selected={item.select} to={`${pathname}?page=2&type=${item.type}`}>{item.text}</LayoutAsideLinkA></li>)}
                             </LayoutAsideLinkUl>}
@@ -214,7 +214,7 @@ export default function Page() {
         setSearchValue(addr);
         setSelectStation(stationName);
     };
-    
+
 
     // ! 조회 기간 캘린더
     // # 캘린더 설정
@@ -281,7 +281,7 @@ export default function Page() {
             const { gradeText: so2GradeTxt } = getColorValue(tr.so2Grade);
 
             let returnDom;
-            if(dataTimeCheck && dataDivision === 'time') { returnDom = 
+            if(dataTimeCheck && dataDivision === 'time') { returnDom =
                 <tr key={idx}>
                     <td>{`${tr.dataTime.substring(5, 13).replace(/\s/g, ':')}`}</td>
                     <td><img src={`/images/realtime/img_bum0${tr.pm10Grade}.webp`} alt={pm10GradeTxt} /></td>
@@ -298,7 +298,7 @@ export default function Page() {
                     <td>{tr.so2Value}</td>
                 </tr>}
 
-            if(dataDailyCheck && dataDivision === 'daily') { returnDom = 
+            if(dataDailyCheck && dataDivision === 'daily') { returnDom =
                 <tr key={idx}>
                     <td>{tr.msurDt.substring(5)}</td>
                     <td colSpan={colSpanVariable}>{tr.pm10Value}</td>
@@ -352,7 +352,7 @@ export default function Page() {
         const bginYear = selectedBginDate.getFullYear();
         const bginMonth = String(selectedBginDate.getMonth() + 1).padStart(2, '0');
         const bginDay = (dataDivision === 'daily' && selectedBginDate.getHours() === 0)
-            ? String(selectedBginDate.getDate() - 1).padStart(2, '0') 
+            ? String(selectedBginDate.getDate() - 1).padStart(2, '0')
             : String(selectedBginDate.getDate()).padStart(2, '0');
 
         const endYear = selectedEndDate.getFullYear();
@@ -363,17 +363,17 @@ export default function Page() {
 
         const { innerWidth, innerHeight } = window;
         const value = 100;
-    
+
         const left = (innerWidth - value) / 2 + window.scrollX;
         const top = (innerHeight - value) / 2 + window.scrollY;
-    
+
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
 
-        const startDateString = dataDivision === 'time' 
-                ? `${bginYear}-${bginMonth}-${bginDay}T${bginHour}:00` 
+        const startDateString = dataDivision === 'time'
+                ? `${bginYear}-${bginMonth}-${bginDay}T${bginHour}:00`
                 : `${bginYear}-${bginMonth}-${bginDay}`;
-        const endDateString = dataDivision === 'time' 
-                ? `${endYear}-${endMonth}-${endDay}T${endHour}:00` 
+        const endDateString = dataDivision === 'time'
+                ? `${endYear}-${endMonth}-${endDay}T${endHour}:00`
                 : `${endYear}-${endMonth}-${endDay}`;
 
         const startDateFormatting = new Date(startDateString);
@@ -382,11 +382,11 @@ export default function Page() {
         // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
         const checkResult = filterResult(tableResult, startDateFormatting, endDateFormatting);
 
-        if((dataDivision === 'time' && checkResult.length === 0) 
+        if((dataDivision === 'time' && checkResult.length === 0)
             || (dataDivision === 'daily' && !checkResult.some(item => item.msurDt))
             || (dataDivision === 'total' && !checkResult.some(item => item.khaiValue))) {
             // const response = await fetch(`https://apis.hansan-web.link/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
-            const response = await fetch(`http://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
+            const response = await fetch(`https://localhost:3500/api/airkorea/neighborhood?inqBginDt=${bginYear}${bginMonth}${bginDay}&inqEndDt=${bginYear}${bginMonth}${bginDay}&stationName=${selectStation}&type=${dataDivision}`);
             const arrayResult = await response.json();
 
             const filterDate = filterResult(arrayResult, startDateFormatting, endDateFormatting)
@@ -447,9 +447,9 @@ export default function Page() {
                         const mangName = filter.length > 0 ? filter[0].mangName : null;
                         return (
                             <tr key={index}>
-                                <td><input type="radio" name="station" 
+                                <td><input type="radio" name="station"
                                         value={`${station.addr}|${station.stationName}`}
-                                        onChange={stationInputHandle} 
+                                        onChange={stationInputHandle}
                                         defaultChecked={index === 0}
                                         />
                                 </td>
@@ -472,21 +472,21 @@ export default function Page() {
                             <div>
                                 <strong>데이터 구분</strong>
                                 <div>
-                                    <input 
-                                        type="radio" 
-                                        name="dataDivision" 
-                                        value="time" 
-                                        id="searchBox_time" 
-                                        defaultChecked={true} 
+                                    <input
+                                        type="radio"
+                                        name="dataDivision"
+                                        value="time"
+                                        id="searchBox_time"
+                                        defaultChecked={true}
                                         onChange={(e) => setDataDivision(e.currentTarget.value)}
                                     /><label htmlFor="searchBox_time">시간</label>
                                     {viewSelectIndex === 0 && <>
-                                    <input 
-                                        type="radio" 
-                                        name="dataDivision" 
-                                        value="daily" 
-                                        id="searchBox_daily" 
-                                        onChange={(e) => setDataDivision(e.currentTarget.value)} 
+                                    <input
+                                        type="radio"
+                                        name="dataDivision"
+                                        value="daily"
+                                        id="searchBox_daily"
+                                        onChange={(e) => setDataDivision(e.currentTarget.value)}
                                     /><label htmlFor="searchBox_daily">일평균</label>
                                     </>}
                                 </div>
@@ -522,7 +522,7 @@ export default function Page() {
                                             <th rowSpan={tableRowSpan} colSpan="2">일산화탄소(ppm)</th>
                                             <th rowSpan={tableRowSpan} colSpan="2">아황산가스(ppm)</th>
                                         </tr>
-                                        {dataDivision === 'time' && 
+                                        {dataDivision === 'time' &&
                                         <tr>
                                             <th colSpan={2}>1시간</th>
                                             <th colSpan={2}>1시간</th>
@@ -530,7 +530,7 @@ export default function Page() {
                                             <th colSpan={2}>1시간</th>
                                             <th colSpan={2}>1시간</th>
                                             <th colSpan={2}>1시간</th>
-                                        </tr>}</> 
+                                        </tr>}</>
                                         // ^ total
                                         : <><tr>
                                             <th rowSpan="2">날짜<br />&#40;월-일:시&#41;</th>
