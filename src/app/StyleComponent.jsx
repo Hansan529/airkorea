@@ -520,6 +520,8 @@ export const AppMMOBorderDiv = styled(AppMMOSelectWrapper)`
     background: none;
     border-radius: 30px;
     height: calc(100% - 5px);
+    word-break: keep-all;
+    padding: 0 5px;
     cursor: pointer;
   }
 
