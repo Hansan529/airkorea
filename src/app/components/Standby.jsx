@@ -408,7 +408,7 @@ const Standby = ({Time}) => {
 			});
 
 			return (
-				<DetailContainer data-region_num={regNum} regionNum={regNum}>
+				<DetailContainer data-region_num={regNum} regionNum={regNum} noImage={regNum === '064' && true}>
 					<StandbyInnerTitle>
 						<h2>{fullName}</h2>
 						<button onClick={() => {
