@@ -89,6 +89,7 @@ export default function Page() {
     }, [searchParams]);
     // # 자료구분
     const [dataDivision, setDataDivision] = useState('daily');
+    const [tempDataDivision, setTempDataDivision] = useState(dataDivision);
     // # 화면 중앙
     const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
 
@@ -258,14 +259,15 @@ export default function Page() {
 
     // ! 측정자료
     // # 금일
-    // FIXME
-    // const currentDate = new Date();
-    const currentDate = new Date('2024-07-06');
+    const currentDate = new Date();
+    // const currentDate = new Date('2024-07-06');
     const currentMonth = currentDate.getMonth() + 1;
     const currentDay = currentDate.getDate();
+
     // # 통계 검색
-    const [tableResult, setTableResult] = useState([{}]);
-    const [tableDom, setTableDom] = useState({hour: [], daily: []});
+    const [tableData, setTableData] = useState([]);
+    const [tableElement, setTableElement] = useState(<tr><td colSpan="18">검색된 자료가 없습니다.</td></tr>);
+
     // # 지역 목록
     const regionList = {
         seoul: '서울',
@@ -308,33 +310,44 @@ export default function Page() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        const data = tableDom.daily.map(obj => {
-            return regionList_eng.map(key => obj[key]);
-        });
-        switch(dataDivision) {
-            case 'daily':
-                return setBarChartData(Object.values(values));
-            case 'oneWeek':
-                return setLineChartData(data.slice(0, 7));
-            case 'month':
-                return setLineChartData(data);
-            default:
-                return;
-        }
-    }, [tableDom.daily, dataDivision]);
-    // @ 통계 테이블 컴포넌트
-    const TableDomComponent = () => {
-        const startTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T00:00:00`);
+
+    // ! 데이터
+    // # 데이터 검색 타입 임시 변경 핸들러
+    const handleChange_radio = (e) => setTempDataDivision(e.target.value);
+
+    // # 데이터 검색 버튼 핸들러
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const { innerWidth, innerHeight } = window;
+        const value = 100;
+
+        const left = (innerWidth - value) / 2 + window.scrollX;
+        const top = (innerHeight - value) / 2 + window.scrollY;
+
+        setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
+
+        try {
+            let dataGubun = 'DAILY';
+            setDataDivision(tempDataDivision);
+            if(tempDataDivision === 'daily') dataGubun = 'HOUR';
+
+            const response = await fetch(`https://apis.hansan-web.link/airkorea/realtime-data?itemCode=${searchType}&dataGubun=${dataGubun}${dataGubun === 'DAILY' ? `&searchCondition=${tempDataDivision}` : ''}`);
+            // const response = await fetch(`https://localhost:3500/api/airkorea/realtime-data?itemCode=${searchType}&dataGubun=${dataGubun}${dataGubun === 'DAILY' && `&searchCondition=${tempDataDivision}`}`);
+            if (!response.ok)
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            const data = await response.json();
+            setTableData(data);
+
+            // # [테이블 데이터] 필터링 날짜
+            const startTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T00:00:00`);
         const endTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T${String(currentDate.getHours()).padStart(2, '0')}:00:00`);
-        // # tableDom이 children을 갖고 있는지 체크
-        if(tableDom.hasOwnProperty('hour')){
-            // # 검색하고자 하는 시작 날짜와 종료 날짜 범위 내에 있는 데이터 필터링
-            const filteredData = tableDom.hour.filter(item => {
+            // % [테이블 데이터] 1. 검색하고자 하는 시작 날짜와 종료 날짜 범위 내에 있는 데이터 필터링
+            const filteredData = data.filter(item => {
                 const itemTime = new Date(item.dataTime.replace(' ', 'T'));
                 return itemTime >= startTime && itemTime <= endTime;
             });
-            // # 테이블 데이터
+            // % [테이블 데이터] 2. 테이블 데이터 계산
             function getValue(region, comparator) {
                 if(filteredData.length === 0) return initialState;
 
@@ -347,7 +360,7 @@ export default function Page() {
                 });
                 return isNaN(extremeValue) ? initialState : extremeValue;
             }
-            // # 데이터 기입
+            // % [테이블 데이터] 3. 테이블 데이터 추가
             regionList_eng.forEach(region => {
                 const max = getValue(region, (a, b) => a > b);
                 const min = getValue(region, (a, b) => a < b);
@@ -355,29 +368,32 @@ export default function Page() {
                 values[region] = Math.round((max + min) / 2);
                 minValues[region] = min;
             });
-        // # 테이블 렌더링 함수
-        function renderTableRow(data) {
-            return (
-                <>
-                    {data.map((day, key) =>
-                    <tr key={key}>
-                        <td>{day.dataTime ? day.dataTime : '-'}</td>
-                        {regionList_eng.map((reg, idx) => {
-                            return <td key={idx}>{day[reg] ? day[reg] : '-'}</td>
-                        })}
-                    </tr>
-                )}
-                </>
-            )
-        };
-        // # 타입 별 출력
-        switch(dataDivision) {
-            case 'daily':
-                function returnValue(type) {
-                    return regionList_eng.map((region, key) => <td key={key}>{type[region] !== 0 ? type[region] : '-'}</td>)
-                };
+            // % [테이블 데이터] 4. 테이블 데이터를 이용한 Dom 설정
+            function renderTableRow(data) {
+                const sliceData = tempDataDivision === 'week' ? data.slice(0, 7) : data;
                 return (
                     <>
+                        {sliceData.map((day, key) =>
+                            <tr key={key}>
+                                <td>{day.dataTime ? day.dataTime : '-'}</td>
+                                {regionList_eng.map((reg, idx) => {
+                                    return <td key={idx}>{day[reg] ? day[reg] : '-'}</td>
+                                })}
+                            </tr>
+                        )}
+                    </>
+                )
+            };
+            // # 차트 데이터 정렬
+            const alignData = data.map(obj => regionList_eng.map(key => obj[key]));
+            // # 클라이언트에게 출력
+            switch(tempDataDivision) {
+                case 'daily': {
+                    setBarChartData(Object.values(values));
+                    function returnValue(type) {
+                        return regionList_eng.map((region, key) => <td key={key}>{type[region] !== 0 ? type[region] : '-'}</td>)
+                    };
+                    setTableElement(<>
                         <tr>
                             <td>시간평균</td>
                             {returnValue(values)}
@@ -390,42 +406,18 @@ export default function Page() {
                             <td>최저값</td>
                             {returnValue(minValues)}
                         </tr>
-                    </>
-                );
-            case 'oneWeek':
-                return renderTableRow(tableDom.daily.slice(0, 7));
-            case 'month':
-                return renderTableRow(tableDom.daily);
-            default:
-                break;
-        };
+                    </>)
+                    break;
+                };
+                default: {
+                    setLineChartData(alignData);
+                    setTableElement(renderTableRow(data));
+                    break;
+                }
+            }
+        } catch {
+            console.error('요청에 실패함');
         }
-        return <tr><td colSpan="18">검색된 자료가 없습니다.</td></tr>
-    };
-    // # 데이터 검색 버튼 핸들러
-    const handleCenterButton = async (e) => {
-        e.preventDefault();
-
-        const { innerWidth, innerHeight } = window;
-        const value = 100;
-
-        const left = (innerWidth - value) / 2 + window.scrollX;
-        const top = (innerHeight - value) / 2 + window.scrollY;
-
-        setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
-
-        // # 데이터를 갖고 있는 상태에서 다시 요청하는지 체크
-        try {
-            // FIXME: 완료 후 API 서버 복구
-            // const response = await fetch(`https://apis.hansan-web.link/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
-            const response = await fetch(`https://localhost:3500/api/airkorea/realtime-data?itemCode=${searchType}&dataGubun=DAILY&searchCondition=MONTH`);
-            if (!response.ok)
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            const data = await response.json();
-            setTableResult(data);
-            setTableDom({hour: data.hour, daily: data.daily});
-        } catch {}
-
         setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
     }
 
@@ -501,13 +493,14 @@ export default function Page() {
             },
         ],
     };
+    // # 한 달의 마지막 날 계산
     function getLastDays(currentDate, days) {
         const dates = [];
         const current = new Date(currentDate);
 
         for(let i = days - 1; i >= 0; i--) {
             const date = new Date(current);
-            date.setDate(current.getDate() - i);
+            date.setDate(current.getDate() - i - 1);
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
@@ -515,6 +508,7 @@ export default function Page() {
         };
         return dates;
     };
+    // # 라인 차트 생성
     function createLineData(labels) {
         return {
             labels: labels,
@@ -533,24 +527,25 @@ export default function Page() {
     const lineWeekData = createLineData(lineWeekLabels);
     const lineMonthData = createLineData(lineMonthLabels);
 
+    // # 라인 차트 Dom
     function LineChart({ period, lineOptions, chartRef, chartOnClick }) {
-        const lineData = period === 'oneWeek' ? lineWeekData : lineMonthData;
+        const lineData = period === 'week' ? lineWeekData : lineMonthData;
         return <Line options={lineOptions} data={lineData} ref={chartRef} onClick={chartOnClick} />;
       }
+
     // # 차트 목록
     const ChartComponent = () => {
         switch(dataDivision) {
             case 'daily':
                 return <Bar options={barOptions} data={barData} ref={chartRef} onClick={chartOnClick} />
-            case 'oneWeek':
-                return <LineChart period="oneWeek" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
+            case 'week':
+                return <LineChart period="week" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
             case 'month':
                 return <LineChart period="month" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
             default:
                 return <></>
         }
     }
-
 
 
     // ! 결과
@@ -578,44 +573,47 @@ export default function Page() {
                                 <strong>자료 구분</strong>
                                 <div>
                                     <div>
+                                        <label>
                                         <input
                                             type="radio"
-                                            name="dataDivision"
                                             value="daily"
-                                            id="searchBox_daily"
-                                            defaultChecked={true}
-                                            onChange={(e) => setDataDivision(e.currentTarget.value)}
-                                        />
-                                        <label htmlFor="searchBox_daily">당일</label>
+                                            checked={tempDataDivision === 'daily'}
+                                            onChange={handleChange_radio}
+                                            />
+                                            당일
+                                            </label>
                                     </div>
                                     <div>
-                                        <input
-                                            type="radio"
-                                            name="dataDivision"
-                                            value="oneWeek"
-                                            id="searchBox_week"
-                                            onChange={(e) => setDataDivision(e.currentTarget.value)}
-                                        />
-                                        <label htmlFor="searchBox_week">7일간</label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                value="week"
+                                                checked={tempDataDivision === 'week'}
+                                                onChange={handleChange_radio}
+                                                />
+                                            7일간
+                                        </label>
                                     </div>
                                     <div>
-                                        <input
-                                            type="radio"
-                                            name="dataDivision"
-                                            value="month"
-                                            id="searchBox_month"
-                                            onChange={(e) => setDataDivision(e.currentTarget.value)}
-                                        />
-                                        <label htmlFor="searchBox_month">1달</label>
+                                        <label htmlFor="">
+                                            <input
+                                                type="radio"
+                                                value="month"
+                                                checked={tempDataDivision === 'month'}
+                                                onChange={handleChange_radio}
+                                            />
+                                            1달
+                                        </label>
                                         <span>{currentMonth - 1}월 {currentDay - 1}일 </span>~<span> {currentMonth}월 {currentDay}일 </span><span>&#40;실시간&#41;</span>
                                     </div>
                                 </div>
                             </div>
                             <RealtimePage2ContentResultSearchBtn>
-                                <button onClick={handleCenterButton}>검색</button>
+                                <button onClick={handleSubmit}>검색</button>
                             </RealtimePage2ContentResultSearchBtn>
                         </RealtimePage2ContentResultSearchBox>
-                        <p style={{ margin: '10px 0'}}>※측정시간 : {tableDom?.hour[0]?.dataTime !== undefined ? tableDom.hour[0].dataTime : '0000-00-00 00'}시 기준.</p>
+                        {/* FIXMD */}
+                        <p style={{ margin: '10px 0'}}>※측정시간 : {tableData[0]?.dataTime !== undefined ? tableData[0].dataTime : '0000-00-00 00'}시 기준.</p>
                         <ContentResultTableWrap>
                             <h2>시간자료&#40;수치&#41;</h2>
                             <p>시도명 클릭시 상세 자료를 보실 수 있습니다.</p>
@@ -629,7 +627,7 @@ export default function Page() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <TableDomComponent />
+                                        {tableElement}
                                     </tbody>
                                 </ContentTable>
                             </RealtimePage2ContentTableWrap>
