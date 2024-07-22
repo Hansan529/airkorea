@@ -431,7 +431,7 @@ export default function Page() {
         pm10: { max: 125, step: 25 },
         o3: { max: 0.125, step: 0.025 },
         no2: { max: 0.125, step: 0.025 },
-        co: { max: 30, step: 10 },
+        co: { max: 10, step: 5 },
         so2: { max: 0.2, step: 0.05 }
     };
     // # 차트 부가 옵션
