@@ -153,6 +153,7 @@ export const LayoutContent = styled.div`
     flex-grow: 1;
     padding-bottom: 100px;
     word-break: keep-all;
+    position: relative;
 `;
 export const LayoutContentTitle = styled.h2`
     border-bottom: 1px solid rgba(0,0,0,0.2);
@@ -1805,6 +1806,7 @@ export const LoadingWrap = styled.div`
     display: none;
     position: absolute;
     z-index: 3001;
+    left: 50%;
     transform: translate(-50%, -50%);
 `;
 

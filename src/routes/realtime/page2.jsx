@@ -91,7 +91,7 @@ export default function Page() {
     const [dataDivision, setDataDivision] = useState('daily');
     const [tempDataDivision, setTempDataDivision] = useState(dataDivision);
     // # 화면 중앙
-    const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
+    const [loadingStyle, setLoadingStyle] = useState({ left: '50%' });
 
 
     // ! 네비게이션
@@ -319,13 +319,12 @@ export default function Page() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { innerWidth, innerHeight } = window;
-        const value = 100;
+        const { innerHeight } = window;
+        const value = 180;
 
-        const left = (innerWidth - value) / 2 + window.scrollX;
         const top = (innerHeight - value) / 2 + window.scrollY;
 
-        setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'block' });
+        setLoadingStyle({ top: `${top}px`, display: 'block' });
 
         try {
             let dataGubun = 'DAILY';
@@ -365,7 +364,7 @@ export default function Page() {
                 const max = getValue(region, (a, b) => a > b);
                 const min = getValue(region, (a, b) => a < b);
                 maxValues[region] = max;
-                values[region] = Math.round((max + min) / 2);
+                values[region] = (max + min) / 2;
                 minValues[region] = min;
             });
             // % [테이블 데이터] 4. 테이블 데이터를 이용한 Dom 설정
@@ -418,7 +417,7 @@ export default function Page() {
         } catch {
             console.error('요청에 실패함');
         }
-        setLoadingStyle({ top: `${top}px`, left: `${left}px`, display: 'none' });
+        setLoadingStyle({ top: `${top}px` });
     }
 
 
@@ -551,9 +550,6 @@ export default function Page() {
     // ! 결과
     return (
         <>
-            <LoadingWrap style={loadingStyle}>
-                <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
-            </LoadingWrap>
             <LayoutDivStyle>
                 <LayoutTopBar>
                     <li><LayoutHome to="/" title="홈"></LayoutHome></li>
@@ -566,6 +562,9 @@ export default function Page() {
                     {/* 컴포넌트: ul */} <AsideComponent />
                 </LayoutAside>
                 <LayoutContent>
+                    <LoadingWrap style={loadingStyle}>
+                        <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
+                    </LoadingWrap>
                     <LayoutContentTitle>시도별 대기정보&#40;{searchTypeText}&#41;</LayoutContentTitle>
                     <ContentResultWrap>
                         <RealtimePage2ContentResultSearchBox>
