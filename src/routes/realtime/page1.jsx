@@ -134,8 +134,8 @@ export default function Page() {
                 { text: '미세먼지 세부 측정정보',
                     select: false,
                     children: [
-                    { text: '초미세먼지 (PM-2.5)',      select: false, type: 'pm25' },
-                    { text: '미세먼지 (PM-10)',        select: false, type: 'pm10' }]
+                    { text: '초미세먼지 (PM-2.5)',      select: false, type: 'detail-pm25' },
+                    { text: '미세먼지 (PM-10)',        select: false, type: 'detail-pm10' }]
                 },
             ]
     };
@@ -192,7 +192,7 @@ export default function Page() {
                                 >{link.text}</LayoutAsideLink>
                             {childrenCheck &&
                             <LayoutAsideLinkUl $height={asideToggle[link.text]?.px}>
-                                {link.children.map((item, _index) => <li key={_index}><LayoutAsideLinkA selected={item.select} to={`${pathname}?page=2&type=${item.type}`}>{item.text}</LayoutAsideLinkA></li>)}
+                                {link.children.map((item, _index) => <li key={_index}><LayoutAsideLinkA selected={item.select} to={`${pathname}?page=${index + 1}&type=${item.type}`}>{item.text}</LayoutAsideLinkA></li>)}
                             </LayoutAsideLinkUl>}
                         </li>
                     );

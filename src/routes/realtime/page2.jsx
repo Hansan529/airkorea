@@ -108,10 +108,10 @@ export default function Page() {
             ]
         },
         {
-            title: '실시간 대기 정보',
+            title: '시도별 대기정보',
             toggleIndex: 2,
             links: [
-                { text: "시도별 대기정보", to: '/realtime?page=2&type=pm25' },
+                { text: "실시간 대기 정보", to: '/realtime?page=1' },
                 { text: "미세먼지 세부 측정정보", to: '/realtime?page=3' }
             ]
         },
@@ -119,7 +119,8 @@ export default function Page() {
             title: `시도별 대기정보(${searchTypeText.replace('-', '')})`,
             toggleIndex: 3,
             links: [
-                { text: '시도별 대기정보(PM-10)', to: '/realtime?page=2&type=pm10'},
+                { text: '시도별 대기정보(PM2.5)', to: '/realtime?page=2&type=pm25'},
+                { text: '시도별 대기정보(PM10)', to: '/realtime?page=2&type=pm10'},
                 { text: '시도별 대기정보(오존)', to: '/realtime?page=2&type=o3'},
                 { text: '시도별 대기정보(이산화질소)', to: '/realtime?page=2&type=no2'},
                 { text: '시도별 대기정보(일산화탄소)', to: '/realtime?page=2&type=co'},
