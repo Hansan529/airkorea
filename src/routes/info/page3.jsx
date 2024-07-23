@@ -20,10 +20,33 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 // ~ Json
-import stationInfo from "../../app/data/stationInfo.json";
+import stationsInfoData from "../../app/data/stationInfo.json";
 
 // ~ Style
 import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage3ContentSubTitleWrap, InfoPage3ContentSelectWrap, InfoPage3ContentSelect, InfoPage3ContentMain, InfoPage3ContentMapWrap, InfoPage3ContentMap, InfoPage3ContentMapListWrap, InfoPage3ContentMapListTitle, InfoPage3ContentMapList, InfoPage3ContentMapDetail, InfoPage3ContentMapDetailKey } from '../../app/StyleComponent';
+
+// # 측정소 정보
+/**
+ * @typedef {Object} StationInfo
+ * @property {string} dmX
+ * @property {string} item
+ * @property {string} mangName
+ * @property {string} year
+ * @property {string} city
+ * @property {string} cityShort
+ * @property {string} addr
+ * @property {string} building
+ * @property {string} stationName
+ * @property {string} dmY
+ * @property {string} top
+ * @property {string} left
+ * @property {string} innerTop
+ * @property {string} innerLeft
+ */
+
+/** @type {StationInfo[]} */
+const stationsInfo = stationsInfoData;
+
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page({ topbarMain, topbarList }) {
@@ -87,7 +110,7 @@ export default function Page({ topbarMain, topbarList }) {
                         </LayoutListDetail>
                     </LayoutList>
                     {/* topbarList */}
-                    {objectExist 
+                    {objectExist
                     ? (<LayoutList>
                         <LayoutAElement
                             to="#"
@@ -97,7 +120,7 @@ export default function Page({ topbarMain, topbarList }) {
                             data-direction={toggles[topbarList.toggleIndex].px === toggles[topbarList.toggleIndex].initial ? 'up' : 'down'}
                         >{topbarList.title}</LayoutAElement>
                         <LayoutListDetail $height={toggles[topbarList.toggleIndex].px}>{topbarList.links.map((link, idx) => <li key={idx}><Link to={link.to}>{link.text}</Link></li>)}</LayoutListDetail>
-                        </LayoutList>) 
+                        </LayoutList>)
                     : topbarList.map((list, idx) => {
                         return (
                             <LayoutList>
@@ -165,12 +188,12 @@ export default function Page({ topbarMain, topbarList }) {
 
     // # 측정소 목록 필터 함수
     useEffect(() => {
-        const response = stationInfo.items.filter(station => {
+        const response = stationsInfo.filter(station => {
             let result;
-            
+
             if(district === 'all') result = station.mangName === mangCode;
             else result = station.mangName === mangCode && station.city === district;
-    
+
             return result;
         });
         const sortedData = response.sort((a, b) => {
@@ -211,14 +234,14 @@ export default function Page({ topbarMain, topbarList }) {
             setFilterData(sortedData);
             setDataToggle(toggleObject);
         };
-        
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mangCode, district, search]);
 
 //------------------------------------------------------------
 
     return (
-        <>  
+        <>
             <LayoutDivStyle>
                 <TopbarLayout />
             </LayoutDivStyle>
@@ -233,14 +256,14 @@ export default function Page({ topbarMain, topbarList }) {
                             if(variableCheck) {
                                 // result = variableCheck && (
                                 //     <li key={index}>
-                                //         <AsideLink 
-                                //             to="#" 
+                                //         <AsideLink
+                                //             to="#"
                                 //             onClick={asideHandle}
                                 //             children_height={asideToggle[link.text]?.px}
                                 //             selected={link.select}
-                                //             showmore={childrenCheck ? 'true' : 'false'} 
+                                //             showmore={childrenCheck ? 'true' : 'false'}
                                 //             >{link.text}</AsideLink>
-                                //         {childrenCheck && 
+                                //         {childrenCheck &&
                                 //             <AsideLinkUl $height={asideToggle[link.text]?.px}>
                                 //                 {link.children.map((item, _index) => {
                                 //                     return <li key={_index}><AsideLinkA selected={item.select}>{item.text}</AsideLinkA></li>
@@ -351,7 +374,7 @@ export default function Page({ topbarMain, topbarList }) {
                                                 </div>
                                             </InfoPage3ContentMapDetail>
                                         </li>
-                                        )}) : 
+                                        )}) :
                                         <li>
                                             <div>
                                                 <div><span>-</span></div>

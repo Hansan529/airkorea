@@ -22,7 +22,8 @@ import styled from '@emotion/styled';
 // ~ Json
 import { backgroundPathData, innerBackgroundPathData, pathData} from '../data/paths.js';
 import regionList from "../data/regionList.json";
-import stationJson from "../data/stationInfo.json";
+// # 측정소 데이터
+import stationsInfoData from "../data/stationInfo.json";
 import { SeoulInner } from '../data/Seoul.js';
 import { IncheonInner, IncheonPath } from '../data/Incheon.js';
 import { ChungnamInner, ChungnamPath } from '../data/Chungnam.js';
@@ -47,6 +48,29 @@ import useStore from '../hooks/useStore.tsx';
 
 // ~ Style
 import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../StyleComponent.jsx';
+
+// # 측정소 정보
+/**
+ * @typedef {Object} StationInfo
+ * @property {string} dmX
+ * @property {string} item
+ * @property {string} mangName
+ * @property {string} year
+ * @property {string} city
+ * @property {string} cityShort
+ * @property {string} addr
+ * @property {string} building
+ * @property {string} stationName
+ * @property {string} dmY
+ * @property {string} top
+ * @property {string} left
+ * @property {string} innerTop
+ * @property {string} innerLeft
+ */
+
+/** @type {StationInfo[]} */
+const stationsInfo = stationsInfoData;
+
 
 // ! 지역 데이터
 const regionDetailData = [
@@ -157,10 +181,6 @@ const filterStationReturnValue = (type, list, data) => {
 		return { result: null, avgValue: null }
 	}
 };
-
-
-// ! 측정소 데이터
-const stationsInfo = stationJson.items;
 
 
 // @ 전체 지도 SVG 컴포넌트

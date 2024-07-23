@@ -23,7 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ko from 'date-fns/locale/ko';
 
 // ~ JSON
-import stationInfoJSON from '../../app/data/stationInfo.json';
+import stationsInfoData from '../../app/data/stationInfo.json';
 
 // ~ Hooks
 import useStore from '../../app/hooks/useStore.tsx';
@@ -34,6 +34,30 @@ import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutA
 
 // ~ Package Settings
 registerLocale('ko', ko);
+
+
+// # 측정소 정보
+/**
+ * @typedef {Object} StationInfo
+ * @property {string} dmX
+ * @property {string} item
+ * @property {string} mangName
+ * @property {string} year
+ * @property {string} city
+ * @property {string} cityShort
+ * @property {string} addr
+ * @property {string} building
+ * @property {string} stationName
+ * @property {string} dmY
+ * @property {string} top
+ * @property {string} left
+ * @property {string} innerTop
+ * @property {string} innerLeft
+ */
+
+/** @type {StationInfo[]} */
+const stationsInfo = stationsInfoData;
+
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
@@ -48,7 +72,6 @@ export default function Page() {
     const [loadingStyle, setLoadingStyle] = useState({ top: '50%', left: '50%' });
     // # 측정소 정보
     const { nearStation } = useStore(store => store);
-    const stationInfo = stationInfoJSON.items;
     // # 측정소 선택
     const [selectStation, setSelectStation] = useState(nearStation[0].stationName || '온의동');
 
@@ -481,7 +504,7 @@ export default function Page() {
                         </thead>
                         <tbody>
                         {nearStation.map((station, index) => {
-                        const filter = stationInfo.filter(item => item.stationName === station.stationName);
+                        const filter = stationsInfo.filter(item => item.stationName === station.stationName);
                         const mangName = filter.length > 0 ? filter[0].mangName : null;
                         return (
                             <tr key={index}>

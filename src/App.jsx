@@ -20,7 +20,8 @@ import { useEffect, useState } from 'react';
 import proj4 from 'proj4';
 
 // ~ Json
-import stationInfoJSON from './app/data/stationInfo.json';
+// # 측정소 위치 데이터
+import stationsInfoData from './app/data/stationInfo.json';
 
 // ~ Hooks
 import useStore from './app/hooks/useStore.tsx';
@@ -43,6 +44,30 @@ import TodayAirQuality from './app/components/TodayAirQuality.jsx';
 const wgs84 = '+proj=longlat +datum=WGS84 +no_defs'; /* WGS84 좌표계 (기본 설정) */
 const epsg2097 = '+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=GRS80 +units=m +no_defs'; /* EPSG:2097 (Korea Central Belt / Korean 1985) */
 
+
+// # 측정소 정보
+/**
+ * @typedef {Object} StationInfo
+ * @property {string} dmX
+ * @property {string} item
+ * @property {string} mangName
+ * @property {string} year
+ * @property {string} city
+ * @property {string} cityShort
+ * @property {string} addr
+ * @property {string} building
+ * @property {string} stationName
+ * @property {string} dmY
+ * @property {string} top
+ * @property {string} left
+ * @property {string} innerTop
+ * @property {string} innerLeft
+ */
+
+/** @type {StationInfo[]} */
+const stationsInfo = stationsInfoData;
+
+
 // @@@ 출력 컴포넌트 @@@
 function App() {
   // # store
@@ -57,8 +82,6 @@ function App() {
 
 
   // ! 기타
-  // # 측정소 위치 데이터
-  const stationsInfo = stationInfoJSON.items;
   // # 탭 목록 인덱스
   const [tapSelect, setTapSelect] = useState(0);
   const AppMMOContainerResultComponent = () => {

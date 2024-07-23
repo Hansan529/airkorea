@@ -20,7 +20,7 @@ import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 
 // ~ Json
-import stationJson from "../data/stationInfo.json";
+import stationsInfoData from "../data/stationInfo.json";
 
 // ~ Hooks
 import useStore from "../hooks/useStore.tsx";
@@ -44,12 +44,35 @@ import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQuality
  * 대기오염정보: 대기질 예보통보 조회(getMinuDustFrcstDspth)
  */
 
+
+// # 측정소 정보
+/**
+ * @typedef {Object} StationInfo
+ * @property {string} dmX
+ * @property {string} item
+ * @property {string} mangName
+ * @property {string} year
+ * @property {string} city
+ * @property {string} cityShort
+ * @property {string} addr
+ * @property {string} building
+ * @property {string} stationName
+ * @property {string} dmY
+ * @property {string} top
+ * @property {string} left
+ * @property {string} innerTop
+ * @property {string} innerLeft
+ */
+
+/** @type {StationInfo[]} */
+const stationsInfo = stationsInfoData;
+
+
 // @@@ 출력 컴포넌트 @@@
 const TodayAirQuaility = ({Time}) => {
     const { data, text, station, changer: storeChanger } = useStore(state => state);
     const { pm10, pm25, o3, currentLocation: location, changer: airQualityChanger } = useAirQualityStore(state => state);
 
-    const stationsInfo = stationJson.items;
     const legendPopupRef = useRef();
 
     // 범례 보기(true) / 닫기(false)
