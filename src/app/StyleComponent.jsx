@@ -348,10 +348,22 @@ export const FooterInfoAreaIconWrap = styled.div`
     >*:first-of-type { margin-right: 40px; }
 `;
 export const FooterCopyRight = styled.div`
+    position: relative;
     a{
         color: darkblue;
         text-decoration: underline;
         &:visited { color: darkblue; }
+    }
+    p {
+        text-indent: 15px;
+        &::before {
+            content: "-";
+            display: block;
+            text-align: left;
+            position: absolute;
+            left: 0;
+            transform: translateX(-50%);
+        }
     }
 `;
 export const FooterCopyRightImg = styled.div`
