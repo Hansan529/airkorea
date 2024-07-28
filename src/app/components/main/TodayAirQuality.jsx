@@ -20,15 +20,15 @@ import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 
 // ~ Json
-import stationsInfoData from "../data/stationInfo.json";
+import stationsInfoData from "../../data/stationInfo.json";
 
 // ~ Hooks
-import useStore from "../hooks/useStore.tsx";
-import useAirQualityStore from "../hooks/useAirQualityStore.jsx";
-import getColorValue from "../functions/getColorValue.ts";
+import useStore from "../../hooks/useStore.tsx";
+import useAirQualityStore from "../../hooks/useAirQualityStore.jsx";
+import getColorValue from "../../functions/getColorValue.ts";
 
 // ~ Style
-import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQualityInfoButton, TodayAirQualityInfoContainer, TodayAirQualityInfoInteraction, TodayAirQualityInfoWrap, TodayAirQualityInfoWrapper, TodayAirQualityLegendBase, TodayAirQualityPart, TodayAirQualityPartLi, TodayAirQualityPartTitle, TodayAirQualityPartUl, TodayAirQualityTitle, TodayAirQualityTitleWrap } from "../StyleComponent.jsx";
+import { TodayAirQualityAirForecastLi, TodayAirQualityContainer, TodayAirQualityInfoButton, TodayAirQualityInfoContainer, TodayAirQualityInfoInteraction, TodayAirQualityInfoWrap, TodayAirQualityInfoWrapper, TodayAirQualityLegendBase, TodayAirQualityPart, TodayAirQualityPartLi, TodayAirQualityPartTitle, TodayAirQualityPartUl, TodayAirQualityTitle, TodayAirQualityTitleWrap } from "../assets/StyleComponent.jsx";
 
 /**
  * 금일 시간별 미세먼지

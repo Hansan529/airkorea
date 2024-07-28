@@ -30,7 +30,7 @@ import useStore from '../../app/hooks/useStore.tsx';
 import getColorValue from '../../app/functions/getColorValue.ts';
 
 // ~ Style
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableSpan, ContentResultTableWrap, ContentResultTap, ContentResultWrap, ContentSearchInput, ContentSearchWrap, RealtimePage1ContentTable, ContentTableWrap, LayoutContentTitle, ContentResultSearchBtn, ContentResultSearchBtnWrap, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar } from '../../app/StyleComponent.jsx';
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultSearchBox, ContentResultTableSpan, ContentResultTableWrap, ContentResultTap, ContentResultWrap, ContentSearchInput, ContentSearchWrap, RealtimePage1ContentTable, ContentTableWrap, LayoutContentTitle, ContentResultSearchBtn, ContentResultSearchBtnWrap, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar } from '../../app/components/assets/StyleComponent.jsx';
 
 // ~ Package Settings
 registerLocale('ko', ko);

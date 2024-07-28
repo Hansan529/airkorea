@@ -20,7 +20,7 @@ import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // ~ Style
-import { HeaderGlobalNav, HeaderContainer, HeaderElement, HeaderMainLogo, HeaderNavLi, HeaderNavUl, HeaderUtil, HeaderUtilBtn } from '../StyleComponent';
+import { HeaderGlobalNav, HeaderContainer, HeaderElement, HeaderMainLogo, HeaderNavLi, HeaderNavUl, HeaderUtil, HeaderUtilBtn } from '../assets/StyleComponent.jsx';
 
 // @@@ 출력 컴포넌트 @@@
 export default function Header() {
@@ -36,21 +36,21 @@ export default function Header() {
 
   // ! Nav 정보
   const NavList = [
-    {ref: 'info', title: '에어코리아란', 
+    {ref: 'info', title: '에어코리아란',
       subTitle: [
-        { text: '에어코리아 소개', refSub: '' }, 
-        { text: '측정망 정보', refSub: '' }, 
+        { text: '에어코리아 소개', refSub: '' },
+        { text: '측정망 정보', refSub: '' },
         { text: '측정소 정보', refSub: '' }
       ]},
 
-    {ref: 'realtime', refSub: 'no=1', title: '실시간 자료조회', 
+    {ref: 'realtime', refSub: 'no=1', title: '실시간 자료조회',
       subTitle: [
-        { text: '실시간 대기정보', refSub: '&no=1' }, 
-        { text: '시도별 대기정보', refSub: '&no=1'}, 
+        { text: '실시간 대기정보', refSub: '&no=1' },
+        { text: '시도별 대기정보', refSub: '&no=1'},
         { text: '미세먼지 세부 측정정보', refSub: '&no=1'}
       ]},
 
-    {ref: 'standby', title: '대기정보 예보 / 경보', 
+    {ref: 'standby', title: '대기정보 예보 / 경보',
       subTitle: [
       { text: '오늘/내일/모레 대기정보', refSub: '' },
       { text: '초미세먼지 주간예보', refSub: '' },
@@ -59,14 +59,14 @@ export default function Header() {
       { text: '국민 행동요령', refSub: '&no=1' }
     ]},
 
-    {ref: 'statistics', title: '통계정보', 
+    {ref: 'statistics', title: '통계정보',
       subTitle: [
         { text: '대기환경 월간/연간 보고서', refSub: '' },
         { text: '최종확정 측정자료 조회', refSub: '' },
         { text: '국외대기 환경정보', refSub: '' }
       ]},
 
-    {ref: 'learning', title: '배움터', 
+    {ref: 'learning', title: '배움터',
       subTitle: [
         { text: '통합대기환경지수', refSub: ''},
         { text: '대기환경기준물질', refSub: ''},

@@ -17,11 +17,11 @@
 
 // ~ Package
 import { useState } from "react";
-import { AppBannerWrap, AppBtn, AppButtonBox, AppListLi, AppListUl, AppSecondBannerInfo } from "../StyleComponent"
+import { AppBannerWrap, AppBtn, AppButtonBox, AppListLi, AppListUl, AppSecondBannerInfo } from "../assets/StyleComponent.jsx"
 
 // ~ Hooks
-import sleep from "../functions/sleep.ts";
-import useInterval from "../hooks/useInterval.ts";
+import sleep from "../../functions/sleep.ts";
+import useInterval from "../../hooks/useInterval.ts";
 
 export const AppSecondBannerInfoComponent = ({ children }) => {
   // ! 예보 발표 모듈
@@ -33,7 +33,7 @@ export const AppSecondBannerInfoComponent = ({ children }) => {
   // # 인터벌
   const [bannerIntervalDelay] = useState(5000);
   const [bannerIntervalRunning, setBannerIntervalRunning] = useState(true);
-  
+
   // # 하단 이동 클릭 이벤트
   const airInfoIndexHandleDownFunction = async () => {
     if(!transitionRunning){
@@ -60,7 +60,7 @@ export const AppSecondBannerInfoComponent = ({ children }) => {
   // # 예보 발표 이동 핸들러
   const airInfoIndexHandle = async (e) => {
     const type = e.currentTarget.dataset.type;
-    
+
     bannerIntervalRunning && setBannerIntervalRunning(false);
     switch(type) {
       case 'up':

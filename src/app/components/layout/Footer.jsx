@@ -16,7 +16,7 @@
 */
 
 // ~ Style
-import { FooterCopyRight, FooterCopyRightImg, FooterComp, FooterInfoArea, FooterInfoAreaCallDust, FooterInfoAreaIconWrap, FooterInfoAreaLogo, FooterInfoAreaPseudo } from "../StyleComponent";
+import { FooterCopyRight, FooterCopyRightImg, FooterComp, FooterInfoArea, FooterInfoAreaCallDust, FooterInfoAreaIconWrap, FooterInfoAreaLogo, FooterInfoAreaPseudo } from "../assets/StyleComponent.jsx";
 
 // @@@ 출력 컴포넌트 @@@
 export default function Footer() {

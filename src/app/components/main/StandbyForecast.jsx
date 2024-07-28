@@ -19,10 +19,10 @@
 import { useState } from 'react';
 
 // ~ Hooks
-import useStore from '../hooks/useStore.tsx';
+import useStore from '../../hooks/useStore.tsx';
 
 // ~ Style
-import { StyledbyForecastMain, StyledbyForecastNames } from '../StyleComponent';
+import { StyledbyForecastMain, StyledbyForecastNames } from '../assets/StyleComponent.jsx';
 
 // # 색상 코드
 const hexCode = {

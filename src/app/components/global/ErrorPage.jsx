@@ -19,7 +19,7 @@
 import { useRouteError } from "react-router-dom";
 
 // ~ Style
-import { ErrorDiv, ErrorTitle } from "../StyleComponent";
+import { ErrorDiv, ErrorTitle } from "../assets/StyleComponent";
 
 // @@@ 출력 컴포넌트 @@@
 export default function ErrorPage() {

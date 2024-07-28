@@ -20,7 +20,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 // ~ Style
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage2ContentTable } from '../../app/StyleComponent';
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage2ContentTable } from '../../app/components/assets/StyleComponent.jsx';
 
 //정보 네비게이션
 export default function Page({ topbarMain, topbarList }) {
@@ -84,7 +84,7 @@ export default function Page({ topbarMain, topbarList }) {
                         </LayoutListDetail>
                     </LayoutList>
                     {/* topbarList */}
-                    {objectExist 
+                    {objectExist
                     ? (<LayoutList>
                         <LayoutAElement
                             to="#"
@@ -94,7 +94,7 @@ export default function Page({ topbarMain, topbarList }) {
                             data-direction={toggles[topbarList.toggleIndex].px === toggles[topbarList.toggleIndex].initial ? 'up' : 'down'}
                         >{topbarList.title}</LayoutAElement>
                         <LayoutListDetail $height={toggles[topbarList.toggleIndex].px}>{topbarList.links.map((link, idx) => <li key={idx}><Link to={link.to}>{link.text}</Link></li>)}</LayoutListDetail>
-                        </LayoutList>) 
+                        </LayoutList>)
                     : topbarList.map((list, idx) => {
                         return (
                             <LayoutList>
@@ -143,14 +143,14 @@ export default function Page({ topbarMain, topbarList }) {
                             if(variableCheck) {
                                 // result = variableCheck && (
                                 //     <li key={index}>
-                                //         <AsideLink 
-                                //             to="#" 
+                                //         <AsideLink
+                                //             to="#"
                                 //             onClick={asideHandle}
                                 //             children_height={asideToggle[link.text]?.px}
                                 //             selected={link.select}
-                                //             showmore={childrenCheck ? 'true' : 'false'} 
+                                //             showmore={childrenCheck ? 'true' : 'false'}
                                 //             >{link.text}</AsideLink>
-                                //         {childrenCheck && 
+                                //         {childrenCheck &&
                                 //             <AsideLinkUl $height={asideToggle[link.text]?.px}>
                                 //                 {link.children.map((item, _index) => {
                                 //                     return <li key={_index}><AsideLinkA selected={item.select}>{item.text}</AsideLinkA></li>

@@ -16,10 +16,10 @@
 */
 
 // ~ Package
-import useStore from "../hooks/useStore.tsx";
+import useStore from "../../hooks/useStore.tsx";
 
 // ~ Style
-import { Loading } from "../StyleComponent";
+import { Loading } from "../assets/StyleComponent.jsx";
 
 // @@@ 출력 컴포넌트 @@@
 const LoadingScreen = () => {

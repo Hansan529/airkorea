@@ -28,17 +28,17 @@ import useStore from './app/hooks/useStore.tsx';
 
 // ~ Style
 import './App.css';
-import { AppFirstSection, AppMMLayout, AppMMOBorderDiv, AppMMOContainer, AppMMOList, AppMMOSelect, AppMMOSelectWrapper, AppMMOptionLayout, AppMMWrapper, AppSecondBanner, AppSecondSection, AppTimeButtonStyle, AppTimeDiv } from './app/StyleComponent.jsx';
+import { AppFirstSection, AppMMLayout, AppMMOBorderDiv, AppMMOContainer, AppMMOList, AppMMOSelect, AppMMOSelectWrapper, AppMMOptionLayout, AppMMWrapper, AppSecondBanner, AppSecondSection, AppTimeButtonStyle, AppTimeDiv } from './app/components/assets/StyleComponent.jsx';
 
 // ~ Component
-import HeaderComponent from './app/components/Header';
-import { AppSecondBannerInfoComponent, AppEndBannerComponent } from './app/components/AppBanner.jsx';
-import FooterComponent from './app/components/Footer';
-import Loading from './app/components/Loading';
-import Standby from './app/components/Standby.jsx';
-import StandbyForecast from './app/components/StandbyForecast.jsx';
-import Weather from './app/components/Weather.jsx';
-import TodayAirQuality from './app/components/TodayAirQuality.jsx';
+import HeaderComponent from './app/components/layout/Header.jsx';
+import { AppSecondBannerInfoComponent, AppEndBannerComponent } from './app/components/main/AppBanner.jsx';
+import FooterComponent from './app/components/layout/Footer.jsx';
+import Loading from './app/components/global/Loading.jsx';
+import Standby from './app/components/main/Standby.jsx';
+import StandbyForecast from './app/components/main/StandbyForecast.jsx';
+import Weather from './app/components/main/Weather.jsx';
+import TodayAirQuality from './app/components/main/TodayAirQuality.jsx';
 
 // ~ Package Settings
 const wgs84 = '+proj=longlat +datum=WGS84 +no_defs'; /* WGS84 좌표계 (기본 설정) */

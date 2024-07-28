@@ -20,34 +20,34 @@ import { Fragment, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
 // ~ Json
-import { backgroundPathData, innerBackgroundPathData, pathData} from '../data/paths.js';
-import regionList from "../data/regionList.json";
+import { backgroundPathData, innerBackgroundPathData, pathData} from '../../data/paths.js';
+import regionList from "../../data/regionList.json";
 // # 측정소 데이터
-import stationsInfoData from "../data/stationInfo.json";
-import { SeoulInner } from '../data/Seoul.js';
-import { IncheonInner, IncheonPath } from '../data/Incheon.js';
-import { ChungnamInner, ChungnamPath } from '../data/Chungnam.js';
-import { GyeongbukInner, GyeongbukPath } from '../data/Gyeongbuk.js';
-import { GyeongnamInner, GyeongnamPath } from '../data/Gyeongnam.js';
-import { JeonnamInner, JeonnamPath } from '../data/Jeonnam.js';
-import { JeonbukInner, JeonbukPath } from '../data/Jeonbuk.js';
-import { JejuInner, JejuPath } from '../data/Jeju.js';
-import { GyeonggiPath } from '../data/Gyeonggi.js';
-import { GangwonPath } from '../data/Gangwon.js';
-import { DaejeonPath } from '../data/Daejeon.js';
-import { SejongPath } from '../data/Sejong.js';
-import { BusanPath } from '../data/Busan.js';
-import { UlsanPath } from '../data/Ulsan.js';
-import { DaeguPath } from '../data/Daegu.js';
-import { GwangjuPath } from '../data/Gwangju.js';
-import { ChungbukPath } from '../data/Chungbuk.js';
+import stationsInfoData from "../../data/stationInfo.json";
+import { SeoulInner } from '../../data/Seoul.js';
+import { IncheonInner, IncheonPath } from '../../data/Incheon.js';
+import { ChungnamInner, ChungnamPath } from '../../data/Chungnam.js';
+import { GyeongbukInner, GyeongbukPath } from '../../data/Gyeongbuk.js';
+import { GyeongnamInner, GyeongnamPath } from '../../data/Gyeongnam.js';
+import { JeonnamInner, JeonnamPath } from '../../data/Jeonnam.js';
+import { JeonbukInner, JeonbukPath } from '../../data/Jeonbuk.js';
+import { JejuInner, JejuPath } from '../../data/Jeju.js';
+import { GyeonggiPath } from '../../data/Gyeonggi.js';
+import { GangwonPath } from '../../data/Gangwon.js';
+import { DaejeonPath } from '../../data/Daejeon.js';
+import { SejongPath } from '../../data/Sejong.js';
+import { BusanPath } from '../../data/Busan.js';
+import { UlsanPath } from '../../data/Ulsan.js';
+import { DaeguPath } from '../../data/Daegu.js';
+import { GwangjuPath } from '../../data/Gwangju.js';
+import { ChungbukPath } from '../../data/Chungbuk.js';
 
 // ~ Hooks
-import getColorValue from '../functions/getColorValue.ts';
-import useStore from '../hooks/useStore.tsx';
+import getColorValue from '../../functions/getColorValue.ts';
+import useStore from '../../hooks/useStore.tsx';
 
 // ~ Style
-import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../StyleComponent.jsx';
+import { StandbyInnerButtonWrap, StandbyInnerDetailContainer, StandbyInnerMapButton, StandbyInnerMapPathStyle, StandbyInnerSelectDiv, StandbyInnerStationCollection, StandbyInnerTitle, AppLegend, AppLegendWrapper, StandbyLoopContainer, StandbyMainContainer, StandbyMapNameButton, StandbyMapPath, StandbyMapSvgStyle, StandbyStation, StandbyStationPopupStyle } from '../assets/StyleComponent.jsx';
 
 // # 측정소 정보
 /**
