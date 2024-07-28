@@ -32,13 +32,13 @@ import { AppFirstSection, AppMMLayout, AppMMOBorderDiv, AppMMOContainer, AppMMOL
 
 // ~ Component
 import HeaderComponent from './app/components/layout/Header.jsx';
-import { AppSecondBannerInfoComponent, AppEndBannerComponent } from './app/components/main/AppBanner.jsx';
+import { AppSecondBannerInfoComponent, AppEndBannerComponent } from './app/components/0_main/AppBanner.jsx';
 import FooterComponent from './app/components/layout/Footer.jsx';
 import Loading from './app/components/global/Loading.jsx';
-import Standby from './app/components/main/Standby.jsx';
-import StandbyForecast from './app/components/main/StandbyForecast.jsx';
-import Weather from './app/components/main/Weather.jsx';
-import TodayAirQuality from './app/components/main/TodayAirQuality.jsx';
+import Standby from './app/components/0_main/Standby.jsx';
+import StandbyForecast from './app/components/0_main/StandbyForecast.jsx';
+import Weather from './app/components/0_main/Weather.jsx';
+import TodayAirQuality from './app/components/0_main/TodayAirQuality.jsx';
 
 // ~ Package Settings
 const wgs84 = '+proj=longlat +datum=WGS84 +no_defs'; /* WGS84 좌표계 (기본 설정) */

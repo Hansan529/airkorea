@@ -33,11 +33,11 @@ import {
   import { Bar, getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
-import stationInfoData from "../../app/data/stationInfo.json";
-import regionListData from "../../app/data/regionList.json";
+import stationInfoData from "../../data/stationInfo.json";
+import regionListData from "../../data/regionList.json";
 // ~ HOOKS
 // ~ Styles
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultTableWrap, ContentResultWrap, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar, ContentTable, RealtimePage2ContentResultSearchBtn, RealtimePage2ContentResultSearchBox, RealtimePage2ContentTableWrap, ContentTableWrap } from '../../app/components/assets/StyleComponent.jsx';
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultTableWrap, ContentResultWrap, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar, ContentTable, RealtimePage2ContentResultSearchBtn, RealtimePage2ContentResultSearchBox, RealtimePage2ContentTableWrap, ContentTableWrap } from '../assets/StyleComponent.jsx';
 
 // ~ Component
 // ~ Package Settings

@@ -20,15 +20,15 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 // ~ Style
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, LayoutContentTitle, InfoPage1ContentCharacter, InfoPage1ContentCharacterWrap, InfoPage1ContentSubTitleWrap, InfoPage1ContentTable, InfoPage1NuriBox } from "../../app/components/assets/StyleComponent.jsx";
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutContent, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LayoutSection, LayoutTopBar, InfoPage2ContentTable } from '../assets/StyleComponent.jsx';
 
-// ! props: 서브 네비게이션 바 목록
+//정보 네비게이션
 export default function Page({ topbarMain, topbarList }) {
     // # 서브 네비게이션이 객체인지 배열인지 체크
     const objectExist = Object.prototype.toString.call(topbarList) === "[object Object]";
 
-    // # 네비게이션 토글
-    const [toggles, setToggles] = useState({
+     // # 네비게이션 토글
+     const [toggles, setToggles] = useState({
         1: { px: 0, initial: topbarMain.links.length * 50},
         2: { px: 0, initial: objectExist ? topbarList.links.length * 50 : topbarList[0].links.length * 50}
     });
@@ -117,22 +117,23 @@ export default function Page({ topbarMain, topbarList }) {
         )
     }
 
-    // ! 사이드바 목록
-    const asideList = {
+     // ! 사이드바 목록
+     const asideList = {
         title: '에어코리아란',
         links: [
-            { text: '에어코리아 소개', select: true },
-            { text: '측정망 정보', select: false },
+            { text: '에어코리아 소개', select: false },
+            { text: '측정망 정보', select: true },
             { text: '측정소 정보', select: false },
         ]
     };
+
     return (
         <>
             <LayoutDivStyle>
                 <TopbarLayout />
             </LayoutDivStyle>
             <LayoutSection>
-                <LayoutAside>
+            <LayoutAside>
                     <h2>{asideList.title}</h2>
                     <ul>
                         {asideList.links.map((link, index) => {
@@ -172,77 +173,100 @@ export default function Page({ topbarMain, topbarList }) {
                     </ul>
                 </LayoutAside>
                 <LayoutContent>
-                    <LayoutContentTitle>에어코리아 소개</LayoutContentTitle>
-                    <InfoPage1ContentSubTitleWrap>
-                        <div>
-                            <p><img src="/images/global/logo.webp" alt="에어코리아 로고" /></p>
-                            <p><span>나</span>와 <span>우리가족</span>을 위한<br />홈페이지입니다.</p>
-                        </div>
-                        <div>
-                            <p>한국환경곤단은 여러분이 언제 어디서든지 실시간으로 대기정보를 확인할 수 있는<br /><strong>대기환경정보실시간공개시스템</strong>을 운영하고 있습니다.</p>
-                        </div>
-                    </InfoPage1ContentSubTitleWrap>
-                    <p>
-                        한국과 일본의 20개 도시에서 공동으로 개최된 2002년 제17회 한·일 월드컵축구대회의 성공적인 개최를 위하여 국립환경과학원은 2002년 4월부터 우리나라 10개 시·도 경기장 주변 16개 지점의 대기정보를 제한적으로 공개하기 시작하였습니다.<br /><br />
-                        이를 계기로 한국환경공단은 2003년 12월부터 기존에 구축되어 있는 대기측정망 관련 인프라를 이용하여 대기정보의 실시간 공개에 대한 국민적 요구에 부응하고 보다 양질의 대기환경정보를 제공하고자 전국의 모든 측정소를 대상으로 대기정보를 공개할 수 있는 확대방안을 마련하였습니다.<br /><br />
-                        일차적으로 2004년 4월부터 전국의 대기측정망에서 측정되는 아황산가스, 일산화탄소, 이산화질소, 오존, 미세먼지 등 대기정보 자료를 수집·관리하는 국가대기환경정보관리시스템&#40;NAMIS&#41;을 구축하여 국가와 지방자치단체 등 행정기관에서 대기환경정책 자료로 활용할 수 있도록 정보를 제공하였습니다.<br /><br />
-                        NAMIS에 수집된 막대한 양&#40;연간 3억4천만건&#41;의 대기정보 자료는 보다 알기 쉽고 편리하게 국민이 접할 수 있도록 시스템의 최적화, 표출방식, 대국민 의견수렴 및 시범운영 등을 통해 1년여의 각고의 노력 끝에 2005년 12월 28일 드디어 “에어코리아” 라는 대기환경정보실시간공개시스템&#40;www.airkorea.or.kr&#41;이 탄생하였습니다.<br /><br />
-                        에어코리아는 전국 162개 시,군에 설치된 642개의 도시대기 측정망, 국가배경농도 측정망, 교외대기 측정망, 도로변대기 측정망, 항만대기 측정망에서 측정된 대기환경기준물질의 측정 자료를 다양한 형태로 표출하여 국민들에게 실시간으로 제공하고 있습니다. 또한, 기상청에서 운영하는 황사경보제와 지자체에서 운영하는 오존경보제 등의 자료도 함께 공개하고 있어 대기오염으로 인한 국민의 피해예방에 크게 기여하고 있습니다.
-                    </p>
-                    <InfoPage1ContentTable>
+                    <LayoutContentTitle>측정망 정보</LayoutContentTitle>
+                    <InfoPage2ContentTable>
                         <caption>
-                            <ul><li>Airkorea 공개 대상 측정망 현황 &#40;2023년 10월 기준&#41;</li></ul>
+                            <h2>일반대기환경측정망</h2>
+                            <p>전국적인 대기오염실태, 변화추이 및 대기환경기준 달성여부 등을 파악하기 위하여 대기오염물질 측정장비를 설치&#183;운영하고 있습니다.</p>
                         </caption>
                         <thead>
                             <tr>
-                                <th>측정망 종류</th>
-                                <th>공개대상 항목</th>
+                                <th>분류</th>
                                 <th>설치 목적</th>
-                                <th>측정소 수</th>
+                                <th>측정항목</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <th>도시대기 측정망</th>
-                                <td rowSpan="5"><p>SO<sub>2</sub>, CO,</p><p>NO<sub>2</sub>, O<sub>3</sub>,</p><p>PM-10,PM-2.5</p></td>
-                                <td>도시지역의 평균 대기질 농도를 파악하여 환경 기준 달성 여부 판정</td>
-                                <td>525개<br />&#40;170개 시·군&#41;</td>
+                                <td>도심(거주)지역의 평균대기질 농도 측정</td>
+                                <td>SO<sub>2</sub>, CO, NO<sub>2</sub>, O<sub>3</sub>, PM-10, PM-2.5 등</td>
                             </tr>
                             <tr>
-                                <th>국가배경농도&#40;도서&#41; 측정망</th>
-                                <td>국가적인 배경농도를 파악하고 외국으로부터의 오염물질 유입·유출 상태, 장거리 이동 현황 등 파악</td>
-                                <td>11개 <br />&#40;8개 시·군&#41;</td>
+                                <th>국가배경농도 측정망</th>
+                                <td>국가의 배경농도를 파악하고 외국으로의 오염물질 유입, 유출상태 등을 파악</td>
+                                <td>SO<sub>2</sub>, CO, NO<sub>2</sub>, O<sub>3</sub>, PM-10, PM-2.5 등</td>
                             </tr>
                             <tr>
                                 <th>교외대기 측정망</th>
-                                <td>광범위한 지역의 배경농도 파악</td>
-                                <td>27개 <br />&#40;25개 시·군&#41;</td>
+                                <td>도시를 둘러싼 교외 지역의 배경농도 측정</td>
+                                <td>SO<sub>2</sub>, CO, NO<sub>2</sub>, O<sub>3</sub>, PM-10, PM-2.5 등</td>
                             </tr>
                             <tr>
                                 <th>도로변대기 측정망</th>
-                                <td>자동차 통행량과 유동 인구가 많은 도로변 대기질을 파악</td>
-                                <td>58개 <br />&#40;29개 시&#41;</td>
+                                <td>자동차 통행량과 유동인구가 많은 도로변 대기농도 측정</td>
+                                <td>SO<sub>2</sub>, CO, NO<sub>2</sub>, O<sub>3</sub>, PM-10,<br />PM-2.5,Pb, HC, 교통량 등</td>
                             </tr>
                             <tr>
-                                <th>항만대기 측정망</th>
-                                <td>항만지역등의 대기오염물질 배출원의 효과적관리</td>
-                                <td>29개 <br />&#40;18개 시·군&#41;</td>
+                                <th>항만 측정망</th>
+                                <td>항만지역 등의 대기질 현황 및 변화에 대한 실태조사</td>
+                                <td>SO<sub>2</sub>, CO, NO<sub>2</sub>, O<sub>3</sub>, PM-10, PM-2.5 등</td>
                             </tr>
                         </tbody>
-                    </InfoPage1ContentTable>
-                    <p>대기환경기준물질 6개 항목&#40;아황산가스, 일산화탄소, 이산화질소, 오존, 미세먼지&#40;PM-10,PM-2.5&#41;&#41;에 대한 대기오염도를 대기오염 시계, 대기오염 달력 등의 표현 방식과 접목하여 시간대별, 일자별, 요일별로 제공하며, 인체 영향과 체감오염도를 반영한 통합대기환경지수의 적용을 통해 대기오염의 상황을 한눈에 알기 쉽게 4개 등급과 색상으로 표현하여 제공하고 있습니다.</p>
-                    <InfoPage1ContentCharacterWrap>
-                        <ul>
-                            <InfoPage1ContentCharacter char="1"><p><em>좋음</em></p></InfoPage1ContentCharacter>
-                            <InfoPage1ContentCharacter char="2"><p><em>보통</em></p></InfoPage1ContentCharacter>
-                            <InfoPage1ContentCharacter char="3"><p><em>나쁨</em></p></InfoPage1ContentCharacter>
-                            <InfoPage1ContentCharacter char="4"><p><em>매우<br />나쁨</em></p></InfoPage1ContentCharacter>
-                        </ul>
-                    </InfoPage1ContentCharacterWrap>
-                    <InfoPage1NuriBox>
-                        <strong>공공누리</strong>
-                        <p>한국환경공단이 창작한 대기오염도 실시간자료 저작물은 공공누리 이용약관(출처표시, 변경금지)에 따라 이용할 수 있습니다.</p>
-                    </InfoPage1NuriBox>
+                    </InfoPage2ContentTable>
+                    <InfoPage2ContentTable>
+                        <caption>
+                            <h2>특수대기환경측정망</h2>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th>분류</th>
+                                <th>설치 목적</th>
+                                <th>측정항목</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>대기 중금속</th>
+                                <td>도시지역 또는 산단 인근지역에서<br />중금속에 의한 오염실태 파악</td>
+                                <td>Pb, Cd, Cr, Cu, Mn, Fe, Ni, As, Be, Al, Ca, Mg</td>
+                            </tr>
+                            <tr>
+                                <th rowSpan="2">유해대기물질</th>
+                                <td rowSpan="2">도시지역, 주요 산단, 배경농도지역에서<br />특정유해대기물질에 의한 오염 실태 파악</td>
+                                <td>VOCs&#40;휘발성유기화합물&#41;: 16종</td>
+                            </tr>
+                            <tr>
+                                <td>PAHs&#40;다환방향족탄화수소&#41;: 16종</td>
+                            </tr>
+                            <tr>
+                                <th rowSpan="3">산성 강하물</th>
+                                <td rowSpan="3">대기로부터 오염물질의 건성침착량 및<br />강우·강설 등에 의한 오염물질의 습성침착량 파악</td>
+                                <td>건성: 초미세먼지&#40;PM-2.5&#41; 질량, 초미세먼지&#40;PM-2.5&#41; 중 <br />이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub><sup>-</sup>, SO<sub>4</sub><sup>2-</sup>, NH<sub>4</sub><sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg<sup>2+</sup>&#41;, 가스상&#40;HNO<sub>3</sub>, NH<sub>3</sub>&#41;</td>
+                            </tr>
+                            <tr>
+                                <td>습성: pH, 이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub><sup>-</sup>, SO<sub>4</sub><sup>2-</sup>, NH<sub>4</sub><sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg<sup>2+</sup>&#41;,<br />전기전도도, 강우&#40;설&#41;량</td>
+                            </tr>
+                            <tr>
+                                <td>수은: 총가스상수은, 종별수은, 습성침적량</td>
+                            </tr>
+                            <tr>
+                                <th>광화학 대기 오염 물질</th>
+                                <td>도시지역의 오존생성의 원인물질인 휘발성유기화합물질<br />&#40;VOCS&#41;의 농도를 파악하여 오존오염현상을 규명하고 오존예보 <br />등을 위한 기초 자료로 활용</td>
+                                <td>CO, NOx, NOy, O<sub>3</sub>,PM-10,PM-2.5, 카르보닐화합물, VOCs&#40;ethane 등 56종&#41;,<br />풍향, 풍속, 온도, 습도, 일사량, 자외선량, 강수량, 기압</td>
+                            </tr>
+                            <tr>
+                                <th>지구 대기</th>
+                                <td>지구온난화물질, 오존층파괴물질의 대기 중 농도 파악</td>
+                                <td>CO<sub>2</sub>, N<sub>2</sub>O, CH<sub>4</sub>, CFC&#40;-11,-12,-113&#41;</td>
+                            </tr>
+                            <tr>
+                                <th>초미세먼지&#40;PM-2.5&#41;성분</th>
+                                <td>인체위해도가 높은 초미세먼지&#40;PM-2.5&#41;의<br />농도 파악 및 성분파악을 통한 배출원 규명</td>
+                                <td>초미세먼지&#40;PM-2.5&#41; 질량, 탄소성분&#40;OC,EC&#41;,초미세먼지&#40;PM-2.5&#41; 중<br />이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub><sup>-</sup>, SO<sub>4</sub><sup>2-</sup>, NH<sub>4</sub><sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg<sup>2+</sup>&#41;,<br />중금속성분&#40;Pb, Cd, Cr, Cu, Mn, Fe, Ni, As, Be&#41;</td>
+                            </tr>
+                        </tbody>
+                    </InfoPage2ContentTable>
                 </LayoutContent>
             </LayoutSection>
         </>

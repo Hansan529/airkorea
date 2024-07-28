@@ -3,8 +3,8 @@ import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 import ErrorPage from "./app/components/global/ErrorPage.jsx";
 import App from './App';
-import InfoElement from './routes/info/page';
-import RealtimeElement from './routes/realtime/page';
+import InfoElement from './app/pages/InfoPage.jsx';
+import RealtimeElement from './app/pages/RealtimePage.jsx';
 
 const router = createBrowserRouter([
   {

@@ -19,10 +19,10 @@
 import { useSearchParams } from "react-router-dom";
 
 // ~ Component
-import Layout from "../layout";
-import Page1 from "./page1";
-import Page2 from "./page2";
-import Page3 from "./page3";
+import Layout from "../components/layout/pages.jsx";
+import Page1 from "../components/1_info/page1.jsx";
+import Page2 from "../components/1_info/page2.jsx";
+import Page3 from "../components/1_info/page3.jsx";
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
