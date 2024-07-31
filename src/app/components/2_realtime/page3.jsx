@@ -30,14 +30,13 @@ import {
     PointElement,
     LineElement,
   } from 'chart.js';
-  import { Bar, getElementAtEvent, Line } from 'react-chartjs-2';
+  import { getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
-import stationInfoData from "../../data/stationInfo.json";
 import regionListData from "../../data/regionList.json";
 // ~ HOOKS
 // ~ Styles
-import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultTableWrap, ContentResultWrap, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar, ContentTable, RealtimePage2ContentResultSearchBtn, RealtimePage2ContentResultSearchBox, RealtimePage2ContentTableWrap, ContentTableWrap } from '../assets/StyleComponent.jsx';
+import { LayoutAElement, LayoutAside, LayoutAsideLink, LayoutAsideLinkA, LayoutAsideLinkUl, LayoutContent, ContentResultTableWrap, ContentResultWrap, LayoutContentTitle, LayoutDivStyle, LayoutHome, LayoutList, LayoutListDetail, LoadingWrap, LayoutSection, LayoutTopBar, ContentTable, RealtimePage2ContentResultSearchBtn, RealtimePage2ContentResultSearchBox, ContentTableWrap } from '../assets/StyleComponent.jsx';
 
 // ~ Component
 // ~ Package Settings
@@ -50,29 +49,6 @@ ChartJS.register(
     LineElement,
     Title,
 )
-
-// # 측정소 정보
-/**
- * @typedef {Object} StationInfo
- * @property {string} dmX
- * @property {string} item
- * @property {string} mangName
- * @property {string} year
- * @property {string} city
- * @property {string} cityShort
- * @property {string} addr
- * @property {string} building
- * @property {string} stationName
- * @property {string} dmY
- * @property {string} top
- * @property {string} left
- * @property {string} innerTop
- * @property {string} innerLeft
- */
-
-/** @type {StationInfo[]} */
-const stationInfo = stationInfoData;
-
 // # 지역 목록 및 지역 내 측정소 목록
 /**
  * @typedef {Object} RegionList
@@ -302,7 +278,6 @@ export default function Page() {
     const currentDay = currentDate.getDate();
 
     // # 통계 검색
-    const [tableData, setTableData] = useState([]);
     const [tableElement, setTableElement] = useState(<tr><td colSpan="25">검색된 자료가 없습니다.</td></tr>);
 
     // #& 지역 목록
@@ -404,7 +379,6 @@ export default function Page() {
 
             /** @type {Data[]} */
             const data = await response.json();
-            setTableData(data);
 
             // # [테이블 데이터] 필터링 날짜
             const startTime = new Date(`${currentDate.getFullYear()}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}T01:00:00`);
@@ -631,8 +605,7 @@ export default function Page() {
         </div>;
     }
 
-
-    //   TODO: 차트 높이가 비상식적으로 높아지는 문제 해결하기, 차트 값이 정상적으로 값이 나오도록 하기
+    // TODO: DEV 폴더에 daily용 값과 차트 추가하기
     // # 차트 목록
     const ChartComponent = () => {
         switch(dataDivision) {
@@ -640,6 +613,7 @@ export default function Page() {
                 return <LineChart period="hour" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
             case 'daily':
                 // return <LineChart period="week" lineOptions={lineOptions} chartRef={chartRef} chartOnClick={chartOnClick} />;
+                return;
             default:
                 return <></>
         }
