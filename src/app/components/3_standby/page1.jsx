@@ -113,7 +113,7 @@ const elementsWithChildren = findElementsWithChildren(asideList.links);
 
 
 // @@@ 출력 컴포넌트 @@@
-export default function Page({ topbarList }) {
+export default function Page({ selectedData, topbarList }) {
     console.log('topbarList: ', topbarList);
     // ! 기타
     // #& pathname
@@ -143,12 +143,12 @@ export default function Page({ topbarList }) {
         ))
     }
     // #& 네비게이션 토글 상태
-    const togglesObject = {
+    const togglesNavObject = {
         1: { px: 0, initial: topbarList[0].links.length * 50},
         2: { px: 0, initial: topbarList[1].links.length * 50},
     };
-    if(topbarList.length > 2) togglesObject['3'] = { px: 0, initial: topbarList[2].links.length * 50};
-    const [toggles, setToggles] = useState(togglesObject);
+    if(topbarList.length > 2) togglesNavObject['3'] = { px: 0, initial: topbarList[2].links.length * 50};
+    const [toggles, setToggles] = useState(togglesNavObject);
     // #& 네비게이션 토글 함수
     const toggleHandle = (e, index) => {
         e.preventDefault();
@@ -163,11 +163,15 @@ export default function Page({ topbarList }) {
 
 
     // # 사이드바 토글
-    const [asideToggle, setAsideToggle] = useState({
-        [asideList.links[2].text]: { px: 0, initial: asideList.links[2].children.length * 50 },
-        [asideList.links[3].text]: { px: 0, initial: asideList.links[3].children.length * 50 },
-        [asideList.links[4].text]: { px: 0, initial: asideList.links[4].children.length * 50 },
-    });
+    // TODO: 현재 페이지가 토글의 1번째일 경우 px을 0이 아닌, 확장한 값으로 나타나도록 변경
+    const togglesAsideObject = selectedData.children.reduce((acc, item) => {
+        if (item.toggle && item.toggle.length > 0) {
+            acc[item.title] = { px: 0, initial: item.toggle.length * 50};
+        }
+        return acc;
+    }, {});
+    const [asideToggle, setAsideToggle] = useState(togglesAsideObject);
+
     // #& 사이드바 토글 함수
     const asideHandle = (e) => {
         e.preventDefault();
