@@ -5,7 +5,7 @@ import ErrorPage from "./app/components/global/ErrorPage.jsx";
 import App from './App';
 import InfoElement from './app/pages/InfoPage.jsx';
 import RealtimeElement from './app/pages/RealtimePage.jsx';
-import StandbyElement from './app/pages/StandbyPage.jsx';
+import Layout from './app/components/layout/pages.jsx';
 
 const router = createBrowserRouter([
   {
@@ -15,15 +15,15 @@ const router = createBrowserRouter([
   },
   {
     path: 'info',
-    element: <InfoElement />,
+    element: <Layout tag="info" />,
   },
   {
     path: 'realtime',
-    element: <RealtimeElement />,
+    element: <Layout tag="realtime" />,
   },
   {
     path: 'standby',
-    element: <StandbyElement tag="standby" />,
+    element: <Layout tag="standby" />,
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

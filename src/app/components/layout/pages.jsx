@@ -215,6 +215,7 @@ const Layout = ({ tag }) => {
     dynamicTopbarList.push(topbarListToggle);
   }
 
+  // TODO: 페이지 Link를 통해 이동 시, 토글 최소화 하도록 변경
   // @ 네비게이션 바 컴포넌트
   const TopBarListComponent = () => {
     return dynamicTopbarList.map((item, index) => (
@@ -251,6 +252,7 @@ const Layout = ({ tag }) => {
       </LayoutList>
     ));
   };
+  // FIXME: 페이지 변경 후, 토글 높이, 최대 높이 업데이트 되지 않는 문제 수정
   // # 네비게이션 토글 상태
   const togglesNavObject = {
     1: { px: 0, initial: dynamicTopbarList[0].links.length * 50 },
@@ -265,13 +267,16 @@ const Layout = ({ tag }) => {
   // # 네비게이션 토글 함수
   const toggleHandle = (e, index) => {
     e.preventDefault();
-    setToggles((prevToggles) => ({
-      ...prevToggles,
-      [index]: {
-        px: prevToggles[index].px !== 0 ? 0 : prevToggles[index].initial,
-        initial: prevToggles[index].initial,
-      },
-    }));
+    setToggles((prevToggles) => {
+      const currentToggle = prevToggles[index] || { px: 0, initial: 0 };
+      return {
+        ...prevToggles,
+        [index]: {
+          px: currentToggle.px !== 0 ? 0 : currentToggle.initial,
+          initial: currentToggle.initial,
+        },
+      };
+    });
   };
 
   // # 사이드바 토글
