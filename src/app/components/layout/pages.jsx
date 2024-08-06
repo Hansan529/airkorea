@@ -1,6 +1,11 @@
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import React, { Suspense, useState } from 'react';
 import Loading from '../global/Loading.jsx';
 import {
@@ -55,10 +60,12 @@ const Layout = ({ tag }) => {
   const { pathname } = useLocation();
   const pageNum = searchParams.get('page');
   const type = searchParams.get('type');
+  const navigate = useNavigate();
 
   // # 출력할 컴포넌트 선택
   const PageComponent = components[tag]?.[pageNum];
 
+  // # 네비게이션, 사이드바 목록
   const categoryList = [
     {
       title: '에어코리아란',
@@ -178,6 +185,27 @@ const Layout = ({ tag }) => {
     },
   ];
 
+  // # 지역명
+  const regionList = {
+    seoul: '서울',
+    busan: '부산',
+    daegu: '대구',
+    incheon: '인천',
+    gwangju: '광주',
+    daejeon: '대전',
+    ulsan: '울산',
+    gyeonggi: '경기',
+    gangwon: '강원',
+    chungbuk: '충북',
+    chungnam: '충남',
+    jeonbuk: '전북',
+    jeonnam: '전남',
+    sejong: '세종',
+    gyeongbuk: '경북',
+    gyeongnam: '경남',
+    jeju: '제주',
+  };
+
   // ! 네비게이션바
   // # 큰 주제의 메인 요소 찾기
   const findTopbarTitle = categoryList.find((item) => item.tag === tag);
@@ -215,59 +243,22 @@ const Layout = ({ tag }) => {
     dynamicTopbarList.push(topbarListToggle);
   }
 
-  // TODO: 페이지 Link를 통해 이동 시, 토글 최소화 하도록 변경
-  // @ 네비게이션 바 컴포넌트
-  const TopBarListComponent = () => {
-    return dynamicTopbarList.map((item, index) => (
-      <LayoutList key={index}>
-        {/* 메인 목록 */}
-        <LayoutAElement
-          to="./"
-          title={item.title}
-          onClick={(e) => toggleHandle(e, item.toggleIndex)}
-          data-index={item.toggleIndex}
-          data-direction={
-            toggles[item.toggleIndex].px &&
-            toggles[item.toggleIndex].px === toggles[item.toggleIndex].initial
-              ? 'up'
-              : 'down'
-          }
-        >
-          {item.title}
-        </LayoutAElement>
-        {/* # 토글 열면 나오는 목록 */}
-        {/* FIXME: toggle이 있는 페이지에서, type을 입력하지 않은 채 URL 접속 시, 높이가 불일치함 */}
-        <LayoutListDetail $height={toggles[item.toggleIndex]?.px}>
-          {item.links.map((link, linkIndex) => {
-            const linkUrl = `${link.tag ? `/${link.tag}` : pathname}?page=${
-              link.page ? link.page : item.toggleIndex
-            }${link.type ? `&type=${link.type}` : ''}`;
-            return (
-              <li key={linkIndex}>
-                <Link to={linkUrl}>{link.title}</Link>
-              </li>
-            );
-          })}
-        </LayoutListDetail>
-      </LayoutList>
-    ));
-  };
-  // FIXME: 페이지 변경 후, 토글 높이, 최대 높이 업데이트 되지 않는 문제 수정
   // # 네비게이션 토글 상태
   const togglesNavObject = {
     1: { px: 0, initial: dynamicTopbarList[0].links.length * 50 },
     2: { px: 0, initial: dynamicTopbarList[1].links.length * 50 },
+    3: { px: 0, initial: 0 },
   };
   if (dynamicTopbarList.length > 2)
     togglesNavObject['3'] = {
       px: 0,
       initial: dynamicTopbarList[2].links.length * 50,
     };
-  const [toggles, setToggles] = useState(togglesNavObject);
+  const [navToggles, setNavToggles] = useState(togglesNavObject);
   // # 네비게이션 토글 함수
-  const toggleHandle = (e, index) => {
+  const toggleHandle = (e, { index, linkUrl }) => {
     e.preventDefault();
-    setToggles((prevToggles) => {
+    setNavToggles((prevToggles) => {
       const currentToggle = prevToggles[index] || { px: 0, initial: 0 };
       return {
         ...prevToggles,
@@ -277,51 +268,127 @@ const Layout = ({ tag }) => {
         },
       };
     });
-  };
 
-  // # 사이드바 토글
-  const matchedToggleLength = findTopbarTwoStep.toggle?.length || 0;
-  const togglesAsideObject = findTopbarTitle.children.reduce((acc, cur) => {
-    if (cur.toggle && cur.toggle.length > 0) {
-      const isPageMatched = cur.page === pageNum;
-      acc[cur.title] = {
-        px: isPageMatched ? matchedToggleLength * 50 : 0,
-        initial: cur.toggle.length * 50,
-      };
-    }
-    return acc;
-  }, {});
-  const [asideToggle, setAsideToggle] = useState(togglesAsideObject);
-
-  // # 사이드바 토글 함수
-  const asideHandle = (e) => {
-    e.preventDefault();
-    const key = e.currentTarget.innerText;
-    const boolean = key in asideToggle;
-    if (boolean) {
-      setAsideToggle((prevToggles) => {
+    if (linkUrl) {
+      setNavToggles((prevToggles) => {
         const newToggles = {};
-
-        // @ 모든 px을 0으로 초기화
         for (let key in prevToggles) {
           newToggles[key] = {
             ...prevToggles[key],
             px: 0,
           };
         }
+        return newToggles;
+      });
+      navigate(linkUrl);
+    }
+  };
+  // @ 네비게이션 바 컴포넌트
+  const TopBarListComponent = () => {
+    return dynamicTopbarList.map((item, index) => (
+      <LayoutList key={index}>
+        {/* 메인 목록 */}
+        <LayoutAElement
+          to="./"
+          title={item.title}
+          onClick={(e) => toggleHandle(e, { index: item.toggleIndex })}
+          data-index={item.toggleIndex}
+          data-direction={
+            navToggles[item.toggleIndex].px &&
+            navToggles[item.toggleIndex].px ===
+              navToggles[item.toggleIndex].initial
+              ? 'up'
+              : 'down'
+          }
+        >
+          {item.title}
+        </LayoutAElement>
+        {/* # 토글 열면 나오는 목록 */}
+        {/* FIXME: toggle이 있는 페이지에서, type을 입력하지 않은 채 URL 접속 시, 높이가 불일치함 */}
+        <LayoutListDetail $height={navToggles[item.toggleIndex]?.px}>
+          {item.links.map((link, linkIndex) => {
+            // # 2번째 네비게이션, 3번째 네비게이션 구분 및 toggle 구분
+            const getUrl = (tag, page, type, toggle) => {
+              let baseUrl = tag ? `/${tag}` : pathname;
+              let queryParams = `?page=${page || item.toggleIndex}`;
+              if (toggle && toggle.length > 0) {
+                queryParams += `&type=${toggle[0].type}`;
+              } else if (type) {
+                queryParams += `&type=${type}`;
+              }
+              return `${baseUrl}${queryParams}`;
+            };
+            const linkUrl = getUrl(link.tag, link.page, link.type, link.toggle);
+            return (
+              <li key={linkIndex}>
+                <Link
+                  to={linkUrl}
+                  onClick={(e) => toggleHandle(e, { linkUrl })}
+                >
+                  {link.title}
+                </Link>
+              </li>
+            );
+          })}
+        </LayoutListDetail>
+      </LayoutList>
+    ));
+  };
 
-        // @ 선택한 버튼의 px 높이 설정
+  // # 사이드바 토글
+  const matchedToggleLength = findTopbarTwoStep.toggle?.length || 0;
+  const initializedAsideToggle = (title, matchedToggleLength) => {
+    return title.children.reduce((acc, cur) => {
+      if (cur.toggle && cur.toggle.length > 0) {
+        const isPageMatched = cur.page === pageNum;
+        acc[cur.title] = {
+          px: isPageMatched ? matchedToggleLength * 50 : 0,
+          initial: cur.toggle.length * 50,
+        };
+      }
+      return acc;
+    }, {});
+  };
+  const [asideToggle, setAsideToggle] = useState(
+    initializedAsideToggle(findTopbarTitle, matchedToggleLength)
+  );
+
+  // # 사이드바 토글 함수
+  const asideHandle = (e, { path }) => {
+    e.preventDefault();
+    const key = e.currentTarget.innerText;
+    const hasToggle = key in asideToggle;
+
+    // # 모든 px을 0으로 초기화
+    const resetToggles = (prevToggles) => {
+      const newToggles = {};
+      for (let key in prevToggles) {
+        newToggles[key] = {
+          ...prevToggles[key],
+          px: 0,
+        };
+      }
+      return newToggles;
+    };
+
+    // # 토글 기능이 있는 경우
+    if (hasToggle) {
+      setAsideToggle((prevToggles) => {
+        const newToggles = resetToggles(prevToggles);
+        // # 선택한 버튼의 px 높이 설정
         newToggles[key] = {
           ...prevToggles[key],
           px: prevToggles[key].px !== 0 ? 0 : prevToggles[key].initial,
           initial: prevToggles[key].initial,
         };
-
         return newToggles;
       });
+    } else {
+      setAsideToggle((prevToggles) => resetToggles(prevToggles));
+      navigate(path);
     }
   };
-  // @& 사이드바 컴포넌트
+  // @ 사이드바 컴포넌트
   const AsideComponent = () => {
     const children = findTopbarTitle.children.map((children, index) => {
       const variableCheck = typeof asideToggle !== 'undefined';
@@ -332,7 +399,9 @@ const Layout = ({ tag }) => {
             <>
               <LayoutAsideLink
                 to={`${pathname}?page=${index + 1}`}
-                onClick={toggleCheck ? asideHandle : null}
+                onClick={(e) =>
+                  asideHandle(e, { path: `${pathname}?page=${index + 1}` })
+                }
                 children_height={asideToggle[children.title]?.px}
                 selected={children.page === pageNum}
                 showmore={toggleCheck ? 'true' : 'false'}
@@ -381,7 +450,7 @@ const Layout = ({ tag }) => {
             <AsideComponent />
           </LayoutAside>
           <LayoutContent>
-            <PageComponent />
+            <PageComponent regionList={regionList} type={type} />
           </LayoutContent>
         </LayoutSection>
       </main>
