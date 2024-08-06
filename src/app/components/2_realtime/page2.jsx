@@ -58,7 +58,7 @@ ChartJS.register(
 );
 
 // @@@ 출력 컴포넌트 @@@
-export default function Page() {
+export default function Page({ regionList }) {
   // # search 파라미터
   const [searchParams] = useSearchParams();
   const [searchType, setSearchType] = useState('pm25');
@@ -115,25 +115,6 @@ export default function Page() {
   );
 
   // # 지역 목록
-  const regionList = {
-    seoul: '서울',
-    busan: '부산',
-    daegu: '대구',
-    incheon: '인천',
-    gwangju: '광주',
-    daejeon: '대전',
-    ulsan: '울산',
-    gyeonggi: '경기',
-    gangwon: '강원',
-    chungbuk: '충북',
-    chungnam: '충남',
-    jeonbuk: '전북',
-    jeonnam: '전남',
-    sejong: '세종',
-    gyeongbuk: '경북',
-    gyeongnam: '경남',
-    jeju: '제주',
-  };
   const regionList_eng = Object.keys(regionList);
   const regionList_kor = Object.values(regionList);
 

@@ -17,8 +17,7 @@
 */
 
 // ~ System
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   Chart as ChartJS,
@@ -33,26 +32,14 @@ import {
 import { getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
-import regionListData from '../../data/regionList.json';
+import regionsListData from '../../data/regionsList.json';
 // ~ HOOKS
 // ~ Styles
 import {
-  LayoutAElement,
-  LayoutAside,
-  LayoutAsideLink,
-  LayoutAsideLinkA,
-  LayoutAsideLinkUl,
-  LayoutContent,
   ContentResultTableWrap,
   ContentResultWrap,
   LayoutContentTitle,
-  LayoutDivStyle,
-  LayoutHome,
-  LayoutList,
-  LayoutListDetail,
   LoadingWrap,
-  LayoutSection,
-  LayoutTopBar,
   ContentTable,
   RealtimePage2ContentResultSearchBtn,
   RealtimePage2ContentResultSearchBox,
@@ -93,17 +80,16 @@ ChartJS.register(
  */
 
 /** @type {RegionList} */
-const regionList = regionListData;
+const regionDetailList = regionsListData;
 
 // @@@ 출력 컴포넌트 @@@
-export default function Page() {
+export default function Page({ type }) {
   // # search 파라미터
-  const [searchParams] = useSearchParams();
   const [searchType, setSearchType] = useState('detail-pm25');
   const [searchTypeText, setSearchTypeText] = useState('PM-2.5');
   const [searchProperty, setSearchProperty] = useState('pm25Value');
   useEffect(() => {
-    switch (searchParams.get('type')) {
+    switch (type) {
       case 'detail-pm25':
         setSearchTypeText('PM-2.5');
         setSearchType('detail-pm25');
@@ -117,7 +103,7 @@ export default function Page() {
       default:
         break;
     }
-  }, [searchParams]);
+  }, [type]);
   // # 자료구분
   const [dataDivision, setDataDivision] = useState('hour');
   const [tempDataDivision, setTempDataDivision] = useState(dataDivision);
@@ -142,55 +128,19 @@ export default function Page() {
   );
 
   // #& 지역 목록
-  // const regionList = {
-  //     seoul: '서울',
-  //     busan: '부산',
-  //     daegu: '대구',
-  //     incheon: '인천',
-  //     gwangju: '광주',
-  //     daejeon: '대전',
-  //     ulsan: '울산',
-  //     gyeonggi: '경기',
-  //     gangwon: '강원',
-  //     chungbuk: '충북',
-  //     chungnam: '충남',
-  //     jeonbuk: '전북',
-  //     jeonnam: '전남',
-  //     sejong: '세종',
-  //     gyeongbuk: '경북',
-  //     gyeongnam: '경남',
-  //     jeju: '제주'
-  // }
-  // const regionList_eng = Object.keys(regionList);
-  const regionList_kor = Object.keys(regionList);
+  const regionDetailList_kor = Object.keys(regionDetailList);
 
   // # 차트 데이터
   const [lineChartData, setLineChartData] = useState([]);
-
-  // const initialState = 0;
-  // const maxValues = {};
-  // const values = {};
-  // const minValues = {};
-  // useEffect(() => {
-  //     regionList_eng.forEach(region => {
-  //         maxValues[region] = initialState;
-  //         values[region] = initialState;
-  //         minValues[region] = initialState;
-  //     });
-  //     const data = regionList_eng.map(region => values[region]);
-  //     setBarChartData(data);
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
 
   // ! 데이터
   // # 데이터 검색 타입 임시 변경 핸들러
   const handleChange_radio = (e) => setTempDataDivision(e.target.value);
 
   // # 선택한 지역의 측정소 목록
-  const selectRegionList = regionList[district].map((item) => {
+  const selectRegionList = regionDetailList[district].map((item) => {
     return `${item.name}${item.district}`;
   });
-  console.log('selectRegionList: ', selectRegionList);
 
   // # 데이터 검색 버튼 핸들러
   const handleSubmit = async (e) => {
@@ -576,7 +526,7 @@ export default function Page() {
                 onChange={(e) => setDistrict(e.currentTarget.value)}
                 value={district}
               >
-                {regionList_kor.map((reg, _) => {
+                {regionDetailList_kor.map((reg, _) => {
                   return <option key={_}>{reg}</option>;
                 })}
               </select>

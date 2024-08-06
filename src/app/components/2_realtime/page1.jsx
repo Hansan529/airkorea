@@ -16,7 +16,6 @@
 */
 
 // ~ Package
-import { Link, useLocation } from 'react-router-dom';
 import { Fragment, useState } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -31,11 +30,6 @@ import getColorValue from '../../functions/getColorValue.ts';
 
 // ~ Style
 import {
-  LayoutAElement,
-  LayoutAside,
-  LayoutAsideLink,
-  LayoutAsideLinkA,
-  LayoutAsideLinkUl,
   LayoutContent,
   ContentResultSearchBox,
   ContentResultTableSpan,
@@ -49,13 +43,7 @@ import {
   LayoutContentTitle,
   ContentResultSearchBtn,
   ContentResultSearchBtnWrap,
-  LayoutDivStyle,
-  LayoutHome,
-  LayoutList,
-  LayoutListDetail,
   LoadingWrap,
-  LayoutSection,
-  LayoutTopBar,
 } from '../assets/StyleComponent.jsx';
 
 // ~ Package Settings

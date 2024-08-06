@@ -22,7 +22,7 @@ import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // ~ JSON
-import regionListData from '../../data/regionList.json';
+import regionListData from '../../data/regionsList.json';
 // ~ HOOKS
 // ~ Styles
 import {
@@ -61,20 +61,6 @@ const regionList = regionListData;
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
-  // ! 사이드바
-  //   // # 사이드바 토글이 있는 요소 찾기
-  //   function findElementsWithChildren(array) {
-  //     const result = [];
-  //     array.forEach((element) => {
-  //       if (element.toggle && element.toggle.length > 0) {
-  //         result.push(element);
-  //         result.push(...findElementsWithChildren(element.toggle));
-  //       }
-  //     });
-  //     return result;
-  //   }
-  //   const elementsWithChildren = findElementsWithChildren(category.children);
-
   // ! 측정자료
   // # 금일
   const currentDate = new Date();

@@ -21,7 +21,7 @@ import styled from '@emotion/styled';
 
 // ~ Json
 import { backgroundPathData, innerBackgroundPathData, pathData} from '../../data/paths.js';
-import regionList from "../../data/regionList.json";
+import regionList from "../../data/regionsList.json";
 // # 측정소 데이터
 import stationsInfoData from "../../data/stationInfo.json";
 import { SeoulInner } from '../../data/Seoul.js';
