@@ -6,7 +6,13 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
-import React, { Suspense, useState } from 'react';
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import Loading from '../global/Loading.jsx';
 import {
   LayoutAElement,
@@ -55,6 +61,126 @@ const components = {
   },
 };
 
+// # 네비게이션, 사이드바 목록
+const categoryList = [
+  {
+    title: '에어코리아란',
+    tag: 'info',
+    children: [
+      {
+        title: '에어코리아 소개',
+        page: '1',
+      },
+      {
+        title: '측정망 정보',
+        page: '2',
+      },
+      {
+        title: '측정소 정보',
+        page: '3',
+      },
+    ],
+  },
+  {
+    title: '실시간 자료조회',
+    tag: 'realtime',
+    children: [
+      {
+        title: '실시간 대기 정보',
+        page: '1',
+      },
+      {
+        title: '시도별 대기정보',
+        page: '2',
+        toggle: [
+          { title: '시도별 대기정보(PM-2.5)', type: 'pm25' },
+          { title: '시도별 대기정보(PM-10)', type: 'pm10' },
+          { title: '시도별 대기정보(오존)', type: 'o3' },
+          { title: '시도별 대기정보(이산화질소)', type: 'no2' },
+          { title: '시도별 대기정보(일산화탄소)', type: 'co' },
+          { title: '시도별 대기정보(아황산가스)', type: 'so2' },
+        ],
+      },
+      {
+        title: '미세먼지 세부 측정정보',
+        page: '3',
+        toggle: [
+          { title: '초미세먼지 (PM-2.5)', type: 'detail-pm25' },
+          { title: '미세먼지 (PM-10)', type: 'detail-pm10' },
+        ],
+      },
+    ],
+  },
+  {
+    title: '대기정보 예보 / 경보',
+    tag: 'standby',
+    children: [
+      {
+        title: '오늘/내일/모레 대기정보',
+        page: '1',
+      },
+      {
+        title: '초미세먼지 주간예보',
+        page: '2',
+      },
+      {
+        title: '대기오염경보 발령 내역',
+        page: '3',
+        toggle: [
+          { title: '오존', type: 'ozone' },
+          { title: '미세먼지', type: 'findDust' },
+        ],
+      },
+      {
+        title: '황사 발생현황',
+        page: '4',
+        toggle: [
+          {
+            title: '연도별 발생현황',
+            type: '',
+          },
+          {
+            title: '황사특보(경보) 발령현황',
+            type: '',
+          },
+          {
+            title: '황사 발생 대비 국민행동요령',
+            type: '',
+          },
+        ],
+      },
+      {
+        title: '국민 행동요령',
+        page: '5',
+        toggle: [
+          {
+            title: '오존 행동요령',
+            type: '',
+          },
+          {
+            title: '미세먼지 행동요령',
+            type: '',
+          },
+          {
+            title: '통합대기환경지수 행동요령',
+            type: '',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: '통계정보',
+    tag: '',
+    page: '1',
+  },
+  {
+    title: '배움터',
+    tag: '',
+    page: '1',
+  },
+];
+
 const Layout = ({ tag }) => {
   const [searchParams] = useSearchParams();
   const { pathname } = useLocation();
@@ -64,126 +190,6 @@ const Layout = ({ tag }) => {
 
   // # 출력할 컴포넌트 선택
   const PageComponent = components[tag]?.[pageNum];
-
-  // # 네비게이션, 사이드바 목록
-  const categoryList = [
-    {
-      title: '에어코리아란',
-      tag: 'info',
-      children: [
-        {
-          title: '에어코리아 소개',
-          page: '1',
-        },
-        {
-          title: '측정망 정보',
-          page: '2',
-        },
-        {
-          title: '측정소 정보',
-          page: '3',
-        },
-      ],
-    },
-    {
-      title: '실시간 자료조회',
-      tag: 'realtime',
-      children: [
-        {
-          title: '실시간 대기 정보',
-          page: '1',
-        },
-        {
-          title: '시도별 대기정보',
-          page: '2',
-          toggle: [
-            { title: '시도별 대기정보(PM-2.5)', type: 'pm25' },
-            { title: '시도별 대기정보(PM-10)', type: 'pm10' },
-            { title: '시도별 대기정보(오존)', type: 'o3' },
-            { title: '시도별 대기정보(이산화질소)', type: 'no2' },
-            { title: '시도별 대기정보(일산화탄소)', type: 'co' },
-            { title: '시도별 대기정보(아황산가스)', type: 'so2' },
-          ],
-        },
-        {
-          title: '미세먼지 세부 측정정보',
-          page: '3',
-          toggle: [
-            { title: '초미세먼지 (PM-2.5)', type: 'detail-pm25' },
-            { title: '미세먼지 (PM-10)', type: 'detail-pm10' },
-          ],
-        },
-      ],
-    },
-    {
-      title: '대기정보 예보 / 경보',
-      tag: 'standby',
-      children: [
-        {
-          title: '오늘/내일/모레 대기정보',
-          page: '1',
-        },
-        {
-          title: '초미세먼지 주간예보',
-          page: '2',
-        },
-        {
-          title: '대기오염경보 발령 내역',
-          page: '3',
-          toggle: [
-            { title: '오존', type: 'ozone' },
-            { title: '미세먼지', type: 'findDust' },
-          ],
-        },
-        {
-          title: '황사 발생현황',
-          page: '4',
-          toggle: [
-            {
-              title: '연도별 발생현황',
-              type: '',
-            },
-            {
-              title: '황사특보(경보) 발령현황',
-              type: '',
-            },
-            {
-              title: '황사 발생 대비 국민행동요령',
-              type: '',
-            },
-          ],
-        },
-        {
-          title: '국민 행동요령',
-          page: '5',
-          toggle: [
-            {
-              title: '오존 행동요령',
-              type: '',
-            },
-            {
-              title: '미세먼지 행동요령',
-              type: '',
-            },
-            {
-              title: '통합대기환경지수 행동요령',
-              type: '',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: '통계정보',
-      tag: '',
-      page: '1',
-    },
-    {
-      title: '배움터',
-      tag: '',
-      page: '1',
-    },
-  ];
 
   // # 지역명
   const regionList = {
@@ -208,7 +214,9 @@ const Layout = ({ tag }) => {
 
   // ! 네비게이션바
   // # 큰 주제의 메인 요소 찾기
-  const findTopbarTitle = categoryList.find((item) => item.tag === tag);
+  const findTopbarTitle = useMemo(() => {
+    return categoryList.find((item) => item.tag === tag);
+  }, [tag]);
   // # 큰 주제의 다른 요소
   const anotherLinks = categoryList.filter((item) => item.tag !== tag);
 
@@ -337,22 +345,30 @@ const Layout = ({ tag }) => {
 
   // # 사이드바 토글
   const matchedToggleLength = findTopbarTwoStep.toggle?.length || 0;
-  const initializedAsideToggle = (title, matchedToggleLength) => {
-    return title.children.reduce((acc, cur) => {
-      if (cur.toggle && cur.toggle.length > 0) {
-        const isPageMatched = cur.page === pageNum;
-        acc[cur.title] = {
-          px: isPageMatched ? matchedToggleLength * 50 : 0,
-          initial: cur.toggle.length * 50,
-        };
-      }
-      return acc;
-    }, {});
-  };
+  const initializedAsideToggle = useCallback(
+    (title, matchedToggleLength) => {
+      return title.children.reduce((acc, cur) => {
+        if (cur.toggle && cur.toggle.length > 0) {
+          const isPageMatched = cur.page === pageNum;
+          acc[cur.title] = {
+            px: isPageMatched ? matchedToggleLength * 50 : 0,
+            initial: cur.toggle.length * 50,
+          };
+        }
+        return acc;
+      }, {});
+    },
+    [pageNum]
+  );
   const [asideToggle, setAsideToggle] = useState(
     initializedAsideToggle(findTopbarTitle, matchedToggleLength)
   );
-
+  // # 페이지가 변경되었을 때, Toggle이 해당 페이지에 맞도록 업데이트
+  useEffect(() => {
+    setAsideToggle(
+      initializedAsideToggle(findTopbarTitle, matchedToggleLength)
+    );
+  }, [pathname, findTopbarTitle, matchedToggleLength, initializedAsideToggle]);
   // # 사이드바 토글 함수
   const asideHandle = (e, { path }) => {
     e.preventDefault();
