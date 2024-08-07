@@ -17,19 +17,20 @@
 */
 
 // ~ System
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // ~ JSON
-import regionListData from '../../data/regionsList.json';
+import regionDetailListData from '../../data/regionsList.json';
 // ~ HOOKS
 // ~ Styles
 import {
+  ContentResultSearchBox,
   ContentResultTableWrap,
+  ContentResultTap,
   ContentResultWrap,
   LayoutContentTitle,
 } from '../assets/StyleComponent.jsx';
+import { useState } from 'react';
 
 // ~ Component
 // ~ Package Settings
@@ -57,11 +58,13 @@ import {
  */
 
 /** @type {RegionList} */
-const regionList = regionListData;
+const regionDetailList = regionDetailListData;
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
+  const [district, setDistrict] = useState('전체');
   // ! 측정자료
+  // TODO: currentDate 하나의 jsx에서 통일하거나, zustand로 설정해 중복으로 생성하지 않도록 변경
   // # 금일
   const currentDate = new Date();
   // const currentDate = new Date('2024-07-23');
@@ -69,13 +72,39 @@ export default function Page() {
   const currentDay = currentDate.getDate();
 
   // #& 지역 목록
-  const regionList_kor = Object.keys(regionList);
+  const regionDetailList_kor = Object.keys(regionDetailList);
 
   // ! 결과
   return (
     <>
-      <LayoutContentTitle></LayoutContentTitle>
+      <LayoutContentTitle>오존</LayoutContentTitle>
       <ContentResultWrap>
+        <div style={{ display: 'flex' }}>
+          <ContentResultTap selectCheck={true}>최근발령지역</ContentResultTap>
+          <ContentResultTap>연도별 발령현황</ContentResultTap>
+          <ContentResultTap>지역별 발령현황</ContentResultTap>
+          <ContentResultTap>경보기준</ContentResultTap>
+        </div>
+        <ContentResultSearchBox>
+          <div>
+            <strong>지역</strong>
+            <div>
+              <select
+                onChange={(e) => setDistrict(e.currentTarget.value)}
+                value={district}
+              >
+                <option value="전체">전체</option>
+                {regionDetailList_kor.map((reg, _) => {
+                  return (
+                    <option value={reg} key={_}>
+                      {reg}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+        </ContentResultSearchBox>
         <ContentResultTableWrap>
           {/* <ContentTableWrap style={{ width: '1070px' }}>
                 <ContentTable style={{ marginBottom: '15px' }}>
