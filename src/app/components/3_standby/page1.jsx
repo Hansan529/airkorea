@@ -75,13 +75,6 @@ export default function Page() {
   //   }
   //   const elementsWithChildren = findElementsWithChildren(category.children);
 
-  // ! 측정자료
-  // # 금일
-  const currentDate = new Date();
-  // const currentDate = new Date('2024-07-23');
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
-
   // #& 지역 목록
   const regionList_kor = Object.keys(regionList);
 

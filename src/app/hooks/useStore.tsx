@@ -36,6 +36,8 @@ interface TextItem {
     informData: string;
 };
 
+type OzoneItem = Record<string, string | null>
+
 interface StoreState {
     getFetch: (target: string, url: string) => Promise<void>;
     postFetch: (target: string, url: string, value: any) => Promise<void>;
@@ -55,6 +57,15 @@ interface StoreState {
     filterData: FilterData;
     openMap: string;
     loading: boolean;
+    alertOzone: OzoneItem[];
+    currentDate: Date;
+    currentYear: number;
+    currentMonth: number;
+    currentDay: number;
+    setCurrentDate: (newDate: Date) => void;
+    setCurrentYear: (year: number) => void;
+    setCurrentMonth: (month: number) => void;
+    setCurrentDay: (day: number) => void;
 };
 
 interface NearStation {
@@ -150,6 +161,53 @@ const useStore = create<StoreState>()(
 
         // 데이터 로딩
         loading: false,
+
+        alertOzone: [],
+
+        // 금일
+        currentDate: new Date(),
+        currentYear: new Date().getFullYear(),
+        currentMonth: new Date().getMonth(),
+        currentDay: new Date().getDate(),
+
+        setCurrentDate: (newDate: Date) => {
+          set({
+            currentDate: newDate,
+            currentYear: newDate.getFullYear(),
+            currentMonth: newDate.getMonth(),
+            currentDay: newDate.getDate(),
+          });
+        },
+        setCurrentYear: (year: number) => {
+          set((state) => {
+            const newDate = new Date(state.currentDate);
+            newDate.setFullYear(year);
+            return {
+              currentDate: newDate,
+              currentYear: year,
+            }
+          })
+        },
+        setCurrentMonth: (month: number) => {
+          set((state) => {
+            const newDate = new Date(state.currentDate);
+            newDate.setMonth(month);
+            return {
+              currentDate: newDate,
+              currentMonth: month,
+            }
+          })
+        },
+        setCurrentDay: (day: number) => {
+          set((state) => {
+            const newDate = new Date(state.currentDate);
+            newDate.setDate(day);
+            return {
+              currentDate: newDate,
+              currentDay: day,
+            }
+          })
+        }
         }),
         {
             name: 'fetchStorage',

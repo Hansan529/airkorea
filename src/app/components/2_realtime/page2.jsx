@@ -33,6 +33,8 @@ import { Bar, getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
 // ~ HOOKS
+import useStore from '../../hooks/useStore.tsx';
+
 // ~ Styles
 import {
   ContentResultTableWrap,
@@ -59,6 +61,14 @@ ChartJS.register(
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page({ regionList }) {
+  const {
+    currentDate: currentDateString,
+    currentYear,
+    currentMonth: currentMonthNumber,
+    currentDay,
+  } = useStore((store) => store);
+  const currentDate = new Date(currentDateString);
+  const currentMonth = currentMonthNumber + 1;
   // # search 파라미터
   const [searchParams] = useSearchParams();
   const [searchType, setSearchType] = useState('pm25');
@@ -98,13 +108,6 @@ export default function Page({ regionList }) {
   const [tempDataDivision, setTempDataDivision] = useState(dataDivision);
   // # 화면 중앙
   const [loadingStyle, setLoadingStyle] = useState({ left: '50%' });
-
-  // ! 측정자료
-  // # 금일
-  const currentDate = new Date();
-  // const currentDate = new Date('2024-07-06');
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
 
   // # 통계 검색
   const [tableData, setTableData] = useState([]);
@@ -174,18 +177,17 @@ export default function Page({ regionList }) {
 
       // # [테이블 데이터] 필터링 날짜
       const startTime = new Date(
-        `${currentDate.getFullYear()}-${String(currentMonth).padStart(
-          2,
-          '0'
-        )}-${String(currentDay).padStart(2, '0')}T00:00:00`
+        `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(
+          currentDay
+        ).padStart(2, '0')}T00:00:00`
       );
       const endTime = new Date(
-        `${currentDate.getFullYear()}-${String(currentMonth).padStart(
+        `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(
+          currentDay
+        ).padStart(2, '0')}T${String(currentDate.getHours()).padStart(
           2,
           '0'
-        )}-${String(currentDay).padStart(2, '0')}T${String(
-          currentDate.getHours()
-        ).padStart(2, '0')}:00:00`
+        )}:00:00`
       );
       // % [테이블 데이터] 1. 검색하고자 하는 시작 날짜와 종료 날짜 범위 내에 있는 데이터 필터링
       const filteredData = data.filter((item) => {

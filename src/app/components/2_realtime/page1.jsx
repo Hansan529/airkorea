@@ -73,6 +73,8 @@ const stationsInfo = stationsInfoData;
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
+  // # 금일 날짜
+  const { currentDay } = useStore((store) => store);
   // # 조회 종류
   const [viewSelectIndex, setViewSelectIndex] = useState(0);
   const [dataDivision, setDataDivision] = useState('time');
@@ -99,11 +101,10 @@ export default function Page() {
 
   // ! 조회 기간 캘린더
   // # 캘린더 설정
-  const currentDate = new Date();
   const yesterday = new Date();
   const pastDate = new Date();
-  yesterday.setDate(currentDate.getDate() - 1);
-  pastDate.setDate(currentDate.getDate() - 60);
+  yesterday.setDate(currentDay - 1);
+  pastDate.setDate(currentDay - 60);
   const [selectedBginDate, setSelectedBginDate] = useState(yesterday);
   const [selectedEndDate, setSelectedEndDate] = useState(yesterday);
   const [bginHour, setBginHour] = useState('01');

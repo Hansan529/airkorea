@@ -33,7 +33,10 @@ import { getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
 import regionsListData from '../../data/regionsList.json';
+
 // ~ HOOKS
+import useStore from '../../hooks/useStore.tsx';
+
 // ~ Styles
 import {
   ContentResultTableWrap,
@@ -84,6 +87,14 @@ const regionDetailList = regionsListData;
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page({ type }) {
+  const {
+    currentDate: currentDateString,
+    currentYear,
+    currentMonth: currentMonthNumber,
+    currentDay,
+  } = useStore((store) => store);
+  const currentDate = new Date(currentDateString);
+  const currentMonth = currentMonthNumber + 1;
   // # search 파라미터
   const [searchType, setSearchType] = useState('detail-pm25');
   const [searchTypeText, setSearchTypeText] = useState('PM-2.5');
@@ -113,12 +124,7 @@ export default function Page({ type }) {
   // # 선택한 지역
   const [district, setDistrict] = useState('서울');
 
-  // ! 측정자료
-  // # 금일
-  // const currentDate = new Date();
-  const currentDate = new Date('2024-07-23');
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
+  // const currentDate = new Date('2024-07-23');
 
   // # 통계 검색
   const [tableElement, setTableElement] = useState(
@@ -194,18 +200,17 @@ export default function Page({ type }) {
 
       // # [테이블 데이터] 필터링 날짜
       const startTime = new Date(
-        `${currentDate.getFullYear()}-${String(currentMonth).padStart(
-          2,
-          '0'
-        )}-${String(currentDay).padStart(2, '0')}T01:00:00`
+        `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(
+          currentDay
+        ).padStart(2, '0')}T01:00:00`
       );
       const endTime = new Date(
-        `${currentDate.getFullYear()}-${String(currentMonth).padStart(
+        `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(
+          currentDay
+        ).padStart(2, '0')}T${String(currentDate.getHours()).padStart(
           2,
           '0'
-        )}-${String(currentDay).padStart(2, '0')}T${String(
-          currentDate.getHours()
-        ).padStart(2, '0')}:00:00`
+        )}:00:00`
       );
       // % [테이블 데이터] 1. 검색하고자 하는 시작 날짜와 종료 날짜 범위 내에 있는 데이터 필터링, 필요한 요소만 추출
       /**
