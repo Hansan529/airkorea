@@ -22,12 +22,16 @@ import 'react-datepicker/dist/react-datepicker.css';
 // ~ JSON
 import regionDetailListData from '../../data/regionsList.json';
 // ~ HOOKS
+import useStore from '../../hooks/useStore.tsx';
 // ~ Styles
 import {
   ContentResultSearchBox,
+  ContentResultSearchBtn,
   ContentResultTableWrap,
   ContentResultTap,
   ContentResultWrap,
+  ContentTable,
+  ContentTableWrap,
   LayoutContentTitle,
 } from '../assets/StyleComponent.jsx';
 import { useState } from 'react';
@@ -62,17 +66,35 @@ const regionDetailList = regionDetailListData;
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
-  const [district, setDistrict] = useState('전체');
-  // ! 측정자료
-  // TODO: currentDate 하나의 jsx에서 통일하거나, zustand로 설정해 중복으로 생성하지 않도록 변경
-  // # 금일
-  const currentDate = new Date();
-  // const currentDate = new Date('2024-07-23');
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
-
-  // #& 지역 목록
+  const {
+    getFetch,
+    alertOzone,
+    currentDate: currentDateString,
+  } = useStore((store) => store);
+  const currentDate = new Date(currentDateString);
+  // ! 검색
+  // # 검색 지역 목록
   const regionDetailList_kor = Object.keys(regionDetailList);
+  // # 검색 지역
+  const [district, setDistrict] = useState('전체');
+  // # 검색 범위
+  const [searchRange, setSearchRange] = useState('오늘');
+
+  // # 검색 범위 핸들러
+  const handleSearchRangeRadioChange = (e) => {
+    const selectedLabel = e.target.closest('label').textContent.trim();
+    setSearchRange(selectedLabel);
+  };
+
+  const handleSearchButton = () => {
+    getFetch(
+      'alertOzone',
+      `https://apis.hansan-web.link/airkorea/standby-ozone?year=${currentDate.getFullYear()}`
+    );
+    console.log('alertOzone: ', alertOzone);
+  };
+
+  const tbodyComp = () => {};
 
   // ! 결과
   return (
@@ -102,44 +124,52 @@ export default function Page() {
                   );
                 })}
               </select>
+              <label>
+                <input
+                  type="radio"
+                  name="searchRange"
+                  onChange={handleSearchRangeRadioChange}
+                />
+                오늘
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="searchRange"
+                  onChange={handleSearchRangeRadioChange}
+                />
+                이번달
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="searchRange"
+                  onChange={handleSearchRangeRadioChange}
+                />
+                올해
+              </label>
+              <ContentResultSearchBtn>
+                <button onClick={handleSearchButton}>검색</button>
+              </ContentResultSearchBtn>
             </div>
           </div>
         </ContentResultSearchBox>
         <ContentResultTableWrap>
-          {/* <ContentTableWrap style={{ width: '1070px' }}>
-                <ContentTable style={{ marginBottom: '15px' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: '#fff' }}>
-                      <th>측정소명</th>
-                      <th>1시</th>
-                      <th>2시</th>
-                      <th>3시</th>
-                      <th>4시</th>
-                      <th>5시</th>
-                      <th>6시</th>
-                      <th>7시</th>
-                      <th>8시</th>
-                      <th>9시</th>
-                      <th>10시</th>
-                      <th>11시</th>
-                      <th>12시</th>
-                      <th>13시</th>
-                      <th>14시</th>
-                      <th>15시</th>
-                      <th>16시</th>
-                      <th>17시</th>
-                      <th>18시</th>
-                      <th>19시</th>
-                      <th>20시</th>
-                      <th>21시</th>
-                      <th>22시</th>
-                      <th>23시</th>
-                      <th>24시</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </ContentTable>
-              </ContentTableWrap> */}
+          <ContentTableWrap style={{ width: '1070px' }}>
+            <ContentTable style={{ marginBottom: '15px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#fff' }}>
+                  <th>번호</th>
+                  <th>지역</th>
+                  <th>권역</th>
+                  <th>경보단계</th>
+                  <th>발령시간</th>
+                  <th>해제시간</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </ContentTable>
+          </ContentTableWrap>
         </ContentResultTableWrap>
       </ContentResultWrap>
     </>
