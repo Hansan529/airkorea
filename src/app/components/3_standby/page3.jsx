@@ -86,11 +86,16 @@ export default function Page() {
     setSearchRange(selectedLabel);
   };
 
+  // # 검색 버튼 클릭 이벤트
   const handleSearchButton = () => {
     getFetch(
       'alertOzone',
-      `https://apis.hansan-web.link/airkorea/standby-ozone?year=${currentDate.getFullYear()}`
+      `https://localhost:3500/api/airkorea/standby-ozone?year=2024`
     );
+    // getFetch(
+    //   'alertOzone',
+    //   `https://apis.hansan-web.link/airkorea/standby-ozone?year=${currentDate.getFullYear()}`
+    // );
     console.log('alertOzone: ', alertOzone);
   };
 
