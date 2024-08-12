@@ -111,14 +111,13 @@ function getDateRange(date, type) {
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
-  const {
-    getFetch,
-    alertOzone,
-    currentDate: currentDateString,
-  } = useStore((store) => store);
+  const { currentDate: currentDateString } = useStore((store) => store);
   // # 날짜
   const currentDate = new Date(currentDateString);
-  const todayString = formatDateToString(currentDate);
+
+  // ! 조회 종류
+  const [viewSelectIndex, setViewSelectIndex] = useState(0);
+
   // ! 검색
   // # 검색 지역 목록
   const regionDetailList_kor = Object.keys(regionDetailList);
@@ -126,42 +125,73 @@ export default function Page() {
   const [district, setDistrict] = useState('전체');
   // # 검색 범위
   const [searchRange, setSearchRange] = useState('오늘');
-
+  // # 검색 년도
+  const [searchYear, setSearchYear] = useState(currentDate.getFullYear());
   // # 검색 범위 핸들러
   const handleSearchRangeRadioChange = (e) => {
     const selectedLabel = e.target.closest('label').textContent.trim();
     setSearchRange(selectedLabel);
   };
-
   // # 검색 결과
   const [searchResult, setSearchResult] = useState([]);
-
   // # 검색 버튼 클릭 이벤트
   const handleSearchButton = async () => {
     const response = await fetch(
       `https://localhost:3500/api/airkorea/standby-ozone?year=2024`
     );
     const data = await response.json();
-    // # 일련번호 내림차순 정렬
-    const sortSearchResult = data.sort((a, b) => b.sn - a.sn);
-    // # 검색 범위 날짜 데이터
-    const { startDate, endDate } = getDateRange(currentDate, searchRange);
 
-    // # 지역, 날짜 필터링
-    const filteredResult = sortSearchResult.filter((res) => {
-      // # string 형식을 Date 형식으로 변경
-      const date = parseDate(res.dataDate);
+    switch (viewSelectIndex) {
+      case 0:
+        // # 일련번호 내림차순 정렬
+        const sortSearchResult = data.sort((a, b) => b.sn - a.sn);
+        // # 검색 범위 날짜 데이터
+        const { startDate, endDate } = getDateRange(currentDate, searchRange);
 
-      // # 전체인 경우 지역 필터링을 하지 않음
-      if (district === '전체') {
-        return date >= startDate && date <= endDate;
-      }
+        // # 지역, 날짜 필터링
+        const filteredResult = sortSearchResult.filter((res) => {
+          // # string 형식을 Date 형식으로 변경
+          const date = parseDate(res.dataDate);
 
-      return (
-        date >= startDate && date <= endDate && res.districtName === district
-      );
-    });
-    setSearchResult(filteredResult);
+          // # 전체인 경우 지역 필터링을 하지 않음
+          if (district === '전체') {
+            return date >= startDate && date <= endDate;
+          }
+
+          return (
+            date >= startDate &&
+            date <= endDate &&
+            res.districtName === district
+          );
+        });
+        setSearchResult(filteredResult);
+        break;
+      case 1:
+        const groupedResult = data.reduce((acc, cur) => {
+          const { districtName } = cur;
+          if (!acc[districtName]) {
+            acc[districtName] = [];
+          }
+          acc[districtName].push(cur);
+          return acc;
+        }, {});
+
+        for (const districtName in groupedResult) {
+          groupedResult[districtName].sort((a, b) => a.sn - b.sn);
+        }
+
+        const sortedGroupedData = Object.keys(groupedResult)
+          .sort((a, b) => {
+            return (
+              regionDetailList_kor.indexOf(a) - regionDetailList_kor.indexOf(b)
+            );
+          })
+          .flatMap((reg) => groupedResult[reg]);
+        setSearchResult(sortedGroupedData);
+        break;
+      default:
+        break;
+    }
 
     // getFetch(
     //   'alertOzone',
@@ -169,6 +199,7 @@ export default function Page() {
     // );
   };
 
+  // @ 테이블 컴포넌트
   const TbodyComp = () => {
     // # 주의보 단계
     function getIssueLvl(number) {
@@ -190,6 +221,40 @@ export default function Page() {
           <td colSpan={6}>경보내역이 없습니다.</td>
         </tr>
       );
+    }
+
+    function getNewDistrictRows() {
+      let previousDistrict = '';
+      let count = 0;
+
+      return searchResult.map((ozone, idx) => {
+        const isNewDistrict = ozone.districtName !== previousDistrict;
+
+        if (isNewDistrict) {
+          count = 0;
+        }
+
+        previousDistrict = ozone.districtName;
+        count += 1;
+
+        return (
+          <tr key={idx}>
+            <td>{isNewDistrict ? 1 : count}</td>
+            <td>{ozone.districtName}</td>
+            <td>{ozone.moveName}</td>
+            <td>{getIssueLvl(ozone.issueLvl)}</td>
+            <td>{`${ozone.dataDate} ${padZero(ozone.issueTime)}`}</td>
+            <td>
+              {ozone.clearTime
+                ? `${ozone.dataDate} ${padZero(ozone.clearTime)}`
+                : '-'}
+            </td>
+          </tr>
+        );
+      });
+    }
+    if (viewSelectIndex === 1) {
+      return getNewDistrictRows();
     }
 
     return searchResult.map((ozone, key) => {
@@ -216,61 +281,105 @@ export default function Page() {
       <LayoutContentTitle>오존</LayoutContentTitle>
       <ContentResultWrap>
         <div style={{ display: 'flex' }}>
-          <ContentResultTap selectCheck={true}>최근발령지역</ContentResultTap>
-          <ContentResultTap>연도별 발령현황</ContentResultTap>
-          <ContentResultTap>지역별 발령현황</ContentResultTap>
-          <ContentResultTap>경보기준</ContentResultTap>
+          <ContentResultTap
+            onClick={() => setViewSelectIndex(0)}
+            selectCheck={viewSelectIndex === 0}
+          >
+            최근발령지역
+          </ContentResultTap>
+          <ContentResultTap
+            onClick={() => setViewSelectIndex(1)}
+            selectCheck={viewSelectIndex === 1}
+          >
+            연도별 발령현황
+          </ContentResultTap>
+          <ContentResultTap
+            onClick={() => setViewSelectIndex(2)}
+            selectCheck={viewSelectIndex === 2}
+          >
+            지역별 발령현황
+          </ContentResultTap>
+          <ContentResultTap
+            onClick={() => setViewSelectIndex(3)}
+            selectCheck={viewSelectIndex === 3}
+          >
+            경보기준
+          </ContentResultTap>
         </div>
-        <ContentResultSearchBox>
-          <div>
-            <strong>지역</strong>
+        {viewSelectIndex !== 3 && (
+          <ContentResultSearchBox>
             <div>
-              <select
-                onChange={(e) => setDistrict(e.currentTarget.value)}
-                value={district}
-              >
-                <option value="전체">전체</option>
-                {regionDetailList_kor.map((reg, _) => {
-                  return (
-                    <option value={reg} key={_}>
-                      {reg}
-                    </option>
-                  );
-                })}
-              </select>
-              <label>
-                <input
-                  type="radio"
-                  name="searchRange"
-                  checked={searchRange === '오늘'}
-                  onChange={handleSearchRangeRadioChange}
-                />
-                오늘
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="searchRange"
-                  checked={searchRange === '이번달'}
-                  onChange={handleSearchRangeRadioChange}
-                />
-                이번달
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="searchRange"
-                  checked={searchRange === '올해'}
-                  onChange={handleSearchRangeRadioChange}
-                />
-                올해
-              </label>
-              <ContentResultSearchBtn>
-                <button onClick={handleSearchButton}>검색</button>
-              </ContentResultSearchBtn>
+              <strong>{viewSelectIndex !== 1 ? '지역' : '년도'}</strong>
+              <div>
+                {viewSelectIndex !== 1 ? (
+                  <select
+                    onChange={(e) => setDistrict(e.currentTarget.value)}
+                    value={district}
+                  >
+                    <option value="전체">전체</option>
+                    {regionDetailList_kor.map((reg, _) => {
+                      return (
+                        <option value={reg} key={_}>
+                          {reg}
+                        </option>
+                      );
+                    })}
+                  </select>
+                ) : (
+                  <select
+                    onChange={(e) => setSearchYear(e.currentTarget.value)}
+                    value={searchYear}
+                  >
+                    {Array.from(
+                      { length: 10 },
+                      (_, idx) => currentDate.getFullYear() - idx
+                    ).map((year, key) => {
+                      return (
+                        <option value={year} key={key}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
+                {viewSelectIndex === 0 && (
+                  <>
+                    <label>
+                      <input
+                        type="radio"
+                        name="searchRange"
+                        checked={searchRange === '오늘'}
+                        onChange={handleSearchRangeRadioChange}
+                      />
+                      오늘
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="searchRange"
+                        checked={searchRange === '이번달'}
+                        onChange={handleSearchRangeRadioChange}
+                      />
+                      이번달
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="searchRange"
+                        checked={searchRange === '올해'}
+                        onChange={handleSearchRangeRadioChange}
+                      />
+                      올해
+                    </label>
+                  </>
+                )}
+                <ContentResultSearchBtn>
+                  <button onClick={handleSearchButton}>검색</button>
+                </ContentResultSearchBtn>
+              </div>
             </div>
-          </div>
-        </ContentResultSearchBox>
+          </ContentResultSearchBox>
+        )}
         <ContentResultTableWrap>
           <ContentTableWrap style={{ width: '1070px' }}>
             <ContentTable style={{ marginBottom: '15px' }}>
