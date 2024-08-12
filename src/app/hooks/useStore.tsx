@@ -36,8 +36,6 @@ interface TextItem {
     informData: string;
 };
 
-type OzoneItem = Record<string, string | null>
-
 interface StoreState {
     getFetch: (target: string, url: string) => Promise<void>;
     postFetch: (target: string, url: string, value: any) => Promise<void>;
@@ -57,7 +55,6 @@ interface StoreState {
     filterData: FilterData;
     openMap: string;
     loading: boolean;
-    alertOzone: OzoneItem[];
     currentDate: Date;
     currentYear: number;
     currentMonth: number;
@@ -162,13 +159,11 @@ const useStore = create<StoreState>()(
         // 데이터 로딩
         loading: false,
 
-        alertOzone: [],
-
         // 금일
-        currentDate: new Date(),
-        currentYear: new Date().getFullYear(),
-        currentMonth: new Date().getMonth(),
-        currentDay: new Date().getDate(),
+        currentDate: new Date('2024-08-07'),
+        currentYear: new Date('2024-08-07').getFullYear(),
+        currentMonth: new Date('2024-08-07').getMonth(),
+        currentDay: new Date('2024-08-07').getDate(),
 
         setCurrentDate: (newDate: Date) => {
           set({
