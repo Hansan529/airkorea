@@ -64,6 +64,51 @@ import { useState } from 'react';
 /** @type {RegionList} */
 const regionDetailList = regionDetailListData;
 
+// # 00 포맷팅
+function padZero(num) {
+  return String(num).padStart(2, '0');
+}
+
+// # yyyy-mm-dd 포맷팅
+function formatDateToString(date) {
+  const year = date.getFullYear();
+  const month = padZero(date.getMonth() + 1);
+  const day = padZero(date.getDate());
+  return `${year}-${month}-${day}`;
+}
+
+function parseDate(dateString) {
+  const [year, month, day] = dateString.split('-');
+  return new Date(year, month - 1, day);
+}
+
+function getDateRange(date, type) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+
+  let startDate, endDate;
+
+  switch (type) {
+    case '오늘':
+      startDate = new Date(year, month, day);
+      endDate = new Date(year, month, day);
+      break;
+    case '이번달':
+      startDate = new Date(year, month, 1);
+      endDate = new Date(year, month, day);
+      break;
+    case '올해':
+      startDate = new Date(year, 0, 1);
+      endDate = new Date(year, month, day);
+      break;
+    default:
+      throw new Error('검색 범위를 지정하지 않았습니다');
+  }
+
+  return { startDate, endDate };
+}
+
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
   const {
@@ -71,7 +116,9 @@ export default function Page() {
     alertOzone,
     currentDate: currentDateString,
   } = useStore((store) => store);
+  // # 날짜
   const currentDate = new Date(currentDateString);
+  const todayString = formatDateToString(currentDate);
   // ! 검색
   // # 검색 지역 목록
   const regionDetailList_kor = Object.keys(regionDetailList);
@@ -86,20 +133,82 @@ export default function Page() {
     setSearchRange(selectedLabel);
   };
 
+  // # 검색 결과
+  const [searchResult, setSearchResult] = useState([]);
+
   // # 검색 버튼 클릭 이벤트
-  const handleSearchButton = () => {
-    getFetch(
-      'alertOzone',
+  const handleSearchButton = async () => {
+    const response = await fetch(
       `https://localhost:3500/api/airkorea/standby-ozone?year=2024`
     );
+    const data = await response.json();
+    // # 일련번호 내림차순 정렬
+    const sortSearchResult = data.sort((a, b) => b.sn - a.sn);
+    // # 검색 범위 날짜 데이터
+    const { startDate, endDate } = getDateRange(currentDate, searchRange);
+
+    // # 지역, 날짜 필터링
+    const filteredResult = sortSearchResult.filter((res) => {
+      // # string 형식을 Date 형식으로 변경
+      const date = parseDate(res.dataDate);
+
+      // # 전체인 경우 지역 필터링을 하지 않음
+      if (district === '전체') {
+        return date >= startDate && date <= endDate;
+      }
+
+      return (
+        date >= startDate && date <= endDate && res.districtName === district
+      );
+    });
+    setSearchResult(filteredResult);
+
     // getFetch(
     //   'alertOzone',
     //   `https://apis.hansan-web.link/airkorea/standby-ozone?year=${currentDate.getFullYear()}`
     // );
-    console.log('alertOzone: ', alertOzone);
   };
 
-  const tbodyComp = () => {};
+  const TbodyComp = () => {
+    // # 주의보 단계
+    function getIssueLvl(number) {
+      switch (number) {
+        case '1':
+          return '주의보';
+        case '2':
+          return '경보';
+        case '3':
+          return '중대경보';
+        default:
+          return '알 수 없음';
+      }
+    }
+    // # 결과 값이 없을 경우 출력
+    if (searchResult.length <= 0) {
+      return (
+        <tr>
+          <td colSpan={6}>경보내역이 없습니다.</td>
+        </tr>
+      );
+    }
+
+    return searchResult.map((ozone, key) => {
+      return (
+        <tr key={key}>
+          <td>{key + 1}</td>
+          <td>{ozone.districtName}</td>
+          <td>{ozone.moveName}</td>
+          <td>{getIssueLvl(ozone.issueLvl)}</td>
+          <td>{`${ozone.dataDate} ${padZero(ozone.issueTime)}`}</td>
+          <td>
+            {ozone.clearTime
+              ? `${ozone.dataDate} ${padZero(ozone.clearTime)}`
+              : '-'}
+          </td>
+        </tr>
+      );
+    });
+  };
 
   // ! 결과
   return (
@@ -133,6 +242,7 @@ export default function Page() {
                 <input
                   type="radio"
                   name="searchRange"
+                  checked={searchRange === '오늘'}
                   onChange={handleSearchRangeRadioChange}
                 />
                 오늘
@@ -141,6 +251,7 @@ export default function Page() {
                 <input
                   type="radio"
                   name="searchRange"
+                  checked={searchRange === '이번달'}
                   onChange={handleSearchRangeRadioChange}
                 />
                 이번달
@@ -149,6 +260,7 @@ export default function Page() {
                 <input
                   type="radio"
                   name="searchRange"
+                  checked={searchRange === '올해'}
                   onChange={handleSearchRangeRadioChange}
                 />
                 올해
@@ -162,6 +274,14 @@ export default function Page() {
         <ContentResultTableWrap>
           <ContentTableWrap style={{ width: '1070px' }}>
             <ContentTable style={{ marginBottom: '15px' }}>
+              <colgroup>
+                <col style={{ width: '8%' }} />
+                <col style={{ width: 'auto' }} />
+                <col style={{ width: '17%' }} />
+                <col style={{ width: '17%' }} />
+                <col style={{ width: '17%' }} />
+                <col style={{ width: '17%' }} />
+              </colgroup>
               <thead>
                 <tr style={{ backgroundColor: '#fff' }}>
                   <th>번호</th>
@@ -172,7 +292,9 @@ export default function Page() {
                   <th>해제시간</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                <TbodyComp></TbodyComp>
+              </tbody>
             </ContentTable>
           </ContentTableWrap>
         </ContentResultTableWrap>
