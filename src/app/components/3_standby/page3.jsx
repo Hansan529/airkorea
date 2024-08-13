@@ -134,15 +134,19 @@ export default function Page() {
   };
   // # 검색 결과
   const [searchResult, setSearchResult] = useState([]);
+
   // # 검색 버튼 클릭 이벤트
   const handleSearchButton = async () => {
     const response = await fetch(
-      `https://localhost:3500/api/airkorea/standby-ozone?year=2024`
+      `https://localhost:3500/api/airkorea/standby-ozone${
+        viewSelectIndex !== 2 ? `?year=${currentDate.getFullYear()}` : ''
+      }`
     );
     const data = await response.json();
 
     switch (viewSelectIndex) {
-      case 0:
+      // ! 최근발령지역
+      case 0: {
         // # 일련번호 내림차순 정렬
         const sortSearchResult = data.sort((a, b) => b.sn - a.sn);
         // # 검색 범위 날짜 데이터
@@ -166,7 +170,9 @@ export default function Page() {
         });
         setSearchResult(filteredResult);
         break;
-      case 1:
+      }
+      // ! 연도별 발령현황
+      case 1: {
         const groupedResult = data.reduce((acc, cur) => {
           const { districtName } = cur;
           if (!acc[districtName]) {
@@ -189,6 +195,44 @@ export default function Page() {
           .flatMap((reg) => groupedResult[reg]);
         setSearchResult(sortedGroupedData);
         break;
+      }
+      // ! 지역별 발령현황
+      case 2: {
+        const groupedYear = data.reduce((acc, cur) => {
+          const year = new Date(cur.dataDate).getFullYear();
+          const district = cur.districtName;
+
+          if (!acc[year]) {
+            acc[year] = {};
+          }
+
+          if (!acc[year][district]) {
+            acc[year][district] = [];
+          }
+
+          acc[year][district].push(cur);
+          return acc;
+        }, {});
+
+        const sortedGroupedByYearAndDistrict = Object.keys(groupedYear).reduce(
+          (result, year) => {
+            result[year] = Object.keys(groupedYear[year])
+              .sort(
+                (a, b) =>
+                  regionDetailList_kor.indexOf(a) -
+                  regionDetailList_kor.indexOf(b)
+              )
+              .reduce((sortedObj, district) => {
+                sortedObj[district] = groupedYear[year][district];
+                return sortedObj;
+              }, {});
+            return result;
+          },
+          {}
+        );
+        setSearchResult(sortedGroupedByYearAndDistrict);
+        break;
+      }
       default:
         break;
     }
@@ -218,7 +262,9 @@ export default function Page() {
     if (searchResult.length <= 0) {
       return (
         <tr>
-          <td colSpan={6}>경보내역이 없습니다.</td>
+          <td colSpan={viewSelectIndex !== 2 ? 6 : 19}>
+            경보내역이 없거나 검색하지 않았습니다.
+          </td>
         </tr>
       );
     }
@@ -261,7 +307,39 @@ export default function Page() {
         );
       });
     }
-    return getRows();
+    function getYearRows() {
+      const years = Object.keys(searchResult);
+      return (
+        <>
+          {years.map((year, idx) => {
+            const val = searchResult[year];
+            const totalLength = Object.keys(val).reduce(
+              (sum, district) => sum + val[district].length,
+              0
+            );
+
+            return (
+              <tr key={idx}>
+                <th>{year}</th>
+                <td>{totalLength}</td>
+                {regionDetailList_kor.map((district) => {
+                  return (
+                    <td key={district}>
+                      {val[district] ? val[district].length : '-'}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </>
+      );
+    }
+    if (viewSelectIndex !== 2) {
+      return getRows();
+    } else {
+      return getYearRows();
+    }
   };
 
   // ! 결과
@@ -370,24 +448,41 @@ export default function Page() {
           </ContentResultSearchBox>
         )}
         <ContentResultTableWrap>
+          {viewSelectIndex === 2 && (
+            <h2>시도별 오존주의보 발령 현황 &#40;차트 : 전체 발령횟수&#41;</h2>
+          )}
           <ContentTableWrap style={{ width: '1070px' }}>
             <ContentTable style={{ marginBottom: '15px' }}>
-              <colgroup>
-                <col style={{ width: '8%' }} />
-                <col style={{ width: 'auto' }} />
-                <col style={{ width: '17%' }} />
-                <col style={{ width: '17%' }} />
-                <col style={{ width: '17%' }} />
-                <col style={{ width: '17%' }} />
-              </colgroup>
+              {viewSelectIndex !== 2 && (
+                <colgroup>
+                  <col style={{ width: '8%' }} />
+                  <col style={{ width: 'auto' }} />
+                  <col style={{ width: '17%' }} />
+                  <col style={{ width: '17%' }} />
+                  <col style={{ width: '17%' }} />
+                  <col style={{ width: '17%' }} />
+                </colgroup>
+              )}
               <thead>
                 <tr style={{ backgroundColor: '#fff' }}>
-                  <th>번호</th>
-                  <th>지역</th>
-                  <th>권역</th>
-                  <th>경보단계</th>
-                  <th>발령시간</th>
-                  <th>해제시간</th>
+                  {viewSelectIndex !== 2 ? (
+                    <>
+                      <th>번호</th>
+                      <th>지역</th>
+                      <th>권역</th>
+                      <th>경보단계</th>
+                      <th>발령시간</th>
+                      <th>해제시간</th>
+                    </>
+                  ) : (
+                    <>
+                      <th>년도</th>
+                      <th>전체</th>
+                      {regionDetailList_kor.map((item, key) => {
+                        return <th key={key}>{item}</th>;
+                      })}
+                    </>
+                  )}
                 </tr>
               </thead>
               <tbody>
