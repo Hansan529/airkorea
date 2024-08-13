@@ -223,13 +223,15 @@ export default function Page() {
       );
     }
 
-    function getNewDistrictRows() {
-      let previousDistrict = '';
+    function getRows() {
+      // # 맨 윗줄 border 제거용 기본값 '서울' 할당
+      let previousDistrict = '서울';
       let count = 0;
 
       return searchResult.map((ozone, idx) => {
         const isNewDistrict = ozone.districtName !== previousDistrict;
 
+        // # 새로운 지역이 나올 경우, 번호를 1번으로 초기화
         if (isNewDistrict) {
           count = 0;
         }
@@ -237,42 +239,29 @@ export default function Page() {
         previousDistrict = ozone.districtName;
         count += 1;
 
+        const tdStyle = { borderTop: isNewDistrict && '1.5px solid #000' };
+
         return (
           <tr key={idx}>
-            <td>{isNewDistrict ? 1 : count}</td>
-            <td>{ozone.districtName}</td>
-            <td>{ozone.moveName}</td>
-            <td>{getIssueLvl(ozone.issueLvl)}</td>
-            <td>{`${ozone.dataDate} ${padZero(ozone.issueTime)}`}</td>
-            <td>
+            <td style={tdStyle}>
+              {viewSelectIndex === 1 ? (isNewDistrict ? 1 : count) : idx + 1}
+            </td>
+            <td style={tdStyle}>{ozone.districtName}</td>
+            <td style={tdStyle}>{ozone.moveName}</td>
+            <td style={tdStyle}>{getIssueLvl(ozone.issueLvl)}</td>
+            <td style={tdStyle}>{`${ozone.dataDate} ${padZero(
+              ozone.issueTime
+            )}`}</td>
+            <td style={tdStyle}>
               {ozone.clearTime
                 ? `${ozone.dataDate} ${padZero(ozone.clearTime)}`
-                : '-'}
+                : '발령 중'}
             </td>
           </tr>
         );
       });
     }
-    if (viewSelectIndex === 1) {
-      return getNewDistrictRows();
-    }
-
-    return searchResult.map((ozone, key) => {
-      return (
-        <tr key={key}>
-          <td>{key + 1}</td>
-          <td>{ozone.districtName}</td>
-          <td>{ozone.moveName}</td>
-          <td>{getIssueLvl(ozone.issueLvl)}</td>
-          <td>{`${ozone.dataDate} ${padZero(ozone.issueTime)}`}</td>
-          <td>
-            {ozone.clearTime
-              ? `${ozone.dataDate} ${padZero(ozone.clearTime)}`
-              : '-'}
-          </td>
-        </tr>
-      );
-    });
+    return getRows();
   };
 
   // ! 결과
