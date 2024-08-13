@@ -2067,6 +2067,14 @@ export const RealtimePage2ContentTableWrap = styled(ContentTableWrap)`
   overflow: initial;
 `;
 
+// @ standby/page3.jsx
+export const StandbyPage3ContentTable = styled(ContentTable)`
+  th,
+  td {
+    padding: 15px 5px;
+  }
+`;
+
 // -------------------------------------------------------------
 
 // @ ErrorPage.jsx
