@@ -18,6 +18,17 @@
 
 // ~ System
 import 'react-datepicker/dist/react-datepicker.css';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  registerables,
+  PointElement,
+  LineElement,
+} from 'chart.js';
+import { Bar, getElementAtEvent, Line } from 'react-chartjs-2';
 
 // ~ JSON
 import regionDetailListData from '../../data/regionsList.json';
@@ -30,9 +41,9 @@ import {
   ContentResultTableWrap,
   ContentResultTap,
   ContentResultWrap,
-  ContentTable,
   ContentTableWrap,
   LayoutContentTitle,
+  StandbyPage3ContentTable,
 } from '../assets/StyleComponent.jsx';
 import { useState } from 'react';
 
@@ -134,6 +145,9 @@ export default function Page() {
   };
   // # 검색 결과
   const [searchResult, setSearchResult] = useState([]);
+
+  // # 차트 데이터
+  const [barChartData, setBarChartData] = useState([]);
 
   // # 검색 버튼 클릭 이벤트
   const handleSearchButton = async () => {
@@ -259,15 +273,16 @@ export default function Page() {
       }
     }
     // # 결과 값이 없을 경우 출력
-    if (searchResult.length <= 0) {
-      return (
-        <tr>
-          <td colSpan={viewSelectIndex !== 2 ? 6 : 19}>
-            경보내역이 없거나 검색하지 않았습니다.
-          </td>
-        </tr>
-      );
-    }
+    const nullValue = (
+      <tr>
+        <td colSpan={viewSelectIndex !== 2 ? 6 : 19}>
+          경보내역이 없거나 검색하지 않았습니다.
+        </td>
+      </tr>
+    );
+    if (searchResult.length <= 0) return nullValue;
+
+    let result;
 
     function getRows() {
       // # 맨 윗줄 border 제거용 기본값 '서울' 할당
@@ -285,7 +300,10 @@ export default function Page() {
         previousDistrict = ozone.districtName;
         count += 1;
 
-        const tdStyle = { borderTop: isNewDistrict && '1.5px solid #000' };
+        const tdStyle = {
+          borderTop:
+            isNewDistrict && viewSelectIndex === 1 && '1.5px solid #000',
+        };
 
         return (
           <tr key={idx}>
@@ -313,19 +331,28 @@ export default function Page() {
         <>
           {years.map((year, idx) => {
             const val = searchResult[year];
-            const totalLength = Object.keys(val).reduce(
-              (sum, district) => sum + val[district].length,
+            const totalLength = Object.keys(val)?.reduce(
+              (sum, district) => sum + val[district]?.length,
               0
             );
-
             return (
               <tr key={idx}>
                 <th>{year}</th>
                 <td>{totalLength}</td>
                 {regionDetailList_kor.map((district) => {
+                  const data = val[district] || [];
+
+                  const uniqueDates = new Set(
+                    data.map((item) => item.dataDate)
+                  );
+                  const uniqueDateCount = uniqueDates.size;
+
+                  const totalCount = data.length;
                   return (
                     <td key={district}>
-                      {val[district] ? val[district].length : '-'}
+                      {val[district]
+                        ? `${totalCount}(${uniqueDateCount})`
+                        : '-'}
                     </td>
                   );
                 })}
@@ -335,11 +362,23 @@ export default function Page() {
         </>
       );
     }
-    if (viewSelectIndex !== 2) {
-      return getRows();
+    if (viewSelectIndex === 2) {
+      // # 지역별 발령현황 처리
+      if (
+        searchResult instanceof Object &&
+        !Array.isArray(searchResult) &&
+        searchResult !== null
+      )
+        result = getYearRows();
     } else {
-      return getYearRows();
+      // # 그 외 처리
+      if (Array.isArray(searchResult)) {
+        result = getRows();
+      }
     }
+
+    // # 결과 값이 없는 경우
+    return result || nullValue;
   };
 
   // ! 결과
@@ -449,10 +488,13 @@ export default function Page() {
         )}
         <ContentResultTableWrap>
           {viewSelectIndex === 2 && (
-            <h2>시도별 오존주의보 발령 현황 &#40;차트 : 전체 발령횟수&#41;</h2>
+            <h2>
+              시도별 오존주의보 발령 현황 &#40;차트 : 전체 발령횟수&#40;전체
+              발령일수&#41;&#41;
+            </h2>
           )}
           <ContentTableWrap style={{ width: '1070px' }}>
-            <ContentTable style={{ marginBottom: '15px' }}>
+            <StandbyPage3ContentTable style={{ marginBottom: '15px' }}>
               {viewSelectIndex !== 2 && (
                 <colgroup>
                   <col style={{ width: '8%' }} />
@@ -488,7 +530,7 @@ export default function Page() {
               <tbody>
                 <TbodyComp></TbodyComp>
               </tbody>
-            </ContentTable>
+            </StandbyPage3ContentTable>
           </ContentTableWrap>
         </ContentResultTableWrap>
       </ContentResultWrap>
