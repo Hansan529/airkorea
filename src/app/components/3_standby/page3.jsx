@@ -241,8 +241,7 @@ export default function Page() {
           })
           .flatMap((reg) => groupedResult[reg]);
         changer('searchResult', sortedGroupedData, 1);
-        // setSearchResult(sortedGroupedData);
-        console.log('sortedGroupedData: ', sortedGroupedData);
+        updateRenderedSearchResult(sortedGroupedData, 1);
         break;
       }
       // ! 지역별 발령현황
@@ -280,7 +279,7 @@ export default function Page() {
           {}
         );
         changer('searchResult', sortedGroupedByYearAndDistrict, 2);
-        // setSearchResult(sortedGroupedByYearAndDistrict);
+        updateRenderedSearchResult(sortedGroupedByYearAndDistrict, 2);
         console.log(
           'sortedGroupedByYearAndDistrict: ',
           sortedGroupedByYearAndDistrict
@@ -549,7 +548,7 @@ export default function Page() {
           )}
           <ContentTableWrap style={{ width: '1070px' }}>
             <StandbyPage3ContentTable style={{ marginBottom: '15px' }}>
-              {viewSelectIndex !== 2 && (
+              {viewSelectIndex !== 2 ? (
                 <colgroup>
                   <col style={{ width: '8%' }} />
                   <col style={{ width: 'auto' }} />
@@ -557,6 +556,28 @@ export default function Page() {
                   <col style={{ width: '17%' }} />
                   <col style={{ width: '17%' }} />
                   <col style={{ width: '17%' }} />
+                </colgroup>
+              ) : (
+                <colgroup>
+                  <col style={{ width: 'auto' }} />
+                  <col style={{ width: '8%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
+                  <col style={{ width: '5%' }} />
                 </colgroup>
               )}
               <thead>
