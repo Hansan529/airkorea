@@ -45,7 +45,7 @@ import {
   LayoutContentTitle,
   StandbyPage3ContentTable,
 } from '../assets/StyleComponent.jsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // ~ Component
 // ~ Package Settings
@@ -122,12 +122,20 @@ function getDateRange(date, type) {
 
 // @@@ 출력 컴포넌트 @@@
 export default function Page() {
-  const { currentDate: currentDateString } = useStore((store) => store);
+  const {
+    currentDate: currentDateString,
+    searchResult,
+    changer,
+  } = useStore((store) => store);
   // # 날짜
   const currentDate = new Date(currentDateString);
 
   // ! 조회 종류
   const [viewSelectIndex, setViewSelectIndex] = useState(0);
+  // # 조회 종류 변경 시, 검색 기록 초기화
+  useEffect(() => {
+    // setSearchResult([]);
+  }, [viewSelectIndex]);
 
   // ! 검색
   // # 검색 지역 목록
@@ -144,19 +152,37 @@ export default function Page() {
     setSearchRange(selectedLabel);
   };
   // # 검색 결과
-  const [searchResult, setSearchResult] = useState([]);
+  const [renderedSearchResult, setRenderedSearchResult] = useState({
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+  });
+  const updateRenderedSearchResult = (newData, idx) => {
+    setRenderedSearchResult((prevState) => ({
+      ...prevState,
+      [idx]: newData,
+    }));
+  };
 
   // # 차트 데이터
   const [barChartData, setBarChartData] = useState([]);
 
   // # 검색 버튼 클릭 이벤트
   const handleSearchButton = async () => {
-    const response = await fetch(
-      `https://localhost:3500/api/airkorea/standby-ozone${
-        viewSelectIndex !== 2 ? `?year=${currentDate.getFullYear()}` : ''
-      }`
-    );
-    const data = await response.json();
+    const existingResult = searchResult[viewSelectIndex];
+    let response, data;
+
+    if (!existingResult || !(existingResult.length > 0)) {
+      response = await fetch(
+        `https://localhost:3500/api/airkorea/standby-ozone${
+          viewSelectIndex !== 2 ? `?year=${currentDate.getFullYear()}` : ''
+        }`
+      );
+      data = await response.json();
+    } else {
+      data = searchResult[viewSelectIndex];
+    }
 
     switch (viewSelectIndex) {
       // ! 최근발령지역
@@ -166,6 +192,12 @@ export default function Page() {
         // # 검색 범위 날짜 데이터
         const { startDate, endDate } = getDateRange(currentDate, searchRange);
 
+        // # store 용 필터링
+        const storeResult = sortSearchResult.filter((res) => {
+          const { startDate, endDate } = getDateRange(currentDate, '올해');
+          const date = parseDate(res.dataDate);
+          return date >= startDate && date <= endDate;
+        });
         // # 지역, 날짜 필터링
         const filteredResult = sortSearchResult.filter((res) => {
           // # string 형식을 Date 형식으로 변경
@@ -182,7 +214,8 @@ export default function Page() {
             res.districtName === district
           );
         });
-        setSearchResult(filteredResult);
+        changer('searchResult', storeResult, 0);
+        updateRenderedSearchResult(filteredResult, 0);
         break;
       }
       // ! 연도별 발령현황
@@ -207,7 +240,9 @@ export default function Page() {
             );
           })
           .flatMap((reg) => groupedResult[reg]);
-        setSearchResult(sortedGroupedData);
+        changer('searchResult', sortedGroupedData, 1);
+        // setSearchResult(sortedGroupedData);
+        console.log('sortedGroupedData: ', sortedGroupedData);
         break;
       }
       // ! 지역별 발령현황
@@ -244,7 +279,12 @@ export default function Page() {
           },
           {}
         );
-        setSearchResult(sortedGroupedByYearAndDistrict);
+        changer('searchResult', sortedGroupedByYearAndDistrict, 2);
+        // setSearchResult(sortedGroupedByYearAndDistrict);
+        console.log(
+          'sortedGroupedByYearAndDistrict: ',
+          sortedGroupedByYearAndDistrict
+        );
         break;
       }
       default:
@@ -280,7 +320,7 @@ export default function Page() {
         </td>
       </tr>
     );
-    if (searchResult.length <= 0) return nullValue;
+    if (renderedSearchResult[viewSelectIndex].length <= 0) return nullValue;
 
     let result;
 
@@ -289,7 +329,7 @@ export default function Page() {
       let previousDistrict = '서울';
       let count = 0;
 
-      return searchResult.map((ozone, idx) => {
+      return renderedSearchResult[viewSelectIndex].map((ozone, idx) => {
         const isNewDistrict = ozone.districtName !== previousDistrict;
 
         // # 새로운 지역이 나올 경우, 번호를 1번으로 초기화
@@ -326,19 +366,34 @@ export default function Page() {
       });
     }
     function getYearRows() {
-      const years = Object.keys(searchResult);
+      // # 검색된 결과에서 시작~종료 년도 추출
+      const years = Object.keys(renderedSearchResult[viewSelectIndex]);
       return (
         <>
           {years.map((year, idx) => {
-            const val = searchResult[year];
-            const totalLength = Object.keys(val)?.reduce(
-              (sum, district) => sum + val[district]?.length,
-              0
-            );
+            // # n년도 선택
+            const val = renderedSearchResult[viewSelectIndex][year];
+            let totalLength = 0;
+            let totalUniqueDateCount = 0;
+
+            // # 예보 발령된 지역 KR 텍스트
+            Object.keys(val)?.forEach((district) => {
+              // # 해당 년도의 지역별 예보 정보
+              const data = val[district] || [];
+              // # 모든 예보 수 합
+              totalLength += data.length;
+
+              // # SET을 사용해 발령된 일 추가
+              const uniqueDates = new Set(data.map((item) => item.dataDate));
+              // # uniquEDates의 크기를 추출해 발령 일 수 설정
+              totalUniqueDateCount += uniqueDates.size;
+            });
             return (
               <tr key={idx}>
                 <th>{year}</th>
-                <td>{totalLength}</td>
+                <td>
+                  {totalLength}({totalUniqueDateCount})
+                </td>
                 {regionDetailList_kor.map((district) => {
                   const data = val[district] || [];
 
@@ -365,14 +420,14 @@ export default function Page() {
     if (viewSelectIndex === 2) {
       // # 지역별 발령현황 처리
       if (
-        searchResult instanceof Object &&
-        !Array.isArray(searchResult) &&
-        searchResult !== null
+        renderedSearchResult[viewSelectIndex] instanceof Object &&
+        !Array.isArray(renderedSearchResult[viewSelectIndex]) &&
+        renderedSearchResult[viewSelectIndex] !== null
       )
         result = getYearRows();
     } else {
       // # 그 외 처리
-      if (Array.isArray(searchResult)) {
+      if (Array.isArray(renderedSearchResult[viewSelectIndex])) {
         result = getRows();
       }
     }
@@ -489,8 +544,7 @@ export default function Page() {
         <ContentResultTableWrap>
           {viewSelectIndex === 2 && (
             <h2>
-              시도별 오존주의보 발령 현황 &#40;차트 : 전체 발령횟수&#40;전체
-              발령일수&#41;&#41;
+              시도별 오존주의보 발령 현황 (차트 : 전체 발령횟수(전체 발령일수))
             </h2>
           )}
           <ContentTableWrap style={{ width: '1070px' }}>

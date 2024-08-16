@@ -1,3 +1,4 @@
+import { StringLiteral } from 'typescript';
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -36,6 +37,27 @@ interface TextItem {
     informData: string;
 };
 
+// # 검색한 결과 타입
+interface SearchResultType {
+  clearTime: string | null;
+  clearVal: string | null;
+  dataDate: string;
+  districtName: string;
+  issueLvl: string;
+  issueTime: string;
+  issueVal: string;
+  maxVal: string | null
+  moveName: string;
+  sn: string;
+}
+
+// # 년도별 > 지역별 분류 후 결과 타입
+interface SearchResultMap {
+  [year: number]: {
+    [district: string]: SearchResultType[];
+  }
+}
+
 interface StoreState {
     getFetch: (target: string, url: string) => Promise<void>;
     postFetch: (target: string, url: string, value: any) => Promise<void>;
@@ -45,7 +67,7 @@ interface StoreState {
     dataFetchBoolean: boolean;
     textFetchBoolean: boolean;
     stationFetchBoolean: boolean;
-    changer: (target: string, value: any) => void;
+    changer: (target: string, value: any, etc: any) => void;
     type: string;
     regionNum: string;
     selectInfo: string;
@@ -54,6 +76,12 @@ interface StoreState {
     filterRange: boolean[];
     filterData: FilterData;
     openMap: string;
+    searchResult: {
+      0: SearchResultType[] | [] | null;
+      1: SearchResultType[] | [] | null;
+      2: SearchResultMap | {} | null
+      3: [] | null;
+    };
     loading: boolean;
     currentDate: Date;
     currentYear: number;
@@ -84,9 +112,14 @@ const useStore = create<StoreState>()(
     persist(
         (set, get) => ({
         getFetch: async (target: string, url: string) => {
+          set({ loading: true });
+          try {
             const response = await fetch(url);
             const data = await response.json();
             set({[target]: data});
+          } catch (error) {
+            set({ loading: false })
+          }
         },
         postFetch: async (target: string, url: string, value: any) => {
             const response = await fetch(url, {
@@ -114,7 +147,19 @@ const useStore = create<StoreState>()(
         stationFetchBoolean: false,
 
         // 상태 변경자
-        changer: (target: string, value: any) => set(() => ({[target]: value})),
+        changer: (target: string, value: any, etc: any) => {
+          if(target === 'searchResult') {
+            set(state => ({
+              searchResult: {
+                ...state.searchResult,
+                [etc]: value,
+              }
+            }))
+          } else {
+            set(() => ({[target]: value}))
+          }
+
+        },
 
         // 출력 타입 khai, pm25, pm10, o3, no2, co, so2
         type: 'khaiValue',
@@ -155,6 +200,16 @@ const useStore = create<StoreState>()(
 
         // 상세 지역 Open/Close
         openMap: '0',
+
+        // # Standby
+        searchResult: {
+          0: [],
+          1: [],
+          2: {},
+          3: [],
+        },
+
+        // @ 공동 활용 상태
 
         // 데이터 로딩
         loading: false,
