@@ -117,10 +117,10 @@ export default function Page() {
               <br />
               특정유해대기물질에 의한 오염 실태 파악
             </td>
-            <td>VOCs&#40;휘발성유기화합물&#41;: 16종</td>
+            <td>VOCs(휘발성유기화합물): 16종</td>
           </tr>
           <tr>
-            <td>PAHs&#40;다환방향족탄화수소&#41;: 16종</td>
+            <td>PAHs(다환방향족탄화수소): 16종</td>
           </tr>
           <tr>
             <th rowSpan="3">산성 강하물</th>
@@ -129,25 +129,23 @@ export default function Page() {
               강우·강설 등에 의한 오염물질의 습성침착량 파악
             </td>
             <td>
-              건성: 초미세먼지&#40;PM-2.5&#41; 질량, 초미세먼지&#40;PM-2.5&#41;
-              중 <br />
-              이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub>
+              건성: 초미세먼지(PM-2.5) 질량, 초미세먼지(PM-2.5) 중 <br />
+              이온성분(CI<sup>-</sup>, NO<sub>3</sub>
               <sup>-</sup>, SO<sub>4</sub>
               <sup>2-</sup>, NH<sub>4</sub>
               <sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg
-              <sup>2+</sup>&#41;, 가스상&#40;HNO<sub>3</sub>, NH<sub>3</sub>
-              &#41;
+              <sup>2+</sup>), 가스상(HNO<sub>3</sub>, NH<sub>3</sub>)
             </td>
           </tr>
           <tr>
             <td>
-              습성: pH, 이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub>
+              습성: pH, 이온성분(CI<sup>-</sup>, NO<sub>3</sub>
               <sup>-</sup>, SO<sub>4</sub>
               <sup>2-</sup>, NH<sub>4</sub>
               <sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg
-              <sup>2+</sup>&#41;,
+              <sup>2+</sup>),
               <br />
-              전기전도도, 강우&#40;설&#41;량
+              전기전도도, 강우(설)량
             </td>
           </tr>
           <tr>
@@ -158,13 +156,12 @@ export default function Page() {
             <td>
               도시지역의 오존생성의 원인물질인 휘발성유기화합물질
               <br />
-              &#40;VOCS&#41;의 농도를 파악하여 오존오염현상을 규명하고 오존예보{' '}
-              <br />
+              (VOCS)의 농도를 파악하여 오존오염현상을 규명하고 오존예보 <br />
               등을 위한 기초 자료로 활용
             </td>
             <td>
               CO, NOx, NOy, O<sub>3</sub>,PM-10,PM-2.5, 카르보닐화합물,
-              VOCs&#40;ethane 등 56종&#41;,
+              VOCs(ethane 등 56종),
               <br />
               풍향, 풍속, 온도, 습도, 일사량, 자외선량, 강수량, 기압
             </td>
@@ -173,27 +170,26 @@ export default function Page() {
             <th>지구 대기</th>
             <td>지구온난화물질, 오존층파괴물질의 대기 중 농도 파악</td>
             <td>
-              CO<sub>2</sub>, N<sub>2</sub>O, CH<sub>4</sub>,
-              CFC&#40;-11,-12,-113&#41;
+              CO<sub>2</sub>, N<sub>2</sub>O, CH<sub>4</sub>, CFC(-11,-12,-113)
             </td>
           </tr>
           <tr>
-            <th>초미세먼지&#40;PM-2.5&#41;성분</th>
+            <th>초미세먼지(PM-2.5)성분</th>
             <td>
-              인체위해도가 높은 초미세먼지&#40;PM-2.5&#41;의
+              인체위해도가 높은 초미세먼지(PM-2.5)의
               <br />
               농도 파악 및 성분파악을 통한 배출원 규명
             </td>
             <td>
-              초미세먼지&#40;PM-2.5&#41; 질량,
-              탄소성분&#40;OC,EC&#41;,초미세먼지&#40;PM-2.5&#41; 중<br />
-              이온성분&#40;CI<sup>-</sup>, NO<sub>3</sub>
+              초미세먼지(PM-2.5) 질량, 탄소성분(OC,EC),초미세먼지(PM-2.5) 중
+              <br />
+              이온성분(CI<sup>-</sup>, NO<sub>3</sub>
               <sup>-</sup>, SO<sub>4</sub>
               <sup>2-</sup>, NH<sub>4</sub>
               <sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>, Ca<sup>2+</sup>, Mg
-              <sup>2+</sup>&#41;,
+              <sup>2+</sup>),
               <br />
-              중금속성분&#40;Pb, Cd, Cr, Cu, Mn, Fe, Ni, As, Be&#41;
+              중금속성분(Pb, Cd, Cr, Cu, Mn, Fe, Ni, As, Be)
             </td>
           </tr>
         </tbody>

@@ -576,7 +576,7 @@ export default function Page() {
             </div>
           </ContentResultSearchBox>
           <ContentResultTableWrap>
-            <h2>측정자료&#40;수치&#41;</h2>
+            <h2>측정자료(수치)</h2>
             {/* 컴포넌트 */} <ContentResultTableStation />
             <ContentTableWrap>
               <RealtimePage1ContentTable>
@@ -632,38 +632,38 @@ export default function Page() {
                         <th rowSpan="2">
                           날짜
                           <br />
-                          &#40;월-일:시&#41;
+                          (월-일:시)
                         </th>
                         <th colSpan="3">통합대기환경지수</th>
                         <th colSpan="2">
                           PM-10
                           <br />
-                          &#40;㎍/㎥&#41;
+                          (㎍/㎥)
                         </th>
                         <th colSpan="2">
                           PM-2.5
                           <br />
-                          &#40;㎍/㎥&#41;
+                          (㎍/㎥)
                         </th>
                         <th colSpan="2">
                           오존
                           <br />
-                          &#40;ppm&#41;
+                          (ppm)
                         </th>
                         <th colSpan="2">
                           이산화질소
                           <br />
-                          &#40;ppm&#41;
+                          (ppm)
                         </th>
                         <th colSpan="2">
                           일산화탄소
                           <br />
-                          &#40;ppm&#41;
+                          (ppm)
                         </th>
                         <th colSpan="2">
                           아황산가스
                           <br />
-                          &#40;ppm&#41;
+                          (ppm)
                         </th>
                       </tr>
                       <tr>

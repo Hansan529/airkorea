@@ -438,9 +438,7 @@ export default function Page({ regionList }) {
       <LoadingWrap style={loadingStyle}>
         <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
       </LoadingWrap>
-      <LayoutContentTitle>
-        시도별 대기정보&#40;{searchTypeText}&#41;
-      </LayoutContentTitle>
+      <LayoutContentTitle>시도별 대기정보({searchTypeText})</LayoutContentTitle>
       <ContentResultWrap>
         <RealtimePage2ContentResultSearchBox>
           <div>
@@ -486,7 +484,7 @@ export default function Page({ regionList }) {
                   {' '}
                   {currentMonth}월 {currentDay}일{' '}
                 </span>
-                <span>&#40;실시간&#41;</span>
+                <span>(실시간)</span>
               </div>
             </div>
           </div>
@@ -503,11 +501,9 @@ export default function Page({ regionList }) {
           시 기준.
         </p>
         <ContentResultTableWrap>
-          <h2>시간자료&#40;수치&#41;</h2>
+          <h2>시간자료(수치)</h2>
           <p>시도명 클릭시 상세 자료를 보실 수 있습니다.</p>
-          <p style={{ textAlign: 'right', marginBottom: '5px' }}>
-            단위&#40;㎍/㎥&#41;
-          </p>
+          <p style={{ textAlign: 'right', marginBottom: '5px' }}>단위(㎍/㎥)</p>
           <RealtimePage2ContentTableWrap>
             <ContentTable style={{ marginBottom: '15px' }}>
               <thead>

@@ -492,8 +492,7 @@ export default function Page({ type }) {
         <img src="/images/realtime/loading.webp" alt="로딩중 Loading" />
       </LoadingWrap>
       <LayoutContentTitle>
-        {searchTypeText === 'PM-2.5' ? '초' : ''}미세먼지 &#40;{searchTypeText}
-        &#41;
+        {searchTypeText === 'PM-2.5' ? '초' : ''}미세먼지 ({searchTypeText})
       </LayoutContentTitle>
       <ContentResultWrap>
         <RealtimePage2ContentResultSearchBox>
